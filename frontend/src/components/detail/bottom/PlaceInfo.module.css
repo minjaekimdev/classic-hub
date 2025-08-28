@@ -1,0 +1,46 @@
+.place-info {
+  padding: 32px;
+}
+.place-info .hall {
+  margin-bottom: 32px;
+}
+.place-info .hall__title {
+  margin-bottom: 16px;
+  color: rgb(17, 24, 39);
+  font-size: 20px;
+  font-weight: 700;
+}
+.place-info .hall__detail {
+  display: flex;
+  gap: 12px;
+}
+.place-info .hall__detail .icon {
+  align-self: flex-start;
+  margin-top: 2px;
+}
+.place-info .hall__detail-name {
+  color: rgb(17, 24, 39);
+  font-weight: 600;
+  line-height: 24px;
+}
+.place-info .hall__detail-address {
+  color: rgb(75, 85, 99);
+  line-height: 24px;
+}
+.place-info .location__title {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 28px;
+  margin-bottom: 12px;
+}
+.place-info .location__map {
+  width: 1096px;
+  height: 616px;
+  border-radius: 8px;
+}
+.place-info .location__map--no-location {
+  background: lightgray;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}/*# sourceMappingURL=PlaceInfo.module.css.map */

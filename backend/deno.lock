@@ -1,0 +1,44 @@
+{
+  "version": "5",
+  "specifiers": {
+    "jsr:@std/dotenv@*": "0.225.5"
+  },
+  "jsr": {
+    "@std/dotenv@0.225.5": {
+      "integrity": "9ce6f9d0ec3311f74a32535aa1b8c62ed88b1ab91b7f0815797d77a6f60c922f"
+    }
+  },
+  "redirects": {
+    "https://esm.sh/@types/sax@~1.2.7/index.d.ts": "https://esm.sh/@types/sax@1.2.7/index.d.ts",
+    "https://esm.sh/dayjs": "https://esm.sh/dayjs@1.11.15",
+    "https://esm.sh/sax@^1.2.4?target=denonext": "https://esm.sh/sax@1.4.1?target=denonext",
+    "https://esm.sh/xml-js": "https://esm.sh/xml-js@1.6.11"
+  },
+  "remote": {
+    "https://esm.sh/dayjs@1.11.15": "6baa377187c964e324bddf32b4db3ad2f2ba32828ce747908cf6f5b6d74b2706",
+    "https://esm.sh/dayjs@1.11.15/denonext/dayjs.mjs": "e27ae82d34ade301a7e62616dc97c327b25fc1a7492275a180f5a801916b9090",
+    "https://esm.sh/sax@1.4.1/denonext/sax.mjs": "f6b76bfda979cf50ea49b0f4c36fdba9ac24c2f5261e31df0adb662f505ef277",
+    "https://esm.sh/sax@1.4.1?target=denonext": "e27842cb4e8dc59720f1f3df21075f69ddeb0b5c06bb055efcd72d1d59fefd79",
+    "https://esm.sh/xml-js@1.6.11": "9f30bf1857f9da9c902c290b59f6b399c973d3dc7e35f11c5db2502aad733f63",
+    "https://esm.sh/xml-js@1.6.11/denonext/xml-js.mjs": "e1863b42f0016edd5321d08aae2e92f6f856027ed813d5825a413fbbc0dfb875"
+  },
+  "workspace": {
+    "packageJson": {
+      "dependencies": [
+        "npm:@google/genai@^1.15.0",
+        "npm:@supabase/supabase-js@^2.51.0",
+        "npm:@types/cors@^2.8.19",
+        "npm:@types/express@^5.0.3",
+        "npm:cors@^2.8.5",
+        "npm:dayjs@^1.11.13",
+        "npm:dotenv@^17.2.0",
+        "npm:express@^5.1.0",
+        "npm:supabase@^2.39.2",
+        "npm:ts-node@^10.9.2",
+        "npm:tsconfig-paths@^4.2.0",
+        "npm:typescript@^5.8.3",
+        "npm:xml-js@^1.6.11"
+      ]
+    }
+  }
+}

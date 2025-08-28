@@ -1,0 +1,20 @@
+.performance-info {
+  padding: 32px;
+
+  &__title {
+    margin-bottom: 16px;
+    color: rgb(17, 24, 39);
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  .time {
+    margin-bottom: 32px;
+  }
+
+  .detail {
+    &__image {
+      width: 100%;
+    }
+  }
+}

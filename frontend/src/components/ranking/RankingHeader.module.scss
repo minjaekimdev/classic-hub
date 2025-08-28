@@ -1,0 +1,43 @@
+.ranking-header {
+  height: 130px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .ranking-title {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    &__main {
+      color: #111827;
+      font-size: 30px;
+      font-weight: 700;
+      line-height: 36px;
+    }
+
+    &__sub {
+      color: #4b5563;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 24px;
+    }
+  }
+
+  .ranking-options {
+    display: flex;
+
+    &__period {
+      padding: 12px;
+      background: none;
+      color: #4b5563;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 16px;
+
+      &--focused {
+        color: #cc0000;
+      }
+    }
+  }
+}

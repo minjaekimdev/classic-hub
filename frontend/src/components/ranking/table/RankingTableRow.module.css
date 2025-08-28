@@ -1,0 +1,58 @@
+.table-row {
+  display: grid;
+  grid-template-columns: 1fr 4fr repeat(3, 2fr);
+  height: 112px;
+  border-top: 1px solid #f3f4f6;
+}
+.table-row__cell {
+  display: flex;
+  align-items: center;
+}
+.table-row__rank {
+  justify-content: center;
+  color: #111827;
+  font-family: Geist;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 28px;
+}
+.table-row__title {
+  gap: 40px;
+}
+.table-row__title .poster {
+  flex-shrink: 0;
+  background: #eaeaea;
+  border-radius: 6px;
+  width: 56px;
+  height: 80px;
+}
+.table-row__title .pfnm {
+  margin-right: 40px;
+  color: #111827;
+  font-weight: 600;
+  line-height: 24px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  text-overflow: ellipsis;
+}
+.table-row__venue {
+  justify-content: center;
+  text-align: center;
+  color: #4b5563;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+}
+.table-row__period {
+  justify-content: center;
+  color: #4b5563;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+}
+.table-row__booking {
+  justify-content: center;
+}/*# sourceMappingURL=RankingTableRow.module.css.map */

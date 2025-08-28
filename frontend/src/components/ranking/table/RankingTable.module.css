@@ -1,0 +1,28 @@
+.ranking-table {
+  margin: 60px auto;
+  border-radius: 8px;
+  border: 1px solid #e4e4e7;
+  background: #fff;
+  box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.05);
+}
+.ranking-table .table-header {
+  display: grid;
+  grid-template-columns: 1fr 4fr repeat(3, 2fr);
+  height: 50px;
+  border-radius: 8px 8px 0px 0px;
+  border-bottom: 1px solid #e4e4e7;
+  background: #f9fafb;
+}
+.ranking-table .table-header__cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #374151;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+}
+.ranking-table .table__body {
+  display: flex;
+  flex-direction: column;
+}/*# sourceMappingURL=RankingTable.module.css.map */

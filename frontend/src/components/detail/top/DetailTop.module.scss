@@ -1,0 +1,103 @@
+.detail-top {
+  background: #fff;
+  margin-top: 32px;
+  padding: 32px;
+  height: 556px;
+  display: flex;
+  justify-content: space-between;
+  border-radius: 8px;
+  box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.05);
+
+  .poster {
+    position: relative;
+    width: 418px;
+    height: 556px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 8px;
+
+    .state {
+      position: absolute;
+      top: 18px;
+      left: 18px;
+      padding: 4px 12px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: 1px solid;
+      border-radius: 9999px;
+      font-size: 14px;
+
+      &--ongoing {
+        background-color: rgb(229, 231, 235);
+        color: rgb(31, 41, 55);
+        border-color: rgb(156, 163, 175);
+      }
+
+      &--upcoming {
+        background-color: rgb(241, 245, 249);
+        color: rgb(30, 41, 59);
+        border-color: rgb(203, 213, 225);
+      }
+
+      &--finished {
+        background-color: rgb(245, 245, 244);
+        color: rgb(87, 83, 78);
+        border-color: rgb(214, 211, 209);
+      }
+    }
+  }
+
+  .info {
+    display: flex;
+    flex-direction: column;
+    width: 654px;
+
+    &__title {
+      display: flex;
+
+      &-text {
+        width: 100%;
+        padding-bottom: 18px;
+        border-bottom: 1px solid #d1d5db;
+        color: #111827;
+        font-size: 30px;
+        font-weight: 700;
+        line-height: 36px;
+      }
+    }
+
+    &__detail {
+      margin-top: 26px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: 1fr 1fr 5.8fr;
+      grid-row-gap: 34px;
+      grid-template-areas:
+        "a b"
+        "c d"
+        "e f";
+    }
+
+    &__comp {
+      &-content {
+        color: #111827;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 24px;
+        display: flex;
+        flex-direction: column;
+
+        &--odd {
+          margin-right: 50px;
+        }
+
+        &-list {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,15 @@
+.performance-info {
+  padding: 32px;
+}
+.performance-info__title {
+  margin-bottom: 16px;
+  color: rgb(17, 24, 39);
+  font-size: 20px;
+  font-weight: 700;
+}
+.performance-info .time {
+  margin-bottom: 32px;
+}
+.performance-info .detail__image {
+  width: 100%;
+}/*# sourceMappingURL=PerformanceInfo.module.css.map */

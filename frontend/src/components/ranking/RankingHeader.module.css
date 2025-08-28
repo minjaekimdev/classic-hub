@@ -1,0 +1,37 @@
+.ranking-header {
+  height: 130px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.ranking-header .ranking-title {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.ranking-header .ranking-title__main {
+  color: #111827;
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 36px;
+}
+.ranking-header .ranking-title__sub {
+  color: #4b5563;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px;
+}
+.ranking-header .ranking-options {
+  display: flex;
+}
+.ranking-header .ranking-options__period {
+  padding: 12px;
+  background: none;
+  color: #4b5563;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 16px;
+}
+.ranking-header .ranking-options__period--focused {
+  color: #cc0000;
+}/*# sourceMappingURL=RankingHeader.module.css.map */
