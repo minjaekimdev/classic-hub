@@ -1,4 +1,4 @@
-import { createClient, SupabaseClient } from "npm:@supabase/supabase-js@2";
+import { createClient } from "npm:@supabase/supabase-js@2";
 import 'jsr:@std/dotenv/load'
 
 const supabaseUrl = "https://razltwjkvwqiyksaydcw.supabase.co";

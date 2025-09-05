@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
-import PfRanking from "./PfRanking";
+// import PfRanking from "./PfRanking";
+import PfSearch from "./PfSearch";
 import PfDetail from "./PfDetail";
 
 export function Scroll() {
@@ -16,7 +17,7 @@ const App: React.FC = () => {
     <BrowserRouter>
       <Scroll />
       <Routes>
-        <Route path="/" element={<PfRanking />} />
+        <Route path="/" element={<PfSearch />} />
         <Route path="/detail/:pfId" element={<PfDetail />} />
       </Routes>
     </BrowserRouter>

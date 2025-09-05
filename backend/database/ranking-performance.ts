@@ -89,6 +89,7 @@ export const deleteRankingData = async (
   }
 };
 
+
 // 랭킹 공연 상세 데이터 업데이트
 const returnPfIdArray = async (
   period: RankingPeriod

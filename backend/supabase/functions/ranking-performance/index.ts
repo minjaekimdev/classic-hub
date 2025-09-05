@@ -2,7 +2,11 @@ import supabase from "../_shared/supabaseClient.ts";
 import { apiURL, classic, serviceKey } from "../_shared/kopisClient.ts";
 import dayjs from "https://esm.sh/dayjs";
 import convert, { ElementCompact } from "https://esm.sh/xml-js";
-import { RankingPeriod, RankingItem, pfIdObject } from "../_shared/types/ranking.d.ts";
+import {
+  RankingPeriod,
+  RankingItem,
+  pfIdObject,
+} from "../_shared/types/ranking.d.ts";
 
 // 랭킹 데이터 업데이트
 const getRankingAPI = (period: RankingPeriod) => {
@@ -34,6 +38,7 @@ const getRankingData = async (
       .then((res) => res.text())
       .then((data) => convert.xml2js(data, { compact: true }));
 
+    console.log(response);
     rankingItemArray = response.boxofs.boxof;
   } catch (error) {
     console.log("KOPIS API로 공연 랭킹 데이터 가져오기 실패: ", error);
@@ -130,7 +135,7 @@ export const importRankingPfDetail = async (
   if (!RankingPfIdArray) {
     console.log("DB _ranking 에서 랭킹 공연 id로 이루어진 배열 가져오기 실패");
   } else {
-    await Promise.all(
+    await Promise.all( // setTimeout
       RankingPfIdArray.map(async (element) => {
         await getRankingPfDetailAndImport(element.mt20id._text);
       })
@@ -196,16 +201,34 @@ export const refreshAllRankingData = async () => {
     deleteRankingData("weekly"),
     deleteRankingData("monthly"),
   ]);
-  await Promise.all([
-    importRankingData("daily"),
-    importRankingData("weekly"),
-    importRankingData("monthly"),
-  ]);
-  await Promise.all([
-    importRankingPfDetail("daily"),
-    importRankingPfDetail("weekly"),
-    importRankingPfDetail("monthly"),
-  ]);
+  await importRankingData("daily");
+
+  await new Promise((r) => {
+    setTimeout(r, 100);
+  });
+  await importRankingData("weekly");
+  await new Promise((r) => {
+    setTimeout(r, 100);
+  });
+  await importRankingData("monthly");
+  await new Promise((r) => {
+    setTimeout(r, 100);
+  });
+
+  await importRankingPfDetail("daily");
+   await new Promise((r) => {
+    setTimeout(r, 100);
+  });
+  await importRankingPfDetail("weekly");
+   await new Promise((r) => {
+    setTimeout(r, 100);
+  });
+  await importRankingPfDetail("monthly");
+   await new Promise((r) => {
+    setTimeout(r, 100);
+  });
+
+  // db에서의 호출이므로 settimeout 필요 x
   await Promise.all([
     addTicketlinkToRankingData("daily"),
     addTicketlinkToRankingData("weekly"),
@@ -215,4 +238,4 @@ export const refreshAllRankingData = async () => {
 
 Deno.test("Refreshing ranking performance test", async () => {
   await refreshAllRankingData();
-})
+});
