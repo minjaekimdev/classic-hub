@@ -1,0 +1,49 @@
+.performance-item {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 40px;
+  cursor: pointer;
+
+  &__poster {
+    width: 213px;
+    height: 283px;
+    background: #e5e7eb;
+    position: relative;
+    border-radius: 12px;
+  }
+  
+  &__info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 2px;
+  }
+
+  &__title,
+  &__price {
+    font-size: 14px;
+    font-weight: 600;
+    height: 20px;
+    display: flex;
+  }
+
+  &__location,
+  &__period {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  &__text {
+    font-size: 12px;
+    font-weight: 400;
+    height: 16px;
+    color: #4b5563;
+  }
+
+  &__icon {
+    width: 12px;
+    height: 12px;
+  }
+}
