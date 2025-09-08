@@ -5,7 +5,7 @@ import locationIcon from "@assets/filter/location.svg";
 import periodIcon from "@assets/filter/period.svg";
 import styles from "./FilterField.module.scss";
 import DropdownMenu from "../dropdown/DropdownMenu";
-import PeriodCalendar from "../dropdown/PeriodCalendar";
+import DatePicker from "../dropdown/DatePicker";
 import dropdownArrow from "@/assets/dropdown/dropdown-icon-gray.svg";
 
 interface FilterFieldProps {
@@ -122,38 +122,54 @@ const FilterField: React.FC<FilterFieldProps> = ({
 
   const renderDropdown = () => {
     if (data.type === "기간") {
-      return <PeriodCalendar />;
+      return (
+        <div className={`${styles["dropdown-container"]} ${styles["dropdown-container-single"]}`}>
+          <DatePicker />
+        </div>
+      );
     } else if (data.type === "시대" || data.type === "장르") {
-      return propsDataObj[data.type].map((item) => (
-        <DropdownMenu
-          key={item.main}
-          main={item.main}
-          sub={item.sub}
-          onSelect={() => dropdownSelect(item.main)}
-          setSelected={setSelected}
-          setFilterActive={setFilterActive}
-        />
-      ));
+      return (
+        <div ref={dropdownRef} className={`${styles["dropdown-container"]} ${styles["dropdown-container-group"]}`}>
+          {propsDataObj[data.type].map((item) => (
+            <DropdownMenu
+              key={item.main}
+              main={item.main}
+              sub={item.sub}
+              onSelect={() => dropdownSelect(item.main)}
+              setSelected={setSelected}
+              setFilterActive={setFilterActive}
+            />
+          ))}
+        </div>
+      );
     } else if (data.type === "가격") {
-      return propsDataObj[data.type].map((price) => (
-        <DropdownMenu
-          key={price}
-          main={price}
-          onSelect={() => dropdownSelect(price)}
-          setSelected={setSelected}
-          setFilterActive={setFilterActive}
-        />
-      ));
+      return (
+        <div ref={dropdownRef} className={`${styles["dropdown-container"]} ${styles["dropdown-container-group"]}`}>
+          {propsDataObj[data.type].map((price) => (
+            <DropdownMenu
+              key={price}
+              main={price}
+              onSelect={() => dropdownSelect(price)}
+              setSelected={setSelected}
+              setFilterActive={setFilterActive}
+            />
+          ))}
+        </div>
+      );
     } else {
-      return propsDataObj["지역"].map((item) => (
-        <DropdownMenu
-          key={item}
-          main={item}
-          onSelect={() => dropdownSelect(item)}
-          setSelected={setSelected}
-          setFilterActive={setFilterActive}
-        />
-      ));
+      return (
+        <div ref={dropdownRef} className={`${styles["dropdown-container"]} ${styles["dropdown-container-group"]}`}>
+          {propsDataObj["지역"].map((item) => (
+            <DropdownMenu
+              key={item}
+              main={item}
+              onSelect={() => dropdownSelect(item)}
+              setSelected={setSelected}
+              setFilterActive={setFilterActive}
+            />
+          ))}
+        </div>
+      );
     }
   };
 
@@ -192,12 +208,7 @@ const FilterField: React.FC<FilterFieldProps> = ({
           <img className="dropdown-icon" src={dropdownArrow} alt="" />
         </div>
       </section>
-
-      {showDropdown && (
-        <div ref={dropdownRef} className={styles["filter-dropdown"]}>
-          {renderDropdown()}
-        </div>
-      )}
+      {showDropdown && renderDropdown()}
     </fieldset>
   );
 };

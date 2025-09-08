@@ -18,6 +18,7 @@ const App: React.FC = () => {
       <Scroll />
       <Routes>
         <Route path="/" element={<PfSearch />} />
+        {/* <Route path="/" element={<PfRanking />} /> */}
         <Route path="/detail/:pfId" element={<PfDetail />} />
       </Routes>
     </BrowserRouter>

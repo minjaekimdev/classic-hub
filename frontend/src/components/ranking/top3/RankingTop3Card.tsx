@@ -4,8 +4,8 @@ import type { RankingItem } from "@/models/ranking.client";
 import rankingFirst from "@assets/ranking/ranking-first.svg";
 import rankingSecond from "@assets/ranking/ranking-second.svg";
 import rankingThird from "@assets/ranking/ranking-third.svg";
-import locationIcon from "@assets/card/concert-item-location-icon.svg";
-import periodIcon from "@assets/card/concert-item-period-icon.svg";
+import locationIcon from "@assets/card/performance-item-location-icon.svg";
+import periodIcon from "@assets/card/performance-item-period-icon.svg";
 import RankingTop3TicketLink from "./RankingTop3TicketLink";
 import { Link } from "react-router-dom";
 

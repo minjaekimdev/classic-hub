@@ -1,5 +1,6 @@
 import express, { Express, Request, Response } from "express";
-import supabase from "./supabase/functions/client/supabase-client-sb";
+// import supabase from "./supabase/functions/client/supabase-client-sb";
+import supabase from "./apis/supabase-client";
 import cors from "cors";
 import { RankingItem } from "./models/ranking-server";
 
@@ -17,16 +18,10 @@ app.get("/ranking/:period", async (req: Request, res: Response) => {
     .from(tableName)
     .select("rnum, prfnm, prfpd, prfplcnm, poster, mt20id, relates");
 
+
   if (error) {
     return res.status(500).json({ error: error.message });
   } else {
-    data.forEach((element: RankingItem) => {
-      const item = element as { [key: string]: any };
-      Object.keys(element).forEach((key) => {
-        item[key] = JSON.parse(item[key]);
-      });
-    });
-
     data.sort((a, b) => a.rnum._text - b.rnum._text);
     return res.status(200).json(data);
   }
