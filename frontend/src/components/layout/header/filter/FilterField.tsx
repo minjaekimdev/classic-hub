@@ -4,8 +4,8 @@ import genreIcon from "@assets/filter/genre.svg";
 import locationIcon from "@assets/filter/location.svg";
 import periodIcon from "@assets/filter/period.svg";
 import styles from "./FilterField.module.scss";
-import DropdownMenu from "../dropdown/DropdownMenu";
-import DatePicker from "../dropdown/DatePicker";
+import DropdownMenu from "./dropdown/DropdownMenu";
+import DatePicker from "./dropdown/DatePicker";
 import dropdownArrow from "@/assets/dropdown/dropdown-icon-gray.svg";
 
 interface FilterFieldProps {
@@ -117,19 +117,30 @@ const FilterField: React.FC<FilterFieldProps> = ({
 
   const dropdownSelect = (menu: string) => {
     setSelectedMenu(menu);
-    setShowDropdown(false);
+
+    if (
+      !(/^\d{4}-\d{2}-\d{2}\s~\s\d{4}-\d{2}-\d{2}$/.test(menu) || menu === "")
+    ) {
+      setShowDropdown(false);
+    }
   };
 
   const renderDropdown = () => {
     if (data.type === "기간") {
       return (
-        <div className={`${styles["dropdown-container"]} ${styles["dropdown-container-single"]}`}>
-          <DatePicker />
+        <div
+          ref={dropdownRef}
+          className={`${styles["dropdown-container"]} ${styles["dropdown-container-single"]}`}
+        >
+          <DatePicker onSelect={dropdownSelect} />
         </div>
       );
     } else if (data.type === "시대" || data.type === "장르") {
       return (
-        <div ref={dropdownRef} className={`${styles["dropdown-container"]} ${styles["dropdown-container-group"]}`}>
+        <div
+          ref={dropdownRef}
+          className={`${styles["dropdown-container"]} ${styles["dropdown-container-group"]}`}
+        >
           {propsDataObj[data.type].map((item) => (
             <DropdownMenu
               key={item.main}
@@ -144,7 +155,10 @@ const FilterField: React.FC<FilterFieldProps> = ({
       );
     } else if (data.type === "가격") {
       return (
-        <div ref={dropdownRef} className={`${styles["dropdown-container"]} ${styles["dropdown-container-group"]}`}>
+        <div
+          ref={dropdownRef}
+          className={`${styles["dropdown-container"]} ${styles["dropdown-container-group"]}`}
+        >
           {propsDataObj[data.type].map((price) => (
             <DropdownMenu
               key={price}
@@ -158,7 +172,10 @@ const FilterField: React.FC<FilterFieldProps> = ({
       );
     } else {
       return (
-        <div ref={dropdownRef} className={`${styles["dropdown-container"]} ${styles["dropdown-container-group"]}`}>
+        <div
+          ref={dropdownRef}
+          className={`${styles["dropdown-container"]} ${styles["dropdown-container-group"]}`}
+        >
           {propsDataObj["지역"].map((item) => (
             <DropdownMenu
               key={item}

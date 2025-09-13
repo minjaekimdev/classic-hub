@@ -1,8 +1,10 @@
 import React, { useEffect } from "react";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 // import PfRanking from "./PfRanking";
-import PfSearch from "./PfSearch";
-import PfDetail from "./PfDetail";
+// import Home from "./Home";
+import Detail from "./Detail";
+import SearchResult from "./SearchResult";
+
 
 export function Scroll() {
   const { pathname } = useLocation();
@@ -17,9 +19,10 @@ const App: React.FC = () => {
     <BrowserRouter>
       <Scroll />
       <Routes>
-        <Route path="/" element={<PfSearch />} />
+        {/* <Route path="/" element={<Home />} /> */}
         {/* <Route path="/" element={<PfRanking />} /> */}
-        <Route path="/detail/:pfId" element={<PfDetail />} />
+        <Route path="/" element={<SearchResult />} />
+        {/* <Route path="/detail/:pfId" element={<Detail />} /> */}
       </Routes>
     </BrowserRouter>
   );

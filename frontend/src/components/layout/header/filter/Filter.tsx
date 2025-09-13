@@ -1,20 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import styles from "./filter.module.scss";
 import searchIcon from "@assets/filter/search-icon.svg";
-import FilterField from "./field/FilterField";
-
-const ServiceDescription: React.FC = () => {
-  return (
-    <div className={styles["service-description"]}>
-      <h1 className={styles["main-description"]}>
-        원하는 클래식 공연을 찾아보세요
-      </h1>
-      <p className={styles["sub-description"]}>
-        다양한 조건별 맞춤 검색이 가능합니다
-      </p>
-    </div>
-  );
-};
+import FilterField from "./FilterField";
 
 const SearchInput: React.FC<{
   isSelected: boolean;
@@ -131,7 +118,6 @@ const Filter: React.FC = () => {
     <div className={styles["filter-section"]}>
       <div className={styles["container"]}>
         <div className={styles["filter-wrapper"]}>
-          <ServiceDescription />
           <form
             ref={filterRef}
             method="get"

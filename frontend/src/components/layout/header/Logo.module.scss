@@ -1,0 +1,18 @@
+.logo {
+    margin-left: 20px;
+    display: flex;
+    gap: 6px;
+    cursor: pointer;
+
+    .im {
+      width: 32px;
+      height: 32px;
+    }
+
+    .logo__title {
+      font-family: "Geist", sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      transform: translateY(6px);
+    }
+  }

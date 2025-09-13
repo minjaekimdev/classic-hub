@@ -1,0 +1,31 @@
+.result-header {
+  padding-top: 32px;
+  padding-bottom: 48px;
+  display: flex;
+  justify-content: space-between;
+
+  .title {
+    font-weight: 700;
+    font-size: 30px;
+  }
+
+  .result-count {
+    display: flex;
+    flex-direction: column;
+
+    &__number {
+      font-family: "Inter", sans-serif;
+      font-weight: 700;
+      font-size: 24px;
+      color: #cc0000;
+    }
+
+    &__label {
+      font-weight: 400;
+      font-size: 14px;
+      color: #4B5563
+    }
+  }
+
+
+}

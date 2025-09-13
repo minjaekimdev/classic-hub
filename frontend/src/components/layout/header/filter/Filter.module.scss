@@ -3,11 +3,11 @@ fieldset {
 }
 
 .filter-section {
-  background: #f9fafb;
   .filter-wrapper {
     width: 1023px;
     margin: 0 auto;
-    padding: 50px 0 40px;
+    padding-top: 10px;
+    padding-bottom: 30px;
     display: flex;
     flex-direction: column;
     gap: 40px;
