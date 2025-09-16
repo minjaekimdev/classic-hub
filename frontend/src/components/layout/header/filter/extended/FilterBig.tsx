@@ -1,39 +1,46 @@
-import React, { useState, useEffect, useRef } from "react";
-import styles from "./filter.module.scss";
+import React, { useRef, useEffect, type SetStateAction } from "react";
+import styles from "./FilterBig.module.scss";
 import searchIcon from "@assets/filter/search-icon.svg";
 import FilterField from "./FilterField";
+import type { fieldType, fieldContentType } from "../../Header";
 
 const SearchInput: React.FC<{
-  isSelected: boolean;
-  onSelect: () => void;
-  isFilterActive: boolean;
-}> = ({ isSelected, onSelect, isFilterActive }) => {
+  fieldSelected: fieldType | "";
+  inputValue: string;
+  onFieldSelect: React.Dispatch<React.SetStateAction<fieldType | "">>;
+  setFieldContent: React.Dispatch<React.SetStateAction<fieldContentType>>;
+}> = ({ fieldSelected, inputValue, onFieldSelect, setFieldContent }) => {
   const inputRef = useRef<HTMLInputElement>(null);
-
-  const inputFocus = () => {
-    inputRef.current?.focus();
-  };
 
   return (
     <div
       className={`${styles["filter__searchbox"]} ${
-        isSelected ? styles["filter__searchbox--active"] : ""
+        fieldSelected === "검색" ? styles["filter__searchbox--active"] : ""
       } ${
-        isFilterActive && !isSelected
+        fieldSelected !== null && fieldSelected !== "검색"
           ? styles["filter__searchbox--inactive"]
           : ""
       }`}
       onClick={() => {
-        onSelect();
-        inputFocus();
+        onFieldSelect("검색");
+        inputRef.current?.focus();
       }}
     >
       <input
         ref={inputRef}
         type="text"
+        value={inputValue}
         placeholder="공연명, 프로그램(작품)명으로 검색해보세요!"
         className={styles["filter__input"]}
-        onFocus={onSelect}
+        onChange={(e) => {
+          setFieldContent((prev) => ({
+            ...prev,
+            검색: e.target.value,
+          }));
+        }}
+        onFocus={() => {
+          onFieldSelect("검색");
+        }}
         onClick={(e) => {
           e.stopPropagation();
         }}
@@ -88,9 +95,12 @@ const filterFieldProps = [
   },
 ] as const;
 
-const Filter: React.FC = () => {
-  const [selected, setSelected] = useState<number | null>(null);
-  const [filterActive, setFilterActive] = useState(false);
+const FilterBig: React.FC<{
+  selectedField: fieldType | "";
+  fieldContent: fieldContentType;
+  setSelectedField: React.Dispatch<SetStateAction<fieldType | "">>;
+  setFieldContent: React.Dispatch<SetStateAction<fieldContentType>>;
+}> = ({ selectedField, fieldContent, setSelectedField, setFieldContent }) => {
   const filterRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
@@ -99,20 +109,16 @@ const Filter: React.FC = () => {
         filterRef.current &&
         !filterRef.current.contains(event.target as Node)
       ) {
-        setFilterActive(false);
-        setSelected(null);
+        setSelectedField("");
       }
     };
 
     document.addEventListener("click", handleClickOutside);
 
-    return () => document.removeEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
   }, []);
-
-  const onSelect = (index: number) => {
-    setFilterActive(true);
-    setSelected(index);
-  };
 
   return (
     <div className={styles["filter-section"]}>
@@ -122,24 +128,24 @@ const Filter: React.FC = () => {
             ref={filterRef}
             method="get"
             className={`${styles["filter"]} ${
-              filterActive ? styles["filter--active"] : ""
+              selectedField ? styles["filter--active"] : ""
             }`}
           >
             <SearchInput
-              isSelected={selected === -2}
-              onSelect={() => onSelect(-2)}
-              isFilterActive={selected !== null}
+              fieldSelected={selectedField}
+              inputValue={fieldContent.검색}
+              onFieldSelect={setSelectedField}
+              setFieldContent={setFieldContent}
             />
             <ButtonContainer />
-            {filterFieldProps.map((element, index) => (
+            {filterFieldProps.map((element) => (
               <FilterField
-                key={element.area}
+                key={element.type}
                 data={element}
-                onSelect={() => onSelect(index)}
-                setSelected={setSelected}
-                setFilterActive={setFilterActive}
-                isSelected={selected === index}
-                isFilterActive={selected !== null}
+                fieldSelected={selectedField}
+                fieldContent={fieldContent[element.type]}
+                onFieldSelect={setSelectedField}
+                setFieldContent={setFieldContent}
               />
             ))}
           </form>
@@ -149,4 +155,4 @@ const Filter: React.FC = () => {
   );
 };
 
-export default Filter;
+export default FilterBig;

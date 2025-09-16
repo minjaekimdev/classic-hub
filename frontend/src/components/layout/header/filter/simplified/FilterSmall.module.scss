@@ -1,0 +1,61 @@
+.filter-small {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+  padding-right: 8px;
+  cursor: pointer;
+
+  &__item {
+    padding: 14px 18px;
+
+    &:not(:last-child) {
+      position: relative;
+
+      &::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        right: 0;
+        width: 1px;
+        height: 20px;
+        background-color: #e2e8f0;
+      }
+    }
+
+    .item-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+
+      .icon {
+        width: 10px;
+        height: 10px;
+      }
+
+      .field-text {
+        font-weight: 400;
+        font-size: 14px;
+        color: #000;
+      }
+    }
+  }
+
+  .search-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 6px;
+    width: 30px;
+    height: 30px;
+    background-color: #cc0000;
+
+    .search-icon {
+      width: 14px;
+      height: 14px;
+    }
+  }
+}

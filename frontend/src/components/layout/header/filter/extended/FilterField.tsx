@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, type SetStateAction } from "react";
 import eraIcon from "@assets/filter/era.svg";
 import genreIcon from "@assets/filter/genre.svg";
 import locationIcon from "@assets/filter/location.svg";
@@ -7,35 +7,33 @@ import styles from "./FilterField.module.scss";
 import DropdownMenu from "./dropdown/DropdownMenu";
 import DatePicker from "./dropdown/DatePicker";
 import dropdownArrow from "@/assets/dropdown/dropdown-icon-gray.svg";
+import type { fieldType, fieldContentType } from "../../Header";
 
 interface FilterFieldProps {
   data: {
     area: string;
-    type: "시대" | "장르" | "지역" | "가격" | "기간";
+    type: Exclude<fieldType, "검색">;
     initialState: string;
   };
-  onSelect: () => void;
-  isSelected: boolean;
-  isFilterActive: boolean;
-  setSelected: React.Dispatch<React.SetStateAction<number | null>>;
-  setFilterActive: React.Dispatch<React.SetStateAction<boolean>>;
+  fieldSelected: fieldType | "";
+  fieldContent: string;
+  onFieldSelect: React.Dispatch<SetStateAction<fieldType | "">>;
+  setFieldContent: React.Dispatch<SetStateAction<fieldContentType>>;
 }
 
 const FilterField: React.FC<FilterFieldProps> = ({
   data,
-  onSelect,
-  isSelected,
-  isFilterActive,
-  setSelected,
-  setFilterActive,
+  fieldSelected,
+  fieldContent,
+  onFieldSelect,
+  setFieldContent,
 }) => {
-  const [showDropdown, setShowDropdown] = useState(false);
-  const [selectedMenu, setSelectedMenu] = useState(data.initialState);
+  const [showDropdown, setShowDropdown] = useState<string | null>("");
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    setShowDropdown(isSelected);
-  }, [isSelected]);
+    setShowDropdown(fieldSelected);
+  }, [fieldSelected]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -43,8 +41,7 @@ const FilterField: React.FC<FilterFieldProps> = ({
         dropdownRef.current &&
         !dropdownRef.current.contains(event.target as Node)
       ) {
-        setShowDropdown(false);
-        console.log("FilterField eventListener!");
+        setShowDropdown("");
       }
     };
     document.addEventListener("click", handleClickOutside);
@@ -116,26 +113,28 @@ const FilterField: React.FC<FilterFieldProps> = ({
   };
 
   const dropdownSelect = (menu: string) => {
-    setSelectedMenu(menu);
-
+    setFieldContent((prev) => ({ ...prev, [data.type]: menu }));
     if (
       !(/^\d{4}-\d{2}-\d{2}\s~\s\d{4}-\d{2}-\d{2}$/.test(menu) || menu === "")
     ) {
-      setShowDropdown(false);
+      setShowDropdown("");
     }
   };
 
   const renderDropdown = () => {
-    if (data.type === "기간") {
+    if (data.type === "기간" && showDropdown === "기간") {
       return (
         <div
           ref={dropdownRef}
           className={`${styles["dropdown-container"]} ${styles["dropdown-container-single"]}`}
         >
-          <DatePicker onSelect={dropdownSelect} />
+          <DatePicker setFieldContent={setFieldContent} />
         </div>
       );
-    } else if (data.type === "시대" || data.type === "장르") {
+    } else if (
+      (data.type === "시대" && showDropdown === "시대") ||
+      (data.type === "장르" && showDropdown === "장르")
+    ) {
       return (
         <div
           ref={dropdownRef}
@@ -146,14 +145,15 @@ const FilterField: React.FC<FilterFieldProps> = ({
               key={item.main}
               main={item.main}
               sub={item.sub}
-              onSelect={() => dropdownSelect(item.main)}
-              setSelected={setSelected}
-              setFilterActive={setFilterActive}
+              fieldType={data.type}
+              onSelect={dropdownSelect}
+              onFieldSelect={onFieldSelect}
+              setFieldContent={setFieldContent}
             />
           ))}
         </div>
       );
-    } else if (data.type === "가격") {
+    } else if (data.type === "가격" && showDropdown === "가격") {
       return (
         <div
           ref={dropdownRef}
@@ -163,14 +163,15 @@ const FilterField: React.FC<FilterFieldProps> = ({
             <DropdownMenu
               key={price}
               main={price}
-              onSelect={() => dropdownSelect(price)}
-              setSelected={setSelected}
-              setFilterActive={setFilterActive}
+              fieldType={data.type}
+              onSelect={dropdownSelect}
+              onFieldSelect={onFieldSelect}
+              setFieldContent={setFieldContent}
             />
           ))}
         </div>
       );
-    } else {
+    } else if (data.type === "지역" && showDropdown === "지역") {
       return (
         <div
           ref={dropdownRef}
@@ -180,9 +181,10 @@ const FilterField: React.FC<FilterFieldProps> = ({
             <DropdownMenu
               key={item}
               main={item}
-              onSelect={() => dropdownSelect(item)}
-              setSelected={setSelected}
-              setFilterActive={setFilterActive}
+              fieldType={data.type}
+              onSelect={dropdownSelect}
+              onFieldSelect={onFieldSelect}
+              setFieldContent={setFieldContent}
             />
           ))}
         </div>
@@ -200,13 +202,16 @@ const FilterField: React.FC<FilterFieldProps> = ({
   return (
     <fieldset
       className={`${styles["filter-field"]} ${
-        isSelected ? styles["filter-field--active"] : ""
+        fieldSelected === data.type ? styles["filter-field--active"] : ""
       } ${
-        isFilterActive && !isSelected ? styles["filter-field--inactive"] : ""
+        fieldSelected !== null && fieldSelected !== data.type
+          ? styles["filter-field--inactive"]
+          : ""
       }`}
       onClick={(e) => {
         e.stopPropagation();
-        onSelect();
+        onFieldSelect(data.type);
+        setShowDropdown(data.type);
       }}
       style={{
         gridArea: data.area,
@@ -218,14 +223,14 @@ const FilterField: React.FC<FilterFieldProps> = ({
           <div className={styles["field-icon-wrapper"]}>{renderIcon()}</div>
           <section className={styles["field-text-wrapper"]}>
             <legend>{data.type}</legend>
-            <p>{selectedMenu}</p>
+            <p>{fieldContent ? fieldContent : data.initialState}</p>
           </section>
         </div>
         <div className="dropdown-icon-wrapper">
           <img className="dropdown-icon" src={dropdownArrow} alt="" />
         </div>
       </section>
-      {showDropdown && renderDropdown()}
+      {renderDropdown()}
     </fieldset>
   );
 };

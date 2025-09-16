@@ -48,7 +48,7 @@
       .field-text-wrapper {
         display: flex;
         flex-direction: column;
-        width: 90px;
+        width: 94px;
         gap: 4.5px;
 
         legend {
@@ -91,9 +91,12 @@
     }
 
     &-single {
-      padding: 10px 20px;
+      display: flex;
+      justify-content: center;
+      padding-top: 10px;
+      padding-bottom: 10px;
       right: -122px;
-      width: 650px;
+      width: 680px;
     }
   }
 }

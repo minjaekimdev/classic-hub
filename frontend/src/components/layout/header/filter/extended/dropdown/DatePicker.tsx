@@ -1,30 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, type SetStateAction } from "react";
 import { DayPicker } from "react-day-picker";
 import { ko } from "date-fns/locale";
 import "./DatePicker.scss";
 import { format } from "date-fns";
 import type { OnSelectHandler, DateRange } from "react-day-picker";
+import type { fieldContentType } from "../../../Header";
 
 const DatePicker: React.FC<{
-  onSelect: (menu: string) => void;
-}> = ({ onSelect }) => {
+  setFieldContent: React.Dispatch<SetStateAction<fieldContentType>>;
+}> = ({ setFieldContent }) => {
   const [range, setRange] = useState<DateRange>();
 
   const handleSelect: OnSelectHandler<DateRange | undefined> = (selected) => {
-    console.log("Selected:", selected);
-    setRange(selected);
-
-    console.log("range:", range);
-
-    setRange(selected);
     const fromStr = selected?.from ? format(selected.from, "yyyy-MM-dd") : "";
     const toStr = selected?.to ? format(selected.to, "yyyy-MM-dd") : "";
-
-    const period = fromStr && toStr ? `${fromStr} ~ ${toStr}` : "기간 선택";
-
-    console.log(period);
-
-    onSelect(period); // field에 항목명 표시
+    const period =
+      fromStr && toStr
+        ? `${fromStr}
+    ~ ${toStr}`
+        : "기간 선택";
+    setRange(selected);
+    setFieldContent((prev) => ({ ...prev, 기간: period }));
   };
 
   return (

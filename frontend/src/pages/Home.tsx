@@ -1,7 +1,7 @@
 import React from "react";
-import Header from "@/components/layout/header/HeaderExtended";
 import Footer from "@/components/layout/footer/Footer";
 import Info from "@/components/home/performance-info/Info";
+import Header from "@/components/layout/header/Header";
 
 const Home: React.FC = () => {
   return (
