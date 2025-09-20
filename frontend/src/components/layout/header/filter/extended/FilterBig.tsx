@@ -12,6 +12,12 @@ const SearchInput: React.FC<{
 }> = ({ fieldSelected, inputValue, onFieldSelect, setFieldContent }) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
+  useEffect(() => {
+    if (fieldSelected === "검색어") {
+      inputRef.current?.focus();
+    }
+  }, [fieldSelected]);
+
   return (
     <div
       className={`${styles["filter__searchbox"]} ${

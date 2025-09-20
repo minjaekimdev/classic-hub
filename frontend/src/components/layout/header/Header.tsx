@@ -84,55 +84,68 @@ const Header: React.FC = () => {
   };
 
   return (
-    <motion.div
-      ref={headerRef}
-      className={styles["header"]}
-      layout 
-      transition={{ duration: 0.1, ease: "easeInOut" }}
-    >
-      <Logo />
-      <div className={styles["header__middle"]}>
-        <AnimatePresence mode="wait">
-          {expanded && (
-            <motion.div
-              key="nav"
-              exit={{ opacity: 0, y: -50 }}
-              transition={{ duration: 0.1, ease: "easeInOut" }}
-            >
-              <NavBar />
-            </motion.div>
-          )}
-          {expanded ? (
-            <motion.div
-              layout
-              key="big"
-              layoutId="filter"
-              transition={{ duration: 0.1, ease: "easeInOut" }}
-            >
-              <FilterBig
-                selectedField={selectedField}
-                fieldContent={fieldContent}
-                setSelectedField={setSelectedField}
-                setFieldContent={setFieldContent}
-              />
-            </motion.div>
-          ) : (
-            <motion.div
-              layout
-              key="small"
-              layoutId="filter"
-              transition={{ duration: 0.1, ease: "easeInOut" }}
-            >
-              <FilterSmall
-                selected={selectedField}
-                onFieldClick={handleUserHeaderExpand}
-              />
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-      <Auth />
-    </motion.div>
+    <>
+      <AnimatePresence>
+        {userExpanded && (
+          <motion.div
+            className={styles["overlay"]}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.1, ease: "easeInOut" }}
+          ></motion.div>
+        )}
+      </AnimatePresence>
+      <motion.div
+        ref={headerRef}
+        className={styles["header"]}
+        layout
+        transition={{ duration: 0.1, ease: "easeInOut" }}
+      >
+        <Logo />
+        <div className={styles["header__middle"]}>
+          <AnimatePresence mode="wait">
+            {expanded && (
+              <motion.div
+                key="nav"
+                exit={{ opacity: 0, y: -50 }}
+                transition={{ duration: 0.1, ease: "easeInOut" }}
+              >
+                <NavBar />
+              </motion.div>
+            )}
+            {expanded ? (
+              <motion.div
+                layout
+                key="big"
+                layoutId="filter"
+                transition={{ duration: 0.1, ease: "easeInOut" }}
+              >
+                <FilterBig
+                  selectedField={selectedField}
+                  fieldContent={fieldContent}
+                  setSelectedField={setSelectedField}
+                  setFieldContent={setFieldContent}
+                />
+              </motion.div>
+            ) : (
+              <motion.div
+                layout
+                key="small"
+                layoutId="filter"
+                transition={{ duration: 0.1, ease: "easeInOut" }}
+              >
+                <FilterSmall
+                  selected={selectedField}
+                  onFieldClick={handleUserHeaderExpand}
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+        <Auth />
+      </motion.div>
+    </>
   );
 };
 
