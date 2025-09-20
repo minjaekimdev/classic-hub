@@ -4,14 +4,16 @@ import eraIcon from "@assets/filter/era.svg";
 import genreIcon from "@assets/filter/genre.svg";
 import locationIcon from "@assets/filter/location.svg";
 import periodIcon from "@assets/filter/period.svg";
+import trebleClef from "@assets/filter/treble-clef.png";
 import type { fieldType } from "../../Header";
 
 const FilterSmallItem: React.FC<{
-  field: Exclude<fieldType, "검색"> ;
+  field: fieldType;
   selected: string | null;
   onSelect: (field: fieldType) => void;
 }> = ({ field, onSelect }) => {
   const iconObj = {
+    검색어: trebleClef,
     시대: eraIcon,
     장르: genreIcon,
     지역: locationIcon,

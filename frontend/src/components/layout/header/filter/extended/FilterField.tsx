@@ -12,7 +12,7 @@ import type { fieldType, fieldContentType } from "../../Header";
 interface FilterFieldProps {
   data: {
     area: string;
-    type: Exclude<fieldType, "검색">;
+    type: Exclude<fieldType, "검색어">;
     initialState: string;
   };
   fieldSelected: fieldType | "";

@@ -15,14 +15,14 @@ const SearchInput: React.FC<{
   return (
     <div
       className={`${styles["filter__searchbox"]} ${
-        fieldSelected === "검색" ? styles["filter__searchbox--active"] : ""
+        fieldSelected === "검색어" ? styles["filter__searchbox--active"] : ""
       } ${
-        fieldSelected !== null && fieldSelected !== "검색"
+        fieldSelected !== null && fieldSelected !== "검색어"
           ? styles["filter__searchbox--inactive"]
           : ""
       }`}
       onClick={() => {
-        onFieldSelect("검색");
+        onFieldSelect("검색어");
         inputRef.current?.focus();
       }}
     >
@@ -35,11 +35,11 @@ const SearchInput: React.FC<{
         onChange={(e) => {
           setFieldContent((prev) => ({
             ...prev,
-            검색: e.target.value,
+            검색어: e.target.value,
           }));
         }}
         onFocus={() => {
-          onFieldSelect("검색");
+          onFieldSelect("검색어");
         }}
         onClick={(e) => {
           e.stopPropagation();
@@ -133,7 +133,7 @@ const FilterBig: React.FC<{
           >
             <SearchInput
               fieldSelected={selectedField}
-              inputValue={fieldContent.검색}
+              inputValue={fieldContent.검색어}
               onFieldSelect={setSelectedField}
               setFieldContent={setFieldContent}
             />
