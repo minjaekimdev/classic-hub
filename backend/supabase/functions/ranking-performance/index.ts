@@ -38,7 +38,6 @@ const getRankingData = async (
       .then((res) => res.text())
       .then((data) => convert.xml2js(data, { compact: true }));
 
-    console.log(response);
     rankingItemArray = response.boxofs.boxof;
   } catch (error) {
     console.log("KOPIS API로 공연 랭킹 데이터 가져오기 실패: ", error);
@@ -47,8 +46,15 @@ const getRankingData = async (
   return rankingItemArray;
 };
 
-const importRankingItem = async (item: any, table: string): Promise<void> => {
+const importRankingItem = async (
+  item: object,
+  table: string
+): Promise<void> => {
   const { error } = await supabase.from(table).insert(item);
+
+  console.log(`rankingItem:
+    ${JSON.stringify(item)}
+    `);
 
   if (error) {
     console.log("DB에 랭킹 데이터 삽입 실패: ", error);
@@ -76,6 +82,11 @@ export const importRankingData = async (
       async (element) => await importRankingItem(element, tableName)
     )
   );
+
+  // 초당 10회 호출 제한
+  await new Promise((r) => {
+    setTimeout(r, 100);
+  });
 };
 
 export const deleteRankingData = async (
@@ -115,11 +126,12 @@ const getRankingPfDetailAndImport = async (pfId: string): Promise<void> => {
     .then((res) => res.text())
     .then((data) => convert.xml2js(data, { compact: true }));
 
-  console.log(response);
   const pfDetail = response.dbs.db;
 
-  const { error } = await supabase.from("performance_list").insert(pfDetail);
-
+  console.log(`pfDetail:
+    ${JSON.stringify(pfDetail)}
+    `);
+  const { error } = await supabase.from("performance_list").upsert(pfDetail);
   if (error) {
     console.log("랭킹 상세 데이터 삽입 실패: ", error);
   } else {
@@ -135,11 +147,13 @@ export const importRankingPfDetail = async (
   if (!RankingPfIdArray) {
     console.log("DB _ranking 에서 랭킹 공연 id로 이루어진 배열 가져오기 실패");
   } else {
-    await Promise.all( // setTimeout
-      RankingPfIdArray.map(async (element) => {
-        await getRankingPfDetailAndImport(element.mt20id._text);
-      })
-    );
+    for (const item of RankingPfIdArray) {
+      await getRankingPfDetailAndImport(item.mt20id._text);
+      // 초당 10회 호출 제한
+      await new Promise((r) => {
+        setTimeout(r, 100);
+      });
+    }
   }
 };
 
@@ -196,39 +210,24 @@ export const addTicketlinkToRankingData = async (
 };
 
 export const refreshAllRankingData = async () => {
+  // 기존 랭킹 데이터 삭제
   await Promise.all([
     deleteRankingData("daily"),
     deleteRankingData("weekly"),
     deleteRankingData("monthly"),
   ]);
+
+  // 새로운 랭킹 데이터 추가
   await importRankingData("daily");
-
-  await new Promise((r) => {
-    setTimeout(r, 100);
-  });
   await importRankingData("weekly");
-  await new Promise((r) => {
-    setTimeout(r, 100);
-  });
   await importRankingData("monthly");
-  await new Promise((r) => {
-    setTimeout(r, 100);
-  });
 
+  // 랭킹 테이블에 공연 데이터 추가
   await importRankingPfDetail("daily");
-   await new Promise((r) => {
-    setTimeout(r, 100);
-  });
   await importRankingPfDetail("weekly");
-   await new Promise((r) => {
-    setTimeout(r, 100);
-  });
   await importRankingPfDetail("monthly");
-   await new Promise((r) => {
-    setTimeout(r, 100);
-  });
 
-  // db에서의 호출이므로 settimeout 필요 x
+  // 예매처 링크를 DB의 랭킹 테이블에 추가
   await Promise.all([
     addTicketlinkToRankingData("daily"),
     addTicketlinkToRankingData("weekly"),

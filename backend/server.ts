@@ -1,5 +1,4 @@
 import express, { Express, Request, Response } from "express";
-// import supabase from "./supabase/functions/client/supabase-client-sb";
 import supabase from "./apis/supabase-client";
 import cors from "cors";
 import { RankingItem } from "./models/ranking-server";
