@@ -1,13 +1,11 @@
-import supabase from "supabase/functions/client/supabase-client-sb";
-import {
-  apiURL,
-  classic,
-  serviceKey,
-} from "supabase/functions/client/kopis-client-sb";
+import supabase from "../apis/supabase-client";
+import { apiURL, classic, serviceKey } from "../apis/kopis-client";
 import "dotenv/config";
 import dayjs from "dayjs";
 import convert, { ElementCompact } from "xml-js";
 import { TextNode } from "@/types/common-server";
+
+const now = dayjs();
 
 const getPerformanceArrayByPage = async (
   performanceAPI: string
@@ -39,6 +37,37 @@ const getPerformanceArrayByPage = async (
   }
 };
 
+type JsonValue = string | null | JsonObject | JsonArray;
+interface JsonObject {
+  [key: string]: JsonValue;
+}
+type JsonArray = JsonValue[];
+
+const removeTextProperty = (obj: JsonValue): JsonValue => {
+  if (obj === null || typeof obj !== "object") {
+    return obj;
+  }
+
+  if (Array.isArray(obj)) {
+    return obj.map((item) => removeTextProperty(item));
+  }
+
+  // 객체가 _text 속성만 가지고 있는 경우, _text 값을 반환
+  if (Object.keys(obj).length === 1 && obj.hasOwnProperty("_text")) {
+    return obj._text;
+  }
+
+  // 일반 객체의 경우, 각 속성에 대해 재귀적으로 처리
+  const result: JsonObject = {};
+  for (const key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      result[key] = removeTextProperty(obj[key]);
+    }
+  }
+
+  return result;
+};
+
 const getPerformanceDetail = async (pfId: string) => {
   const detailAPI = `${apiURL}/pblprfr/${pfId}?service=${serviceKey}`;
 
@@ -49,15 +78,16 @@ const getPerformanceDetail = async (pfId: string) => {
 
     const pfDetail = response.dbs.db;
 
-    return pfDetail;
+    return removeTextProperty(pfDetail);
   } catch (error) {
     console.log("공연 상세 정보 받아오기 실패", error);
+    return null;
   }
 };
 
 const getAllPerformance = async (): Promise<TextNode[]> => {
-  const stDate = dayjs().format("YYYYMMDD");
-  const edDate = dayjs().add(90, "day").format("YYYYMMDD");
+  const stDate = now.subtract(1, "day").format("YYYYMMDD");
+  const edDate = now.add(89, "day").format("YYYYMMDD");
   const performanceIdArray = [];
 
   let page = 1;
@@ -74,53 +104,16 @@ const getAllPerformance = async (): Promise<TextNode[]> => {
         performanceIdArray.push(item.mt20id);
       }
     }
+
+    await new Promise((r) => {
+      setTimeout(r, 100);
+    });
   }
 
   return performanceIdArray;
 };
 
-const getUpdatedPerformance = async () => {
-  const today = dayjs();
-  const updateStart = today.format("YYYYMMDD");
-  const updateEnd = today.add(29, "day").format("YYYYMMDD");
-  const newDate = today.add(30, "day").format("YYYYMMDD");
-
-  const afterDate = dayjs().subtract(1, "day").format("YYYYMMDD");
-  const performanceIdArray = [];
-
-  let page = 1;
-
-  // 기간 내 수정된 데이터 추가
-  while (true) {
-    const afterDate = today.subtract(1, "day").format("YYYYMMDD");
-    const updatedPerformanceAPI = `${apiURL}/pblprfr?service=${serviceKey}&stdate=${updateStart}&eddate=${updateEnd}&cpage=${page++}&rows=${100}&shcate=${classic}&afterdate=${afterDate}`;
-    const performanceArrayByPage = await getPerformanceArrayByPage(
-      updatedPerformanceAPI
-    );
-
-    if (!performanceArrayByPage) {
-      break;
-    } else {
-      for (const item of performanceArrayByPage) {
-        performanceIdArray.push(item.mt20id);
-      }
-    }
-  }
-
-  // 3개월 뒤 공연 데이터 추가
-  const newPerformanceAPI = `${apiURL}/pblprfr?service=${serviceKey}&stdate=${updateStart}&eddate=${updateEnd}&cpage=${page++}&rows=${100}&shcate=${classic}&afterdate=${afterDate}`;
-  const newPerformanceArray = await getPerformanceArrayByPage(
-    newPerformanceAPI
-  );
-
-  if (newPerformanceArray) {
-    for (const item of newPerformanceArray) {
-      performanceIdArray.push(item.mt20id);
-    }
-  }
-};
-
-const importPerformanceDetailToDB = async (pfDetail: object) => {
+const importPerformanceDetailToDB = async (pfDetail: JsonValue) => {
   const { error } = await supabase
     .from("performance_list")
     .upsert(pfDetail, { onConflict: "mt20id" });

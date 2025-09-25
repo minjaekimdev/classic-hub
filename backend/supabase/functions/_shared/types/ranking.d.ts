@@ -11,7 +11,5 @@ export interface RankingItem {
     relate: TicketLink | TicketLink[];
   }
 }
-
 export type RankingPeriod = "daily" | "weekly" | "monthly";
-
 export type pfIdObject = { mt20id: TextNode };

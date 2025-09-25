@@ -1,5 +1,5 @@
 import supabase from "../_shared/supabaseClient.ts";
-import { apiURL, classic, serviceKey } from "../_shared/kopisClient.ts";
+import { API_URL, CLASSIC, SERVICE_KEY } from "../_shared/kopisClient.ts";
 import dayjs from "https://esm.sh/dayjs";
 import convert, { ElementCompact } from "https://esm.sh/xml-js";
 import {
@@ -21,9 +21,9 @@ const getRankingAPI = (period: RankingPeriod) => {
     stDate = endDate.clone().subtract(1, "month").format("YYYYMMDD");
   }
 
-  const rankingAPI = `${apiURL}/boxoffice?service=${serviceKey}&stdate=${stDate}&eddate=${endDate.format(
+  const rankingAPI = `${API_URL}/boxoffice?service=${SERVICE_KEY}&stdate=${stDate}&eddate=${endDate.format(
     "YYYYMMDD"
-  )}&catecode=${classic}`;
+  )}&catecode=${CLASSIC}`;
 
   return rankingAPI;
 };
@@ -120,7 +120,7 @@ const returnPfIdArray = async (
 };
 
 const getRankingPfDetailAndImport = async (pfId: string): Promise<void> => {
-  const detailAPI = `${apiURL}/pblprfr/${pfId}?service=${serviceKey}`;
+  const detailAPI = `${API_URL}/pblprfr/${pfId}?service=${SERVICE_KEY}`;
 
   const response: ElementCompact = await fetch(detailAPI)
     .then((res) => res.text())
@@ -235,6 +235,6 @@ export const refreshAllRankingData = async () => {
   ]);
 };
 
-Deno.test("Refreshing ranking performance test", async () => {
-  await refreshAllRankingData();
-});
+// Deno.test("Refreshing ranking performance test", async () => {
+//   await refreshAllRankingData();
+// });
