@@ -1,6 +1,15 @@
 import "dotenv/config";
 import { GoogleGenAI, Type } from "@google/genai";
 
+interface ProgramItem {
+  composer: string;
+  title: string[];
+  era: string;
+  genre: string;
+}
+
+type ProgramArray = ProgramItem[];
+
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 const getBase64FromUrl = async (url: string) => {
@@ -17,6 +26,7 @@ const getBase64FromUrl = async (url: string) => {
   }
 };
 
+// 공연 상세 이미지 URL을 받아 프롬프트와 함께 전달
 const returnContents = async (imgURL: string) => {
   const base64ImageFile = await getBase64FromUrl(imgURL);
 
@@ -32,17 +42,22 @@ const returnContents = async (imgURL: string) => {
         text: `
           다음 이미지를 읽고 각 공연 작품을 JSON 객체로 추출해줘.
 
-          - composer: 작곡가 이름
-          - title: 작품명
+          - composerEnglish: 작곡가 영문 이름
+          - composerKorean: 작곡가 한글 이름
+          - titlesEnglish: 영문 작품명
+          - titlesKorean: 한글 작품명
           - era: 시대
-          - genre: 장르(예: orchestral, stage, chamber, solo)
+          - genre: 장르
 
           규칙:
+          - 각 객체는 반드시 위의 6개 키를 모두 포함할 것
+          - titlesEnglish, titlesKorean의 경우 배열 형태로 여러 작품명을 담는다.
+          - 단, 악장(예: "I.", "II.", "III.", "IV." 등 로마 숫자로 시작하거나 숫자 + 마침표 형식의 부제목)은 title 목록에서 제외할 것
+            예: "III. Romance", "IV. Tarantella", "1. Allegro" 등은 포함하지 않는다.
           - era는 반드시 아래 값 중 하나만 선택할 것. 이외의 값은 절대 사용하지 않는다.
             ["baroque", "classical", "romantic", "modern"]
-          - genre는 반드시 아래 값 중 하나만 선택할 것. 이외의 값은 절대 사용하지 않는다.
-            ["orchestral", "stage", "chamber", "solo"]
-          - era와 genre는 반드시 예시 중 하나 사용
+          - genre는 반드시 아래 값 중 하나 이상을 골라 배열로 만들 것. 이외의 값은 절대 사용하지 않는다.
+            ["orchestral", "opera", "ballet", "chamber", "solo", "non-classic"]
           - 반드시 한 작곡가에 대해 하나의 객체만 생성
           - 마크다운 문법('''json''') 제외하고 순수 json만 반환
         `,
@@ -55,15 +70,16 @@ const returnContents = async (imgURL: string) => {
   }
 };
 
-const getProgramJSON = async (imgURL: string) => {
+const getProgramJSON = async (imgURL: string): Promise<string[]> => {
   const contents = await returnContents(imgURL);
 
-  const geminiPromise = ai.models.generateContent({
+  const response = await ai.models.generateContent({
     model: "gemini-2.5-flash-lite",
     contents: contents,
     config: {
+      maxOutputTokens: 15000,
       thinkingConfig: {
-        thinkingBudget: 0,
+        thinkingBudget: -1, 
       },
       responseMimeType: "application/json",
       responseSchema: {
@@ -71,52 +87,52 @@ const getProgramJSON = async (imgURL: string) => {
         items: {
           type: Type.OBJECT,
           properties: {
-            composer: {
-              type: Type.STRING,
-            },
-            title: {
+            composerEnglish: { type: Type.STRING },
+            composerKorean: { type: Type.STRING },
+            titlesEnglish: {
               type: Type.ARRAY,
-              items: {
-                type: Type.STRING,
-              },
+              items: { type: Type.STRING },
             },
-            era: {
-              type: Type.STRING,
+            titlesKorean: {
+              type: Type.ARRAY,
+              items: { type: Type.STRING },
             },
+            era: { type: Type.STRING },
             genre: {
-              type: Type.STRING,
+              type: Type.ARRAY,
+              items: { type: Type.STRING },
             },
           },
-          propertyOrdering: ["composer", "title", "era", "genre"],
         },
       },
     },
   });
 
-  const timeoutPromise = new Promise<null>((_, reject) =>
-    setTimeout(() => reject(new Error("Gemini 호출 타임아웃")), 15000)
-  );
+  console.log(response.usageMetadata);
 
-  let response;
-  try {
-    response = await Promise.race([geminiPromise, timeoutPromise]);
-  } catch (err) {
-    console.warn(err);
-    return []; // 타임아웃 시 빈 배열 반환
-  }
-  
   if (response?.text) {
+    // response가 undefiend/null이 아니면 실행
     const responseSplit = response.text.split("\n");
+
     /// 결과 상하단에 마크다운 문법 (```json```)이 있는 경우 삭제
-    if (responseSplit[0] !== "[") {
+    while (responseSplit[0] != "[") {
       responseSplit.splice(0, 1);
     }
-    if (responseSplit[responseSplit.length - 1] !== "]") {
-      responseSplit.splice(responseSplit.length - 1, 1);
+    while (responseSplit[responseSplit.length - 1] != "]") {
+      responseSplit.splice(-1, 1);
     }
 
     return JSON.parse(responseSplit.join("\n"));
+  } else {
+    return [];
   }
 };
+
+(async () => {
+  const response = await getProgramJSON(
+    "http://www.kopis.or.kr/upload/pfmIntroImage/PF_PF268597_202507041233477990.jpg"
+  );
+  console.log(response);
+})();
 
 export default getProgramJSON;

@@ -1,36 +1,46 @@
+// DB에 데이터 초기 1회 입력 시 실행하는 파일
+
 import supabase from "../apis/supabase-client";
 import { apiURL, classic, serviceKey } from "../apis/kopis-client";
 import "dotenv/config";
 import dayjs from "dayjs";
 import convert, { ElementCompact } from "xml-js";
+import getProgramJSON from "./get-program";
 import { TextNode } from "@/types/common-server";
 
 const now = dayjs();
 
+interface PerformanceListItemType {
+  mt20id: TextNode; // 공연 id
+  prfnm: TextNode; // 공연명
+  prfpdfrom: TextNode; // 공연시작일
+  prfpdto: TextNode; // 공연종료일
+  fcltynm: TextNode; // 공연장명
+  poster: TextNode; // 포스터 URL
+  area: TextNode; // 지역
+  genrenm: TextNode; // 장르
+  openrun: TextNode; // 오픈런여부
+  prfstate: TextNode; // 공연상태
+}
+
+type PerformanceDetailType = {
+  styurls?: {
+    styurl: string;
+  };
+  program?: object;
+} | null;
+
+// 한 페이지의 공연 데이터를 리턴하는 함수
 const getPerformanceArrayByPage = async (
   performanceAPI: string
-): Promise<
-  | {
-      mt20id: TextNode; // 공연 id
-      prfnm: TextNode; // 공연명
-      prfpdfrom: TextNode; // 공연시작일
-      prfpdto: TextNode; // 공연종료일
-      fcltynm: TextNode; // 공연장명
-      poster: TextNode; // 포스터 URL
-      area: TextNode; // 지역
-      genrenm: TextNode; // 장르
-      openrun: TextNode; // 오픈런여부
-      prfstate: TextNode; // 공연상태
-    }[]
-  | null
-> => {
+): Promise<PerformanceListItemType[] | null> => {
   try {
     const response: ElementCompact = await fetch(performanceAPI)
       .then((res) => res.text())
       .then((data) => convert.xml2js(data, { compact: true }));
 
     const result = response.dbs.db;
-    return result;
+    return result; // 반환타입: JsonValue, 그런데 getPerformanceArrayByPage의 반환타입은 이와 다름
   } catch (error) {
     console.log("KOPIS API로 공연 데이터 받아오기 실패");
     return null;
@@ -43,6 +53,7 @@ interface JsonObject {
 }
 type JsonArray = JsonValue[];
 
+// XML -> JSON 변환시 자동으로 생성되는 _text 프로퍼티를 제거하기 위한 함수
 const removeTextProperty = (obj: JsonValue): JsonValue => {
   if (obj === null || typeof obj !== "object") {
     return obj;
@@ -68,30 +79,45 @@ const removeTextProperty = (obj: JsonValue): JsonValue => {
   return result;
 };
 
-const getPerformanceDetail = async (pfId: string) => {
+// 공연 상세 데이터를 pfId가 포함된 API를 호출하여 받아온 뒤, 프로그램 데이터를 추가하여 반환하는 함수
+const getPerformanceDetail = async (
+  pfId: string
+): Promise<[PerformanceDetailType, number]> => {
   const detailAPI = `${apiURL}/pblprfr/${pfId}?service=${serviceKey}`;
+  let pfDetail: PerformanceDetailType = {};
 
+  // 상세 데이터 호출
   try {
     const response: ElementCompact = await fetch(detailAPI)
       .then((res) => res.text())
       .then((data) => convert.xml2js(data, { compact: true }));
 
-    const pfDetail = response.dbs.db;
-
-    return removeTextProperty(pfDetail);
+    pfDetail = removeTextProperty(response.dbs.db) as PerformanceDetailType;
   } catch (error) {
-    console.log("공연 상세 정보 받아오기 실패", error);
-    return null;
+    console.log("KOPIS API로 공연 상세 데이터 받아오기 실패", error);
   }
+
+  const t1 = performance.now();
+  // 상세이미지 url로부터 프로그램 데이터 추출
+  if (pfDetail?.styurls) {
+    const programData = await getProgramJSON(pfDetail.styurls.styurl);
+    pfDetail.program = programData;
+  }
+  const t2 = performance.now();
+
+  return [pfDetail, t2 - t1];
 };
 
+// 대상 기간동안의 모든 공연들의 id를 배열로 리턴하는 함수
 const getAllPerformance = async (): Promise<TextNode[]> => {
-  const stDate = now.subtract(1, "day").format("YYYYMMDD");
-  const edDate = now.add(89, "day").format("YYYYMMDD");
+  const stDate = now.format("YYYYMMDD");
+  const edDate = now.add(90, "day").format("YYYYMMDD");
   const performanceIdArray = [];
 
+  let pfNum = 0;
   let page = 1;
   while (true) {
+    if (pfNum > 30) break;
     const performanceAPI = `${apiURL}/pblprfr?service=${serviceKey}&stdate=${stDate}&eddate=${edDate}&cpage=${page++}&rows=${100}&shcate=${classic}`;
     const performanceArrayByPage = await getPerformanceArrayByPage(
       performanceAPI
@@ -105,6 +131,7 @@ const getAllPerformance = async (): Promise<TextNode[]> => {
       }
     }
 
+    pfNum++;
     await new Promise((r) => {
       setTimeout(r, 100);
     });
@@ -113,7 +140,8 @@ const getAllPerformance = async (): Promise<TextNode[]> => {
   return performanceIdArray;
 };
 
-const importPerformanceDetailToDB = async (pfDetail: JsonValue) => {
+// 공연 상세 데이터를 DB에 추가하는 함수
+const importPerformanceDetailToDB = async (pfDetail: PerformanceDetailType) => {
   const { error } = await supabase
     .from("performance_list")
     .upsert(pfDetail, { onConflict: "mt20id" });
@@ -129,9 +157,21 @@ export const importPerformanceDataToDB = async () => {
   const performanceIdArray = await getAllPerformance();
 
   for (const item of performanceIdArray) {
+    const t1 = performance.now();
     const performanceDetail = await getPerformanceDetail(item._text);
-    importPerformanceDetailToDB(performanceDetail);
+    await importPerformanceDetailToDB(performanceDetail[0]);
+    const t2 = performance.now();
+
+    if (performanceDetail[1] < 4000) {
+      await new Promise((r) => {
+        setTimeout(() => {
+          r(1);
+        }, 4000 - (t2 - t1));
+      });
+    }
   }
 };
 
-importPerformanceDataToDB();
+(async () => {
+  await importPerformanceDataToDB();
+})();

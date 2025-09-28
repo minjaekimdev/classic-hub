@@ -1,5 +1,5 @@
-import supabase from "supabase/functions/client/supabase-client-sb";
-import { apiURL, serviceKey } from "supabase/functions/client/kopis-client-sb";
+import supabase from "@/apis/supabase-client";
+import { apiURL, serviceKey } from "@/apis/kopis-client";
 import { ElementCompact } from "xml-js";
 import convert from "xml-js";
 

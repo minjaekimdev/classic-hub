@@ -1,5 +1,5 @@
 import supabase from "../_shared/supabaseClient.ts";
-import getProgramJSON from "./get-program";
+import getProgramJSON from "../_shared/get-program.js";
 import { TextNode } from "../_shared/types/common.d.ts";
 
 interface ProgramType {
@@ -9,6 +9,7 @@ interface ProgramType {
   genre?: string;
 }
 
+// 프로그램 데디터를
 const insertProgramDataToDB = async (
   pfCode: TextNode,
   program: ProgramType[]
@@ -25,6 +26,7 @@ const insertProgramDataToDB = async (
   }
 };
 
+// 동일한 작곡가명을 가진 객체가 존재하는 경우, 작품명을 병합하는 함수
 const getUniqueProgram = (program: ProgramType[]) => {
   if (program.length >= 2) {
     let left = 0;
@@ -55,6 +57,7 @@ const getUniqueProgram = (program: ProgramType[]) => {
   return program;
 };
 
+// 작곡가 및 작품명을 악센트 및 특수기호 없는 일반 영문으로 정규화하는 함수 ex) "Béla Bartók" → "Bela Bartok"
 const normalizeName = (name: string) => {
   return name
     .normalize("NFD")

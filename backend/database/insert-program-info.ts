@@ -1,4 +1,4 @@
-import supabase from "../apis/supabase-client";
+import supabase from "@/apis/supabase-client";
 import getProgramJSON from "./get-program";
 import { TextNode } from "@/types/common-server";
 
@@ -63,6 +63,7 @@ const normalizeName = (name: string) => {
 };
 
 export const getRankingDataProgramInfo = async () => {
+  // DB에서 공연 상세 이미지 URL 가져오기
   const { data: pfCodeAndImgUrlArray, error } = await supabase
     .from("performance_list")
     .select("mt20id, styurls");
@@ -72,14 +73,14 @@ export const getRankingDataProgramInfo = async () => {
   } else {
     for (const item of pfCodeAndImgUrlArray) {
       console.log(item);
-      const detailImg = item.styurls.styurl;
+      const detailImgUrls = item.styurls.styurl;
 
-      const detailImgURL = Array.isArray(detailImg)
-        ? detailImg[detailImg.length - 1]._text
-        : detailImg._text;
+      const programImgURL = Array.isArray(detailImgUrls)
+        ? detailImgUrls[detailImgUrls.length - 1] // 상세 이미지가 여러 개라서 배열로 이루어진 경우 프로그램 정보는 마지막 이미지에 들어있음
+        : detailImgUrls;
 
       const t1 = performance.now();
-      const program = await getProgramJSON(detailImgURL);
+      const program = await getProgramJSON(programImgURL);
       const uniqueProgram = getUniqueProgram(program);
 
       // 작곡가명에서 악센트 및 특수문자 제거

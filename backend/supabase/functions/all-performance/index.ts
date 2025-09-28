@@ -223,7 +223,6 @@ const updatePerformanceData = async () => {
   // 어제 이후로 등록/수정된 공연 id 받아온 후 해당 공연 DB에 upsert
   const updatedPerformancesIdArray = await getUpdatedPerformancesId();
   for (const pfId of updatedPerformancesIdArray) {
-    console.log(pfId);
     const performanceDetail = await getPerformanceDetail(pfId);
     await upsertUpdatedPerformancesToDB(performanceDetail);
   }
