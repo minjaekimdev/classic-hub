@@ -2,16 +2,17 @@ import "dotenv/config";
 import { GoogleGenAI, Type } from "@google/genai";
 
 interface ProgramItem {
-  composer: string;
-  title: string[];
-  era: string;
-  genre: string;
+  composerEnglish: string;
+  composerKorean: string;
+  titlesEnglish: string[];
+  titlesKorean: string[];
 }
 
 type ProgramArray = ProgramItem[];
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
+// 공연 상세이미지 url로부터 바이너리 데이터를 받아 base64로 변환한 값을 리턴하는 함수
 const getBase64FromUrl = async (url: string) => {
   try {
     const response = await fetch(url);
@@ -26,52 +27,61 @@ const getBase64FromUrl = async (url: string) => {
   }
 };
 
-// 공연 상세 이미지 URL을 받아 프롬프트와 함께 전달
-const returnContents = async (imgURL: string) => {
-  const base64ImageFile = await getBase64FromUrl(imgURL);
+// 공연 상세 이미지 URL을 받아 프롬프트와 함께 Gemini에 전달
+const returnContents = async (imgURLs: string[]) => {
+  // 1. 모든 이미지 URL을 base64로 변환 (병렬 처리)
+  const base64Images = await Promise.all(
+    imgURLs.map(url => getBase64FromUrl(url))
+  );
 
-  if (base64ImageFile) {
-    const contents = [
-      {
-        inlineData: {
-          mimeType: "image/jpeg",
-          data: base64ImageFile,
-        },
+  // 2. 변환에 성공한 base64 데이터만 필터링하여 이미지 파트 생성
+  const imageParts = base64Images
+    .filter(base64 => base64 !== null) // 변환 실패(null)한 경우 제외
+    .map(base64 => ({
+      inlineData: {
+        mimeType: "image/jpeg",
+        data: base64!,
       },
-      {
-        text: `
-          다음 이미지를 읽고 각 공연 작품을 JSON 객체로 추출해줘.
-
-          - composerEnglish: 작곡가 영문 이름
-          - composerKorean: 작곡가 한글 이름
-          - titlesEnglish: 영문 작품명
-          - titlesKorean: 한글 작품명
-          - era: 시대
-          - genre: 장르
-
-          규칙:
-          - 각 객체는 반드시 위의 6개 키를 모두 포함할 것
-          - titlesEnglish, titlesKorean의 경우 배열 형태로 여러 작품명을 담는다.
-          - 단, 악장(예: "I.", "II.", "III.", "IV." 등 로마 숫자로 시작하거나 숫자 + 마침표 형식의 부제목)은 title 목록에서 제외할 것
-            예: "III. Romance", "IV. Tarantella", "1. Allegro" 등은 포함하지 않는다.
-          - era는 반드시 아래 값 중 하나만 선택할 것. 이외의 값은 절대 사용하지 않는다.
-            ["baroque", "classical", "romantic", "modern"]
-          - genre는 반드시 아래 값 중 하나 이상을 골라 배열로 만들 것. 이외의 값은 절대 사용하지 않는다.
-            ["orchestral", "opera", "ballet", "chamber", "solo", "non-classic"]
-          - 반드시 한 작곡가에 대해 하나의 객체만 생성
-          - 마크다운 문법('''json''') 제외하고 순수 json만 반환
-        `,
-      },
-    ];
-
-    return contents;
-  } else {
-    return "";
+    }));
+  
+  // 이미지가 하나도 없으면 빈 배열 반환
+  if (imageParts.length === 0) {
+    return [];
   }
+
+  // 3. 이미지 파트 배열과 텍스트 프롬프트를 합쳐서 최종 contents 배열 반환
+  const textPrompt = {
+    text: `
+      다음 이미지들을 모두 참고하여 공연 프로그램을 JSON 객체로 추출해줘.
+      여러 이미지에 정보가 나뉘어 있을 수 있으니 종합적으로 판단해야 해.
+
+      - composerEnglish: 작곡가 영문 이름
+      - composerKorean: 작곡가 한글 이름
+      - titlesEnglish: 영문 작품명
+      - titlesKorean: 한글 작품명
+
+      공통 규칙:
+      - 각 객체는 반드시 위의 4개 키를 모두 포함할 것
+      - 마크다운 문법('''json''') 제외하고 순수 json만 반환
+      - 반드시 한 작곡가에 대해 하나의 객체만 생성
+    `
+  };
+
+  return [...imageParts, textPrompt];
 };
 
-const getProgramJSON = async (imgURL: string): Promise<string[]> => {
-  const contents = await returnContents(imgURL);
+// generateContent 옵션 및 응답 형식 지정, 모델에 요청
+export const getProgramJSON = async (
+  imgURL: string | string[]
+): Promise<ProgramArray> => {
+  const urls = Array.isArray(imgURL) ? imgURL : [imgURL];
+
+  const contents = await returnContents(urls);
+
+  if (contents.length === 0) {
+    console.log("이미지를 처리할 수 없어 요청을 보내지 않습니다.");
+    return [];
+  }
 
   const response = await ai.models.generateContent({
     model: "gemini-2.5-flash-lite",
@@ -79,7 +89,7 @@ const getProgramJSON = async (imgURL: string): Promise<string[]> => {
     config: {
       maxOutputTokens: 15000,
       thinkingConfig: {
-        thinkingBudget: -1, 
+        thinkingBudget: 10000,
       },
       responseMimeType: "application/json",
       responseSchema: {
@@ -97,30 +107,25 @@ const getProgramJSON = async (imgURL: string): Promise<string[]> => {
               type: Type.ARRAY,
               items: { type: Type.STRING },
             },
-            era: { type: Type.STRING },
-            genre: {
-              type: Type.ARRAY,
-              items: { type: Type.STRING },
-            },
           },
+          propertyOrdering: [
+            "composerEnglish",
+            "composerKorean",
+            "titlesEnglish",
+            "titlesKorean",
+          ],
         },
       },
     },
   });
 
-  console.log(response.usageMetadata);
+  console.log(response.usageMetadata); // 사용 토큰 수 출력
 
   if (response?.text) {
     // response가 undefiend/null이 아니면 실행
     const responseSplit = response.text.split("\n");
 
-    /// 결과 상하단에 마크다운 문법 (```json```)이 있는 경우 삭제
-    while (responseSplit[0] != "[") {
-      responseSplit.splice(0, 1);
-    }
-    while (responseSplit[responseSplit.length - 1] != "]") {
-      responseSplit.splice(-1, 1);
-    }
+    console.log(response.text);
 
     return JSON.parse(responseSplit.join("\n"));
   } else {
@@ -128,11 +133,11 @@ const getProgramJSON = async (imgURL: string): Promise<string[]> => {
   }
 };
 
-(async () => {
-  const response = await getProgramJSON(
-    "http://www.kopis.or.kr/upload/pfmIntroImage/PF_PF268597_202507041233477990.jpg"
-  );
-  console.log(response);
-})();
+// (async () => {
+//   const response = await getProgramJSON(
+//     "http://www.kopis.or.kr/upload/pfmIntroImage/PF_PF268597_202507041233477990.jpg"
+//   );
+//   console.log(response);
+// })();
 
 export default getProgramJSON;

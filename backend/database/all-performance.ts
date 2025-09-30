@@ -47,6 +47,12 @@ const getPerformanceArrayByPage = async (
   }
 };
 
+const normalizeName = (name: string) => {
+  return name
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+};
+
 type JsonValue = string | null | JsonObject | JsonArray;
 interface JsonObject {
   [key: string]: JsonValue;
@@ -63,9 +69,9 @@ const removeTextProperty = (obj: JsonValue): JsonValue => {
     return obj.map((item) => removeTextProperty(item));
   }
 
-  // 객체가 _text 속성만 가지고 있는 경우, _text 값을 반환
+  // 객체가 _text 속성만 가지고 있는 경우, 정규화한 _text 값을 반환
   if (Object.keys(obj).length === 1 && obj.hasOwnProperty("_text")) {
-    return obj._text;
+    return normalizeName(obj._text as string);
   }
 
   // 일반 객체의 경우, 각 속성에 대해 재귀적으로 처리
@@ -105,7 +111,7 @@ const getPerformanceDetail = async (
   }
   const t2 = performance.now();
 
-  return [pfDetail, t2 - t1];
+  return [pfDetail, t2 - t1]; // Gemini API RPM(Request Per Minute)제한 맞추기 위해 시간 차이를 함께 리턴
 };
 
 // 대상 기간동안의 모든 공연들의 id를 배열로 리턴하는 함수
@@ -114,10 +120,8 @@ const getAllPerformance = async (): Promise<TextNode[]> => {
   const edDate = now.add(90, "day").format("YYYYMMDD");
   const performanceIdArray = [];
 
-  let pfNum = 0;
   let page = 1;
   while (true) {
-    if (pfNum > 30) break;
     const performanceAPI = `${apiURL}/pblprfr?service=${serviceKey}&stdate=${stDate}&eddate=${edDate}&cpage=${page++}&rows=${100}&shcate=${classic}`;
     const performanceArrayByPage = await getPerformanceArrayByPage(
       performanceAPI
@@ -131,7 +135,6 @@ const getAllPerformance = async (): Promise<TextNode[]> => {
       }
     }
 
-    pfNum++;
     await new Promise((r) => {
       setTimeout(r, 100);
     });
@@ -154,22 +157,73 @@ const importPerformanceDetailToDB = async (pfDetail: PerformanceDetailType) => {
 };
 
 export const importPerformanceDataToDB = async () => {
-  const performanceIdArray = await getAllPerformance();
+  // const performanceIdArray = await getAllPerformance();
 
-  for (const item of performanceIdArray) {
-    const t1 = performance.now();
-    const performanceDetail = await getPerformanceDetail(item._text);
-    await importPerformanceDetailToDB(performanceDetail[0]);
-    const t2 = performance.now();
+  const stDate = now.format("YYYYMMDD");
+  const edDate = now.add(90, "day").format("YYYYMMDD");
 
-    if (performanceDetail[1] < 4000) {
-      await new Promise((r) => {
-        setTimeout(() => {
-          r(1);
-        }, 4000 - (t2 - t1));
-      });
+  let page = 1;
+  while (true) {
+    console.log(`page: ${page}`);
+    const performanceAPI = `${apiURL}/pblprfr?service=${serviceKey}&stdate=${stDate}&eddate=${edDate}&cpage=${page++}&rows=${100}&shcate=${classic}`;
+    const performanceArrayByPage = await getPerformanceArrayByPage(
+      performanceAPI
+    );
+
+    if (!performanceArrayByPage) {
+      break;
+    } else {
+      for (const item of performanceArrayByPage) {
+        const t1 = performance.now();
+        const performanceDetail = await Promise.race([
+          new Promise<[PerformanceDetailType, number]>((_, reject) =>
+            // 2분 이상 소요되면 다음 공연 데이터의 프로그램 받아오도록 실행
+            setTimeout(() => {
+              reject(new Error("Gemini API timed out after 120 seconds"));
+            }, 120000)
+          ),
+          getPerformanceDetail(item.mt20id._text),
+        ]);
+        await importPerformanceDetailToDB(performanceDetail[0]);
+        const t2 = performance.now();
+
+        if (performanceDetail[1] < 4000) {
+          await new Promise((r) => {
+            setTimeout(() => {
+              r(1);
+            }, 4000 - (t2 - t1));
+          });
+        }
+      }
     }
   }
+
+  // for (const item of performanceIdArray) {
+  //   const t1 = performance.now();
+  //   try {
+  //     const performanceDetail = await Promise.race([
+  //       new Promise<[PerformanceDetailType, number]>((_, reject) =>
+  //         // 2분 이상 소요되면 다음 공연 데이터의 프로그램 받아오도록 실행
+  //         setTimeout(() => {
+  //           reject(new Error("Gemini API timed out after 120 seconds"));
+  //         }, 120000)
+  //       ),
+  //       getPerformanceDetail(item._text),
+  //     ]);
+  //     await importPerformanceDetailToDB(performanceDetail[0]);
+  //     const t2 = performance.now();
+
+  //     if (performanceDetail[1] < 4000) {
+  //       await new Promise((r) => {
+  //         setTimeout(() => {
+  //           r(1);
+  //         }, 4000 - (t2 - t1));
+  //       });
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
 };
 
 (async () => {

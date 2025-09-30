@@ -3,6 +3,7 @@ import { API_URL, CLASSIC, SERVICE_KEY } from "../_shared/kopisClient.ts";
 import dayjs from "https://esm.sh/dayjs";
 import convert, { ElementCompact } from "https://esm.sh/xml-js";
 import { TextNode } from "../_shared/types/common.d.ts";
+import getProgramJSON from "../_shared/get-program.js";
 
 const TARGET_PERIOD = 90;
 
