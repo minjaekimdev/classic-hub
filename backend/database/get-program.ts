@@ -31,19 +31,19 @@ const getBase64FromUrl = async (url: string) => {
 const returnContents = async (imgURLs: string[]) => {
   // 1. 모든 이미지 URL을 base64로 변환 (병렬 처리)
   const base64Images = await Promise.all(
-    imgURLs.map(url => getBase64FromUrl(url))
+    imgURLs.map((url) => getBase64FromUrl(url))
   );
 
   // 2. 변환에 성공한 base64 데이터만 필터링하여 이미지 파트 생성
   const imageParts = base64Images
-    .filter(base64 => base64 !== null) // 변환 실패(null)한 경우 제외
-    .map(base64 => ({
+    .filter((base64) => base64 !== null) // 변환 실패(null)한 경우 제외
+    .map((base64) => ({
       inlineData: {
         mimeType: "image/jpeg",
         data: base64!,
       },
     }));
-  
+
   // 이미지가 하나도 없으면 빈 배열 반환
   if (imageParts.length === 0) {
     return [];
@@ -64,7 +64,7 @@ const returnContents = async (imgURLs: string[]) => {
       - 각 객체는 반드시 위의 4개 키를 모두 포함할 것
       - 마크다운 문법('''json''') 제외하고 순수 json만 반환
       - 반드시 한 작곡가에 대해 하나의 객체만 생성
-    `
+    `,
   };
 
   return [...imageParts, textPrompt];
@@ -122,14 +122,16 @@ export const getProgramJSON = async (
 
   console.log(response.usageMetadata); // 사용 토큰 수 출력
 
-  if (response?.text) {
-    // response가 undefiend/null이 아니면 실행
-    const responseSplit = response.text.split("\n");
+  if (!response?.text) {
+    return [];
+  }
 
-    console.log(response.text);
+  console.log(response.text);
 
-    return JSON.parse(responseSplit.join("\n"));
-  } else {
+  try {
+    return JSON.parse(response.text);
+  } catch (error) {
+    console.error("JSON 파싱 실패:", error);
     return [];
   }
 };
