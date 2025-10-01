@@ -7,6 +7,8 @@ import dayjs from "dayjs";
 import convert, { ElementCompact } from "xml-js";
 import getProgramJSON from "./get-program";
 import { TextNode } from "@/types/common-server";
+import type { ProgramArray } from "./get-program";
+import { ComputeTokensResponse } from "@google/genai";
 
 const now = dayjs();
 
@@ -47,12 +49,6 @@ const getPerformanceArrayByPage = async (
   }
 };
 
-const normalizeName = (name: string) => {
-  return name
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "");
-};
-
 type JsonValue = string | null | JsonObject | JsonArray;
 interface JsonObject {
   [key: string]: JsonValue;
@@ -71,7 +67,7 @@ const removeTextProperty = (obj: JsonValue): JsonValue => {
 
   // 객체가 _text 속성만 가지고 있는 경우, 정규화한 _text 값을 반환
   if (Object.keys(obj).length === 1 && obj.hasOwnProperty("_text")) {
-    return normalizeName(obj._text as string);
+    return obj._text;
   }
 
   // 일반 객체의 경우, 각 속성에 대해 재귀적으로 처리
@@ -83,6 +79,22 @@ const removeTextProperty = (obj: JsonValue): JsonValue => {
   }
 
   return result;
+};
+
+
+const normalizeName = (name: string) => {
+  return name.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+};
+
+const normalizeProgramData = (programData: ProgramArray) => {
+  return programData.map(element => {
+    return {
+      composerEnglish: normalizeName(element.composerEnglish),
+      composerKorean: element.composerKorean,
+      titlesEnglish: element.titlesEnglish.map(normalizeName),
+      titlesKorean: element.titlesKorean      
+    }
+  })
 };
 
 // 공연 상세 데이터를 pfId가 포함된 API를 호출하여 받아온 뒤, 프로그램 데이터를 추가하여 반환하는 함수
@@ -107,40 +119,13 @@ const getPerformanceDetail = async (
   // 상세이미지 url로부터 프로그램 데이터 추출
   if (pfDetail?.styurls) {
     const programData = await getProgramJSON(pfDetail.styurls.styurl);
-    pfDetail.program = programData;
+    const normalizedProgram = normalizeProgramData(programData);
+    console.log(normalizedProgram);
+    pfDetail.program = normalizedProgram;
   }
   const t2 = performance.now();
 
   return [pfDetail, t2 - t1]; // Gemini API RPM(Request Per Minute)제한 맞추기 위해 시간 차이를 함께 리턴
-};
-
-// 대상 기간동안의 모든 공연들의 id를 배열로 리턴하는 함수
-const getAllPerformance = async (): Promise<TextNode[]> => {
-  const stDate = now.format("YYYYMMDD");
-  const edDate = now.add(90, "day").format("YYYYMMDD");
-  const performanceIdArray = [];
-
-  let page = 1;
-  while (true) {
-    const performanceAPI = `${apiURL}/pblprfr?service=${serviceKey}&stdate=${stDate}&eddate=${edDate}&cpage=${page++}&rows=${100}&shcate=${classic}`;
-    const performanceArrayByPage = await getPerformanceArrayByPage(
-      performanceAPI
-    );
-
-    if (!performanceArrayByPage) {
-      break;
-    } else {
-      for (const item of performanceArrayByPage) {
-        performanceIdArray.push(item.mt20id);
-      }
-    }
-
-    await new Promise((r) => {
-      setTimeout(r, 100);
-    });
-  }
-
-  return performanceIdArray;
 };
 
 // 공연 상세 데이터를 DB에 추가하는 함수
@@ -157,8 +142,6 @@ const importPerformanceDetailToDB = async (pfDetail: PerformanceDetailType) => {
 };
 
 export const importPerformanceDataToDB = async () => {
-  // const performanceIdArray = await getAllPerformance();
-
   const stDate = now.format("YYYYMMDD");
   const edDate = now.add(90, "day").format("YYYYMMDD");
 
@@ -174,56 +157,34 @@ export const importPerformanceDataToDB = async () => {
       break;
     } else {
       for (const item of performanceArrayByPage) {
-        const t1 = performance.now();
-        const performanceDetail = await Promise.race([
-          new Promise<[PerformanceDetailType, number]>((_, reject) =>
-            // 2분 이상 소요되면 다음 공연 데이터의 프로그램 받아오도록 실행
-            setTimeout(() => {
-              reject(new Error("Gemini API timed out after 120 seconds"));
-            }, 120000)
-          ),
-          getPerformanceDetail(item.mt20id._text),
-        ]);
-        await importPerformanceDetailToDB(performanceDetail[0]);
-        const t2 = performance.now();
+        try {
+          const t1 = performance.now();
+          const performanceDetail = await Promise.race([
+            new Promise<[PerformanceDetailType, number]>((_, reject) =>
+              // 2분 이상 소요되면 다음 공연 데이터의 프로그램 받아오도록 실행
+              setTimeout(() => {
+                reject(new Error("Gemini API timed out after 120 seconds"));
+              }, 120000)
+            ),
+            getPerformanceDetail(item.mt20id._text),
+          ]);
 
-        if (performanceDetail[1] < 4000) {
-          await new Promise((r) => {
-            setTimeout(() => {
-              r(1);
-            }, 4000 - (t2 - t1));
-          });
+          // await importPerformanceDetailToDB(performanceDetail[0]);
+          const t2 = performance.now();
+
+          if (performanceDetail[1] < 4000) {
+            await new Promise((r) => {
+              setTimeout(() => {
+                r(1);
+              }, 4000 - (t2 - t1));
+            });
+          }
+        } catch (error) {
+          console.log(error);
         }
       }
     }
   }
-
-  // for (const item of performanceIdArray) {
-  //   const t1 = performance.now();
-  //   try {
-  //     const performanceDetail = await Promise.race([
-  //       new Promise<[PerformanceDetailType, number]>((_, reject) =>
-  //         // 2분 이상 소요되면 다음 공연 데이터의 프로그램 받아오도록 실행
-  //         setTimeout(() => {
-  //           reject(new Error("Gemini API timed out after 120 seconds"));
-  //         }, 120000)
-  //       ),
-  //       getPerformanceDetail(item._text),
-  //     ]);
-  //     await importPerformanceDetailToDB(performanceDetail[0]);
-  //     const t2 = performance.now();
-
-  //     if (performanceDetail[1] < 4000) {
-  //       await new Promise((r) => {
-  //         setTimeout(() => {
-  //           r(1);
-  //         }, 4000 - (t2 - t1));
-  //       });
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
 };
 
 (async () => {
