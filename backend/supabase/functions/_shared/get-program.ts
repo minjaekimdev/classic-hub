@@ -1,5 +1,6 @@
 import "dotenv/config";
 import { GoogleGenAI, Type } from "@google/genai";
+import { Buffer } from "node:buffer";
 
 interface ProgramItem {
   composerEnglish: string;
@@ -8,7 +9,7 @@ interface ProgramItem {
   titlesKorean: string[];
 }
 
-type ProgramArray = ProgramItem[];
+export type ProgramArray = ProgramItem[];
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
@@ -31,19 +32,19 @@ const getBase64FromUrl = async (url: string) => {
 const returnContents = async (imgURLs: string[]) => {
   // 1. 모든 이미지 URL을 base64로 변환 (병렬 처리)
   const base64Images = await Promise.all(
-    imgURLs.map(url => getBase64FromUrl(url))
+    imgURLs.map((url) => getBase64FromUrl(url))
   );
 
   // 2. 변환에 성공한 base64 데이터만 필터링하여 이미지 파트 생성
   const imageParts = base64Images
-    .filter(base64 => base64 !== null) // 변환 실패(null)한 경우 제외
-    .map(base64 => ({
+    .filter((base64) => base64 !== null) // 변환 실패(null)한 경우 제외
+    .map((base64) => ({
       inlineData: {
         mimeType: "image/jpeg",
         data: base64!,
       },
     }));
-  
+
   // 이미지가 하나도 없으면 빈 배열 반환
   if (imageParts.length === 0) {
     return [];
@@ -64,7 +65,9 @@ const returnContents = async (imgURLs: string[]) => {
       - 각 객체는 반드시 위의 4개 키를 모두 포함할 것
       - 마크다운 문법('''json''') 제외하고 순수 json만 반환
       - 반드시 한 작곡가에 대해 하나의 객체만 생성
-    `
+      - titlesEnglish의 경우 악장("I.", "II.", "III.", "IV." 등 로마 숫자로 시작하거나 숫자 + 마침표 형식의 부제목)은 제외할 것
+        예: "III. Romance", "IV. Tarantella", "1. Allegro" 등은 포함하지 않는다.
+    `,
   };
 
   return [...imageParts, textPrompt];
@@ -75,7 +78,6 @@ export const getProgramJSON = async (
   imgURL: string | string[]
 ): Promise<ProgramArray> => {
   const urls = Array.isArray(imgURL) ? imgURL : [imgURL];
-
   const contents = await returnContents(urls);
 
   if (contents.length === 0) {
@@ -121,23 +123,18 @@ export const getProgramJSON = async (
 
   console.log(response.usageMetadata); // 사용 토큰 수 출력
 
-  if (response?.text) {
-    // response가 undefiend/null이 아니면 실행
-    const responseSplit = response.text.split("\n");
+  if (!response?.text) {
+    return [];
+  }
 
-    console.log(response.text);
+  console.log(response.text);
 
-    return JSON.parse(responseSplit.join("\n"));
-  } else {
+  try {
+    return JSON.parse(response.text);
+  } catch (error) {
+    console.error("JSON 파싱 실패:", error);
     return [];
   }
 };
-
-// (async () => {
-//   const response = await getProgramJSON(
-//     "http://www.kopis.or.kr/upload/pfmIntroImage/PF_PF268597_202507041233477990.jpg"
-//   );
-//   console.log(response);
-// })();
 
 export default getProgramJSON;

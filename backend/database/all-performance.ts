@@ -1,4 +1,4 @@
-// DB에 데이터 초기 1회 입력 시 실행하는 파일
+// DB에 데이터 초기 1회 입력 시 실행
 
 import supabase from "../apis/supabase-client";
 import { apiURL, classic, serviceKey } from "../apis/kopis-client";
@@ -169,7 +169,7 @@ export const importPerformanceDataToDB = async () => {
             getPerformanceDetail(item.mt20id._text),
           ]);
 
-          // await importPerformanceDetailToDB(performanceDetail[0]);
+          await importPerformanceDetailToDB(performanceDetail[0]);
           const t2 = performance.now();
 
           if (performanceDetail[1] < 4000) {

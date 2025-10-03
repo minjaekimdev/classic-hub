@@ -136,11 +136,4 @@ export const getProgramJSON = async (
   }
 };
 
-// (async () => {
-//   const response = await getProgramJSON(
-//     "http://www.kopis.or.kr/upload/pfmIntroImage/PF_PF268597_202507041233477990.jpg"
-//   );
-//   console.log(response);
-// })();
-
 export default getProgramJSON;

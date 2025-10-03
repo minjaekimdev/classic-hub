@@ -1,9 +1,10 @@
 import supabase from "../_shared/supabaseClient.ts";
 import { API_URL, CLASSIC, SERVICE_KEY } from "../_shared/kopisClient.ts";
-import dayjs from "https://esm.sh/dayjs";
-import convert, { ElementCompact } from "https://esm.sh/xml-js";
+import dayjs from "npm:dayjs";
+import convert, { ElementCompact } from "npm:xml-js";
 import { TextNode } from "../_shared/types/common.d.ts";
-import getProgramJSON from "../_shared/get-program.js";
+import getProgramJSON from "../_shared/get-program.ts";
+import type { ProgramArray } from "../_shared/get-program.ts";
 
 const TARGET_PERIOD = 90;
 
@@ -12,6 +13,7 @@ const yesterday = now.subtract(1, "day").format("YYYYMMDD");
 const today = now.format("YYYYMMDD");
 const updateEndDate = now.add(TARGET_PERIOD - 1, "day").format("YYYYMMDD");
 const newDate = now.add(TARGET_PERIOD, "day").format("YYYY.MM.DD");
+console.log(newDate);
 
 interface PerformanceItemType {
   mt20id: TextNode; // 공연 id
@@ -25,6 +27,13 @@ interface PerformanceItemType {
   openrun: TextNode; // 오픈런여부
   prfstate: TextNode; // 공연상태
 }
+
+type PerformanceDetailType = {
+  styurls?: {
+    styurl: string;
+  };
+  program?: object;
+} | null;
 
 const getPerformanceItemsInPage = async (
   // 한 페이지의 공연 데이터(100개)를 배열로 반환
@@ -74,26 +83,51 @@ const removeTextProperty = (obj: JsonValue): JsonValue => {
   return result;
 };
 
-// pfId를 바탕으로 공연 상세 데이터를 받아오는 함수
-const getPerformanceDetail = async (pfId: string): Promise<JsonValue> => {
-  const detailAPI = `${API_URL}/pblprfr/${pfId}?service=${SERVICE_KEY}`;
-  let pfDetail = null;
+const normalizeName = (name: string) => {
+  return name.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+};
 
+// 프로그램 데이터 정규화(특수문자 제거)
+const normalizeProgramData = (programData: ProgramArray) => {
+  return programData.map((element) => {
+    return {
+      composerEnglish: normalizeName(element.composerEnglish),
+      composerKorean: element.composerKorean,
+      titlesEnglish: element.titlesEnglish.map(normalizeName),
+      titlesKorean: element.titlesKorean,
+    };
+  });
+};
+
+// pfId를 바탕으로 공연 상세 데이터를 받아오는 함수
+const getPerformanceDetail = async (
+  pfId: string
+): Promise<[PerformanceDetailType, number]> => {
+  const detailAPI = `${API_URL}/pblprfr/${pfId}?service=${SERVICE_KEY}`;
+  let pfDetail: PerformanceDetailType = {};
+
+  // 상세 데이터 호출
   try {
     const response: ElementCompact = await fetch(detailAPI)
       .then((res) => res.text())
       .then((data) => convert.xml2js(data, { compact: true }));
 
-    pfDetail = response.dbs.db;
+    pfDetail = removeTextProperty(response.dbs.db) as PerformanceDetailType;
   } catch (error) {
-    console.log("공연 상세 정보 받아오기 실패", error);
+    console.log("KOPIS API로 공연 상세 데이터 받아오기 실패", error);
   }
 
-  await new Promise((r) => {
-    setTimeout(r, 100);
-  });
+  const t1 = performance.now();
+  // 상세이미지 url로부터 프로그램 데이터 추출
+  if (pfDetail?.styurls) {
+    const programData = await getProgramJSON(pfDetail.styurls.styurl);
+    const normalizedProgram = normalizeProgramData(programData);
+    console.log(normalizedProgram);
+    pfDetail.program = normalizedProgram;
+  }
+  const t2 = performance.now();
 
-  return removeTextProperty(pfDetail);
+  return [pfDetail, t2 - t1]; // Gemini API RPM(Request Per Minute)제한 맞추기 위해 시간 차이를 함께 리턴
 };
 
 // 향후 3개월간의 모든 공연 데이터를 받아오는 함수
@@ -105,6 +139,7 @@ const getNewPerformanceItems = async (): Promise<PerformanceItemType[]> => {
   let page = 1;
   while (true) {
     const performanceAPI = `${API_URL}/pblprfr?service=${SERVICE_KEY}&stdate=${stDate}&eddate=${edDate}&cpage=${page++}&rows=${100}&shcate=${CLASSIC}`;
+    console.log(performanceAPI);
     const performanceItemArrayByPage = await getPerformanceItemsInPage(
       performanceAPI
     );
@@ -164,7 +199,7 @@ const getOldPfIdArray = async (): Promise<string[]> => {
     console.log("performance_list table에서 mt20id 컬럼 가져오기 실패");
     return [];
   }
-  return data.map(element => element.mt20id);
+  return data.map((element: { mt20id: string }) => element.mt20id);
 };
 
 const deletePerformanceById = async (pfId: string) => {
@@ -176,11 +211,11 @@ const deletePerformanceById = async (pfId: string) => {
   if (error) {
     console.log("DB performance_list에서 데이터 삭제 실패");
   } else {
-    console.log("DB performance_list에서 데이터 삭제 성공")
+    console.log("DB performance_list에서 데이터 삭제 성공");
   }
 };
 
-const importPerformanceToDB = async (pfDetail: JsonValue) => {
+const importPerformanceToDB = async (pfDetail: PerformanceDetailType) => {
   const { error } = await supabase.from("performance_list").insert(pfDetail);
 
   if (error) {
@@ -190,22 +225,24 @@ const importPerformanceToDB = async (pfDetail: JsonValue) => {
   }
 };
 
-const upsertUpdatedPerformancesToDB = async (pfDetail: JsonValue) => {
-  const {error} = await supabase.from("performance_list").upsert(pfDetail);
+const upsertUpdatedPerformancesToDB = async (pfDetail: PerformanceDetailType) => {
+  const { error } = await supabase.from("performance_list").upsert(pfDetail);
 
   if (error) {
     console.log("DB performance_list에 수정된 데이터 upsert 실패");
   }
-}
+};
 
 const updatePerformanceData = async () => {
   const newPerformanceItemArray = await getNewPerformanceItems(); // 향후 3개월간의 모든 공연
-  const newPfIdArray = newPerformanceItemArray.map((element) => element.mt20id._text); // 공연id TextNode로 이루어진 배열
+  const newPfIdArray = newPerformanceItemArray.map(
+    (element) => element.mt20id._text
+  ); // 공연id로 이루어진 배열
   const newPfIdSet = new Set(newPfIdArray); // 삭제할 공연의 pfId를 효율적으로 찾기 위해 Set 자료구조 활용
   const oldPfIdArray = await getOldPfIdArray(); // 기존 DB에만 존재하고, newPerformanceItemArray에는 없는 공연의 pfId로 이루어진 배열
 
   // DB에서 오래된 공연 데이터(취소되어 삭제된 공연, 종료된 공연) 삭제
-  const idsToDelete = oldPfIdArray.filter(pfId => !newPfIdSet.has(pfId));
+  const idsToDelete = oldPfIdArray.filter((pfId) => !newPfIdSet.has(pfId));
   console.log("idsToDelete:", idsToDelete);
   await Promise.all(
     idsToDelete.map(async (pfId) => {
@@ -215,9 +252,34 @@ const updatePerformanceData = async () => {
 
   // 공연시작일이 (오늘+지정된기간)인 공연을 DB에 추가
   for (const item of newPerformanceItemArray) {
+    console.log(item);
     if (item.prfpdfrom._text === newDate) {
-      const performanceDetail = await getPerformanceDetail(item.mt20id._text);
-      await importPerformanceToDB(performanceDetail);
+      try {
+        const t1 = performance.now();
+        const performanceDetail = await Promise.race([
+          new Promise<[PerformanceDetailType, number]>((_, reject) =>
+            // 2분 이상 소요되면 다음 공연 데이터의 프로그램 받아오도록 실행
+            setTimeout(() => {
+              reject(new Error("Gemini API timed out after 120 seconds"));
+            }, 120000)
+          ),
+          getPerformanceDetail(item.mt20id._text),
+        ]);
+
+        await importPerformanceToDB(performanceDetail[0]);
+        const t2 = performance.now();
+
+        // Gemini API 호출 시간 간격 맞추기
+        if (performanceDetail[1] < 4000) {
+          await new Promise((r) => {
+            setTimeout(() => {
+              r(1);
+            }, 4000 - (t2 - t1));
+          });
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
 
@@ -225,11 +287,11 @@ const updatePerformanceData = async () => {
   const updatedPerformancesIdArray = await getUpdatedPerformancesId();
   for (const pfId of updatedPerformancesIdArray) {
     const performanceDetail = await getPerformanceDetail(pfId);
-    await upsertUpdatedPerformancesToDB(performanceDetail);
+    await upsertUpdatedPerformancesToDB(performanceDetail[0]);
   }
 };
 
 // 테스트 실행 코드
-Deno.test("Refreshing ranking performance test", async () => {
+Deno.test("Updating performance list", async () => {
   await updatePerformanceData();
 });
