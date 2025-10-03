@@ -135,9 +135,9 @@ const importPerformanceDetailToDB = async (pfDetail: PerformanceDetailType) => {
     .upsert(pfDetail, { onConflict: "mt20id" });
 
   if (error) {
-    console.log("performance_list에 3개월간 공연 데이터 삽입 실패", error);
+    console.log("performance_list에 공연 데이터 삽입 실패", error);
   } else {
-    console.log("performance_list에 3개월간 공연 데이터 삽입 성공");
+    console.log("performance_list에 공연 데이터 삽입 성공");
   }
 };
 
