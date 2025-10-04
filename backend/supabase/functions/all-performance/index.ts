@@ -2,10 +2,9 @@ import supabase from "../_shared/supabaseClient.ts";
 import { API_URL, CLASSIC, SERVICE_KEY } from "../_shared/kopisClient.ts";
 import dayjs from "npm:dayjs";
 import convert, { ElementCompact } from "npm:xml-js";
-import { TextNode } from "../_shared/types/common.d.ts";
 import getProgramJSON from "../_shared/get-program.ts";
-import type { ProgramArray } from "../_shared/get-program.ts";
-import type { PerformanceDetailType } from "../_shared/types/detail.d.ts";
+import type { PerformanceDetailType, TextNode } from "../_shared/types.d.ts";
+import { removeTextProperty, normalizeProgramData } from "../_shared/preprocessing.ts";
 
 const TARGET_PERIOD = 90;
 
@@ -38,58 +37,14 @@ const getPerformanceItemsInPage = async (
       .then((data) => convert.xml2js(data, { compact: true }));
 
     const result = response.dbs.db;
-    return result;
+    if (!result) {
+      return null;
+    }
+    return Array.isArray(result) ? result : [result]; // result가 하나인 경우 단일 객체이므로 배열로 만들어주기
   } catch (error) {
     console.log("KOPIS API로 공연 데이터 받아오기 실패", error);
     return null;
   }
-};
-
-type JsonValue = string | null | JsonObject | JsonArray;
-interface JsonObject {
-  [key: string]: JsonValue;
-}
-type JsonArray = JsonValue[];
-
-const removeTextProperty = (obj: JsonValue): JsonValue => {
-  if (obj === null || typeof obj !== "object") {
-    return obj;
-  }
-
-  if (Array.isArray(obj)) {
-    return obj.map((item) => removeTextProperty(item));
-  }
-
-  // 객체가 _text 속성만 가지고 있는 경우, _text 값을 반환
-  if (Object.keys(obj).length === 1 && obj.hasOwnProperty("_text")) {
-    return obj._text;
-  }
-
-  // 일반 객체의 경우, 각 속성에 대해 재귀적으로 처리
-  const result: JsonObject = {};
-  for (const key in obj) {
-    if (obj.hasOwnProperty(key)) {
-      result[key] = removeTextProperty(obj[key]);
-    }
-  }
-
-  return result;
-};
-
-const normalizeName = (name: string) => {
-  return name.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-};
-
-// 프로그램 데이터 정규화(특수문자 제거)
-const normalizeProgramData = (programData: ProgramArray) => {
-  return programData.map((element) => {
-    return {
-      composerEnglish: normalizeName(element.composerEnglish),
-      composerKorean: element.composerKorean,
-      titlesEnglish: element.titlesEnglish.map(normalizeName),
-      titlesKorean: element.titlesKorean,
-    };
-  });
 };
 
 // pfId를 바탕으로 공연 상세 데이터를 받아오는 함수
@@ -179,6 +134,7 @@ const getUpdatedPerformancesId = async (): Promise<string[]> => {
     });
   }
 
+  console.log(updatedPerformancesIdArray);
   return updatedPerformancesIdArray;
 };
 
@@ -229,6 +185,7 @@ const upsertUpdatedPerformancesToDB = async (pfDetail: PerformanceDetailType) =>
 
 const updatePerformanceData = async () => {
   const newPerformanceItemArray = await getNewPerformanceItems(); // 향후 3개월간의 모든 공연
+  console.log(newPerformanceItemArray);
   const newPfIdArray = newPerformanceItemArray.map(
     (element) => element.mt20id._text
   ); // 공연id로 이루어진 배열
@@ -237,7 +194,7 @@ const updatePerformanceData = async () => {
 
   // DB에서 오래된 공연 데이터(취소되어 삭제된 공연, 종료된 공연) 삭제
   const idsToDelete = oldPfIdArray.filter((pfId) => !newPfIdSet.has(pfId));
-  console.log("idsToDelete:", idsToDelete);
+  console.log(idsToDelete);
   await Promise.all(
     idsToDelete.map(async (pfId) => {
       await deletePerformanceById(pfId);
@@ -246,7 +203,6 @@ const updatePerformanceData = async () => {
 
   // 공연시작일이 (오늘+지정된기간)인 공연을 DB에 추가
   for (const item of newPerformanceItemArray) {
-    console.log(item);
     if (item.prfpdfrom._text === newDate) {
       try {
         const performanceDetail = await Promise.race([
@@ -277,7 +233,6 @@ const updatePerformanceData = async () => {
 
   // 어제 이후로 등록/수정된 공연 id 받아온 후 해당 공연 DB에 upsert
   const updatedPerformancesIdArray = await getUpdatedPerformancesId();
-  console.log(updatedPerformancesIdArray);
   for (const pfId of updatedPerformancesIdArray) {
     const performanceDetail = await getPerformanceDetail(pfId);
     await upsertUpdatedPerformancesToDB(performanceDetail[0]);

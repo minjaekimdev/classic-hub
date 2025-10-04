@@ -2,14 +2,10 @@ import supabase from "../_shared/supabaseClient.ts";
 import { API_URL, CLASSIC, SERVICE_KEY } from "../_shared/kopisClient.ts";
 import dayjs from "npm:dayjs";
 import convert, { ElementCompact } from "npm:xml-js";
-import {
-  RankingPeriod,
-  RankingItem,
-  pfIdObject,
-} from "../_shared/types/ranking.d.ts";
-import type { PerformanceDetailType } from "../_shared/types/detail.d.ts";
+import { RankingPeriod } from "../_shared/types.d.ts";
+import type { PerformanceDetailType } from "../_shared/types.d.ts";
 import getProgramJSON from "../_shared/get-program.ts";
-import type { ProgramArray } from "../_shared/get-program.ts";
+import { JsonArray, removeTextProperty, normalizeProgramData } from "../_shared/preprocessing.ts";
 
 // 랭킹 데이터 업데이트
 const getRankingAPI = (period: RankingPeriod) => {
@@ -29,38 +25,6 @@ const getRankingAPI = (period: RankingPeriod) => {
   )}&catecode=${CLASSIC}`;
 
   return rankingAPI;
-};
-
-type JsonValue = string | null | JsonObject | JsonArray;
-interface JsonObject {
-  [key: string]: JsonValue;
-}
-type JsonArray = JsonValue[];
-
-// XML -> JSON 변환시 자동으로 생성되는 _text 프로퍼티를 제거하기 위한 함수
-const removeTextProperty = (obj: JsonValue): JsonValue => {
-  if (obj === null || typeof obj !== "object") {
-    return obj;
-  }
-
-  if (Array.isArray(obj)) {
-    return obj.map((item) => removeTextProperty(item));
-  }
-
-  // 객체가 _text 속성만 가지고 있는 경우, 정규화한 _text 값을 반환
-  if (Object.keys(obj).length === 1 && obj.hasOwnProperty("_text")) {
-    return obj._text;
-  }
-
-  // 일반 객체의 경우, 각 속성에 대해 재귀적으로 처리
-  const result: JsonObject = {};
-  for (const key in obj) {
-    if (obj.hasOwnProperty(key)) {
-      result[key] = removeTextProperty(obj[key]);
-    }
-  }
-
-  return result;
 };
 
 const getRankingData = async (period: RankingPeriod): Promise<JsonArray> => {
@@ -91,27 +55,12 @@ export const importRankingData = async (period: RankingPeriod) => {
     tableName = "monthly_ranking";
   }
 
-  const { error } = await supabase.from(tableName).insert(RankingItemArray);
+  const { error } = await supabase.from(tableName).upsert(RankingItemArray);
 
   if (error) {
     console.log("DB에 랭킹 데이터 삽입 실패: ", error);
   } else {
     console.log("DB에 랭킹 데이터 삽입 성공");
-  }
-};
-
-export const deleteRankingData = async (
-  period: RankingPeriod
-): Promise<void> => {
-  const { data, error } = await supabase
-    .from(`${period}_ranking`)
-    .delete()
-    .not("id", "is", null); // 모든 행 삭제
-
-  if (error) {
-    console.log("랭킹 데이터 삭제 실패: ", error);
-  } else {
-    console.log("랭킹 데이터 삭제 성공: ", data);
   }
 };
 
@@ -138,21 +87,6 @@ const importPerformanceDetailToDB = async (pfDetail: PerformanceDetailType) => {
   } else {
     console.log("performance_list에 공연 데이터 삽입 성공");
   }
-};
-
-const normalizeName = (name: string) => {
-  return name.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-};
-
-const normalizeProgramData = (programData: ProgramArray) => {
-  return programData.map((element) => {
-    return {
-      composerEnglish: normalizeName(element.composerEnglish),
-      composerKorean: element.composerKorean,
-      titlesEnglish: element.titlesEnglish.map(normalizeName),
-      titlesKorean: element.titlesKorean,
-    };
-  });
 };
 
 const getRankingPerformanceDetail = async (
@@ -214,13 +148,6 @@ const importRankingPfDetail = async (period: RankingPeriod) => {
 };
 
 export const updateAllRankingData = async () => {
-  // 기존 랭킹 데이터 삭제
-  await Promise.all([
-    deleteRankingData("daily"),
-    deleteRankingData("weekly"),
-    deleteRankingData("monthly"),
-  ]);
-
   // 새로운 랭킹 데이터 추가
   await importRankingData("daily");
   await new Promise((r) => {

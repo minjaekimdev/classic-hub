@@ -1,4 +1,4 @@
-import type { TextNode, TicketLink} from "./common.d.ts";
+export type TextNode = { _text: string };
 
 export interface RankingItem {
   rnum: TextNode;
@@ -7,9 +7,13 @@ export interface RankingItem {
   prfplcnm: TextNode;
   poster: TextNode;
   mt20id: TextNode;
-  relates: {
-    relate: TicketLink | TicketLink[];
-  }
 }
 export type RankingPeriod = "daily" | "weekly" | "monthly";
 export type pfIdObject = { mt20id: TextNode };
+
+export type PerformanceDetailType = {
+  styurls?: {
+    styurl: string;
+  };
+  program?: object;
+} | null;
