@@ -183,7 +183,7 @@ const upsertUpdatedPerformancesToDB = async (pfDetail: PerformanceDetailType) =>
   }
 };
 
-const updatePerformanceData = async () => {
+export const updatePerformanceData = async () => {
   const newPerformanceItemArray = await getNewPerformanceItems(); // 향후 3개월간의 모든 공연
   console.log(newPerformanceItemArray);
   const newPfIdArray = newPerformanceItemArray.map(
@@ -239,7 +239,32 @@ const updatePerformanceData = async () => {
   }
 };
 
-// 테스트 실행 코드
-Deno.test("Updating performance list", async () => {
-  await updatePerformanceData();
+Deno.serve(async (_req) => {  
+  try {
+    // 메인 로직 실행
+    await updatePerformanceData();
+
+    return new Response(
+      JSON.stringify({ message: "performance data updated successfully." }),
+      {
+        headers: { "Content-Type": "application/json" },
+        status: 200,
+      }
+    );
+  } catch (error) { 
+    console.error("Error updating performance data:", error);
+
+    if (error instanceof Error) {
+      return new Response(JSON.stringify({ error: error.message }), {
+        headers: { "Content-Type": "application/json" },
+        status: 500,
+      });
+    }
+
+    // Error 객체가 아닌 다른 것이 throw된 경우를 대비
+    return new Response(JSON.stringify({ error: "An unexpected error occurred" }), {
+      headers: { "Content-Type": "application/json" },
+      status: 500,
+    });
+  }
 });

@@ -1,5 +1,5 @@
-import "dotenv/config";
-import { GoogleGenAI, Type } from "@google/genai";
+import 'jsr:@std/dotenv/load'
+import { GoogleGenAI, Type } from "npm:@google/genai";
 import { Buffer } from "node:buffer";
 
 interface ProgramItem {
@@ -11,7 +11,7 @@ interface ProgramItem {
 
 export type ProgramArray = ProgramItem[];
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+const ai = new GoogleGenAI({ apiKey: Deno.env.get("GEMINI_API_KEY") });
 
 // 공연 상세이미지 url로부터 바이너리 데이터를 받아 base64로 변환한 값을 리턴하는 함수
 const getBase64FromUrl = async (url: string) => {
