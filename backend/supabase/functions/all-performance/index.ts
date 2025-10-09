@@ -138,6 +138,7 @@ const getUpdatedPerformancesId = async (): Promise<string[]> => {
   return updatedPerformancesIdArray;
 };
 
+// DB performance_list 테이블에 존재하는 공연id를 배열로 반환하는 함수
 const getOldPfIdArray = async (): Promise<string[]> => {
   const { data, error } = await supabase
     .from("performance_list")
@@ -190,7 +191,7 @@ export const updatePerformanceData = async () => {
     (element) => element.mt20id._text
   ); // 공연id로 이루어진 배열
   const newPfIdSet = new Set(newPfIdArray); // 삭제할 공연의 pfId를 효율적으로 찾기 위해 Set 자료구조 활용
-  const oldPfIdArray = await getOldPfIdArray(); // 기존 DB에만 존재하고, newPerformanceItemArray에는 없는 공연의 pfId로 이루어진 배열
+  const oldPfIdArray = await getOldPfIdArray(); // 기존 DB에 존재하는 공연들의 pfId로 이루어진 배열
 
   // DB에서 오래된 공연 데이터(취소되어 삭제된 공연, 종료된 공연) 삭제
   const idsToDelete = oldPfIdArray.filter((pfId) => !newPfIdSet.has(pfId));
