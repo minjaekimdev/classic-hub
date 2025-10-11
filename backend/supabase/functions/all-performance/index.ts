@@ -1,14 +1,18 @@
 import supabase from "../_shared/supabaseClient.ts";
 import { API_URL, CLASSIC, SERVICE_KEY } from "../_shared/kopisClient.ts";
 import dayjs from "npm:dayjs";
+import utc from "npm:dayjs/plugin/utc";
+import timezone from "npm:dayjs/plugin/timezone";
 import convert, { ElementCompact } from "npm:xml-js";
 import getProgramJSON from "../_shared/get-program.ts";
 import type { PerformanceDetailType, TextNode } from "../_shared/types.d.ts";
 import { removeTextProperty, normalizeProgramData } from "../_shared/preprocessing.ts";
 
+dayjs.extend(utc);
+dayjs.extend(timezone);
 const TARGET_PERIOD = 90;
 
-const now = dayjs();
+const now = dayjs().tz("Asia/Seoul");
 const yesterday = now.subtract(1, "day").format("YYYYMMDD");
 const today = now.format("YYYYMMDD");
 const updateEndDate = now.add(TARGET_PERIOD - 1, "day").format("YYYYMMDD");
@@ -134,7 +138,7 @@ const getUpdatedPerformancesId = async (): Promise<string[]> => {
     });
   }
 
-  console.log(updatedPerformancesIdArray);
+  console.log("updated performances:", updatedPerformancesIdArray);
   return updatedPerformancesIdArray;
 };
 
@@ -186,7 +190,6 @@ const upsertUpdatedPerformancesToDB = async (pfDetail: PerformanceDetailType) =>
 
 export const updatePerformanceData = async () => {
   const newPerformanceItemArray = await getNewPerformanceItems(); // 향후 3개월간의 모든 공연
-  console.log(newPerformanceItemArray);
   const newPfIdArray = newPerformanceItemArray.map(
     (element) => element.mt20id._text
   ); // 공연id로 이루어진 배열
@@ -195,10 +198,10 @@ export const updatePerformanceData = async () => {
 
   // DB에서 오래된 공연 데이터(취소되어 삭제된 공연, 종료된 공연) 삭제
   const idsToDelete = oldPfIdArray.filter((pfId) => !newPfIdSet.has(pfId));
-  console.log(idsToDelete);
+  console.log("performances to delete:", idsToDelete);
   await Promise.all(
     idsToDelete.map(async (pfId) => {
-      await deletePerformanceById(pfId);
+      deletePerformanceById(pfId);
     })
   );
 

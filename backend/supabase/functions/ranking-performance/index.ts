@@ -1,16 +1,21 @@
 import supabase from "../_shared/supabaseClient.ts";
 import { API_URL, CLASSIC, SERVICE_KEY } from "../_shared/kopisClient.ts";
 import dayjs from "npm:dayjs";
+import utc from "npm:dayjs/plugin/utc";
+import timezone from "npm:dayjs/plugin/timezone";
 import convert, { ElementCompact } from "npm:xml-js";
 import { RankingPeriod } from "../_shared/types.d.ts";
 import type { PerformanceDetailType } from "../_shared/types.d.ts";
 import getProgramJSON from "../_shared/get-program.ts";
 import { JsonArray, removeTextProperty, normalizeProgramData } from "../_shared/preprocessing.ts";
 
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
 // 랭킹 데이터 업데이트
 const getRankingAPI = (period: RankingPeriod) => {
   let stDate = "";
-  const endDate = dayjs().subtract(1, "day");
+  const endDate = dayjs().tz("Asia/Seoul").subtract(1, "day");
 
   if (period === "daily") {
     stDate = endDate.format("YYYYMMDD");
@@ -114,6 +119,7 @@ const getRankingPerformanceDetail = async (
 
   return pfDetail; // Gemini API RPM(Request Per Minute)제한 맞추기 위해 시간 차이를 함께 리턴
 };
+
 
 const importRankingPfDetail = async (period: RankingPeriod) => {
   const rankingPfIdArray = await returnPfIdArrayFromDB(

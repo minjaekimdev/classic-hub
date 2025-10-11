@@ -13,10 +13,6 @@ import { ComputeTokensResponse } from "@google/genai";
 const TARGET_PERIOD = 90;
 
 const now = dayjs();
-const yesterday = now.subtract(1, "day").format("YYYYMMDD");
-const today = now.format("YYYYMMDD");
-const updateEndDate = now.add(TARGET_PERIOD - 1, "day").format("YYYYMMDD");
-const newDate = now.add(TARGET_PERIOD, "day").format("YYYY.MM.DD");
 
 interface PerformanceItemType {
   mt20id: TextNode; // 공연 id
@@ -357,6 +353,7 @@ const importPerformanceDataToDB = async () => {
   }
 };
 
-(async () => {
-  await refreshDBData();
-})();
+// (async () => {
+//   await refreshDBData();
+// })();
+
