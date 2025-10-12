@@ -37,7 +37,8 @@ jobs:
       # 4. 데이터 업데이트 스크립트 실행
       # 'deno run' 대신 'npx ts-node'를 사용해 TypeScript 파일을 직접 실행
       - name: Run daily tasks runner script
-        run: "npx ts-node -r tsconfig-paths/register backend/database/cron/daily-tasks-runner.ts"
+        run: "ts-node -r tsconfig-paths/register ./database/cron/daily-tasks-runner.ts"
+        working-directory: ./backend
         
         # 환경 변수 주입 방식은 동일합니다.
         env:
