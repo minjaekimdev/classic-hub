@@ -1,0 +1,46 @@
+# 워크플로우의 이름
+name: Run Daily Update Tasks
+
+# 워크플로우 실행 조건
+on:
+  schedule:
+    # UTC 기준 매일 15:00 (한국 시간 자정)에 실행
+    - cron: '0 15 * * *'
+
+  workflow_dispatch:
+    # 수동 실행을 위한 버튼 제공
+
+# 실행할 작업 정의
+jobs:
+  run-daily-job:
+    # 작업이 실행될 환경
+    runs-on: ubuntu-latest
+
+    # 작업의 단계(steps) 정의
+    steps:
+      # 1. 리포지토리 코드를 가상 머신으로 가져오기
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Node.js 실행 환경 설치 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # 안정적인 최신 LTS 버전 사용
+
+      # 3. 필요한 라이브러리 설치 (npm 사용)
+      # package.json 파일에 명시된 모든 의존성을 설치합니다.
+      - name: Install dependencies
+        run: npm install
+        working-directory: ./backend
+
+      # 4. 데이터 업데이트 스크립트 실행
+      # 'deno run' 대신 'npx ts-node'를 사용해 TypeScript 파일을 직접 실행
+      - name: Run daily tasks runner script
+        run: "npx ts-node -r tsconfig-paths/register backend/database/cron/daily-tasks-runner.ts"
+        
+        # 환경 변수 주입 방식은 동일합니다.
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          KOPIS_API_KEY: ${{ secrets.KOPIS_API_KEY }}
