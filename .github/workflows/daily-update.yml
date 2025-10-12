@@ -43,5 +43,5 @@ jobs:
         # 환경 변수 주입 방식은 동일합니다.
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          KOPIS_API_KEY: ${{ secrets.KOPIS_API_KEY }}
+          KOPIS_SERVICE_KEY: ${{ secrets.KOPIS_SERVICE_KEY }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
