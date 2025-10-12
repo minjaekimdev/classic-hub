@@ -208,7 +208,7 @@ const deleteOldDataInDB = async (
   oldPfIdArray: string[]
 ) => {
   const idsToDelete = oldPfIdArray.filter((pfId) => !newPfIdSet.has(pfId));
-  console.log(idsToDelete);
+  console.log("performances to delete:", idsToDelete);
   await Promise.all(
     idsToDelete.map(async (pfId) => {
       deletePerformanceById(pfId);
@@ -222,7 +222,7 @@ const addNewDataToDB = async (
   newPfIdArray: string[]
 ) => {
   const idsToAdd = newPfIdArray.filter((pfId) => !oldPfIdSet.has(pfId));
-  console.log(idsToAdd);
+  console.log("performances to add:", idsToAdd);
 
   for (const pfId of idsToAdd) {
     const performanceDetail = await getPerformanceDetail(pfId);
@@ -276,6 +276,7 @@ const upsertUpdatedDataToDB = async (dateObj: {
   end: string;
 }) => {
   const updatedPerformancesIdArray = await getUpdatedPerformancesId(dateObj);
+  console.log("updated performances:", updatedPerformancesIdArray);
   for (const pfId of updatedPerformancesIdArray) {
     const performanceDetail = await getPerformanceDetail(pfId);
     await importPerformanceDetailToDB(performanceDetail[0]);
@@ -301,9 +302,9 @@ const refreshDBData = async () => {
 
   // 특정 날짜 이후로 수정/등록된 공연 데이터 upsert
   const dateObj = {
-    after: "20251001",
-    start: "20251009",
-    end: "20250107",
+    after: "20251011",
+    start: "20251011",
+    end: "20250109",
   };
   await upsertUpdatedDataToDB(dateObj);
 };
@@ -356,4 +357,3 @@ const importPerformanceDataToDB = async () => {
 // (async () => {
 //   await refreshDBData();
 // })();
-
