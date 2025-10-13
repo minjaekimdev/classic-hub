@@ -41,6 +41,7 @@ const getRankingData = async (period: RankingPeriod): Promise<JsonArray> => {
       .then((data) => convert.xml2js(data, { compact: true }));
 
     rankingItemArray = removeTextProperty(response.boxofs.boxof) as JsonArray;
+    console.log(`${period} 랭킹 데이터:`, rankingItemArray);
   } catch (error) {
     console.log("KOPIS API로 공연 랭킹 데이터 가져오기 실패: ", error);
   }
