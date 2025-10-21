@@ -30,20 +30,3 @@ export const removeTextProperty = (obj: JsonValue): JsonValue => {
 
   return result;
 };
-
-
-export const normalizeName = (name: string) => {
-  return name.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-};
-
-// 프로그램 데이터 정규화(특수문자 제거)
-export const normalizeProgramData = (programData: ProgramArray) => {
-  return programData.map((element) => {
-    return {
-      composerEnglish: normalizeName(element.composerEnglish),
-      composerKorean: element.composerKorean,
-      titlesEnglish: element.titlesEnglish.map(normalizeName),
-      titlesKorean: element.titlesKorean,
-    };
-  });
-};

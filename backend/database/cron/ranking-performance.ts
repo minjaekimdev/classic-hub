@@ -7,7 +7,7 @@ import convert, { ElementCompact } from "xml-js";
 import type { RankingPeriod } from "../types.d.ts";
 import type { PerformanceDetailType } from "../types.d.ts";
 import getProgramJSON from "../get-program";
-import { JsonArray, removeTextProperty, normalizeProgramData } from "../preprocessing";
+import { JsonArray, removeTextProperty } from "../preprocessing";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -114,8 +114,7 @@ const getRankingPerformanceDetail = async (
   // 상세이미지 url로부터 프로그램 데이터 추출
   if (pfDetail?.styurls) {
     const programData = await getProgramJSON(pfDetail.styurls.styurl);
-    const normalizedProgram = normalizeProgramData(programData);
-    pfDetail.program = normalizedProgram;
+    pfDetail.program = programData;
   }
 
   return pfDetail; // Gemini API RPM(Request Per Minute)제한 맞추기 위해 시간 차이를 함께 리턴

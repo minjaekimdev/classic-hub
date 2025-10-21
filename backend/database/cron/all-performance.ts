@@ -6,7 +6,7 @@ import timezone from "dayjs/plugin/timezone";
 import convert, { ElementCompact } from "xml-js";
 import getProgramJSON from "../get-program";
 import type { PerformanceDetailType, TextNode } from "../types.d.ts";
-import { removeTextProperty, normalizeProgramData } from "../preprocessing";
+import { removeTextProperty } from "../preprocessing";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -75,8 +75,7 @@ const getPerformanceDetail = async (
     t1 = performance.now();
     const programData = await getProgramJSON(pfDetail.styurls.styurl);
     t2 = performance.now();
-    const normalizedProgram = normalizeProgramData(programData);
-    pfDetail.program = normalizedProgram;
+    pfDetail.program = programData;
   }
 
   return [pfDetail, t2 - t1]; // Gemini API RPM(Request Per Minute)제한 맞추기 위해 시간 차이를 함께 리턴
