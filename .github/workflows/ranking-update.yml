@@ -1,11 +1,11 @@
 # 워크플로우의 이름
-name: Run Daily Update Tasks
+name: Ranking Update
 
 # 워크플로우 실행 조건
 on:
   schedule:
     # UTC 기준 매일 15:00 (한국 시간 자정)에 실행
-    - cron: '0 15 * * *'
+    - cron: '0 1 * * *'
 
   workflow_dispatch:
     # 수동 실행을 위한 버튼 제공
@@ -37,7 +37,7 @@ jobs:
       # 4. 데이터 업데이트 스크립트 실행
       # 'deno run' 대신 'npx ts-node'를 사용해 TypeScript 파일을 직접 실행
       - name: Run daily tasks runner script
-        run: "npx ts-node -r tsconfig-paths/register ./database/cron/daily-tasks-runner.ts"
+        run: "npx ts-node -r tsconfig-paths/register ./database/cron/ranking-performance.ts"
         working-directory: ./backend
         
         # 환경 변수 주입 방식은 동일합니다.

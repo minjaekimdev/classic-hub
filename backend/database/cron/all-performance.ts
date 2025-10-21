@@ -194,8 +194,8 @@ const upsertUpdatedPerformancesToDB = async (
   }
 };
 
-export const updatePerformanceData = async () => {
-  const newPerformanceItemArray = await getNewPerformanceItems(); // 향후 3개월간의 모든 공연
+(async () => {
+    const newPerformanceItemArray = await getNewPerformanceItems(); // 향후 3개월간의 모든 공연
   const newPfIdArray = newPerformanceItemArray.map(
     (element) => element.mt20id._text
   ); // 공연id로 이루어진 배열
@@ -247,4 +247,4 @@ export const updatePerformanceData = async () => {
     const performanceDetail = await getPerformanceDetail(pfId);
     await upsertUpdatedPerformancesToDB(performanceDetail[0]);
   }
-};
+})();

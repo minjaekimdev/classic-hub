@@ -302,9 +302,9 @@ const refreshDBData = async () => {
 
   // 특정 날짜 이후로 수정/등록된 공연 데이터 upsert
   const dateObj = {
-    after: "20251011",
-    start: "20251011",
-    end: "20250109",
+    after: "20251012",
+    start: "20251016",
+    end: "20260113",
   };
   await upsertUpdatedDataToDB(dateObj);
 };
@@ -354,6 +354,6 @@ const importPerformanceDataToDB = async () => {
   }
 };
 
-// (async () => {
-//   await refreshDBData();
-// })();
+(async () => {
+  await refreshDBData();
+})();

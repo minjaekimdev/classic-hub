@@ -84,54 +84,59 @@ export const getProgramJSON = async (
     return [];
   }
 
-  const response = await ai.models.generateContent({
-    model: "gemini-2.5-flash-lite",
-    contents: contents,
-    config: {
-      maxOutputTokens: 15000,
-      thinkingConfig: {
-        thinkingBudget: 10000,
-      },
-      responseMimeType: "application/json",
-      responseSchema: {
-        type: Type.ARRAY,
-        items: {
-          type: Type.OBJECT,
-          properties: {
-            composerEnglish: { type: Type.STRING },
-            composerKorean: { type: Type.STRING },
-            titlesEnglish: {
-              type: Type.ARRAY,
-              items: { type: Type.STRING },
+  try {
+    const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash-lite",
+      contents: contents,
+      config: {
+        maxOutputTokens: 15000,
+        thinkingConfig: {
+          thinkingBudget: 10000,
+        },
+        responseMimeType: "application/json",
+        responseSchema: {
+          type: Type.ARRAY,
+          items: {
+            type: Type.OBJECT,
+            properties: {
+              composerEnglish: { type: Type.STRING },
+              composerKorean: { type: Type.STRING },
+              titlesEnglish: {
+                type: Type.ARRAY,
+                items: { type: Type.STRING },
+              },
+              titlesKorean: {
+                type: Type.ARRAY,
+                items: { type: Type.STRING },
+              },
             },
-            titlesKorean: {
-              type: Type.ARRAY,
-              items: { type: Type.STRING },
-            },
+            propertyOrdering: [
+              "composerEnglish",
+              "composerKorean",
+              "titlesEnglish",
+              "titlesKorean",
+            ],
           },
-          propertyOrdering: [
-            "composerEnglish",
-            "composerKorean",
-            "titlesEnglish",
-            "titlesKorean",
-          ],
         },
       },
-    },
-  });
+    });
 
-  console.log(response.usageMetadata); // 사용 토큰 수 출력
+    console.log(response.usageMetadata); // 사용 토큰 수 출력
 
-  if (!response?.text) {
-    return [];
-  }
+    if (!response?.text) {
+      return [];
+    }
 
-  console.log(response.text);
+    console.log(response.text);
 
-  try {
-    return JSON.parse(response.text);
+    try {
+      return JSON.parse(response.text);
+    } catch (error) {
+      console.error("JSON 파싱 실패:", error);
+      return [];
+    }
   } catch (error) {
-    console.error("JSON 파싱 실패:", error);
+    console.log(error);
     return [];
   }
 };

@@ -154,8 +154,8 @@ const importRankingPfDetail = async (period: RankingPeriod) => {
   }
 };
 
-export const updateAllRankingData = async () => {
-  // 새로운 랭킹 데이터 추가
+(async () => {
+    // 새로운 랭킹 데이터 추가
   await importRankingData("daily");
   await new Promise((r) => {
     setTimeout(r, 100);
@@ -173,4 +173,4 @@ export const updateAllRankingData = async () => {
   await importRankingPfDetail("daily");
   await importRankingPfDetail("weekly");
   await importRankingPfDetail("monthly");
-};
+})();
