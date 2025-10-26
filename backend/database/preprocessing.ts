@@ -1,5 +1,3 @@
-import { ProgramArray } from "./get-program";
-
 export type JsonValue = string | null | JsonObject | JsonArray;
 export interface JsonObject {
   [key: string]: JsonValue;
@@ -20,12 +18,14 @@ export const removeTextProperty = (obj: JsonValue): JsonValue => {
     return obj._text;
   }
 
-  // 일반 객체의 경우, 각 속성에 대해 재귀적으로 처리
-  const result: JsonObject = {};
-  for (const key in obj) {
-    if (obj.hasOwnProperty(key)) {
-      result[key] = removeTextProperty(obj[key]);
-    }
+  // 일반 객체의 경우
+  // 아무 데이터도 없는 경우 null 반환
+  if (Object.keys(obj).length === 0) return null;
+
+  // 데이터가 존재하는 경우 각 속성에 대해 재귀적으로 처리
+  const result: JsonObject = {}
+  for (const key of Object.keys(obj)) {
+    result[key] = removeTextProperty(obj[key]);
   }
 
   return result;

@@ -12,6 +12,7 @@ export type RankingPeriod = "daily" | "weekly" | "monthly";
 export type pfIdObject = { mt20id: TextNode };
 
 export type PerformanceDetailType = {
+  sty?: string;
   styurls?: {
     styurl: string;
   };

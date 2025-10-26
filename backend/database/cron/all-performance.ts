@@ -71,9 +71,17 @@ const getPerformanceDetail = async (
 
   // 상세이미지 url로부터 프로그램 데이터 추출
   let [t1, t2] = [0, 0];
-  if (pfDetail?.styurls) {
+  let programData;
+
+  if (pfDetail) {
     t1 = performance.now();
-    const programData = await getProgramJSON(pfDetail.styurls.styurl);
+    if (pfDetail.sty) { // 텍스트로 된 프로그램 데이터(sty)가 있다면 이를 인식
+      programData = await getProgramJSON(pfDetail.sty);
+    } else {
+      if (pfDetail.styurls) { // 텍스트로 된 프로그램 데이터가 없다면 이미지를 인식
+        programData = await getProgramJSON(pfDetail.styurls.styurl);
+      }
+    }
     t2 = performance.now();
     pfDetail.program = programData;
   }
@@ -194,14 +202,15 @@ const upsertUpdatedPerformancesToDB = async (
 };
 
 (async () => {
-    const newPerformanceItemArray = await getNewPerformanceItems(); // 향후 3개월간의 모든 공연
+  const newPerformanceItemArray = await getNewPerformanceItems(); // 향후 3개월간의 모든 공연
   const newPfIdArray = newPerformanceItemArray.map(
     (element) => element.mt20id._text
   ); // 공연id로 이루어진 배열
   const newPfIdSet = new Set(newPfIdArray); // 삭제할 공연의 pfId를 효율적으로 찾기 위해 Set 자료구조 활용
   const oldPfIdArray = await getOldPfIdArray(); // 기존 DB에 존재하는 공연들의 pfId로 이루어진 배열
+  const oldPfIdSet = new Set(oldPfIdArray);
 
-  // DB에서 오래된 공연 데이터(취소되어 삭제된 공연, 종료된 공연) 삭제
+  // DB에서 오래된 공연 데이터(취소되어 삭제된 공연, 종료된 공연) 삭제, newPfIdArray에는 없고 oldPfIdArray에는 있는 데이터
   const idsToDelete = oldPfIdArray.filter((pfId) => !newPfIdSet.has(pfId));
   console.log("performances to delete:", idsToDelete);
   await Promise.all(
@@ -210,33 +219,34 @@ const upsertUpdatedPerformancesToDB = async (
     })
   );
 
-  // 공연시작일이 (오늘+지정된기간)인 공연을 DB에 추가
-  for (const item of newPerformanceItemArray) {
-    if (item.prfpdfrom._text === newDate) {
-      try {
-        const performanceDetail = await Promise.race([
-          new Promise<[PerformanceDetailType, number]>((_, reject) =>
-            // 2분 이상 소요되면 다음 공연 데이터의 프로그램 받아오도록 실행
-            setTimeout(() => {
-              reject(new Error("Gemini API timed out after 120 seconds"));
-            }, 120000)
-          ),
-          getPerformanceDetail(item.mt20id._text),
-        ]);
+  // DB에 새로운 공연 데이터 추가, newPfIdArray에만 있고 oldPfIdArray에는 없는 데이터
+  const idsToAdd = newPfIdArray.filter((pfId) => !oldPfIdSet.has(pfId));
+  console.log("performances to add:", idsToAdd);
 
-        await importPerformanceToDB(performanceDetail[0]);
+  for (const id of idsToAdd) {
+    try {
+      const performanceDetail = await Promise.race([
+        new Promise<[PerformanceDetailType, number]>((_, reject) =>
+          // 2분 이상 소요되면 다음 공연 데이터의 프로그램 받아오도록 실행
+          setTimeout(() => {
+            reject(new Error("Gemini API timed out after 120 seconds"));
+          }, 120000)
+        ),
+        getPerformanceDetail(id),
+      ]);
 
-        // Gemini API 호출 시간 간격 맞추기
-        if (performanceDetail[1] < 4000) {
-          await new Promise((r) => {
-            setTimeout(() => {
-              r(1);
-            }, 4000 - performanceDetail[1]);
-          });
-        }
-      } catch (error) {
-        console.log(error);
+      await importPerformanceToDB(performanceDetail[0]);
+
+      // Gemini API 호출 시간 간격 맞추기
+      if (performanceDetail[1] < 4000) {
+        await new Promise((r) => {
+          setTimeout(() => {
+            r(1);
+          }, 4000 - performanceDetail[1]);
+        });
       }
+    } catch (error) {
+      console.log(error);
     }
   }
 

@@ -1,5 +1,5 @@
 import supabase from "@/apis/supabase-client";
-import { apiURL, serviceKey } from "@/apis/kopis-client";
+import { API_URL, SERVICE_KEY } from "@/apis/kopis-client";
 import { ElementCompact } from "xml-js";
 import convert from "xml-js";
 
@@ -27,10 +27,10 @@ const fetchAndImportConcertHallLocationData = async () => {
   const endConcertHallId = 4496;
 
   for (let id = startConcertHallID; id <= endConcertHallId; id++) {
-    const locationAPI = `${apiURL}/prfplc/FC${String(id).padStart(
+    const locationAPI = `${API_URL}/prfplc/FC${String(id).padStart(
       6,
       "0"
-    )}?service=${serviceKey}`;
+    )}?service=${SERVICE_KEY}`;
 
     const response: ElementCompact = await fetch(locationAPI)
       .then((res) => res.text())
