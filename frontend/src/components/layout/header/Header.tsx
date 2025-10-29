@@ -8,7 +8,7 @@ import Auth from "./Auth";
 import FilterSmall from "./filter/simplified/FilterSmall";
 import FilterBig from "@/components/layout/header/filter/extended/FilterBig";
 
-export type fieldType = "검색어" | "시대" | "장르" | "지역" | "가격" | "기간";
+export type fieldType = "검색어" | "지역" | "가격" | "기간";
 
 export interface fieldContentType {
   검색어: string;

@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, type SetStateAction } from "react";
 import styles from "./FilterBig.module.scss";
+import resetIcon from "@/assets/filter/refresh_24dp_374151_FILL0_wght400_GRAD0_opsz24.svg";
 import searchIcon from "@assets/filter/search-icon.svg";
 import FilterField from "./FilterField";
 import type { fieldType, fieldContentType } from "../../Header";
@@ -23,7 +24,7 @@ const SearchInput: React.FC<{
       className={`${styles["filter__searchbox"]} ${
         fieldSelected === "검색어" ? styles["filter__searchbox--active"] : ""
       } ${
-        fieldSelected !== null && fieldSelected !== "검색어"
+        (fieldSelected && fieldSelected !== "검색어")
           ? styles["filter__searchbox--inactive"]
           : ""
       }`}
@@ -57,33 +58,22 @@ const SearchInput: React.FC<{
 
 const ButtonContainer: React.FC = () => {
   return (
-    <div className={styles["filter__button-container"]}>
-      <button
-        className={`${styles["filter__button"]} ${styles["filter__button--reset"]}`}
-      >
-        초기화
+    <div className={styles["button-container"]}>
+      <button className={`${styles["button"]} ${styles["button--reset"]}`}>
+        <img src={resetIcon} alt="" style={{ width: "16px", height: "16px" }} />
       </button>
-      <button
-        className={`${styles["filter__button"]} ${styles["filter__button--search"]}`}
-      >
-        <img src={searchIcon} alt="" />
-        <span>검색</span>
+      <button className={`${styles["button"]} ${styles["button--search"]}`}>
+        <img
+          src={searchIcon}
+          alt=""
+          style={{ width: "16px", height: "16px" }}
+        />
       </button>
     </div>
   );
 };
 
 const filterFieldProps = [
-  {
-    area: "c",
-    type: "시대",
-    initialState: "시대 선택",
-  },
-  {
-    area: "d",
-    type: "장르",
-    initialState: "장르 선택",
-  },
   {
     area: "e",
     type: "지역",
@@ -127,37 +117,32 @@ const FilterBig: React.FC<{
   }, []);
 
   return (
-    <div className={styles["filter-section"]}>
-      <div className={styles["container"]}>
-        <div className={styles["filter-wrapper"]}>
-          <form
-            ref={filterRef}
-            method="get"
-            className={`${styles["filter"]} ${
-              selectedField ? styles["filter--active"] : ""
-            }`}
-          >
-            <SearchInput
-              fieldSelected={selectedField}
-              inputValue={fieldContent.검색어}
-              onFieldSelect={setSelectedField}
-              setFieldContent={setFieldContent}
-            />
-            <ButtonContainer />
-            {filterFieldProps.map((element) => (
-              <FilterField
-                key={element.type}
-                data={element}
-                fieldSelected={selectedField}
-                fieldContent={fieldContent[element.type]}
-                onFieldSelect={setSelectedField}
-                setFieldContent={setFieldContent}
-              />
-            ))}
-          </form>
-        </div>
-      </div>
-    </div>
+    <form className={styles["form"]} method="get">
+      <section
+        ref={filterRef}
+        className={`${styles["filter"]} ${
+          selectedField ? styles["filter--active"] : ""
+        }`}
+      >
+        <SearchInput
+          fieldSelected={selectedField}
+          inputValue={fieldContent.검색어}
+          onFieldSelect={setSelectedField}
+          setFieldContent={setFieldContent}
+        />
+        {filterFieldProps.map((element) => (
+          <FilterField
+            key={element.type}
+            data={element}
+            fieldSelected={selectedField}
+            fieldContent={fieldContent[element.type]}
+            onFieldSelect={setSelectedField}
+            setFieldContent={setFieldContent}
+          />
+        ))}
+      </section>
+      <ButtonContainer />
+    </form>
   );
 };
 

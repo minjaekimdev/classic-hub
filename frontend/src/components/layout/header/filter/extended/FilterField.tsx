@@ -1,8 +1,7 @@
 import { useState, useEffect, useRef, type SetStateAction } from "react";
-import eraIcon from "@assets/filter/era.svg";
-import genreIcon from "@assets/filter/genre.svg";
-import locationIcon from "@assets/filter/location.svg";
-import periodIcon from "@assets/filter/period.svg";
+import locationIcon from "@assets/filter/location-gray.png";
+import moneyIcon from "@assets/filter/money-gray.png";
+import periodIcon from "@assets/filter/calendar-gray.png";
 import styles from "./FilterField.module.scss";
 import DropdownMenu from "./dropdown/DropdownMenu";
 import DatePicker from "./dropdown/DatePicker";
@@ -35,6 +34,7 @@ const FilterField: React.FC<FilterFieldProps> = ({
     setShowDropdown(fieldSelected);
   }, [fieldSelected]);
 
+  // 카테고리 드롭다운 열림 상태에서 외부 클릭 시 닫기
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -52,49 +52,12 @@ const FilterField: React.FC<FilterFieldProps> = ({
   }, []);
 
   const iconArray = {
-    시대: eraIcon,
-    장르: genreIcon,
     지역: locationIcon,
+    가격: moneyIcon,
     기간: periodIcon,
   };
 
   const propsDataObj = {
-    시대: [
-      {
-        main: "바로크",
-        sub: "17세기 ~ 18세기 중반",
-      },
-      {
-        main: "고전",
-        sub: "18세기 중반 ~ 19세기 초",
-      },
-      {
-        main: "낭만",
-        sub: "19세기",
-      },
-      {
-        main: "근현대",
-        sub: "20세기 ~",
-      },
-    ],
-    장르: [
-      {
-        main: "교향악/협연",
-        sub: "오케스트라 공연",
-      },
-      {
-        main: "독주",
-        sub: "솔로 연주(리사이틀)",
-      },
-      {
-        main: "실내악",
-        sub: "소규모 앙상블",
-      },
-      {
-        main: "무대음악",
-        sub: "오페라, 발레",
-      },
-    ],
     지역: [
       "서울",
       "경기/인천",
@@ -129,28 +92,6 @@ const FilterField: React.FC<FilterFieldProps> = ({
           className={`${styles["dropdown-container"]} ${styles["dropdown-container-single"]}`}
         >
           <DatePicker setFieldContent={setFieldContent} />
-        </div>
-      );
-    } else if (
-      (data.type === "시대" && showDropdown === "시대") ||
-      (data.type === "장르" && showDropdown === "장르")
-    ) {
-      return (
-        <div
-          ref={dropdownRef}
-          className={`${styles["dropdown-container"]} ${styles["dropdown-container-group"]}`}
-        >
-          {propsDataObj[data.type].map((item) => (
-            <DropdownMenu
-              key={item.main}
-              main={item.main}
-              sub={item.sub}
-              fieldType={data.type}
-              onSelect={dropdownSelect}
-              onFieldSelect={onFieldSelect}
-              setFieldContent={setFieldContent}
-            />
-          ))}
         </div>
       );
     } else if (data.type === "가격" && showDropdown === "가격") {
@@ -192,19 +133,12 @@ const FilterField: React.FC<FilterFieldProps> = ({
     }
   };
 
-  const renderIcon = () => {
-    if (data.type === "가격") return <span className={styles["won"]}>₩</span>;
-    return (
-      <img src={iconArray[data.type]} alt="" className={styles["field-icon"]} />
-    );
-  };
-
   return (
     <fieldset
       className={`${styles["filter-field"]} ${
         fieldSelected === data.type ? styles["filter-field--active"] : ""
       } ${
-        fieldSelected !== null && fieldSelected !== data.type
+        (fieldSelected && fieldSelected !== data.type)
           ? styles["filter-field--inactive"]
           : ""
       }`}
@@ -220,7 +154,14 @@ const FilterField: React.FC<FilterFieldProps> = ({
     >
       <section className={styles["field-wrapper"]}>
         <div className={styles["field-left"]}>
-          <div className={styles["field-icon-wrapper"]}>{renderIcon()}</div>
+          <div className={styles["field-icon-wrapper"]}>
+            <img
+              src={iconArray[data.type]}
+              alt=""
+              className={styles["field-icon"]}
+              style={{ width: "20px", height: "20px" }}
+            />
+          </div>
           <section className={styles["field-text-wrapper"]}>
             <legend>{data.type}</legend>
             <p>{fieldContent ? fieldContent : data.initialState}</p>

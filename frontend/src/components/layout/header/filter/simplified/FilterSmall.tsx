@@ -16,16 +16,6 @@ const FilterSmall: React.FC<{
         onSelect={onFieldClick}
       />
       <FilterSmallItem
-        field="시대"
-        selected={selected}
-        onSelect={onFieldClick}
-      />
-      <FilterSmallItem
-        field="장르"
-        selected={selected}
-        onSelect={onFieldClick}
-      />
-      <FilterSmallItem
         field="지역"
         selected={selected}
         onSelect={onFieldClick}

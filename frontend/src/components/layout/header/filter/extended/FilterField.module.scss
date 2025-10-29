@@ -1,11 +1,16 @@
 .filter-field {
   position: relative;
+  padding: 10px;
   border-right: 1px solid #e5e7eb;
   cursor: pointer;
 
   &:not(.filter-field--active):not(.filter-field--inactive) {
     &:hover {
-      background: #ebebeb;
+      background: #efefef;
+    }
+
+    &:hover .filter__input {
+      background-color: #efefef;
     }
   }
 
@@ -20,18 +25,14 @@
   }
 
   .field-wrapper {
-    position: absolute;
-    top: 15px;
-    left: 14px;
     display: flex;
     align-items: center;
     width: 150px;
-    gap: 12px;
+    gap: 6px;
 
     .field-left {
       display: flex;
       gap: 14px;
-      height: 48px;
 
       .field-icon-wrapper {
         margin-top: 10px;
@@ -40,7 +41,7 @@
         height: 20px;
 
         .won {
-          color: #cc0000;
+          color: #c6c6c6;
           font-size: 20px;
         }
       }
@@ -95,7 +96,7 @@
       justify-content: center;
       padding-top: 10px;
       padding-bottom: 10px;
-      right: -122px;
+      right: -66%;
       width: 680px;
     }
   }
