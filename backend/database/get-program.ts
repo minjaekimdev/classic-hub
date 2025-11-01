@@ -22,7 +22,6 @@ const getBase64FromUrl = async (url: string) => {
     return buffer.toString("base64");
   } catch (error) {
     console.log("이미지url을 통한 불러오기 실패", error);
-
     return null;
   }
 };
@@ -103,10 +102,8 @@ export const getProgramJSON = async (
   let contents;
 
   if (typeof sty === "string") {
-    console.log("텍스트 프로그램 데이터 존재")
     contents = await buildContentFromText(sty);
   } else {
-    console.log("텍스트 프로그램 데이터가 존재하지 않으므로 상세이미지 인식")
     const urls = Array.isArray(sty.styurl) ? sty.styurl : [sty.styurl];
     contents = await buildContentFromUrls(urls);
 

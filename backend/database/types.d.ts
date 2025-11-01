@@ -11,6 +11,7 @@ export interface RankingItem {
 export type RankingPeriod = "daily" | "weekly" | "monthly";
 export type pfIdObject = { mt20id: TextNode };
 
+// sty, styurls 프로퍼티 참조를 위해 타입을 지정
 export type PerformanceDetailType = {
   sty?: string;
   styurls?: {

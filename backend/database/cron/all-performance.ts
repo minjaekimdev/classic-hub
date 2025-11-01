@@ -6,7 +6,7 @@ import timezone from "dayjs/plugin/timezone";
 import convert, { ElementCompact } from "xml-js";
 import getProgramJSON from "../get-program";
 import type { PerformanceDetailType, TextNode } from "../types.d.ts";
-import { removeTextProperty } from "../preprocessing";
+import { JsonValue, removeTextProperty } from "../preprocessing";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -75,10 +75,12 @@ const getPerformanceDetail = async (
 
   if (pfDetail) {
     t1 = performance.now();
-    if (pfDetail.sty) { // 텍스트로 된 프로그램 데이터(sty)가 있다면 이를 인식
+    if (pfDetail.sty) { // 텍스트로 된 프로그램 데이터가 있다면 이를 인식
+      console.log("텍스트 프로그램 데이터:", pfDetail.sty);
       programData = await getProgramJSON(pfDetail.sty);
     } else {
       if (pfDetail.styurls) { // 텍스트로 된 프로그램 데이터가 없다면 이미지를 인식
+        console.log("이미지 프로그램 url:", pfDetail.styurls.styurl);
         programData = await getProgramJSON(pfDetail.styurls.styurl);
       }
     }
