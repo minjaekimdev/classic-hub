@@ -1,7 +1,6 @@
 import express, { Express, Request, Response } from "express";
 import supabase from "./apis/supabase-client";
 import cors from "cors";
-import { RankingItem } from "./models/ranking-server";
 
 const app: Express = express();
 const PORT = 3000;

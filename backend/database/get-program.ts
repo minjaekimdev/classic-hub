@@ -86,9 +86,6 @@ export const buildContentFromText = async (sty: string) => {
     - 각 객체는 반드시 위의 4개 키를 모두 포함할 것
     - 마크다운 문법('''json''') 제외하고 순수 json만 반환
     - 반드시 한 작곡가에 대해 하나의 객체만 생성
-    - titlesEnglish의 경우 악장("I.", "II.", "III.", "IV." 등 로마 숫자로 시작하거나 숫자 + 마침표 형식의 부제목)은 제외할 것
-      예: "III. Romance", "IV. Tarantella", "1. Allegro" 등은 포함하지 않는다.
-    - 입력 텍스트 하단의 주의 문구("* 프로그램 및 연주자가 변경될 수 있습니다.")는 무시한다.
     `,
   };
 

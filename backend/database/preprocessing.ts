@@ -1,3 +1,13 @@
+/*
+  KOPIS API로부터 받은 XML을 JSON으로 변환하면
+  모든 텍스트 값이 `{ _text: "..." }` 형태의 객체로 래핑되어 있음
+  [원본 데이터 예시]
+  { "prfnm": { "_text": "공연 이름" }, "rnum": { "_text": "1" }, ... }
+
+  불필요하게 중첩된 객체를 재귀적으로 탐색하여
+  `_text` 프로퍼티를 제거하고, 순수한 값으로 언래핑
+*/
+
 export type JsonValue = string | null | JsonObject | JsonArray;
 export interface JsonObject {
   [key: string]: JsonValue;

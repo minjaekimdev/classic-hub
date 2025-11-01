@@ -39,4 +39,35 @@
 4.  가공된 최종 데이터는 **Supabase PostgreSQL 데이터베이스**에 저장(upsert)됩니다.
 5.  **프론트엔드 애플리케이션**(React)은 사용자의 요청에 따라 **Supabase** 데이터베이스를 직접 조회하여 공연 정보를 화면에 표시합니다. Supabase Auth를 통해 사용자 인증 및 찜하기 기능을 구현합니다.
 
+## 📁 폴더 구조
+```
+classic-hub/
+
+├── .github/                  
+│   └── workflows/            # GitHub Actions 워크플로우
+│       ├── performance-update.yml   # 모든 공연 정보를 DB에 업데이트 (all-performance.ts 실행)
+│       └── ranking-update.yml       # 일간/주간/월간 공연 랭킹 업데이트 (ranking-performance.ts 실행)
+
+├── backend/                  
+│   ├── database/             # DB 관련 로직
+│   │   ├── cron/             # 정기 실행 스크립트
+│   │   │   ├── all-performance.ts       # 향후 3개월 대상 공연 정보 업데이트
+│   │   │   └── ranking-performance.ts  # 공연 랭킹 업데이트
+│   │   ├── database.ts       # 상황별 DB 업데이트 함수
+│   │   ├── get-program.ts    # Gemini API를 통해 텍스트/이미지에 존재하는 프로그램 데이터를 구조화된 JSON으로 변환
+│   │   ├── insert-location-info.ts  # 공연장 정보 최초 업데이트
+│   │   ├── preprocessing.ts  # XML → JSON 변환 후 _text 프로퍼티 제거
+│   │   └── types.d.ts        # 타입 정의
+│   ├── server.ts             # API 서버
+│   └── apis/                 # API 유틸리티
+
+├── frontend/                 
+│   └── src/                  # React 소스 코드 (컴포넌트, 페이지, 스타일 등)        
+
+├── .gitignore                
+└── README.md                 
+
+         
+```
+
 ---

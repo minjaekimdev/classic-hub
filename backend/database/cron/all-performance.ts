@@ -5,8 +5,8 @@ import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import convert, { ElementCompact } from "xml-js";
 import getProgramJSON from "../get-program";
-import type { PerformanceDetailType, TextNode } from "../types.d.ts";
-import { JsonValue, removeTextProperty } from "../preprocessing";
+import type { PerformanceItemType, PerformanceDetailType } from "../types.d.ts";
+import { removeTextProperty } from "../preprocessing";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -16,20 +16,6 @@ const now = dayjs().tz("Asia/Seoul");
 const yesterday = now.subtract(1, "day").format("YYYYMMDD");
 const today = now.format("YYYYMMDD");
 const updateEndDate = now.add(TARGET_PERIOD - 1, "day").format("YYYYMMDD");
-const newDate = now.add(TARGET_PERIOD, "day").format("YYYY.MM.DD");
-
-interface PerformanceItemType {
-  mt20id: TextNode; // 공연 id
-  prfnm: TextNode; // 공연명
-  prfpdfrom: TextNode; // 공연시작일
-  prfpdto: TextNode; // 공연종료일
-  fcltynm: TextNode; // 공연장명
-  poster: TextNode; // 포스터 URL
-  area: TextNode; // 지역
-  genrenm: TextNode; // 장르
-  openrun: TextNode; // 오픈런여부
-  prfstate: TextNode; // 공연상태
-}
 
 const getPerformanceItemsInPage = async (
   // 한 페이지의 공연 데이터(100개)를 배열로 반환
@@ -40,7 +26,7 @@ const getPerformanceItemsInPage = async (
       .then((res) => res.text())
       .then((data) => convert.xml2js(data, { compact: true }));
 
-    const result = response.dbs.db;
+    const result = response.dbs.db; // 해당 데이터를 직접 사용하지는 않을 것이므로 _text 전처리 불필요
     if (!result) {
       return null;
     }
@@ -254,7 +240,7 @@ const upsertUpdatedPerformancesToDB = async (
     }
   }
 
-  // 어제 이후로 등록/수정된 공연 id 받아온 후 해당 공연 DB에 upsert
+  // 하루 단위로 데이터를 업데이트하므로, 어제 이후로 등록/수정된 공연 id 받아온 후 해당 공연 DB에 upsert
   const updatedPerformancesIdArray = await getUpdatedPerformancesId();
   for (const pfId of updatedPerformancesIdArray) {
     const performanceDetail = await getPerformanceDetail(pfId);
