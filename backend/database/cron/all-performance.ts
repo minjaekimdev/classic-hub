@@ -90,8 +90,6 @@ const getNewPerformanceItems = async (): Promise<PerformanceItemType[]> => {
       performanceAPI
     );
 
-    console.log(performanceItemArrayByPage);
-
     if (!performanceItemArrayByPage) {
       break;
     } else {
