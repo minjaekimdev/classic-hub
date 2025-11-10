@@ -1,0 +1,62 @@
+.performanceCard {
+  &__text {
+    display: flex;
+    flex-direction: column;
+    width: 12.5rem;
+    gap: 0.59rem;
+  }
+
+  /* 제목, 아티스트 영역 */
+  &__identity {
+    display: flex;
+    flex-direction: column;
+    gap: 0.22rem;
+  }
+  &__title {
+    color: #101828;
+    font-family: Inter;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.3125rem;
+    letter-spacing: -0.00938rem;
+
+    // 1. 최소 높이 확보 (2줄 면적)
+    min-height: 2.625rem; // 1.3125rem * 2 = 2.625rem
+    // 2. 두 줄 말줄임표 처리 (Webkit 기반)
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-line-clamp: 2; 
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+  &__artist {
+    color: #4a5565;
+    font-family: Inter;
+    font-size: 0.76563rem;
+    font-weight: 400;
+    line-height: 1.09375rem;
+    letter-spacing: -0.00113rem;
+  }
+  
+  /* 공연 날짜, 시간, 장소 영역 */
+  &__meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.22rem;
+  }
+  &__metaItem {
+    display: flex;
+    align-items: center;
+    gap: 0.22rem;
+  }
+  &__icon {
+  }
+  &__text {
+    color: #6a7282;
+    font-family: Inter;
+    font-size: 0.65625rem;
+    font-weight: 400;
+    line-height: 0.875rem;
+    letter-spacing: 0.00575rem;
+  }
+}
