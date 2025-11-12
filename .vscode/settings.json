@@ -1,7 +1,6 @@
 {
   "deno.enable": false,
   "material-icon-theme.folders.associations": {
-    "performance": ""  // performance 폴더를 기본 폴더 아이콘으로 변경
+    "performance": "", // performance 폴더를 기본 폴더 아이콘으로 변경
+  }
 }
-}
-

@@ -1,0 +1,22 @@
+.performanceCardHome {
+  &__price {
+    width: 100%;
+    display: flex;
+  }
+  &__priceValue {
+    color: #101828;
+    font-family: Inter;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.3125rem;
+    letter-spacing: -0.00938rem;
+  }
+  &__priceSuffix {
+    color: #6a7282;
+    font-family: Inter;
+    font-size: 0.76563rem;
+    font-weight: 400;
+    line-height: 1.09375rem;
+    letter-spacing: -0.00113rem;
+  }
+}
