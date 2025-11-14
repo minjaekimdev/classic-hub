@@ -1,21 +1,20 @@
-import React from 'react';
-import styles from "./HomePerformanceRanking.module.scss"
-import PerformanceCardHome from '@/features/performance/components/PerformanceCardHome';
+import React from "react";
+import styles from "./HomePerformanceRanking.module.scss";
+import PerformanceCardHome from "@/features/performance/components/PerformanceCardHome";
+import type { HomePerformanceRankingItem } from "@/entities/performance";
 
 interface HomePerformanceRankingProps {
-  imgSrc: string;
-  title: string;
-  artist: string;
-  date: string;
-  time: string;
-  location: string;
-  price: string;
+  top5Array: HomePerformanceRankingItem[];
 }
 
-const HomePerformanceRanking: React.FC<> = () => {
+const HomePerformanceRanking: React.FC<HomePerformanceRankingProps> = ({
+  top5Array,
+}) => {
   return (
     <div className={styles.HomePerformanceRanking}>
-      <PerformanceCardHome imgSrc="" />
+      {top5Array.map((element) => (
+        <PerformanceCardHome data={element} />
+      ))}
     </div>
   );
 };

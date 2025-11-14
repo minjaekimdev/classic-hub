@@ -1,0 +1,156 @@
+.logo {
+  display: flex;
+  width: 8rem;
+  height: 1.75rem;
+  align-items: center;
+  gap: 0.44rem;
+  cursor: pointer;
+  &__icon {
+    width: 1.75rem;
+    height: 1.75rem;
+    flex-shrink: 0;
+  }
+  &__name {
+    color: #101828;
+    font-family: Inter;
+    font-size: 1.1rem;
+    font-weight: 600;
+    line-height: 1.53rem;
+    letter-spacing: -0.03rem;
+  }
+}
+
+.menuBar {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.31rem;
+  &__item {
+    display: flex;
+    height: 1.3125rem;
+    align-items: center;
+    gap: 0.22rem;
+    flex-shrink: 0;
+    cursor: pointer;
+    &--active {
+      .menuBar__text {
+        color: #c00;
+        font-weight: 500;
+      }
+    }
+  }
+  &__icon {
+    flex-shrink: 0;
+  }
+  &__text {
+    color: #364153;
+    font-family: Inter;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.3125rem;
+    letter-spacing: -0.00938rem;
+  }
+}
+
+.auth {
+  display: flex;
+  height: 1.75rem;
+  align-items: center;
+  gap: 0.4375rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  &__login {
+    display: flex;
+    padding: 0.7rem;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  &__signup {
+    display: flex;
+    padding: 0.7rem;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0.43rem;
+    background: #c00;
+    color: #fff;
+    flex-shrink: 0;
+  }
+}
+
+.search-element {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0.66rem 0.88rem;
+  border-radius: 1048575rem;
+  border: 1px solid #d1d5dc;
+  background: #fff;
+  &__wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.72rem;
+  }
+}
+
+.full-menu {
+  &__main {
+    display: flex;
+    height: 3.5rem;
+    max-width: 1280px;
+    padding: 0 1.75rem;
+    margin: 0 auto;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+    align-self: stretch;
+  }
+
+  &__filter {
+    height: 10rem;
+    background-color: #ececec;
+  }
+}
+
+.mobile-menu {
+  height: 3.67rem;
+  padding: 0.66rem 0.88rem;
+  &__wrapper {
+    width: 100%;
+    min-width: 20rem;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 9999rem;
+    border: 1px solid #d1d5dc;
+    background: #fff;
+  }
+  &__search {
+    display: flex;
+    flex-shrink: 0;
+    gap: 0.6rem;
+  }
+  &__text {
+    color: #6a7282;
+    font-family: Inter;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.31rem;
+    letter-spacing: -0.00938rem;
+  }
+}
+
+.header {
+  width: 100%;
+  border-bottom: 1px solid #e5e7eb;
+  background: #fff;
+}
+
+@media screen and (max-width: 750px) {
+  .logo,
+  .menuBar,
+  .auth,
+  .header__filter {
+    display: none;
+  }
+}

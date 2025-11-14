@@ -1,9 +1,9 @@
 import "@app/styles/main.scss";
 import React from "react";
 import styles from "./PerformanceCardAlbumText.module.scss";
-import calendarIcon from "@shared/assets/icons/calendar.svg";
-import clockIcon from "@shared/assets/icons/clock.svg";
-import locationIcon from "@shared/assets/icons/location.svg";
+import calendarIcon from "@shared/assets/icons/calendar-gray.svg";
+import clockIcon from "@shared/assets/icons/clock-gray.svg";
+import locationIcon from "@shared/assets/icons/location-gray.svg";
 
 interface PerformanceCardTextProps {
   title: string;
