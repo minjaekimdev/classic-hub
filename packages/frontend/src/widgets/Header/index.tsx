@@ -1,4 +1,3 @@
-import React from "react";
 import { useState } from "react";
 import "@/app/styles/main.scss";
 import styles from "./Header.module.scss";
@@ -8,7 +7,30 @@ import homeActive from "@shared/assets/icons/home-active.svg";
 import rankingInactive from "@shared/assets/icons/ranking-inactive.svg";
 import rankingActive from "@shared/assets/icons/ranking-active.svg";
 import searchIcon from "@shared/assets/icons/search-gray.svg";
-import useWindowSize from "@/shared/hooks/useWindowSize";
+
+type MenuType = "홈" | "랭킹";
+
+interface MenuItem {
+  id: MenuType;
+  label: string;
+  iconActive: string;
+  iconInactive: string;
+}
+
+const MENU_ITEMS: MenuItem[] = [
+  {
+    id: "홈",
+    label: "홈",
+    iconActive: homeActive,
+    iconInactive: homeInactive,
+  },
+  {
+    id: "랭킹",
+    label: "랭킹",
+    iconActive: rankingActive,
+    iconInactive: rankingInactive,
+  },
+];
 
 const Logo = () => {
   return (
@@ -19,37 +41,59 @@ const Logo = () => {
   );
 };
 
+interface MenuBarItemProps {
+  isActive: string;
+  label: string;
+  iconActive: string;
+  iconInactive: string;
+  onClick: () => void;
+}
+
+const MenuBarItem: React.FC<MenuBarItemProps> = ({
+  isActive,
+  label,
+  iconActive,
+  iconInactive,
+  onClick,
+}) => {
+  return (
+    <div
+      className={`${styles.menuBar__item} ${
+        isActive === label ? styles["menuBar__item--active"] : ""
+      }`}
+      onClick={onClick}
+    >
+      <img
+        src={isActive === label ? iconActive : iconInactive}
+        alt=""
+        className={styles.menuBar__icon}
+      />
+      <span
+        className={`${styles.menuBar__text} ${
+          isActive === label ? styles["menuBar__text--active"] : ""
+        }`}
+      >
+        {label}
+      </span>
+    </div>
+  );
+};
+
 const MenuBar = () => {
   const [isActive, setIsActive] = useState("홈");
   return (
-    <div className={styles.menuBar}>
-      <div
-        className={`${styles.menuBar__item} ${
-          isActive === "홈" ? styles["menuBar__item--active"] : ""
-        }`}
-        onClick={() => setIsActive("홈")}
-      >
-        <img
-          src={isActive === "홈" ? homeActive : homeInactive}
-          alt=""
-          className={styles.menuBar__icon}
+    <nav className={styles.menuBar}>
+      {MENU_ITEMS.map((item) => (
+        <MenuBarItem
+          key={item.id}
+          isActive={isActive}
+          label={item.label}
+          iconActive={item.iconActive}
+          iconInactive={item.iconInactive}
+          onClick={() => setIsActive(item.label)}
         />
-        <span className={styles.menuBar__text}>홈</span>
-      </div>
-      <div
-        className={`${styles.menuBar__item} ${
-          isActive === "랭킹" ? styles["menuBar__item--active"] : ""
-        }`}
-        onClick={() => setIsActive("랭킹")}
-      >
-        <img
-          src={isActive === "랭킹" ? rankingActive : rankingInactive}
-          alt=""
-          className={styles.menuBar__icon}
-        />
-        <span className={styles.menuBar__text}>랭킹</span>
-      </div>
-    </div>
+      ))}
+    </nav>
   );
 };
 
@@ -91,12 +135,10 @@ const MobileMenu = () => {
 };
 
 const Header = () => {
-  const windowWidth = useWindowSize();
-  const isMobile = windowWidth < 750;
-
   return (
     <div className={styles.header}>
-      {isMobile ? <MobileMenu /> : <FullMenu />}
+      <MobileMenu />
+      <FullMenu />
     </div>
   );
 };

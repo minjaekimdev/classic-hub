@@ -32,6 +32,7 @@
       "@widgets/*": ["src/widgets"],
       "@features/*": ["src/features/*"],
       "@shared/*": ["src/shared/*"],
+      "@root-shared/*": ["../shared/*"],
       "@models/*": ["src/models/*"]
       // 기본 경로의 값이 src이기 때문에 paths 속성 경로 수정
     }

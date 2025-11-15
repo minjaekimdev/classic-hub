@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import Header from "./index";
 
 const meta = {
-  title: 'Shared/ui/Header',
+  title: 'Widgets/Header',
   component: Header,
   tags: ['autodocs'],
   args: { 

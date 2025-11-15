@@ -20,6 +20,9 @@ export default defineConfig({
     },{
       find: "@app",
       replacement: resolve(__dirname, "src/app")
+    },{
+      find: "@root-shared",
+      replacement: resolve(__dirname, "../shared")
     }, {
       find: "@pages",
       replacement: resolve(__dirname, "src/pages")
