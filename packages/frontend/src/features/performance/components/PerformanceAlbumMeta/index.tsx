@@ -38,7 +38,7 @@ const MetaItem: React.FC<{ iconSrc: string; label: string }> = ({
 };
 
 const PerformanceAlbumMeta: React.FC<
-  Omit<PerformanceDataSimple, "imgSrc" | "rank" | "price">
+  Omit<PerformanceDataSimple, "imgSrc" | "rank" | "lowPrice" | "highPrice">
 > = ({ title, artist, stdate, eddate, time, hall }) => {
   return (
     <div className={styles.meta}>

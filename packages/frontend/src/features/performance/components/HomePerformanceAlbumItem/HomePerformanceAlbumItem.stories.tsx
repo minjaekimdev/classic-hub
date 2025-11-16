@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import HomePerformanceRankingItem from "./index";
+import HomePerformanceAlbumItem from "./index";
 
 const meta = {
-  title: "Features/Performance/HomePerformanceRankingItem",
-  component: HomePerformanceRankingItem,
+  title: "Features/Performance/HomePerformanceAlbumItem",
+  component: HomePerformanceAlbumItem,
   tags: ["autodocs"],
   args: {
     data: {
@@ -19,7 +19,7 @@ const meta = {
       price: "80,000",
     },
   },
-} satisfies Meta<typeof HomePerformanceRankingItem>;
+} satisfies Meta<typeof HomePerformanceAlbumItem>;
 
 export default meta;
 

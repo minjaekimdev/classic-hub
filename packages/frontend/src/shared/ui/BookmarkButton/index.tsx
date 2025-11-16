@@ -1,6 +1,6 @@
 import React, { useState, type CSSProperties } from "react";
 import "@app/styles/main.scss";
-import styles from "./Bookmark.module.scss";
+import styles from "./BookmarkButton.module.scss";
 import heartIconActive from "@shared/assets/icons/heart-red.svg";
 import heartIconInactive from "@shared/assets/icons/heart-gray.svg";
 
@@ -8,7 +8,7 @@ interface BookmarkProp {
   style: CSSProperties;
 }
 
-const Bookmark: React.FC<BookmarkProp> = ({ style }) => {
+const BookmarkButton: React.FC<BookmarkProp> = ({ style }) => {
   const [isActive, setIsActive] = useState(false);
   return (
     <button
@@ -25,4 +25,4 @@ const Bookmark: React.FC<BookmarkProp> = ({ style }) => {
   );
 };
 
-export default Bookmark;
+export default BookmarkButton;

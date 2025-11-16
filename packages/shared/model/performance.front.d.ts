@@ -1,5 +1,5 @@
 export interface PerformanceDataSimple {
-  rank: string;
+  rank?: string;
   imgSrc: string;
   title: string;
   artist: string;
@@ -7,5 +7,6 @@ export interface PerformanceDataSimple {
   eddate: string;
   time: string;
   hall: string;
-  price: string;
+  lowPrice: string;
+  highPrice?: string;
 }
