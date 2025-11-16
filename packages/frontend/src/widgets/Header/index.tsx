@@ -4,8 +4,8 @@ import styles from "./Header.module.scss";
 import logoIcon from "@shared/assets/icons/logo.svg";
 import homeInactive from "@shared/assets/icons/home-inactive.svg";
 import homeActive from "@shared/assets/icons/home-active.svg";
-import rankingInactive from "@shared/assets/icons/ranking-inactive.svg";
-import rankingActive from "@shared/assets/icons/ranking-active.svg";
+import rankingInactive from "@shared/assets/icons/ranking-gray.svg";
+import rankingActive from "@shared/assets/icons/ranking-red.svg";
 import searchIcon from "@shared/assets/icons/search-gray.svg";
 
 type MenuType = "홈" | "랭킹";

@@ -1,69 +1,69 @@
 import React from "react";
 import styles from "./HomePerformanceRankingItem.module.scss";
 import CardBadge from "@/shared/ui/CardBadge";
-import calendarIcon from "@shared/assets/icons/calendar-gray.svg";
-import clockIcon from "@shared/assets/icons/clock-gray.svg";
-import locationIcon from "@shared/assets/icons/location-gray.svg";
-import type { PerformanceData } from "@root-shared/model/performance.front";
+import Bookmark from "@/shared/ui/Bookmark";
+import type { PerformanceDataSimple } from "@root-shared/model/performance.front";
+import PerformanceAlbumMeta from "../PerformanceAlbumMeta";
 
 const Card: React.FC<{ imgSrc: string; rank: string }> = ({ imgSrc, rank }) => {
   return (
     <div className={styles.card}>
       <img className={styles.card__poster} src={imgSrc} alt="" />
-      <CardBadge>{rank}위</CardBadge>
+      <CardBadge style={{ top: "0.66rem", left: "0.66rem" }}>
+        {rank}위
+      </CardBadge>
+      <Bookmark style={{ top: "0.66rem", right: "0.66rem" }} />
     </div>
   );
 };
 
-const Info: React.FC<Omit<PerformanceData, "imgSrc" | "rank">> = ({
+const Info: React.FC<Omit<PerformanceDataSimple, "imgSrc" | "rank">> = ({
   title,
   artist,
-  date,
+  stdate,
+  eddate,
   time,
   hall,
   price,
 }) => {
   return (
     <div className={styles.info}>
-      <div className={styles.wrapper}>
-        <p className={styles.info__title}>{title}</p>
-        <p className={styles.info__artist}>{artist}</p>
-        <ul className={styles.meta}>
-          <li className={styles.meta__item}>
-            <div className={styles["meta__item-wrapper"]}>
-              <img src={calendarIcon} alt="" />
-              <span className={styles.meta__text}>{date}</span>
-            </div>
-          </li>
-          <li className={styles.meta__item}>
-            <div className={styles["meta__item-wrapper"]}>
-              <img src={clockIcon} alt="" />
-              <span className={styles.meta__text}>{time}</span>
-            </div>
-          </li>
-          <li className={styles.meta__item}>
-            <div className={styles["meta__item-wrapper"]}>
-              <img src={locationIcon} alt="" />
-              <span className={styles.meta__text}>{hall}</span>
-            </div>
-          </li>
-        </ul>
+      <PerformanceAlbumMeta
+        title={title}
+        artist={artist}
+        stdate={stdate}
+        eddate={eddate}
+        time={time}
+        hall={hall}
+      />
+      <div className={styles.info__price}>
+        <span className={styles.price}>{price}</span>
+        <span className={styles.prefix}>부터</span>
       </div>
-      <div className={styles.info__price}>{price}</div>
     </div>
   );
 };
 
-const HomePerformanceRankingItem: React.FC<PerformanceData> = ({
-  imgSrc,
-  rank,
-  ...infoData
+interface HomePerformanceRankingItemProps {
+  data: PerformanceDataSimple;
+}
+
+const HomePerformanceRankingItem: React.FC<HomePerformanceRankingItemProps> = ({
+  data,
 }) => {
   return (
-    <div className={styles.rankingItem}>
-      <Card imgSrc={imgSrc} rank={rank} />
-      <Info {...infoData} />
-    </div>
+    <li className={styles.rankingItem}>
+      <Card imgSrc={data.imgSrc} rank={data.rank} />
+      <Info
+        title={data.title}
+        artist={data.artist}
+        stdate={data.stdate}
+        eddate={data.eddate}
+        time={data.time}
+        hall={data.hall}
+        price={data.price}
+      />
+    </li>
   );
 };
 
