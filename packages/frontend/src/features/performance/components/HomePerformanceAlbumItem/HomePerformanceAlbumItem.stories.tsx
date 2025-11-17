@@ -16,7 +16,8 @@ const meta = {
       eddate: "2026년 1월 13일 (목)",
       time: "오후 8시 30분",
       hall: "롯데콘서트홀",
-      price: "80,000",
+      lowPrice: "80,000",
+      highPrice: "180,000"
     },
   },
 } satisfies Meta<typeof HomePerformanceAlbumItem>;
