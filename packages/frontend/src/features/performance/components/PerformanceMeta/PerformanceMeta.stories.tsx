@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import PerformanceAlbumMeta from './index';
+import PerformanceMeta from './index';
 
 const meta = {
-  title: 'Features/Performance/PerformanceAlbumMeta',
-  component: PerformanceAlbumMeta,
+  title: 'Features/Performance/PerformanceMeta',
+  component: PerformanceMeta,
   tags: ['autodocs'],
   args: { 
     title: "조성진 피아노 리사이틀",
@@ -13,7 +13,7 @@ const meta = {
     time: "오후 7시 30분",
     hall: "예술의전당 콘서트홀"
   },
-} satisfies Meta<typeof PerformanceAlbumMeta>;
+} satisfies Meta<typeof PerformanceMeta>;
 
 export default meta;
 

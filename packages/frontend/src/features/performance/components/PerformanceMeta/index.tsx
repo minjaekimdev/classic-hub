@@ -1,7 +1,7 @@
 import React from "react";
 import type { PerformanceDataSimple } from "@root-shared/model/performance.front";
 import "@app/styles/main.scss";
-import styles from "./PerformanceAlbumMeta.module.scss";
+import styles from "./PerformanceMeta.module.scss";
 import calendarIcon from "@shared/assets/icons/calendar-gray.svg";
 import clockIcon from "@shared/assets/icons/clock-gray.svg";
 import locationIcon from "@shared/assets/icons/location-gray.svg";
@@ -37,7 +37,7 @@ const MetaItem: React.FC<{ iconSrc: string; label: string }> = ({
   );
 };
 
-const PerformanceAlbumMeta: React.FC<
+const PerformanceMeta: React.FC<
   Omit<PerformanceDataSimple, "imgSrc" | "rank" | "lowPrice" | "highPrice">
 > = ({ title, artist, stdate, eddate, time, hall }) => {
   return (
@@ -57,4 +57,4 @@ const PerformanceAlbumMeta: React.FC<
   );
 };
 
-export default PerformanceAlbumMeta;
+export default PerformanceMeta;

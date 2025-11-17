@@ -18,7 +18,7 @@ const meta = {
         time: "오후 7시 30분",
         hall: "영산아트홀",
         lowPrice: "30,000원",
-        highPrice: "30,000원",
+        highPrice: "50,000원",
       },
       {
         imgSrc:
@@ -55,7 +55,7 @@ const meta = {
         time: "저녁 6시 30분",
         hall: "알레스 아트(Alles-Art)",
         lowPrice: "35,000원",
-        highPrice: "35,000원",
+        highPrice: "320,000원",
       },
       {
         imgSrc:
@@ -91,7 +91,7 @@ const meta = {
         time: "저녁 7시 00분",
         hall: "문산행복센터",
         lowPrice: "70,000원",
-        highPrice: "70,000원",
+        highPrice: "180,000원",
       },
       {
         imgSrc:

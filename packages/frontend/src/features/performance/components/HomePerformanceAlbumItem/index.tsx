@@ -4,9 +4,8 @@ import styles from "./HomePerformanceAlbumItem.module.scss";
 import CardBadge from "@/shared/ui/CardBadge";
 import Bookmark from "@/shared/ui/BookmarkButton";
 import type { PerformanceDataSimple } from "@root-shared/model/performance.front";
-import PerformanceAlbumMeta from "../PerformanceAlbumMeta";
+import PerformanceAlbumMeta from "../PerformanceMeta";
 import ProgramButton from "@/shared/ui/ProgramButton";
-import MobileItem from "./HomePerformanceAlbumItemMobile";
 
 interface CardProps {
   imgSrc: string;
@@ -17,9 +16,11 @@ const Card: React.FC<CardProps> = ({ imgSrc, rank }) => {
   return (
     <div className={styles.card}>
       <img className={styles.card__poster} src={imgSrc} alt="" />
-      <CardBadge style={{ top: "0.66rem", left: "0.66rem" }}>
-        {rank}위
-      </CardBadge>
+      {rank && (
+        <CardBadge style={{ top: "0.66rem", left: "0.66rem" }}>
+          {rank}위
+        </CardBadge>
+      )}
       <Bookmark style={{ top: "0.66rem", right: "0.66rem" }} />
       <ProgramButton
         style={{ position: "absolute", bottom: "0.66rem", right: "0.66rem" }}
@@ -36,6 +37,7 @@ const Info: React.FC<Omit<PerformanceDataSimple, "imgSrc">> = ({
   time,
   hall,
   lowPrice,
+  highPrice,
 }) => {
   return (
     <div className={styles.info}>
@@ -48,18 +50,22 @@ const Info: React.FC<Omit<PerformanceDataSimple, "imgSrc">> = ({
         hall={hall}
       />
       <div className={styles.info__price}>
-        <span className={styles.price}>{lowPrice}</span>
-        <span className={styles.prefix}>부터</span>
+        {lowPrice === highPrice ? (
+          <>
+            <span className={styles.price}>전석 {lowPrice}</span>
+          </>
+        ) : (
+          <>
+            <span className={styles.price}>{lowPrice}</span>
+            <span className={styles.prefix}>부터</span>
+          </>
+        )}
       </div>
     </div>
   );
 };
 
-interface HomePerformanceAlbumItemProps {
-  data: PerformanceDataSimple;
-}
-
-const DesktopItem: React.FC<HomePerformanceAlbumItemProps> = ({ data }) => {
+const DesktopItem: React.FC<{ data: PerformanceDataSimple }> = ({ data }) => {
   return (
     <li className={styles.desktopItem}>
       <Card imgSrc={data.imgSrc} rank={data.rank} />
@@ -71,20 +77,10 @@ const DesktopItem: React.FC<HomePerformanceAlbumItemProps> = ({ data }) => {
         time={data.time}
         hall={data.hall}
         lowPrice={data.lowPrice}
+        highPrice={data.highPrice}
       />
     </li>
   );
 };
 
-const HomePerformanceAlbumItem: React.FC<HomePerformanceAlbumItemProps> = ({
-  data,
-}) => {
-  return (
-    <>
-      <MobileItem data={data} />
-      <DesktopItem data={data} />
-    </>
-  );
-};
-
-export default HomePerformanceAlbumItem;
+export default DesktopItem;

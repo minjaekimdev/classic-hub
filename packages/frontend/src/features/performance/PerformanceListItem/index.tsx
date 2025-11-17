@@ -1,7 +1,8 @@
-import styles from "./HomePerformanceAlbumItemMobile.module.scss";
+import "@app/styles/main.scss";
+import styles from "./PerformanceListItem.module.scss";
 import Bookmark from "@shared/ui/BookmarkButton";
 import type { PerformanceDataSimple } from "@root-shared/model/performance.front";
-import PerformanceAlbumMeta from "../PerformanceAlbumMeta";
+import PerformanceAlbumMeta from "../components/PerformanceMeta";
 import ProgramButton from "@/shared/ui/ProgramButton";
 
 interface CardProps {
@@ -18,11 +19,7 @@ const MobileCard: React.FC<CardProps> = ({ imgSrc }) => {
   );
 };
 
-interface HomePerformanceAlbumItemProps {
-  data: PerformanceDataSimple;
-}
-
-const MobileItem: React.FC<HomePerformanceAlbumItemProps> = ({ data }) => {
+const MobileItem: React.FC<{ data: PerformanceDataSimple }> = ({ data }) => {
   return (
     <li className={styles.mobileItem}>
       <MobileCard imgSrc={data.imgSrc} />
@@ -41,9 +38,17 @@ const MobileItem: React.FC<HomePerformanceAlbumItemProps> = ({ data }) => {
           </div>
         </div>
         <p className={styles.mobileItem__price}>
-          {data.lowPrice}
-          <span> ~ </span>
-          {data.highPrice}
+          {data.lowPrice === data.highPrice ? (
+            <>
+              <span className={styles.price}>전석 {data.lowPrice}</span>
+            </>
+          ) : (
+            <>
+              {data.lowPrice}
+              <span className={styles.tilde}> ~ </span>
+              {data.highPrice}
+            </>
+          )}
         </p>
       </div>
     </li>

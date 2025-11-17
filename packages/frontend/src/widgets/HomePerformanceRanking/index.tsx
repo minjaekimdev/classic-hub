@@ -3,8 +3,8 @@ import "@app/styles/main.scss";
 import styles from "./HomePerformanceRanking.module.scss";
 import rankingIcon from "@shared/assets/icons/ranking-red.svg";
 import type { PerformanceDataSimple } from "@root-shared/model/performance.front";
-import HomePerformanceAlbumItem from "@/features/performance/components/HomePerformanceAlbumItem";
 import HomeWidgetHeader from "@/shared/ui/HomeWidgetHeader";
+import DesktopItem from "@/features/performance/components/HomePerformanceAlbumItem";
 
 interface HomePerformanceRankingProps {
   performanceArray: PerformanceDataSimple[];
@@ -23,10 +23,7 @@ const HomePerformanceRanking: React.FC<HomePerformanceRankingProps> = ({
         />
         <ul className={styles.ranking__list}>
           {performanceArray.map((performance) => (
-            <HomePerformanceAlbumItem
-              key={performance.rank}
-              data={performance}
-            />
+            <DesktopItem data={performance} />
           ))}
         </ul>
       </div>
