@@ -1,0 +1,38 @@
+@use "@shared/styles/mixins" as mixin;
+
+.programModal {
+  display: flex;
+  flex-direction: column;
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 0.44rem;
+    .noteIcon {
+      width: 1.1rem;
+      height: 1.1rem;
+    }
+    .headerText {
+      @include mixin.font-style(#0a0a0a, Inter, 1.1rem, 1.53rem, 600);
+    }
+  }
+  &__meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.19rem;
+    margin-top: 0.84rem;
+    .title {
+      @include mixin.font-style(#101828, Inter, 0.766rem, 1.1rem, 600);
+    }
+    .artist {
+      @include mixin.font-style(#4a5565, Inter, 0.766rem, 1.1rem);
+    }
+    .etc {
+      @include mixin.font-style(#6a7282, Inter, 0.766rem, 1.1rem);
+    }
+  }
+  &__program {
+    margin-top: 1.72rem;
+    overflow-y: auto;
+    @include mixin.font-style(#364153, Inter, 0.766rem, 1.24rem);
+  }
+}

@@ -1,3 +1,5 @@
+@use "@shared/styles/colors" as colors;
+
 .filter-small {
   display: flex;
   align-items: center;
@@ -51,7 +53,7 @@
     border-radius: 6px;
     width: 30px;
     height: 30px;
-    background-color: #cc0000;
+    background-color: colors.$main-theme;
 
     .search-icon {
       width: 14px;
