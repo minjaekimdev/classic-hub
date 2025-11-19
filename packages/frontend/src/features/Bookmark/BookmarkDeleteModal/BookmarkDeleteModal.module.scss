@@ -1,0 +1,55 @@
+@use "@shared/styles/variables" as *;
+@use "@shared/styles/mixins" as mixin;
+
+.buttonGroup {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.44rem;
+  margin-top: 0.88rem;
+  .cancel,
+  .delete {
+    @include mixin.font-style(#0a0a0a, Inter, 0.766rem, 1.09rem, 500);
+    padding: 0.44rem 0.88rem;
+  }
+  .cancel {
+    @include mixin.button-style(0.44rem 0.88rem, #fff, #0a0a0a);
+    border-radius: 0.422rem;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  .delete {
+    @include mixin.button-style(0.44rem 0.88rem, $main-theme, #fff);
+    border-radius: 0.42188rem;
+  }
+}
+
+.bookmarkDeleteModal {
+  display: flex;
+  flex-direction: column;
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 0.66rem;
+    .alertIcon {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 9999rem;
+      padding: 0.656rem;
+      background: #ffe2e2;
+    }
+    .headerText {
+      @include mixin.font-style(#0a0a0a, Inter, 1.09rem, 1.53rem, 600);
+    }
+  }
+  &__text {
+    margin-top: 1.32rem;
+    min-height: 2.62rem;
+  }
+  &__pfTitle {
+    @include mixin.font-style(#0a0a0a, Inter, 0.875rem, 1.31rem, 500);
+  }
+  &__message {
+    @include mixin.font-style(#717182, Inter, 0.875rem, 1.31rem);
+  }
+}

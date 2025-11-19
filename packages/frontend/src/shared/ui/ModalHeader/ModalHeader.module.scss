@@ -1,0 +1,13 @@
+@use "@shared/styles/mixins" as mixin;
+
+.modalHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 0.44rem;
+  &__main {
+    @include mixin.font-style(#0a0a0a, Inter, 0.984rem, 0.984rem, 600);
+  }
+  &__sub {
+    @include mixin.font-style(#717182, Inter, 0.766rem, 1.094rem);
+  }
+}
