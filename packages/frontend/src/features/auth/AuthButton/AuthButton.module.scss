@@ -1,0 +1,8 @@
+@use "@shared/styles/mixins" as mixin;
+@use "@shared/styles/variables" as *;
+
+.authButton {
+  @include mixin.button-style(0.47rem 0 0.38rem, $main-theme, #fff);
+  border-radius: 0.422rem;
+  width: 100%;
+}

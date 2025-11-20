@@ -7,11 +7,13 @@ const meta = {
   tags: ["autodocs"],
   args: {
     isSingleLine: true,
+    type: "email",
     id: "email",
     label: "이메일",
     placeHolder: "example@email.com",
     verticalPadding: "0.22rem",
     inputAreaHeight: "1.53rem",
+    required: true,
   },
 } satisfies Meta<typeof FormField>;
 
@@ -29,5 +31,6 @@ export const Secondary: Story = {
     placeHolder: "개선사항, 불편사항, 기능 제안 등을 자유롭게 작성해주세요.",
     verticalPadding: "0.44rem",
     inputAreaHeight: "2.63rem",
+    required: true,
   },
 };

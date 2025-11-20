@@ -19,12 +19,11 @@
       0 4px 6px -4px rgba(0, 0, 0, 0.1);
     background: #fff;
     padding: 1.38rem;
-    width: 28rem;
     max-height: 100%;
   }
 }
 
-@media screen and (max-width: 666px) {
+@media screen and (max-width: 600px) {
   .modal {
     padding-left: 2rem;
     padding-right: 2rem;

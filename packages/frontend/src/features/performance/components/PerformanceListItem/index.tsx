@@ -2,7 +2,7 @@ import "@app/styles/main.scss";
 import styles from "./PerformanceListItem.module.scss";
 import Bookmark from "@shared/ui/BookmarkButton";
 import type { PerformanceDataSimple } from "@root-shared/model/performance.front";
-import PerformanceAlbumMeta from "../components/PerformanceMeta";
+import PerformanceAlbumMeta from "../PerformanceMeta";
 import ProgramButton from "@/shared/ui/ProgramButton";
 
 interface CardProps {

@@ -1,13 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import LoginModal from './index';
+import AuthButton from './index';
 
 const meta = {
-  title: 'Features/Auth/LoginModal',
-  component: LoginModal,
+  title: 'Features/Auth/AuthButton',
+  component: AuthButton,
   tags: ['autodocs'],
   args: { 
+    children: "로그인"
   },
-} satisfies Meta<typeof LoginModal>;
+} satisfies Meta<typeof AuthButton>;
 
 export default meta;
 

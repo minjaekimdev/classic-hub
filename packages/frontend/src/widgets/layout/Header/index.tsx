@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "@/app/styles/main.scss";
 import styles from "./Header.module.scss";
-import logoIcon from "@shared/assets/icons/logo.svg";
+import logoIcon from "@shared/assets/logos/service-logo.svg";
 import homeInactive from "@shared/assets/icons/home-inactive.svg";
 import homeActive from "@shared/assets/icons/home-active.svg";
 import rankingInactive from "@shared/assets/icons/ranking-gray.svg";

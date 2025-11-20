@@ -1,9 +1,10 @@
-import React from "react";
 import styles from "./LoginModal.module.scss";
 import ModalHeader from "@/shared/ui/ModalHeader";
 import FormField from "@/shared/ui/FormField";
 import Modal from "@/shared/ui/Modal";
-import googleIcon from "@shared/assets/icons/auth-google.svg";
+import googleLogo from "@shared/assets/logos/google.svg";
+import AuthButton from "../AuthButton";
+import OAuthButton from "../OAuthButton";
 
 const LoginModal = () => {
   return (
@@ -21,6 +22,7 @@ const LoginModal = () => {
             placeHolder="example@email.com"
             verticalPadding="0.22rem"
             inputAreaHeight="1.53rem"
+            required={true}
           />
           <FormField
             isSingleLine={true}
@@ -29,24 +31,17 @@ const LoginModal = () => {
             placeHolder="••••••••"
             verticalPadding="0.22rem"
             inputAreaHeight="1.53rem"
+            required={true}
           />
           <a href="#" className={styles.loginModal__forgotPassword}>
             비밀번호를 잊으셨나요?
           </a>
-          <button className={styles.authButton}>로그인</button>
-          <div className={styles.or}>또는</div>
-          <button className={styles.oAuthButton}>
-            <img src={googleIcon} alt="" />
-            Google로 로그인
-          </button>
-          <div className={styles.authPrompt}>
-            <span className={styles.authPrompt__text}>
-              이미 계정이 있으신가요?
-            </span>
-            <a className={styles.authPrompt__button} href="#">
-              회원가입
-            </a>
+          <AuthButton>로그인</AuthButton>
+          <div className={styles.or}>
+            <div className={styles.or__line}></div>
+            <span className={styles.or__text}>또는</span>
           </div>
+          <OAuthButton iconSrc={googleLogo}>Google로 로그인</OAuthButton>
         </form>
       </div>
     </Modal>

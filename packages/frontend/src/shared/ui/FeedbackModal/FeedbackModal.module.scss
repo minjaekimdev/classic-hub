@@ -1,0 +1,10 @@
+.feedbackModal {
+  display: flex;
+  flex-direction: column;
+  gap: 1.7rem;
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.88rem;
+  }
+}

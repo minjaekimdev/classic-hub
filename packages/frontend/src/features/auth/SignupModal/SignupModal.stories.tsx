@@ -1,13 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import LoginModal from './index';
+import SignupModal from './index';
 
 const meta = {
-  title: 'Features/Auth/LoginModal',
-  component: LoginModal,
+  title: 'Features/Auth/SignupModal',
+  component: SignupModal,
   tags: ['autodocs'],
   args: { 
   },
-} satisfies Meta<typeof LoginModal>;
+} satisfies Meta<typeof SignupModal>;
 
 export default meta;
 

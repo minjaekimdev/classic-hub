@@ -5,7 +5,7 @@ import HomeWidgetHeader from "@/shared/ui/HomeWidgetHeader";
 import calendarIcon from "@shared/assets/icons/calendar-red.svg";
 import type { PerformanceDataSimple } from "@root-shared/model/performance.front";
 import HomePerformanceAlbumItem from "@/features/performance/components/HomePerformanceAlbumItem";
-import PerformanceListItem from "@/features/performance/PerformanceListItem";
+import PerformanceListItem from "@/features/performance/components/PerformanceListItem";
 
 interface HomePerformanceWeekendProps {
   performanceArray: PerformanceDataSimple[];
