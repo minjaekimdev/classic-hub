@@ -9,16 +9,16 @@
   margin-top: 0.88rem;
   .cancel,
   .delete {
-    @include mixin.font-style(#0a0a0a, Inter, 0.766rem, 1.09rem, 500);
+    @include mixin.font-style(#0a0a0a, 0.77rem, 1.09rem, 500);
     padding: 0.44rem 0.88rem;
   }
   .cancel {
     @include mixin.button-style(0.44rem 0.88rem, #fff, #0a0a0a);
-    border-radius: 0.422rem;
+    border-radius: 0.42rem;
     border: 1px solid rgba(0, 0, 0, 0.1);
   }
   .delete {
     @include mixin.button-style(0.44rem 0.88rem, $main-theme, #fff);
-    border-radius: 0.42188rem;
+    border-radius: 0.42rem;
   }
 }

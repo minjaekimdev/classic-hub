@@ -1,3 +1,6 @@
+@use "@shared/styles/mixins" as mixin;
+@use "@shared/styles/variables" as *;
+
 .widgetHeader {
   display: flex;
   justify-content: space-between;
@@ -17,29 +20,17 @@
     flex-direction: column;
   }
   &__mainTitle {
-    color: #101828;
-    font-family: Inter;
-    font-size: 1.09375rem;
-    font-weight: 700;
-    line-height: 1.53rem;
+    @include mixin.font-style(#101828, 1.09rem, 1.53rem, 700);
   }
   &__subTitle {
-    color: #4a5565;
-    font-family: Inter;
-    font-size: 0.76563rem;
-    font-weight: 400;
-    line-height: 1.09rem;
+    @include mixin.font-style(#4a5565, 0.77rem, 1.09rem);
   }
   &__seeAll {
     display: flex;
     gap: 0.43rem;
     align-items: center;
     padding: 0.47rem 0.66rem 0.38rem;
-    color: #c00;
-    font-family: Inter;
-    font-size: 0.76rem;
-    font-weight: 500;
-    line-height: 1.1rem;
+    @include mixin.font-style($main-theme, 0.76rem, 1.1rem, 500);
     cursor: pointer;
   }
 }

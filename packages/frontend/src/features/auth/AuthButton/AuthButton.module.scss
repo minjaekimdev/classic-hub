@@ -3,6 +3,6 @@
 
 .authButton {
   @include mixin.button-style(0.47rem 0 0.38rem, $main-theme, #fff);
-  border-radius: 0.422rem;
+  border-radius: 0.42rem;
   width: 100%;
 }

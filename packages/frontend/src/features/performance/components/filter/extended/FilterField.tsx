@@ -1,3 +1,4 @@
+import "@app/styles/main.scss";
 import { useState, useEffect, useRef, type SetStateAction } from "react";
 import locationIcon from "@assets/filter/location-gray.png";
 import moneyIcon from "@assets/filter/money-gray.png";
@@ -138,7 +139,7 @@ const FilterField: React.FC<FilterFieldProps> = ({
       className={`${styles["filter-field"]} ${
         fieldSelected === data.type ? styles["filter-field--active"] : ""
       } ${
-        (fieldSelected && fieldSelected !== data.type)
+        fieldSelected && fieldSelected !== data.type
           ? styles["filter-field--inactive"]
           : ""
       }`}

@@ -1,3 +1,5 @@
+@use "@shared/styles/mixins" as mixin;
+
 .filter-field {
   position: relative;
   padding: 10px;
@@ -53,19 +55,11 @@
         gap: 4.5px;
 
         legend {
-          color: #6b7280;
-          font-family: "Inter", sans-serif;
-          font-size: 12px;
-          font-weight: 400;
-          line-height: 20px;
+          @include mixin.font-style(#6b7280, 12px, 20px);
         }
 
         p {
-          color: #000;
-          font-family: "Inter", sans-serif;
-          font-size: 13.6px;
-          font-weight: 500;
-          line-height: 24px;
+          @include mixin.font-style(#000, 13.6px, 24px, 500);
         }
       }
     }

@@ -1,8 +1,9 @@
+import "@app/styles/main.scss";
 import React from "react";
 import styles from "./BookmarkDeleteModal.module.scss";
 import Modal from "@/shared/ui/Modal";
 import alertIcon from "@shared/assets/icons/alert.svg";
-import ButtonGroup from "@/shared/ButtonGroup";
+import ButtonGroup from "@/shared/ui/ButtonGroup";
 
 interface BookmarkDeleteModalProps {
   title: string;

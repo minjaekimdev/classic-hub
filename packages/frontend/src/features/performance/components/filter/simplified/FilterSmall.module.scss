@@ -1,4 +1,5 @@
 @use "@shared/styles/colors" as colors;
+@use "@shared/styles/mixins" as mixin;
 
 .filter-small {
   display: flex;
@@ -39,9 +40,7 @@
       }
 
       .field-text {
-        font-weight: 400;
-        font-size: 14px;
-        color: #000;
+        @include mixin.font-style(#000, 14px, normal);
       }
     }
   }

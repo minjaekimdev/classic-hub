@@ -1,4 +1,5 @@
-import React from 'react';
+import "@app/styles/main.scss";
+import React from "react";
 import styles from "./ModalHeader.module.scss";
 
 interface ModalHeaderProps {
@@ -6,7 +7,7 @@ interface ModalHeaderProps {
   sub: string;
 }
 
-const ModalHeader: React.FC<ModalHeaderProps> = ({main, sub}) => {
+const ModalHeader: React.FC<ModalHeaderProps> = ({ main, sub }) => {
   return (
     <div className={styles.modalHeader}>
       <h3 className={styles.modalHeader__main}>{main}</h3>

@@ -5,9 +5,9 @@
   flex-direction: column;
   gap: 0.44rem;
   &__main {
-    @include mixin.font-style(#0a0a0a, Inter, 0.984rem, 0.984rem, 600);
+    @include mixin.font-style(#0a0a0a, 0.98rem, 0.98rem, 600);
   }
   &__sub {
-    @include mixin.font-style(#717182, Inter, 0.766rem, 1.094rem);
+    @include mixin.font-style(#717182, 0.77rem, 1.09rem);
   }
 }

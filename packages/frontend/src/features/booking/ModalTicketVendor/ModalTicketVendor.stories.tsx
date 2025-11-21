@@ -1,11 +1,12 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import ModalTicketVendor from './index';
+import "@app/styles/main.scss";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import ModalTicketVendor from "./index";
 
 const meta = {
-  title: 'Features/Booking/ModalTicketVendor',
+  title: "Features/Booking/ModalTicketVendor",
   component: ModalTicketVendor,
-  tags: ['autodocs'],
-  args: { 
+  tags: ["autodocs"],
+  args: {
     icon: "🎫",
     background: "#2B7FFF",
     name: "인터파크",
@@ -17,10 +18,8 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Primary: Story = {
-};
+export const Primary: Story = {};
 
 export const Secondary: Story = {
-  args: {
-  }
+  args: {},
 };

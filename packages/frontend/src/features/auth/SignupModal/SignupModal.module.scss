@@ -31,7 +31,7 @@
         width: fit-content;
         padding: 0 0.32rem 0 0.44rem;
         background-color: #fff;
-        @include mixin.font-style(#717182, Inter, 0.656rem, 0.875rem);
+        @include mixin.font-style(#717182, 0.66rem, 0.88rem);
       }
     }
   }

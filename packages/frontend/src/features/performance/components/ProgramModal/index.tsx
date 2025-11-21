@@ -1,3 +1,4 @@
+import "@app/styles/main.scss";
 import React from "react";
 import styles from "./ProgramModal.module.scss";
 import noteIcon from "@shared/assets/icons/musical-note-red.svg";

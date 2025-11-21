@@ -1,6 +1,5 @@
-@mixin font-style($color, $ftfamily, $ftsize, $lineh, $ftweight: 400) {
+@mixin font-style($color, $ftsize, $lineh, $ftweight: 400) {
   color: $color;
-  font-family: $ftfamily;
   font-size: $ftsize;
   font-weight: $ftweight;
   line-height: $lineh;

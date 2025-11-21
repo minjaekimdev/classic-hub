@@ -1,3 +1,4 @@
+import "@app/styles/main.scss";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import HomePerformanceAlbumItem from "./index";
 
@@ -17,7 +18,7 @@ const meta = {
       time: "오후 8시 30분",
       hall: "롯데콘서트홀",
       lowPrice: "80,000",
-      highPrice: "180,000"
+      highPrice: "180,000",
     },
   },
 } satisfies Meta<typeof HomePerformanceAlbumItem>;

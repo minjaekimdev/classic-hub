@@ -1,8 +1,8 @@
 .mobileCard {
   position: relative;
-  width: 9.625rem;
+  width: 9.63rem;
   height: 100%;
-  border-radius: 0.547rem;
+  border-radius: 0.55rem;
   flex-shrink: 0;
   overflow: hidden;
   &__poster {
@@ -20,7 +20,7 @@
   gap: 1.31rem;
   padding: 0.94rem;
   height: 15.5rem;
-  border-radius: 0.547rem;
+  border-radius: 0.55rem;
   border: 1px solid rgba(0, 0, 0, 0.1);
   background: #fff;
   cursor: pointer;
@@ -51,9 +51,9 @@
     .tilde {
       color: #6a7282;
       font-family: Inter;
-      font-size: 0.765rem;
+      font-size: 0.77rem;
       font-weight: 400;
-      line-height: 1.1rem; 
+      line-height: 1.1rem;
     }
   }
 }

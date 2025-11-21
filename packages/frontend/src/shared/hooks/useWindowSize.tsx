@@ -1,3 +1,4 @@
+import "@app/styles/main.scss";
 import { useState, useEffect } from "react";
 
 const useWindowSize = () => {

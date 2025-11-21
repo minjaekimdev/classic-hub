@@ -1,3 +1,6 @@
+@use "@shared/styles/mixins" as mixin;
+@use "@shared/styles/variables" as *;
+
 fieldset {
   border: none;
 }
@@ -95,14 +98,10 @@ fieldset {
       }
 
       .filter-dropdown__main-text {
-        font-size: 16px;
-        color: #111827;
-        font-weight: 500;
+        @include mixin.font-style(#111827, 16px, normal, 500);
       }
       .filter-dropdown__sub-text {
-        font-size: 14px;
-        color: #6b7280;
-        font-weight: 400;
+        @include mixin.font-style(#6b7280, 14px, normal);
       }
     }
   }
@@ -131,7 +130,7 @@ fieldset {
 
       &--search {
         border: 1px solid rgba(0, 0, 0, 0);
-        background: #c00;
+        background: $main-theme;
         display: flex;
         justify-content: center;
         align-items: center;

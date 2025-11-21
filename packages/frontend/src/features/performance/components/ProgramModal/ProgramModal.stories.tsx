@@ -1,3 +1,4 @@
+import "@app/styles/main.scss";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import ProgramModal from "./index";
 
@@ -6,8 +7,7 @@ const meta = {
   component: ProgramModal,
   tags: ["autodocs"],
   args: {
-    title:
-      "크리스티안 짐머만 피아노 리사이틀",
+    title: "크리스티안 짐머만 피아노 리사이틀",
     artist: "크리스티안 짐머만",
     stdate: "2026년 1월 13일 (목)",
     eddate: "2026년 1월 13일 (목)",
@@ -99,6 +99,6 @@ export const Secondary: Story = {
 앙코르 연주 – 쇼팽: 즉흥환상곡 Op.66 (선택곡)
 앙코르 연주 – 모차르트: 터키 행진곡 (재연)
 페스티벌 종료 인사말
-    `
+    `,
   },
 };

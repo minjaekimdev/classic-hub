@@ -1,3 +1,4 @@
+import "@app/styles/main.scss";
 import React from "react";
 import styles from "./FilterSmallItem.module.scss";
 import eraIcon from "@assets/filter/era.svg";

@@ -1,8 +1,9 @@
+import "@app/styles/main.scss";
 import styles from "./FeedbackModal.module.scss";
 import Modal from "../Modal";
 import ModalHeader from "../ModalHeader";
 import FormField from "../FormField";
-import ButtonGroup from "@/shared/ButtonGroup";
+import ButtonGroup from "@/shared/ui/ButtonGroup";
 
 const FeedbackModal = () => {
   return (

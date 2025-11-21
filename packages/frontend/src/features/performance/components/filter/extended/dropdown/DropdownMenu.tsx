@@ -1,3 +1,4 @@
+import "@app/styles/main.scss";
 import React, { type SetStateAction } from "react";
 import styles from "./DropdownMenu.module.scss";
 import type { fieldContentType, fieldType } from "../../../Header";
@@ -9,7 +10,7 @@ const DropdownMenu: React.FC<{
   onSelect: (menu: string) => void;
   onFieldSelect: React.Dispatch<SetStateAction<fieldType | "">>;
   setFieldContent: React.Dispatch<SetStateAction<fieldContentType>>;
-}> = ({ main, sub, onSelect, onFieldSelect, setFieldContent}) => {
+}> = ({ main, sub, onSelect, onFieldSelect, setFieldContent }) => {
   return (
     <div
       className={styles["dropdown-menu"]}
@@ -17,7 +18,7 @@ const DropdownMenu: React.FC<{
         e.stopPropagation();
         onSelect(main);
         onFieldSelect("");
-        setFieldContent(prev => ({...prev, fieldType: main}));
+        setFieldContent((prev) => ({ ...prev, fieldType: main }));
       }}
     >
       <div className={styles["dropdown-menu-wrapper"]}>

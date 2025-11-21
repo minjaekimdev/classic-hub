@@ -1,3 +1,4 @@
+import "@app/styles/main.scss";
 import styles from "./LoginModal.module.scss";
 import ModalHeader from "@/shared/ui/ModalHeader";
 import FormField from "@/shared/ui/FormField";

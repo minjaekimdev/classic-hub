@@ -1,3 +1,4 @@
+import "@app/styles/main.scss";
 import { useState } from "react";
 import "@/app/styles/main.scss";
 import styles from "./Header.module.scss";

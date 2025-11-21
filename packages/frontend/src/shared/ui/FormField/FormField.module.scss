@@ -5,20 +5,20 @@
   flex-direction: column;
   gap: 0.44rem;
   &__label {
-    @include mixin.font-style(#0a0a0a, Inter, 0.766rem, 0.766rem, 500);
+    @include mixin.font-style(#0a0a0a, 0.77rem, 0.77rem, 500);
   }
   &__content {
     padding: 0 0.66rem;
-    border-radius: 0.422rem;
+    border-radius: 0.42rem;
     border: 1px solid rgba(0, 0, 0, 0);
     background: #f3f3f5;
     .inputArea {
       @include mixin.textarea-reset;
-      @include mixin.font-style(#717182, Inter, 0.766rem, normal);
+      @include mixin.font-style(#717182, 0.77rem, normal);
       width: 100%;
     }
     .inputArea::placeholder {
-      @include mixin.font-style(#717182, Inter, 0.766rem, normal);
+      @include mixin.font-style(#717182, 0.77rem, normal);
     }
   }
 }

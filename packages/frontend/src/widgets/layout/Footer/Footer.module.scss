@@ -1,3 +1,5 @@
+@use "@shared/styles/mixins" as mixin;
+
 .footer {
   width: 100%;
   border-top: 1px solid rgba(0, 0, 0, 0.1);
@@ -11,11 +13,7 @@
     max-width: 80rem;
   }
   &__text {
-    color: #717182;
-    font-family: Inter;
-    font-size: 0.76rem;
-    font-weight: 400;
-    line-height: 1.09rem;
+    @include mixin.font-style(#717182, 0.76rem, 1.09rem);
   }
   .feedback {
     display: flex;
@@ -25,19 +23,13 @@
     border-radius: 0.42rem;
     padding: 0.36rem 0.4rem 0.27rem 0.61rem;
     background: #fff;
-    color: #0a0a0a;
-    font-family: Inter;
-    font-size: 0.76rem;
-    font-style: normal;
-    font-weight: 500;
-    line-height: 1.09rem;
+    @include mixin.font-style(#0a0a0a, 0.76rem, 1.09rem, 500);
     cursor: pointer;
     &:hover {
       background-color: rgb(233, 235, 239);
     }
     &__wrapper {
       display: flex;
-      // justify-content: space-between;
       align-items: center;
       gap: 0.44rem;
     }

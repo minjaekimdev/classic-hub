@@ -5,7 +5,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 0.54688rem;
+    border-radius: 0.55rem;
     border: 2px solid rgba(0, 0, 0, 0.1);
     // width: 13.9rem;
     height: 7.47rem;
@@ -24,7 +24,7 @@
       border-radius: 9999px;
     }
     .name {
-      @include mixin.font-style(#0a0a0a, Inter, 0.766rem, 1.09rem, 500);
+      @include mixin.font-style(#0a0a0a, 0.77rem, 1.09rem, 500);
     }
   }
 }

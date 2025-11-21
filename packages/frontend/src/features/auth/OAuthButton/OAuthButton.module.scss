@@ -2,8 +2,8 @@
 
 .oAuthButton {
   @include mixin.button-style(0.47rem 0 0.38rem, #fff, #0a0a0a);
-  @include mixin.font-style(#0a0a0a, Inter, 0.766rem, 1.09rem, 500);
-  border-radius: 0.422rem;
+  @include mixin.font-style(#0a0a0a, 0.77rem, 1.09rem, 500);
+  border-radius: 0.42rem;
   border: 1px solid rgba(0, 0, 0, 0.1);
   background: #fff;
   width: 100%;
