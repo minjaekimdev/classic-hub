@@ -266,6 +266,7 @@ const Home = () => {
   return (
     <>
       <Header />
+      
       <div className={styles.content}>
         <HomePerformanceRanking performanceArray={rankingArray} />
         <HomePerformanceWeekend performanceArray={weekendArray} />

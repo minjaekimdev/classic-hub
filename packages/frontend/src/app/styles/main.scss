@@ -198,10 +198,13 @@ table {
 }
 
 /* 추가 */
-
 * {
   box-sizing: border-box;
   outline: none;
+}
+
+body {
+  font-family: Pretendard, sans-serif;
 }
 
 button {
@@ -215,10 +218,6 @@ a {
   cursor: pointer;
 }
 
-body {
-  font-family: "Pretendard", sans-serif;
-}
-
 input,
 textarea,
 button,
@@ -226,6 +225,7 @@ select {
   font-family: inherit;
 }
 
+input,
 textarea {
   resize: none;
   border: none;

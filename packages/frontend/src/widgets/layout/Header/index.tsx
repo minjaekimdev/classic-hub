@@ -110,12 +110,11 @@ const Auth = () => {
 const FullMenu = () => {
   return (
     <div className={styles["full-menu"]}>
-      <div className={styles["full-menu__main"]}>
+      <div className={styles["full-menu__wrapper"]}>
         <Logo />
         <MenuBar />
         <Auth />
       </div>
-      <div className={styles["full-menu__filter"]}></div>
     </div>
   );
 };

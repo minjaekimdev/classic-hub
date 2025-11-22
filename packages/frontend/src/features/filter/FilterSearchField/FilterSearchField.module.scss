@@ -1,0 +1,29 @@
+@use "@shared/styles/mixins" as mixin;
+
+.filter__searchField {
+  display: flex;
+  flex-direction: column;
+  gap: 0.44rem;
+  .fieldLabel {
+    display: flex;
+    align-items: center;
+    gap: 0.22rem;
+    @include mixin.font-style(#364153, 0.77rem, 1.09rem, 500);
+    &__icon {
+      width: 14px;
+      height: 14px;
+    }
+  }
+  .fieldContent {
+    border-radius: 0.42188rem;
+    border: 1px solid rgba(0, 0, 0, 0);
+    background: #f3f3f5;
+    padding: 0.22rem 0.66rem;
+    &__input {
+      width: 100%;
+      &::placeholder {
+        @include mixin.font-style(#717182, 0.766rem, normal);
+      }
+    }
+  }
+}

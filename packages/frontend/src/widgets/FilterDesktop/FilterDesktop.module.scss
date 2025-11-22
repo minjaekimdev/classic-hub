@@ -1,0 +1,32 @@
+@use "@shared/styles/mixins" as mixin;
+@use "@shared/styles/variables" as *;
+
+.filterDesktop {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr auto;
+  grid-gap: 0.88rem;
+  border-radius: 0.875rem;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  background: #fff;
+  padding: 1.38rem;
+  width: 76.5rem;
+  .buttonWrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    height: 100%;
+  }
+  &__button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.88rem;
+    border-radius: 0.422rem;
+    padding: 0.58rem 0.54rem 0.48rem 0.66rem;
+    background-color: $main-theme;
+    height: 2.19rem;
+    @include mixin.font-style(#fff, 0.77rem, 1.09rem, 500);
+  }
+}
