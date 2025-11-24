@@ -1,4 +1,3 @@
-import "@app/styles/main.scss";
 import { useState, useEffect, useRef, type SetStateAction } from "react";
 import locationIcon from "@assets/filter/location-gray.png";
 import moneyIcon from "@assets/filter/money-gray.png";

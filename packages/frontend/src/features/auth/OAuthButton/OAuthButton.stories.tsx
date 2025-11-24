@@ -1,4 +1,3 @@
-import "@app/styles/main.scss";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import OAuthButton from "./index";
 import googleIcon from "@shared/assets/icons/google.svg";

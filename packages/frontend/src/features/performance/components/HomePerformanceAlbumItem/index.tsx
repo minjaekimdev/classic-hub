@@ -1,5 +1,4 @@
 import React from "react";
-import "@app/styles/main.scss";
 import styles from "./HomePerformanceAlbumItem.module.scss";
 import CardBadge from "@/shared/ui/CardBadge";
 import Bookmark from "@/shared/ui/BookmarkButton";

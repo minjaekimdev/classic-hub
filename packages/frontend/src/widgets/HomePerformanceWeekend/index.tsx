@@ -1,5 +1,5 @@
 import React from "react";
-import "@app/styles/main.scss";
+
 import styles from "./HomePerformanceWeekend.module.scss";
 import HomeWidgetHeader from "@/shared/ui/HomeWidgetHeader";
 import calendarIcon from "@shared/assets/icons/calendar-red.svg";
@@ -24,7 +24,10 @@ const HomePerformanceWeekend: React.FC<HomePerformanceWeekendProps> = ({
         />
         <ul className={styles.weekend__desktop}>
           {performanceArray.map((performance) => (
-            <HomePerformanceAlbumItem key={performance.title} data={performance} />
+            <HomePerformanceAlbumItem
+              key={performance.title}
+              data={performance}
+            />
           ))}
         </ul>
         <ul className={styles.weekend__mobile}>

@@ -1,5 +1,4 @@
 import React from "react";
-import "@app/styles/main.scss";
 import styles from "./FormField.module.scss";
 
 interface FormFieldProps {

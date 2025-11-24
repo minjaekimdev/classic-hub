@@ -52,3 +52,12 @@
     }
   }
 }
+
+// 1150px: 모바일, 데스크톱 기준 X
+// 뷰포트 너비 감소에 따라 공연 카드 텍스트가 잘리는 문제를
+// 가격을 표시하는 요소를 제거함으로써 해결
+@media screen and (max-width: 1150px){
+  .info__price {
+    display: none;
+  }
+}

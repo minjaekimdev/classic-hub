@@ -11,7 +11,7 @@
     0 4px 6px -4px rgba(0, 0, 0, 0.1);
   background: #fff;
   padding: 1.38rem;
-  width: 76.5rem;
+  width: calc(100% - 1.75rem * 2);
   .buttonWrapper {
     display: flex;
     flex-direction: column;

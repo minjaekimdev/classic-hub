@@ -1,4 +1,3 @@
-import "@app/styles/main.scss";
 import React, { useRef, useEffect, type SetStateAction } from "react";
 import styles from "./FilterBig.module.scss";
 import resetIcon from "@/assets/filter/refresh_24dp_374151_FILL0_wght400_GRAD0_opsz24.svg";

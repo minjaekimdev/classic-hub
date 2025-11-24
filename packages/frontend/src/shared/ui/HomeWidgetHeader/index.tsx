@@ -1,4 +1,3 @@
-import "@app/styles/main.scss";
 import React from "react";
 import styles from "./HomeWidgetHeader.module.scss";
 import rightArrow from "@shared/assets/icons/right-arrow-red.svg";

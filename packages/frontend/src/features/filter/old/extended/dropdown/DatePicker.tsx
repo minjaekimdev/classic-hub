@@ -1,4 +1,3 @@
-import "@app/styles/main.scss";
 import React, { useState, type SetStateAction } from "react";
 import { DayPicker } from "react-day-picker";
 import { ko } from "date-fns/locale";

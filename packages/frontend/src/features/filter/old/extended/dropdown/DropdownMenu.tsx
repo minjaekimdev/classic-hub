@@ -1,4 +1,3 @@
-import "@app/styles/main.scss";
 import React, { type SetStateAction } from "react";
 import styles from "./DropdownMenu.module.scss";
 import type { fieldContentType, fieldType } from "../../../Header";

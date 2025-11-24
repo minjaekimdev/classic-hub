@@ -2,7 +2,7 @@ import Header from "@/widgets/layout/Header";
 import Footer from "@/widgets/layout/Footer";
 import HomePerformanceRanking from "@/widgets/HomePerformanceRanking";
 import HomePerformanceWeekend from "@/widgets/HomePerformanceWeekend";
-import "@app/styles/main.scss";
+
 import styles from "./Home.module.scss";
 
 const rankingArray = [
@@ -266,7 +266,6 @@ const Home = () => {
   return (
     <>
       <Header />
-      
       <div className={styles.content}>
         <HomePerformanceRanking performanceArray={rankingArray} />
         <HomePerformanceWeekend performanceArray={weekendArray} />

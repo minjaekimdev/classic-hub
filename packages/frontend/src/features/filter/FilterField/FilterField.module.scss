@@ -24,6 +24,7 @@
     padding: 0 0.66rem;
     height: 1.84rem;
     &__value {
+      min-width: 4rem;
       @include mixin.font-style(#0a0a0a, 0.766rem, 1.09rem);
     }
     &__arrowIcon {

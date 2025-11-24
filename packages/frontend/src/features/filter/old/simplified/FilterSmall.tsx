@@ -1,4 +1,3 @@
-import "@app/styles/main.scss";
 import React from "react";
 import styles from "./FilterSmall.module.scss";
 import searchIcon from "@assets/filter/search-icon.svg";

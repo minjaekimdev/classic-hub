@@ -1,4 +1,3 @@
-import "@app/styles/main.scss";
 import Modal from "@/shared/ui/Modal";
 import ModalHeader from "@/shared/ui/ModalHeader";
 import FormField from "@/shared/ui/FormField";

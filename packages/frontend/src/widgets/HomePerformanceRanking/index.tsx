@@ -1,5 +1,5 @@
 import React from "react";
-import "@app/styles/main.scss";
+
 import styles from "./HomePerformanceRanking.module.scss";
 import rankingIcon from "@shared/assets/icons/ranking-red.svg";
 import type { PerformanceDataSimple } from "@root-shared/model/performance.front";

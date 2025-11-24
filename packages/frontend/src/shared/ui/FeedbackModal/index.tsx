@@ -1,4 +1,3 @@
-import "@app/styles/main.scss";
 import styles from "./FeedbackModal.module.scss";
 import Modal from "../Modal";
 import ModalHeader from "../ModalHeader";

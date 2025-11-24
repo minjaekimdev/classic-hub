@@ -1,4 +1,3 @@
-import "@app/styles/main.scss";
 import React from "react";
 import styles from "./BookingModal.module.scss";
 import Modal from "@/shared/ui/Modal";

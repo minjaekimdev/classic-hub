@@ -1,4 +1,3 @@
-import "@app/styles/main.scss";
 import React, { type CSSProperties } from "react";
 import styles from "./CardBadge.module.scss";
 

@@ -1,5 +1,5 @@
 import styles from "./Footer.module.scss";
-import "@app/styles/main.scss";
+
 import feedbackIcon from "./feedback.svg";
 
 const Origin = () => {

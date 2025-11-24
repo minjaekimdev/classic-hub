@@ -1,4 +1,3 @@
-import React from "react";
 import styles from "./FilterDesktop.module.scss";
 import FilterSearchField from "@/features/filter/FilterSearchField";
 import FilterField from "@/features/filter/FilterField";

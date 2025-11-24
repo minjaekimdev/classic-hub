@@ -1,4 +1,3 @@
-import "@app/styles/main.scss";
 import styles from "./PerformanceListItem.module.scss";
 import Bookmark from "@shared/ui/BookmarkButton";
 import type { PerformanceDataSimple } from "@root-shared/model/performance.front";
