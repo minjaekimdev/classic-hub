@@ -1,14 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import FilterField from './index';
+import ComponentName from './index';
 
 const meta = {
-  title: 'Features/Filter/FilterField',
-  component: FilterField,
+  title: 'Widgets/Header/Menu',
+  component: ComponentName,
   tags: ['autodocs'],
   args: { 
-    label: "가격",
   },
-} satisfies Meta<typeof FilterField>;
+} satisfies Meta<typeof ComponentName>;
 
 export default meta;
 
