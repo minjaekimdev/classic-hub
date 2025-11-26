@@ -1,13 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import FilterDesktop from './index';
+import Dropdown from './Dropdown';
 
 const meta = {
-  title: 'Features/Filter/FilterDesktop',
-  component: FilterDesktop,
+  title: 'Features/Filter/FilterDesktop/Dropdown',
+  component: Dropdown,
   tags: ['autodocs'],
   args: { 
   },
-} satisfies Meta<typeof FilterDesktop>;
+} satisfies Meta<typeof Dropdown>;
 
 export default meta;
 

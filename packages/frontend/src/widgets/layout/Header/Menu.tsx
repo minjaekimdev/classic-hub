@@ -53,7 +53,7 @@ const menuItemArray = [
 const Menu = () => {
   const [selected, setSelected] = useState("홈");
   return (
-    <div className="flex gap-[1.56rem] mt-[1.87rem]">
+    <div className="shrink-0 flex gap-[1.56rem] mt-[1.87rem]">
       {menuItemArray.map((item) => (
         <MenuItem
           icon={item.icon}

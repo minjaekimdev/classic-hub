@@ -3,8 +3,6 @@ import Footer from "@/widgets/layout/Footer";
 import HomePerformanceRanking from "@/widgets/HomePerformanceRanking";
 import HomePerformanceWeekend from "@/widgets/HomePerformanceWeekend";
 
-import styles from "./Home.module.scss";
-
 const rankingArray = [
   {
     imgSrc:
@@ -266,7 +264,7 @@ const Home = () => {
   return (
     <>
       <Header />
-      <div className={styles.content}>
+      <div className="p-[2.62rem_0_6.12rem] bg-white">
         <HomePerformanceRanking performanceArray={rankingArray} />
         <HomePerformanceWeekend performanceArray={weekendArray} />
       </div>
