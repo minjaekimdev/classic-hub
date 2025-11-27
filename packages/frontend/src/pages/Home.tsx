@@ -265,8 +265,15 @@ const weekendArray = [
 const Home = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   useScroll({ callback: setIsScrolled });
+  
+  let mainTopMargin;
+  if (window.innerWidth < 600) {
+    mainTopMargin = "11.69rem";
+  } else {
+    mainTopMargin = isScrolled ? "6.49rem" : "13.12rem";
+  }
 
-  const mainTopMargin = isScrolled ? "6.49rem" : "13.12rem";
+  // const mainTopMargin = isScrolled ? "6.49rem" : "13.12rem";
 
   return (
     <>

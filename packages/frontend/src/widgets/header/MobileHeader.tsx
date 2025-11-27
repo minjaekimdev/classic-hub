@@ -3,9 +3,9 @@ import logoIcon from "@shared/assets/logos/classichub.svg";
 
 const MobileHeader = () => {
   return (
-    <div className="bg-[#ebebeb]">
-      <div className="p-[1.53rem_1.09rem]">
-        <div className="flex flex-col items-center gap-4">
+    <div className="fixed z-20 bg-[#ebebeb] w-full">
+      <div className="flex justify-center items-center px-6 h-[11.7rem]">
+        <div className="flex flex-col items-center gap-6 w-full">
           <div className="flex justify-center gap-[0.28rem]">
             <img className="w-7 h-7" src={logoIcon} alt="" />
             <h1 className="mt-auto text-[#101828] text-[1.31rem]/[1.31rem] font-logo font-bold ">
