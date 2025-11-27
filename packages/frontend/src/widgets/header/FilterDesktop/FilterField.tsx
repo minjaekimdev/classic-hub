@@ -13,6 +13,10 @@ interface FieldProps {
 }
 
 const FilterField = ({ icon, label, children }: FieldProps) => {
+  const textStyle =
+    label === "지역" || label === "가격" || label === "날짜"
+      ? "#867e7c"
+      : "#000";
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger>
@@ -20,7 +24,7 @@ const FilterField = ({ icon, label, children }: FieldProps) => {
           <div className="flex place-content-between items-center w-full h-[1.97rem] p-[0_0.66rem]">
             <div className="flex items-center gap-[0.44rem]">
               <img className="w-3.5 h-3.5" src={icon} alt="" />
-              <span className="text-[#867e7c] text-[0.77rem]/[1.09rem]">
+              <span className="text-[0.77rem]/[1.09rem]" style={{color: textStyle}}>
                 {label}
               </span>
             </div>

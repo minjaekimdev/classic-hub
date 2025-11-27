@@ -3,21 +3,22 @@
 import * as React from "react";
 import { type DateRange } from "react-day-picker";
 import { Calendar } from "@shared/ui/shadcn/calendar";
+import type { filterCategoryObjType } from "../DesktopHeader";
 
 interface CalendarProps {
-  dateRange: string;
-  onSelect: (value: string) => void;
+  filterValue: filterCategoryObjType;
+  onSelect: React.Dispatch<React.SetStateAction<filterCategoryObjType>>;
 }
 
-export function Calendar05({ dateRange, onSelect }: CalendarProps) {
+export function Calendar05({ filterValue, onSelect }: CalendarProps) {
   let calendarDateRange;
-  if (dateRange === "날짜") {
+  if (filterValue.date === "날짜") {
     calendarDateRange = {
       from: new Date(),
       to: new Date(),
     };
   } else {
-    const [startDate, endDate] = dateRange
+    const [startDate, endDate] = filterValue.date
       .split(" - ")
       .map((item: string) => item.replaceAll("/", "-"));
     calendarDateRange = {
@@ -29,7 +30,7 @@ export function Calendar05({ dateRange, onSelect }: CalendarProps) {
   const handleSelect = (range: DateRange | undefined) => {
     // 1. 선택 취소되거나 값이 없으면 초기화
     if (!range?.from) {
-      onSelect("날짜");
+      onSelect({ ...filterValue, date: "날짜" });
       return;
     }
 
@@ -46,7 +47,7 @@ export function Calendar05({ dateRange, onSelect }: CalendarProps) {
     const toStr = range.to ? formatDate(range.to) : fromStr;
 
     // 3. 부모에게 문자열로 전달
-    onSelect(`${fromStr} - ${toStr}`);
+    onSelect({ ...filterValue, date: `${fromStr} - ${toStr}` });
   };
 
   return (

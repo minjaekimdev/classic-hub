@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { type SetStateAction } from "react";
 import locationIcon from "@shared/assets/icons/location-gray.svg";
 import calendarIcon from "@shared/assets/icons/calendar-gray.svg";
 import moneyIcon from "@shared/assets/icons/dollar-gray.svg";
@@ -8,6 +8,7 @@ import FilterField from "./FilterField";
 import { DropdownMenuItem } from "@shared/ui/shadcn/dropdown-menu";
 import PriceRangeSlider from "./PriceRangeSlider";
 import { Calendar05 } from "./Calendar";
+import type { filterCategoryObjType } from "../DesktopHeader";
 
 const locationArray = [
   "전체",
@@ -30,41 +31,48 @@ const locationArray = [
   "제주",
 ];
 
-const FilterDesktop = () => {
-  const [searchText, setSearchText] = useState("");
-  const [location, setLocation] = useState("지역");
-  const [priceRange, setPriceRange] = useState("가격");
-  const [dateRange, setDateRange] = useState("날짜");
+interface FilterDesktopProps {
+  filterValue: filterCategoryObjType;
+  setFilterValue: React.Dispatch<SetStateAction<filterCategoryObjType>>;
+}
 
+const FilterDesktop = ({ filterValue, setFilterValue }: FilterDesktopProps) => {
   return (
     <div className="grid grid-flow-col gap-[0.66rem] auto-cols-[2fr_1fr_1fr_1fr_auto] rounded-[0.875rem] border border-gray-200 bg-white shadow-xl p-[0.94rem] w-4xl">
-      <SearchField inputValue={searchText} onChange={setSearchText}/>
-      <FilterField icon={locationIcon} label={location}>
+      <SearchField filterValue={filterValue} onChange={setFilterValue} />
+      <FilterField icon={locationIcon} label={filterValue.location}>
         {locationArray.map((item) => (
           <DropdownMenuItem
             className="text-xs cursor-pointer"
-            onSelect={() => setLocation(item)}
+            onSelect={() =>
+              setFilterValue({ ...filterValue, location: item })
+            }
           >
             {item}
           </DropdownMenuItem>
         ))}
       </FilterField>
-      <FilterField icon={moneyIcon} label={priceRange}>
+      <FilterField icon={moneyIcon} label={filterValue.price}>
         <DropdownMenuItem className="focus:bg-transparent">
-          <PriceRangeSlider priceRange={priceRange} onSelect={setPriceRange} />
+          <PriceRangeSlider
+            filterValue={filterValue}
+            onSelect={setFilterValue}
+          />
         </DropdownMenuItem>
       </FilterField>
-      <FilterField icon={calendarIcon} label={dateRange}>
-        <Calendar05 dateRange={dateRange} onSelect={setDateRange} />
+      <FilterField icon={calendarIcon} label={filterValue.date}>
+        <Calendar05 filterValue={filterValue} onSelect={setFilterValue} />
       </FilterField>
       <div className="flex gap-3">
         <button
           className="p-[0.69rem_0.56rem] border border-gray-200 rounded-[0.55rem] bg-white text-[0.77rem] transition-transform duration-200 hover:scale-105"
           onClick={() => {
-            setSearchText("");
-            setLocation("지역");
-            setPriceRange("가격");
-            setDateRange("날짜");
+            setFilterValue({
+              searchText: "",
+              location: "지역",
+              price: "가격",
+              date: "날짜",
+            });
           }}
         >
           <div className="flex items-center gap-[0.44rem] w-fit">초기화</div>

@@ -1,7 +1,9 @@
-import Header from "@/widgets/layout/Header";
-import Footer from "@/widgets/layout/Footer";
-import HomePerformanceRanking from "@/widgets/HomePerformanceRanking";
-import HomePerformanceWeekend from "@/widgets/HomePerformanceWeekend";
+import Header from "@/widgets/header";
+import Footer from "@/widgets/footer";
+import HomePerformanceRanking from "@/widgets/home/HomePerformanceRanking";
+import HomePerformanceWeekend from "@/widgets/home/HomePerformanceWeekend";
+import { useState } from "react";
+import useScroll from "@/shared/hooks/useScroll";
 
 const rankingArray = [
   {
@@ -261,10 +263,18 @@ const weekendArray = [
 ];
 
 const Home = () => {
+  const [isScrolled, setIsScrolled] = useState(false);
+  useScroll({ callback: setIsScrolled });
+
+  const mainTopMargin = isScrolled ? "6.49rem" : "13.12rem";
+
   return (
     <>
       <Header />
-      <div className="p-[2.62rem_0_6.12rem] bg-white">
+      <div
+        className={`pt-8 pb-[6.12rem] bg-white`}
+        style={{ marginTop: mainTopMargin }}
+      >
         <HomePerformanceRanking performanceArray={rankingArray} />
         <HomePerformanceWeekend performanceArray={weekendArray} />
       </div>
