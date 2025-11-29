@@ -3,7 +3,7 @@
 import * as React from "react";
 import { type DateRange } from "react-day-picker";
 import { Calendar } from "@shared/ui/shadcn/calendar";
-import type { filterCategoryObjType } from "../DesktopHeader";
+import type { filterCategoryObjType } from "@/shared/model/filter";
 
 interface CalendarProps {
   filterValue: filterCategoryObjType;
@@ -11,8 +11,11 @@ interface CalendarProps {
 }
 
 export function Calendar05({ filterValue, onSelect }: CalendarProps) {
-  let calendarDateRange;
-  if (filterValue.date === "날짜") {
+  let calendarDateRange: DateRange | undefined;
+  const isValidDateRange = /^\d{4}\/\d{2}\/\d{2} - \d{4}\/\d{2}\/\d{2}$/.test(
+    filterValue.date
+  );
+  if (!isValidDateRange) {
     calendarDateRange = {
       from: new Date(),
       to: new Date(),

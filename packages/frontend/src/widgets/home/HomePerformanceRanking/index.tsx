@@ -2,7 +2,7 @@ import React from "react";
 
 import styles from "./HomePerformanceRanking.module.scss";
 import rankingIcon from "@shared/assets/icons/ranking-red.svg";
-import type { PerformanceDataSimple } from "@root-shared/model/performance.front";
+import type { PerformanceDataSimple } from "@/shared/model/performance.front";
 import HomeWidgetHeader from "@/shared/ui/HomeWidgetHeader";
 import DesktopItem from "@/features/performance/components/HomePerformanceAlbumItem";
 

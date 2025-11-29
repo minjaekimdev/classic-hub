@@ -1,10 +1,9 @@
 import React from "react";
 import styles from "./HomePerformanceAlbumItem.module.scss";
 import CardBadge from "@/shared/ui/CardBadge";
-import Bookmark from "@/shared/ui/BookmarkButton";
-import type { PerformanceDataSimple } from "@root-shared/model/performance.front";
+import Bookmark from "@/features/bookmark/BookmarkButton";
+import type { PerformanceDataSimple } from "@/shared/model/performance.front";
 import PerformanceAlbumMeta from "../PerformanceMeta";
-import ProgramButton from "@/shared/ui/ProgramButton";
 
 interface CardProps {
   imgSrc: string;
@@ -21,9 +20,6 @@ const Card: React.FC<CardProps> = ({ imgSrc, rank }) => {
         </CardBadge>
       )}
       <Bookmark style={{ top: "0.66rem", right: "0.66rem" }} />
-      <ProgramButton
-        style={{ position: "absolute", bottom: "0.66rem", right: "0.66rem" }}
-      />
     </div>
   );
 };

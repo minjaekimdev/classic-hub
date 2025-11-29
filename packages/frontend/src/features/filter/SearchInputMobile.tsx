@@ -1,13 +1,16 @@
 import searchIcon from "@shared/assets/icons/search-gray.svg";
 import type { SetStateAction } from "react";
-import type { filterCategoryObjType } from "../DesktopHeader";
+import type { filterCategoryObjType } from "@/shared/model/filter";
 
-interface SearchFieldProps {
+interface SearchInputMobileProps {
   filterValue: filterCategoryObjType;
   onChange: React.Dispatch<SetStateAction<filterCategoryObjType>>;
 }
 
-const SearchField = ({ filterValue, onChange }: SearchFieldProps) => {
+const SearchInputMobile = ({
+  filterValue,
+  onChange,
+}: SearchInputMobileProps) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange({ ...filterValue, searchText: e.target.value });
   };
@@ -25,4 +28,4 @@ const SearchField = ({ filterValue, onChange }: SearchFieldProps) => {
   );
 };
 
-export default SearchField;
+export default SearchInputMobile;

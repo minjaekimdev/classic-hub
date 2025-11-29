@@ -1,5 +1,5 @@
-import Header from "@/widgets/header";
-import Footer from "@/widgets/footer";
+import Header from "@/widgets/Header";
+import Footer from "@/widgets/Footer";
 import HomePerformanceRanking from "@/widgets/home/HomePerformanceRanking";
 import HomePerformanceWeekend from "@/widgets/home/HomePerformanceWeekend";
 import { useState } from "react";
@@ -265,7 +265,7 @@ const weekendArray = [
 const Home = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   useScroll({ callback: setIsScrolled });
-  
+
   let mainTopMargin;
   if (window.innerWidth < 600) {
     mainTopMargin = "11.69rem";

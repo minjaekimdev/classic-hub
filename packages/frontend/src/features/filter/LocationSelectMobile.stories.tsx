@@ -1,13 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import FilterDesktop from './index';
+import LocationSelectMobile from './LocationSelectMobile';
 
 const meta = {
-  title: 'Features/Filter/FilterDesktop',
-  component: FilterDesktop,
+  title: 'Features/Filter/LocationSelectMobile',
+  component: LocationSelectMobile,
   tags: ['autodocs'],
   args: { 
   },
-} satisfies Meta<typeof FilterDesktop>;
+} satisfies Meta<typeof LocationSelectMobile>;
 
 export default meta;
 

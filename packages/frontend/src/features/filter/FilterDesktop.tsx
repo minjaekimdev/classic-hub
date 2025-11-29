@@ -3,12 +3,12 @@ import locationIcon from "@shared/assets/icons/location-gray.svg";
 import calendarIcon from "@shared/assets/icons/calendar-gray.svg";
 import moneyIcon from "@shared/assets/icons/dollar-gray.svg";
 import searchIcon from "@shared/assets/icons/search-white.svg";
-import SearchField from "./SearchField";
-import FilterField from "./FilterField";
+import SearchField from "./SearchInputMobile";
+import FilterFieldDesktop from "./FilterFieldDesktop";
 import { DropdownMenuItem } from "@shared/ui/shadcn/dropdown-menu";
 import PriceRangeSlider from "./PriceRangeSlider";
 import { Calendar05 } from "./Calendar";
-import type { filterCategoryObjType } from "../DesktopHeader";
+import type { filterCategoryObjType } from "@shared/model/filter";
 
 const locationArray = [
   "전체",
@@ -40,29 +40,27 @@ const FilterDesktop = ({ filterValue, setFilterValue }: FilterDesktopProps) => {
   return (
     <div className="grid grid-flow-col gap-[0.66rem] auto-cols-[2fr_1fr_1fr_1fr_auto] rounded-[0.875rem] border border-gray-200 bg-white shadow-xl p-[0.94rem] w-4xl">
       <SearchField filterValue={filterValue} onChange={setFilterValue} />
-      <FilterField icon={locationIcon} label={filterValue.location}>
+      <FilterFieldDesktop icon={locationIcon} label={filterValue.location}>
         {locationArray.map((item) => (
           <DropdownMenuItem
             className="text-xs cursor-pointer"
-            onSelect={() =>
-              setFilterValue({ ...filterValue, location: item })
-            }
+            onSelect={() => setFilterValue({ ...filterValue, location: item })}
           >
             {item}
           </DropdownMenuItem>
         ))}
-      </FilterField>
-      <FilterField icon={moneyIcon} label={filterValue.price}>
-        <DropdownMenuItem className="focus:bg-transparent">
+      </FilterFieldDesktop>
+      <FilterFieldDesktop icon={moneyIcon} label={filterValue.price}>
+        <DropdownMenuItem className="focus:bg-transparent w-75">
           <PriceRangeSlider
             filterValue={filterValue}
             onSelect={setFilterValue}
           />
         </DropdownMenuItem>
-      </FilterField>
-      <FilterField icon={calendarIcon} label={filterValue.date}>
+      </FilterFieldDesktop>
+      <FilterFieldDesktop icon={calendarIcon} label={filterValue.date}>
         <Calendar05 filterValue={filterValue} onSelect={setFilterValue} />
-      </FilterField>
+      </FilterFieldDesktop>
       <div className="flex gap-3">
         <button
           className="p-[0.69rem_0.56rem] border border-gray-200 rounded-[0.55rem] bg-white text-[0.77rem] transition-transform duration-200 hover:scale-105"

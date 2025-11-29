@@ -12,7 +12,7 @@ interface FieldProps {
   children: React.ReactNode;
 }
 
-const FilterField = ({ icon, label, children }: FieldProps) => {
+const FilterFieldDesktop = ({ icon, label, children }: FieldProps) => {
   const textStyle =
     label === "지역" || label === "가격" || label === "날짜"
       ? "#867e7c"
@@ -39,4 +39,4 @@ const FilterField = ({ icon, label, children }: FieldProps) => {
   );
 };
 
-export default FilterField;
+export default FilterFieldDesktop;

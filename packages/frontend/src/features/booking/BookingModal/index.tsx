@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./BookingModal.module.scss";
 import Modal from "@/shared/ui/Modal";
 import ModalHeader from "@/shared/ui/ModalHeader";
-import type { TicketVendorInfoType } from "@root-shared/model/booking";
+import type { TicketVendorInfoType } from "@/shared/model/booking";
 import ModalTicketVendor from "../ModalTicketVendor";
 
 interface BookingModalProps {

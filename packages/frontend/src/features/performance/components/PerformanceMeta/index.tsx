@@ -1,5 +1,5 @@
 import React from "react";
-import type { PerformanceDataSimple } from "@root-shared/model/performance.front";
+import type { PerformanceDataSimple } from "@/shared/model/performance.front";
 
 import styles from "./PerformanceMeta.module.scss";
 import calendarIcon from "@shared/assets/icons/calendar-gray.svg";

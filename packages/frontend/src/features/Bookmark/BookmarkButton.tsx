@@ -1,5 +1,4 @@
 import React, { useState, type CSSProperties } from "react";
-import styles from "./BookmarkButton.module.scss";
 import heartIconActive from "@shared/assets/icons/heart-red.svg";
 import heartIconInactive from "@shared/assets/icons/heart-gray.svg";
 
@@ -11,7 +10,7 @@ const BookmarkButton: React.FC<BookmarkProp> = ({ style }) => {
   const [isActive, setIsActive] = useState(false);
   return (
     <button
-      className={styles.bookmark}
+      className="absolute z-10 flex justify-center items-center rounded-full p-[0.44rem] bg-[rgba(255,255,255,0.9)] transition hover:scale-110"
       style={style}
       onClick={() => setIsActive((prev) => !prev)}
     >

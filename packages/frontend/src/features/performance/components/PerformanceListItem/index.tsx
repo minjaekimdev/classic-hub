@@ -1,8 +1,7 @@
 import styles from "./PerformanceListItem.module.scss";
-import Bookmark from "@shared/ui/BookmarkButton";
-import type { PerformanceDataSimple } from "@root-shared/model/performance.front";
+import Bookmark from "@/features/bookmark/BookmarkButton";
+import type { PerformanceDataSimple } from "@/shared/model/performance.front";
 import PerformanceAlbumMeta from "../PerformanceMeta";
-import ProgramButton from "@/shared/ui/ProgramButton";
 
 interface CardProps {
   imgSrc: string;
@@ -32,9 +31,6 @@ const MobileItem: React.FC<{ data: PerformanceDataSimple }> = ({ data }) => {
             time={data.time}
             hall={data.hall}
           />
-          <div>
-            <ProgramButton />
-          </div>
         </div>
         <p className={styles.mobileItem__price}>
           {data.lowPrice === data.highPrice ? (

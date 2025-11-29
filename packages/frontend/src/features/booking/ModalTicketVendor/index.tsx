@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./ModalTicketVendor.module.scss";
-import type { TicketVendorInfoType } from "@root-shared/model/booking";
+import type { TicketVendorInfoType } from "@/shared/model/booking";
 
 interface ModalTicketVendorProps extends TicketVendorInfoType {
   icon: string;
