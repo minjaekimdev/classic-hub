@@ -2,15 +2,17 @@ import React from "react";
 import FilterFieldHeaderMobile from "./FilterFieldHeaderMobile";
 
 interface FilterFieldContentMobileProps {
+  fieldName: string | null;
   children: React.ReactNode;
 }
 
 const FilterFieldContentMobile = ({
+  fieldName,
   children,
 }: FilterFieldContentMobileProps) => {
   return (
     <div className="flex flex-col gap-[0.66rem] p-[1.31rem]">
-      <FilterFieldHeaderMobile fieldName="지역" />
+      <FilterFieldHeaderMobile fieldName={fieldName} />
       {children}
     </div>
   );

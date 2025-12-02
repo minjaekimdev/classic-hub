@@ -1,5 +1,5 @@
 interface FilterFieldHeaderMobileProps {
-  fieldName: string;
+  fieldName: string | null;
 }
 
 const FilterFieldHeaderMobile = ({

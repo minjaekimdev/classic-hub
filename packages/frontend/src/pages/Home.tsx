@@ -3,8 +3,8 @@ import Footer from "@/widgets/Footer";
 import HomePerformanceRanking from "@/widgets/home/HomePerformanceRanking";
 import HomePerformanceWeekend from "@/widgets/home/HomePerformanceWeekend";
 import { useState } from "react";
-import useScroll from "@/shared/hooks/useScroll";
 
+// 목업 데이터
 const rankingArray = [
   {
     imgSrc:
@@ -77,6 +77,7 @@ const rankingArray = [
     highPrice: "80,000",
   },
 ];
+
 const weekendArray = [
   {
     imgSrc:
@@ -139,148 +140,23 @@ const weekendArray = [
     lowPrice: "10,000원",
     highPrice: "10,000원",
   },
-  {
-    imgSrc:
-      "http://www.kopis.or.kr/upload/pfmPoster/PF_PF278449_251107_111203.jpg",
-    title: "부산 원먼스페스티벌, 앙상블 클라온: 클라온의 선율",
-    artist: "앙상블 클라온",
-    stdate: "2025.11.15",
-    eddate: "2025.11.15",
-    time: "오후 4시 00분",
-    hall: "필슈파스 [부산진구]",
-    lowPrice: "무료",
-    highPrice: "무료",
-  },
-  {
-    imgSrc:
-      "http://www.kopis.or.kr/upload/pfmPoster/PF_PF278414_251107_095146.jpg",
-    title: "파주 DMZ 필하모닉 오케스트라, 음악의 파도 (PaDO)",
-    artist: "DMZ 필하모닉",
-    stdate: "2025.11.16",
-    eddate: "2025.11.16",
-    time: "저녁 7시 00분",
-    hall: "문산행복센터",
-    lowPrice: "70,000원",
-    highPrice: "180,000원",
-  },
-  {
-    imgSrc:
-      "http://www.kopis.or.kr/upload/pfmPoster/PF_PF278313_251106_101408.gif",
-    title: "겨울, 밤마실 콘서트 Ⅴ [대전]",
-    artist: "지역 예술가",
-    stdate: "2025.11.15",
-    eddate: "2025.11.15",
-    time: "오후 6시 00분",
-    hall: "복합문화공간 플랜에이",
-    lowPrice: "15,000원",
-    highPrice: "15,000원",
-  },
-  {
-    imgSrc:
-      "http://www.kopis.or.kr/upload/pfmPoster/PF_PF278207_251105_105726.gif",
-    title: "삼육대학교 음악학과 교수음악회",
-    artist: "삼육대 교수진",
-    stdate: "2025.11.16",
-    eddate: "2025.11.16",
-    time: "오후 7시 00분",
-    hall: "영산아트홀",
-    lowPrice: "무료",
-    highPrice: "무료",
-  },
-  {
-    imgSrc:
-      "http://www.kopis.or.kr/upload/pfmPoster/PF_PF278126_251104_112455.jpg",
-    title: "O.B.S Ensemble 애니매이션 O.S.T 콘서트 [대구]",
-    artist: "O.B.S 앙상블",
-    stdate: "2025.11.15",
-    eddate: "2025.11.15",
-    time: "오후 3시 30분",
-    hall: "수성아트피아",
-    lowPrice: "40,000원",
-    highPrice: "40,000원",
-  },
-  {
-    imgSrc:
-      "http://www.kopis.or.kr/upload/pfmPoster/PF_PF278123_251104_111656.jpg",
-    title: "제4회 파주시립소년소녀합창단 정기연주회: 풍금소리",
-    artist: "파주시립 합창단",
-    stdate: "2025.11.15",
-    eddate: "2025.11.16",
-    time: "오후 5시 30분",
-    hall: "문산행복센터",
-    lowPrice: "20,000원",
-    highPrice: "20,000원",
-  },
-  {
-    imgSrc:
-      "http://www.kopis.or.kr/upload/pfmPoster/PF_PF278012_251103_135827.jpg",
-    title: "쌀롱드무지끄, 일상의 에피파니",
-    artist: "쌀롱드무지끄 출연진",
-    stdate: "2025.11.15",
-    eddate: "2025.11.15",
-    time: "오후 7시 00분",
-    hall: "쌀롱드무지끄",
-    lowPrice: "50,000원",
-    highPrice: "50,000원",
-  },
-  {
-    imgSrc:
-      "http://www.kopis.or.kr/upload/pfmPoster/PF_PF277994_251103_132531.gif",
-    title: "소프라노 김은별 귀국 독창회",
-    artist: "소프라노 김은별",
-    stdate: "2025.11.15",
-    eddate: "2025.11.15",
-    time: "오후 7시 30분",
-    hall: "영산아트홀",
-    lowPrice: "15,000원",
-    highPrice: "15,000원",
-  },
-  {
-    imgSrc:
-      "http://www.kopis.or.kr/upload/pfmPoster/PF_PF277988_251103_130935.jpg",
-    title:
-      "피아노듀오 콘서트 해설이 있는 가족콘서트, 작곡가시리즈 Charles Camille Saint-Saens (앵콜) [대구]",
-    artist: "피아노 듀오",
-    stdate: "2025.11.16",
-    eddate: "2025.11.16",
-    time: "오후 2시 00분",
-    hall: "수성아트피아",
-    lowPrice: "20,000원",
-    highPrice: "20,000원",
-  },
-  {
-    imgSrc:
-      "http://www.kopis.or.kr/upload/pfmPoster/PF_PF277970_251103_113609.gif",
-    title: "권혁민 바이올린 독주회",
-    artist: "바이올리니스트 권혁민",
-    stdate: "2025.11.16",
-    eddate: "2025.11.16",
-    time: "오후 7시 30분",
-    hall: "금호아트홀 연세",
-    lowPrice: "5,000원",
-    highPrice: "5,000원",
-  },
 ];
 
 const Home = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
-  useScroll({ callback: setIsScrolled });
+  // 헤더가 확대 상태인지 축소 상태인지 판별
+  const [headerExpand, setHeaderExpand] = useState(false); 
 
-  let mainTopMargin;
-  if (window.innerWidth < 600) {
-    mainTopMargin = "11.69rem";
-  } else {
-    mainTopMargin = isScrolled ? "6.49rem" : "13.12rem";
-  }
-
-  // const mainTopMargin = isScrolled ? "6.49rem" : "13.12rem";
+  // 헤더가 확대된 경우 데스크탑 모드에서 메인 영역의 margin-top은 13.12rem
+  // 헤더가 축소된 경우 5rem
+  const desktopMarginClass = headerExpand
+    ? "min-[600px]:mt-[13.12rem]"
+    : "min-[600px]:mt-[5rem]";
 
   return (
     <>
-      <Header />
+      <Header onChange={setHeaderExpand} />
       <div
-        className={`pt-8 pb-[6.12rem] bg-white`}
-        style={{ marginTop: mainTopMargin }}
+        className={`pt-6 min-[600px]:pt-8 mt-[9.12rem] ${desktopMarginClass} pb-[6.12rem] bg-white`}
       >
         <HomePerformanceRanking performanceArray={rankingArray} />
         <HomePerformanceWeekend performanceArray={weekendArray} />

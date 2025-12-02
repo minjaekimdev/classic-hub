@@ -1,6 +1,6 @@
 import FilterDesktop from "@/features/filter/FilterDesktop";
 import Menu from "../shared/ui/HeaderMenu";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type SetStateAction } from "react";
 import FilterSmall from "../features/filter/FilterDesktopSmall";
 import useClickOutside from "@/shared/hooks/useClickOutside";
 import Logo from "@/shared/ui/Logo";
@@ -13,25 +13,24 @@ import FilterMobile from "@/features/filter/FilterMobile";
 const MobileHeader = () => {
   const [filterActive, setFilterActive] = useState(false);
 
+  // 필터가 활성화된 상태라면 뷰포트의 스크롤을 해제
   useEffect(() => {
     if (filterActive) {
-      // 모달이 열리면: body의 스크롤을 막음
       document.body.style.overflow = "hidden";
     } else {
-      // 모달이 닫히면: body의 스크롤을 다시 허용
       document.body.style.overflow = "auto";
     }
 
-    // 컴포넌트가 언마운트될 때(페이지 이동 등) 안전하게 스크롤을 풀어줌
     return () => {
       document.body.style.overflow = "auto";
     };
   }, [filterActive]);
+
   return (
     <>
       {!filterActive ? (
-        <div className="fixed z-20 bg-[#ebebeb] w-full">
-          <div className="flex justify-center items-center px-6 h-[11.7rem]">
+        <div className="fixed z-20 bg-[linear-gradient(180deg,#FFF_39.9%,#F8F8F8_100%)] w-full">
+          <div className="flex justify-center items-center p-6">
             <div className="flex flex-col items-center gap-6 w-full">
               <div className="flex justify-center gap-[0.28rem]">
                 <img className="w-7 h-7" src={logoIcon} alt="" />
@@ -40,7 +39,7 @@ const MobileHeader = () => {
                 </h1>
               </div>
               <div
-                className="flex justify-center items-center rounded-full w-full h-[2.88rem] border-2 border-solid border-[#e5e7eb] bg-white shadow-[0_1px_3px_0_rgba(0,0,0,0.1),0_1px_2px_-1px_rgba(0,0,0,0.1)] cursor-pointer"
+                className="flex justify-center items-center rounded-full w-full h-[2.88rem] border border-gray-200 bg-white shadow-xl cursor-pointer"
                 onClick={() => setFilterActive(true)}
               >
                 <div className="flex shrink-0 gap-[0.6rem]">
@@ -62,7 +61,11 @@ const MobileHeader = () => {
   );
 };
 
-const DesktopHeader = () => {
+interface DesktopHeaderProps {
+  onChange: React.Dispatch<SetStateAction<boolean>>;
+}
+
+const DesktopHeader = ({ onChange }: DesktopHeaderProps) => {
   const [isScrolled, setIsScrolled] = useState(false); // window.scrollY > 0이면 isScrolled = true, 0이면 false
   const [isManuallyExpanded, setManuallyExpanded] = useState(false); // 축소된 필터를 클릭한 경우 true
   const [filterValue, setFilterValue] = useState<filterCategoryObjType>({
@@ -72,6 +75,10 @@ const DesktopHeader = () => {
     date: "날짜",
   });
   const headerRef = useRef<HTMLDivElement | null>(null);
+
+  // 헤더가 확장되는 경우는 스크롤 위치가 0이거나 축소된 필터를 클릭한 경우
+  const headerExpand = !isScrolled || isManuallyExpanded;
+  const headerMarginBottom = headerExpand ? "1.5rem" : "0";
 
   // 스크롤 발생 시 헤더 상태 최신화
   useEffect(() => {
@@ -94,9 +101,9 @@ const DesktopHeader = () => {
     setManuallyExpanded(false)
   );
 
-  // 헤더가 확장되는 경우는 스크롤 위치가 0이거나 축소된 필터를 클릭한 경우
-  const headerExpand = !isScrolled || isManuallyExpanded;
-  const headerMarginBottom = headerExpand ? "1.5rem" : "0";
+  useEffect(() => {
+    onChange(headerExpand);
+  }, [headerExpand, onChange]);
 
   return (
     <div
@@ -133,11 +140,15 @@ const DesktopHeader = () => {
   );
 };
 
-const Header = () => {
+interface HeaderProps {
+  onChange: React.Dispatch<SetStateAction<boolean>>;
+}
+
+const Header = ({ onChange }: HeaderProps) => {
   return (
     <div className="w-full border-b border-[#e5e7eb]">
       <div className="block max-[600px]:hidden">
-        <DesktopHeader />
+        <DesktopHeader onChange={onChange} />
       </div>
       <div className="hidden max-[600px]:block">
         <MobileHeader />

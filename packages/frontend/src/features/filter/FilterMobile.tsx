@@ -123,9 +123,11 @@ const FilterMobile = ({ onClose }: FilterMobileProps) => {
             />
           ))}
         </div>
-        <FilterFieldContentMobile>
-          {showFieldContent()}
-        </FilterFieldContentMobile>
+        {selectedField && (
+          <FilterFieldContentMobile fieldName={selectedField}>
+            {showFieldContent()}
+          </FilterFieldContentMobile>
+        )}
       </div>
 
       <div className="flex-none flex gap-[0.66rem] px-[1.31rem] py-[0.88rem]">

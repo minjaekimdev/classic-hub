@@ -25,7 +25,7 @@ const FilterFieldMobile = ({
   const categoryKey = LABEL_TO_KEY[label];
   return (
     <div
-      className="flex items-center gap-[0.66rem]  rounded-[0.797rem] bg-[#f9fafb] p-[0.88rem] cursor-pointer"
+      className="flex gap-[0.66rem] rounded-[0.797rem] bg-[#f9fafb] p-[0.88rem] cursor-pointer"
       onClick={() => onSelect(label)}
     >
       <div className="flex justify-center items-center w-[1.97rem] h-[1.97rem]">
