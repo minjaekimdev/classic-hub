@@ -2,6 +2,7 @@ import calendarIcon from "@shared/assets/icons/calendar-gray.svg";
 import crownIcon from "@shared/assets/icons/crown-gold.svg";
 import medalIcon from "@shared/assets/icons/medal-silver.svg";
 import badgeIcon from "@shared/assets/icons/badge-bronze.svg";
+import type { PerformanceType } from "@classic-hub/shared/types/performance";
 
 interface RankProps {
   rank: string;
@@ -79,19 +80,14 @@ const Meta = ({ data }: { data: MetaProps }) => {
           <img src={calendarIcon} />
           <span className={`${normalFontStyle}`}>{data.date}</span>
         </li>
-        <li className={`${normalFontStyle}`}>{data.location}</li>
+        <li className={`${normalFontStyle}`}>{data.hall}</li>
       </ul>
     </div>
   );
 };
 
-interface RankingItemProps {
+interface RankingItemProps extends PerformanceType {
   rank: string;
-  posterUrl: string;
-  name: string;
-  artist: string;
-  date: string;
-  location: string;
 }
 
 const RankingItem = ({
@@ -100,13 +96,13 @@ const RankingItem = ({
   name,
   artist,
   date,
-  location,
+  hall,
 }: RankingItemProps) => {
   return (
-    <div className="flex gap-[0.88rem] items-center">
+    <div className="flex gap-[0.88rem] items-center rounded-[0.55rem] px-[0.66rem] h-[6.34rem] cursor-pointer hover:bg-[rgba(236,236,240,0.5)]">
       <Rank rank={rank} />
       <Poster posterUrl={posterUrl} />
-      <Meta data={{ name, artist, date, location }} />
+      <Meta data={{ name, artist, date, hall }} />
       <button className="shrink-0 justify-center items-center px-[0.43rem] py-[0.40rem] bg-main rounded-[0.42rem] text-white text-[0.77rem]/[1.09rem] font-medium">
         예매하기
       </button>

@@ -1,5 +1,5 @@
 import React from "react";
-import HomeWidgetHeader from "@/shared/ui/HomeWidgetHeader";
+import HomeWidgetHeader from "@/shared/layout/HomeWidgetHeader";
 import calendarIcon from "@shared/assets/icons/calendar-red.svg";
 import type { PerformanceDataSimple } from "@/shared/model/performance.front";
 import HomePerformanceAlbumItem from "@/features/performance/components/HomePerformanceAlbumItem";

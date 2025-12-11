@@ -5,3 +5,7 @@ export interface PerformanceType {
   date: string;
   hall: string;
 }
+
+export interface RankingPerformanceType extends PerformanceType{
+  rank: string;
+}

@@ -1,7 +1,7 @@
 import React from "react";
 import rankingIcon from "@shared/assets/icons/ranking-red.svg";
 import type { PerformanceDataSimple } from "@/shared/model/performance.front";
-import HomeWidgetHeader from "@/shared/ui/HomeWidgetHeader";
+import HomeWidgetHeader from "@/shared/layout/HomeWidgetHeader";
 import DesktopItem from "@/features/performance/components/HomePerformanceAlbumItem";
 
 interface HomePerformanceRankingProps {

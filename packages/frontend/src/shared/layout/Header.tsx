@@ -1,14 +1,14 @@
-import FilterDesktop from "@/features/filter/FilterDesktop";
-import Menu from "../shared/ui/HeaderMenu";
+import FilterDesktop from "@/features/filter/components/FilterDesktop";
+import Menu from "./HeaderMenu";
 import { useEffect, useRef, useState, type SetStateAction } from "react";
-import FilterSmall from "../features/filter/FilterDesktopSmall";
+import FilterSmall from "@/features/filter/components/FilterDesktopSmall";
 import useClickOutside from "@/shared/hooks/useClickOutside";
-import Logo from "@/shared/ui/Logo";
-import HeaderAuthButton from "@/shared/ui/HeaderAuthButton";
+import Logo from "@/shared/layout/Logo";
+import HeaderAuthButton from "@/shared/layout/HeaderAuthButton";
 import searchIcon from "@shared/assets/icons/search-gray.svg";
 import logoIcon from "@shared/assets/logos/classichub.svg";
 import type { filterCategoryObjType } from "@/shared/model/filter";
-import FilterMobile from "@/features/filter/FilterMobile";
+import FilterMobile from "@/features/filter/components/FilterMobile";
 
 const MobileHeader = () => {
   const [filterActive, setFilterActive] = useState(false);
@@ -108,7 +108,7 @@ const DesktopHeader = ({ onChange }: DesktopHeaderProps) => {
   return (
     <div
       ref={headerRef}
-      className="fixed z-20 w-full bg-[linear-gradient(180deg,#FFF_39.9%,#F8F8F8_100%)] transition-height duration-200 ease-in-out"
+      className="fixed top-0 z-20 w-full bg-[linear-gradient(180deg,#FFF_39.9%,#F8F8F8_100%)] transition-height duration-200 ease-in-out"
       onClick={(e) => e.stopPropagation()}
     >
       <div className="flex flex-col max-w-7xl m-[0_auto] px-7">

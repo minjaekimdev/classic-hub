@@ -1,8 +1,6 @@
-import Header from "@/widgets/Header";
-import Footer from "@/widgets/Footer";
 import HomePerformanceRanking from "@/widgets/home/HomePerformanceRanking";
 import HomePerformanceWeekend from "@/widgets/home/HomePerformanceWeekend";
-import { useState } from "react";
+import MainLayout from "@/shared/layout/MainLayout";
 
 // 목업 데이터
 const rankingArray = [
@@ -143,26 +141,11 @@ const weekendArray = [
 ];
 
 const Home = () => {
-  // 헤더가 확대 상태인지 축소 상태인지 판별
-  const [headerExpand, setHeaderExpand] = useState(false); 
-
-  // 헤더가 확대된 경우 데스크탑 모드에서 메인 영역의 margin-top은 13.12rem
-  // 헤더가 축소된 경우 5rem
-  const desktopMarginClass = headerExpand
-    ? "min-[600px]:mt-[13.12rem]"
-    : "min-[600px]:mt-[5rem]";
-
   return (
-    <>
-      <Header onChange={setHeaderExpand} />
-      <div
-        className={`pt-6 min-[600px]:pt-8 mt-[9.12rem] ${desktopMarginClass} pb-[6.12rem] bg-white`}
-      >
-        <HomePerformanceRanking performanceArray={rankingArray} />
-        <HomePerformanceWeekend performanceArray={weekendArray} />
-      </div>
-      <Footer />
-    </>
+    <MainLayout>
+      <HomePerformanceRanking performanceArray={rankingArray} />
+      <HomePerformanceWeekend performanceArray={weekendArray} />
+    </MainLayout>
   );
 };
 
