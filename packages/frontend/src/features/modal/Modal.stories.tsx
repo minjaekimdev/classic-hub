@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import FeedbackModal from "./index";
+import Modal from "./Modal";
 
 const meta = {
-  title: "Shared/FeedbackModal",
-  component: FeedbackModal,
+  title: "Features/Module/Modal",
+  component: Modal,
   tags: ["autodocs"],
   args: {},
-} satisfies Meta<typeof FeedbackModal>;
+} satisfies Meta<typeof Modal>;
 
 export default meta;
 

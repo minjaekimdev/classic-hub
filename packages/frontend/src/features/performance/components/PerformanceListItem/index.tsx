@@ -1,5 +1,5 @@
 import styles from "./PerformanceListItem.module.scss";
-import Bookmark from "@/features/bookmark/BookmarkButton";
+import Bookmark from "@/shared/ui/buttons/BookmarkButton";
 import type { PerformanceDataSimple } from "@/shared/model/performance.front";
 import PerformanceAlbumMeta from "../PerformanceMeta";
 

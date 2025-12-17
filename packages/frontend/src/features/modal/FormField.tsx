@@ -1,5 +1,4 @@
 import React from "react";
-import styles from "./FormField.module.scss";
 
 interface FormFieldProps {
   isSingleLine: boolean;
@@ -12,8 +11,6 @@ interface FormFieldProps {
   required: boolean;
 }
 
-/* input의 id와 type을 동일하게 하여 props개수 줄이기*/
-/* ex) type=email, id=email */
 const FormField: React.FC<FormFieldProps> = ({
   isSingleLine,
   type,
@@ -25,12 +22,12 @@ const FormField: React.FC<FormFieldProps> = ({
   required,
 }) => {
   return (
-    <div className={styles.formField}>
-      <label className={styles.formField__label} htmlFor={id}>
+    <div className="flex flex-col gap-[0.44rem]">
+      <label className="text-[#0a0a0a] text-[0.77rem] font-medium" htmlFor={id}>
         {label}
       </label>
       <div
-        className={styles.formField__content}
+        className="px-[0.66rem] rounded-[0.42rem] bg-[#f3f3f5]"
         style={{
           paddingTop: `${verticalPadding}`,
           paddingBottom: `${verticalPadding}`,
@@ -38,7 +35,7 @@ const FormField: React.FC<FormFieldProps> = ({
       >
         {isSingleLine ? (
           <input
-            className={styles.inputArea}
+            className="text-[#717182] text-[0.77rem] w-full"
             type={type}
             id={id}
             placeholder={placeHolder}
@@ -47,7 +44,7 @@ const FormField: React.FC<FormFieldProps> = ({
           />
         ) : (
           <textarea
-            className={styles.inputArea}
+            className="text-[#717182] text-[0.77rem] w-full"
             id={id}
             name={id}
             placeholder={placeHolder}

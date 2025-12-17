@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import BookmarkDeleteModal from "./index";
+import BookmarkDeleteModal from "./BookmarkDeleteModal";
 
 const meta = {
   title: "Features/Bookmark/BookmarkDeleteModal",

@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./HomePerformanceAlbumItem.module.scss";
 import CardBadge from "@/shared/ui/CardBadge";
-import Bookmark from "@/features/bookmark/BookmarkButton";
+import Bookmark from "@/shared/ui/buttons/BookmarkButton";
 import type { PerformanceDataSimple } from "@/shared/model/performance.front";
 import PerformanceAlbumMeta from "../PerformanceMeta";
 

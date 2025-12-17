@@ -1,5 +1,4 @@
 import React from "react";
-import styles from "./ModalHeader.module.scss";
 
 interface ModalHeaderProps {
   main: string;
@@ -8,9 +7,9 @@ interface ModalHeaderProps {
 
 const ModalHeader: React.FC<ModalHeaderProps> = ({ main, sub }) => {
   return (
-    <div className={styles.modalHeader}>
-      <h3 className={styles.modalHeader__main}>{main}</h3>
-      <p className={styles.modalHeader__sub}>{sub}</p>
+    <div className="flex flex-col gap-[0.44rem]">
+      <h3 className="text-[#0a0a0a] text-[0.98rem] font-semibold">{main}</h3>
+      <p className="text-[#717182] text-[0.77rem]/[1.09rem]">{sub}</p>
     </div>
   );
 };

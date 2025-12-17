@@ -1,18 +1,17 @@
-import styles from "./FeedbackModal.module.scss";
-import Modal from "../Modal";
-import ModalHeader from "../ModalHeader";
-import FormField from "../FormField";
-import ButtonGroup from "@/shared/ui/ButtonGroup";
+import Modal from "./Modal";
+import ModalHeader from "./ModalHeader";
+import FormField from "./FormField";
+import ButtonGroup from "@/shared/ui/buttons/CancelConfirmButtons";
 
 const FeedbackModal = () => {
   return (
     <Modal>
-      <div className={styles.feedbackModal}>
+      <div className="flex flex-col gap-[1.7rem]">
         <ModalHeader
           main="의견 제안"
           sub="ClassicHub를 이용하시면서 불편하셨던 점이나 개선사항을 알려주세요. 소중한 의견을 반영하여 더 나은 서비스를 제공하겠습니다."
         />
-        <form className={styles.feedbackModal__content}>
+        <form className="flex flex-col gap-[0.88rem]">
           <FormField
             isSingleLine={true}
             type="email"
