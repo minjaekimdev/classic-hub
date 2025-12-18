@@ -1,5 +1,5 @@
-import HomePerformanceRanking from "@/widgets/home/HomePerformanceRanking";
-import HomePerformanceWeekend from "@/widgets/home/HomePerformanceWeekend";
+import HomePerformanceRanking from "@/features/performance/components/HomePerformanceRanking";
+import HomePerformanceWeekend from "@/features/performance/components/HomePerformanceWeekend";
 import MainLayout from "@/shared/layout/MainLayout";
 
 // 목업 데이터

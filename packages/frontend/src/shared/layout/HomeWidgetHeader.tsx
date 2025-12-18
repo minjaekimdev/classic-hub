@@ -13,7 +13,7 @@ const HomeWidgetHeader: React.FC<HomeWidgetHeaderProps> = ({
   subTitle,
 }) => {
   return (
-    <div className="flex justify-between items-center w-[calc(100%-3.5rem)]">
+    <div className="flex justify-between items-center w-full">
       <div className="flex items-center gap-[0.66rem]">
         <img className="w-[1.31rem] h-[1.31rem]" src={icon} alt="" />
         <div className="flex flex-col">

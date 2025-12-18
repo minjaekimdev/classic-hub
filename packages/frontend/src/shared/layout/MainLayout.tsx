@@ -17,7 +17,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
     <>
       <Header onChange={setHeaderExpand} />
       <main
-        className={`pt-6 min-[600px]:pt-8 mt-[9.12rem] ${desktopMarginClass} pb-[6.12rem] bg-white max-w-7xl mx-auto`}
+        className={`pt-6 min-[600px]:pt-8 mt-[9.12rem] ${desktopMarginClass} pb-[6.12rem] px-7 bg-white max-w-7xl mx-auto`}
       >
         {children}
       </main>

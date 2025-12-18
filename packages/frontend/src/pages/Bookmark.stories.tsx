@@ -1,13 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import Ranking from './Ranking';
+import Bookmark from './Bookmark';
 
 const meta = {
-  title: 'pages/Ranking',
-  component: Ranking,
+  title: 'pages/Bookmark',
+  component: Bookmark,
   tags: ['autodocs'],
   args: { 
   },
-} satisfies Meta<typeof Ranking>;
+} satisfies Meta<typeof Bookmark>;
 
 export default meta;
 

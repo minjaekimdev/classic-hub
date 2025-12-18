@@ -13,13 +13,13 @@ const HomePerformanceRanking: React.FC<HomePerformanceRankingProps> = ({
 }) => {
   return (
     <div className="w-full">
-      <div className="flex flex-col items-center gap-[1.31rem] mx-auto max-w-7xl">
+      <div className="flex flex-col gap-[1.31rem] mx-auto max-w-7xl">
         <HomeWidgetHeader
           icon={rankingIcon}
           mainTitle="오늘의 공연 랭킹"
           subTitle="티켓판매액 기준 인기 공연"
         />
-        <ul className="grid grid-cols-5 gap-[1.31rem] w-[calc(100%-3.5rem)]">
+        <ul className="grid grid-cols-5 gap-[1.31rem] w-full">
           {performanceArray.map((performance) => (
             <DesktopItem data={performance} />
           ))}
