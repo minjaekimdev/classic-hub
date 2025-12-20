@@ -1,14 +1,14 @@
-import FilterDesktop from "@/features/filter/components/FilterDesktop";
+import FilterDesktop from "@/features/filter/components/search/FilterDesktop";
 import Menu from "./HeaderMenu";
 import { useEffect, useRef, useState, type SetStateAction } from "react";
-import FilterSmall from "@/features/filter/components/FilterDesktopSmall";
+import FilterSmall from "@/features/filter/components/search/FilterDesktopSmall";
 import useClickOutside from "@/shared/hooks/useClickOutside";
 import Logo from "@/shared/layout/Logo";
 import HeaderAuthButton from "@/shared/layout/HeaderAuthButton";
 import searchIcon from "@shared/assets/icons/search-gray.svg";
 import logoIcon from "@shared/assets/logos/classichub.svg";
 import type { filterCategoryObjType } from "@/shared/model/filter";
-import FilterMobile from "@/features/filter/components/FilterMobile";
+import FilterMobile from "@/features/filter/components/search/FilterMobile";
 
 const MobileHeader = () => {
   const [filterActive, setFilterActive] = useState(false);

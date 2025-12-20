@@ -97,7 +97,7 @@ const FilterMobile = ({ onClose }: FilterMobileProps) => {
   };
 
   return (
-    <div className="grow-9 fixed bottom-0 z-99 left-0 flex flex-col rounded-tl-[1.31rem] rounded-tr-[1.31rem] bg-white w-screen h-[90vh]">
+    <div className="fixed bottom-0 z-99 left-0 flex flex-col rounded-tl-[1.31rem] rounded-tr-[1.31rem] bg-white w-screen h-[90vh]">
       <div className="flex-none">
         <Header onClose={onClose} />
         <div className="border-b border-b-[rgba(0,0,0,0.1)] px-[1.31rem] py-[0.88rem]">
