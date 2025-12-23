@@ -35,7 +35,6 @@ const Rank = ({ rank }: RankProps) => {
         "bg-[linear-gradient(135deg,#FE9A00_0%,#E17100_50%,#BB4D00_100%)] " +
         "shadow-[0_0_0_2px_rgba(255,185,0,0.30),0_10px_15px_-3px_rgba(0,0,0,0.10),0_4px_6px_-4px_rgba(0,0,0,0.10)]";
       break;
-
   }
 
   return (
@@ -65,20 +64,26 @@ const Poster = ({ posterUrl }: PosterProps) => {
   );
 };
 
-type MetaProps = Omit<RankingItemProps, "rank" | "posterUrl">;
+type MetaType = Omit<RankingItemProps, "rank" | "posterUrl" | "time">;
 
-const Meta = ({ data }: { data: MetaProps }) => {
+interface MetaProps {
+  data: MetaType;
+}
+
+const Meta = ({ data }: MetaProps) => {
   const normalFontStyle = "text-[#717182] text-[0.66rem]/[0.88rem]";
   return (
     <div className="grow">
       <ul className="flex flex-col ">
         <li className="mb-[0.16rem] text-[#0a0a0a] text-[0.77rem]/[1.09rem] font-semibold">
-          {data.name}
+          {data.title}
         </li>
         <li className={`mb-[0.44rem] ${normalFontStyle}`}>{data.artist}</li>
         <li className="flex gap-[0.22rem] items-center mb-[0.56rem]">
           <img src={calendarIcon} />
-          <span className={`${normalFontStyle}`}>{data.date}</span>
+          <span className={`${normalFontStyle}`}>
+            {data.stdate} ~ {data.eddate}
+          </span>
         </li>
         <li className={`${normalFontStyle}`}>{data.hall}</li>
       </ul>
@@ -93,16 +98,17 @@ interface RankingItemProps extends PerformanceType {
 const RankingItem = ({
   rank,
   posterUrl,
-  name,
+  title,
   artist,
-  date,
+  stdate,
+  eddate,
   hall,
 }: RankingItemProps) => {
   return (
     <div className="flex gap-[0.88rem] items-center rounded-[0.55rem] px-[0.66rem] h-[6.34rem] cursor-pointer hover:bg-[rgba(236,236,240,0.5)]">
       <Rank rank={rank} />
       <Poster posterUrl={posterUrl} />
-      <Meta data={{ name, artist, date, hall }} />
+      <Meta data={{ title, artist, stdate, eddate, hall }} />
       <button className="shrink-0 justify-center items-center px-[0.43rem] py-[0.40rem] bg-main rounded-[0.42rem] text-white text-[0.77rem]/[1.09rem] font-medium">
         예매하기
       </button>

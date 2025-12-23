@@ -2,7 +2,7 @@
   "name": "@classic-hub/shared",
   "version": "1.0.0",
   "exports": {
-    "./types/performance": "./types/performance.d.ts",
+    "./types/performance": "./types/performance.ts",
     "./utils": "./utils/index.ts"
   }
 }

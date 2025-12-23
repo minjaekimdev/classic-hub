@@ -10,7 +10,7 @@ const BookmarkButton: React.FC<BookmarkProp> = ({ style }) => {
   const [isActive, setIsActive] = useState(false);
   return (
     <button
-      className="absolute z-10 flex justify-center items-center rounded-full p-[0.44rem] bg-[rgba(255,255,255,0.9)] transition hover:scale-110"
+      className="absolute z-10 flex justify-center items-center rounded-full p-[0.44rem] bg-[rgba(255,255,255,0.9)] shadow-[0_4px_6px_-1px_rgba(0,0,0,0.2),0_2px_4px_-2px_rgba(0,0,0,0.2)] transition hover:scale-110"
       style={style}
       onClick={() => setIsActive((prev) => !prev)}
     >

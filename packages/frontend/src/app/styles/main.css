@@ -6,10 +6,12 @@
 
 @theme {
   --color-main: #c00;
+  --color-dark: #0a0a0a;
   --font-logo: "Josefin Sans", sans-serif;
   --breakpoint-tablet: 600px;
   --breakpoint-desktop: 960px;
   --breakpoint-large-desktop: 1280px;
+  --radius-main: 0.55rem;
 }
 
 /* Pretendard */

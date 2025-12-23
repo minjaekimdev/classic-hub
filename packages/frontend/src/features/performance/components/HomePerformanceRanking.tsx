@@ -1,11 +1,11 @@
 import React from "react";
 import rankingIcon from "@shared/assets/icons/ranking-red.svg";
-import type { PerformanceDataSimple } from "@/shared/model/performance.front";
+import type { HomePerformance } from "@classic-hub/shared/types/performance";
 import HomeWidgetHeader from "@/shared/layout/HomeWidgetHeader";
-import DesktopItem from "@/features/performance/components/HomePerformanceAlbumItem";
+import AlbumItem from "@/features/performance/components/AlbumItem";
 
 interface HomePerformanceRankingProps {
-  performanceArray: PerformanceDataSimple[];
+  performanceArray: HomePerformance[];
 }
 
 const HomePerformanceRanking: React.FC<HomePerformanceRankingProps> = ({
@@ -21,7 +21,7 @@ const HomePerformanceRanking: React.FC<HomePerformanceRankingProps> = ({
         />
         <ul className="grid grid-cols-5 gap-[1.31rem] w-full">
           {performanceArray.map((performance) => (
-            <DesktopItem data={performance} />
+            <AlbumItem data={performance} />
           ))}
         </ul>
       </div>

@@ -20,9 +20,10 @@ const Meta = ({ iconSrc, text }: MetaProps) => {
 
 const BookmarkPerformance = ({
   posterUrl,
-  name,
+  title,
   artist,
-  date,
+  stdate,
+  eddate,
   hall,
 }: PerformanceType) => {
   return (
@@ -35,13 +36,13 @@ const BookmarkPerformance = ({
       <div className="flex flex-col pt-[0.55rem] pb-[1.31rem] px-[0.66rem]">
         <ul className="flex flex-col gap-1">
           <li className="truncate text-[#0a0a0a] text-[0.88rem]/[1.31rem] font-semibold">
-            {name}
+            {title}
           </li>
           <li className="text-[#717182] text-[0.77rem]/[1.09rem]">{artist}</li>
         </ul>
         <div className="bg-[rgba(0,0,0,0.1)] my-[0.44rem] w-full h-[0.06rem] "></div>
         <ul className="flex flex-col gap-[0.16rem]">
-          <Meta iconSrc={calendarIcon} text={date} />
+          <Meta iconSrc={calendarIcon} text={`${stdate} ~ ${eddate}`} />
           <Meta iconSrc={locationIcon} text={hall} />
         </ul>
         <div className="flex gap-[0.44rem] mt-[0.88rem]">
