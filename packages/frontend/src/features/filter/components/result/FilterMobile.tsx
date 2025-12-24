@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { X } from "lucide-react";
 import LocationHall from "./LocationHall";
+import Sort from "./Sort";
 
 // 예시 데이터 타입 정의
 type Venue = {
@@ -44,13 +45,6 @@ const MOCK_REGIONS: Region[] = [
     totalCount: 12,
     venues: [{ id: "busan_culture", name: "부산문화회관", count: 12 }],
   },
-];
-
-const SORT_OPTIONS = [
-  { id: "imminent", label: "공연임박순" },
-  { id: "price_asc", label: "낮은가격순" },
-  { id: "price_desc", label: "높은가격순" },
-  { id: "alphabet", label: "가나다순" },
 ];
 
 interface FilterBottomSheetProps {
@@ -134,25 +128,7 @@ const FilterBottomSheet = ({
         {/* Scrollable Content */}
         <div className="flex-1 overflow-y-auto p-5 space-y-8 pb-24">
           {/* 2. 정렬 카테고리 */}
-          <section>
-            <h3 className="text-sm font-semibold text-gray-800 mb-3">정렬</h3>
-            <div className="flex flex-wrap gap-2">
-              {SORT_OPTIONS.map((option) => (
-                <button
-                  key={option.id}
-                  onClick={() => handleSortChange(option.id)}
-                  className={`px-3 py-2 rounded-full text-sm font-medium transition-colors border
-                    ${
-                      selectedSort === option.id
-                        ? "bg-[#cc0000] border-[#cc0000] text-white shadow-sm"
-                        : "bg-white border-gray-200 text-gray-600 hover:bg-gray-50"
-                    }`}
-                >
-                  {option.label}
-                </button>
-              ))}
-            </div>
-          </section>
+          <Sort selectedSort={selectedSort} handleSortChange={handleSortChange} />
 
           {/* 3. 지역 · 공연장 카테고리 */}
           <LocationHall

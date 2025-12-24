@@ -10,7 +10,7 @@ const Origin = () => {
 
 const FeedbackButton = () => {
   return (
-    <div className="flex justify-center items-center border border-[rgba(0,0,0,0.1)] rounded-[0.42rem] p-[0.36rem_0.4rem_0.27rem_0.61rem] bg-white text-[#0a0a0a] text-[0.76rem]/[1.09rem] font-medium cursor-pointer hover:bg-[rgb(233,235,239)]">
+    <div className="shrink-0 flex justify-center items-center border border-[rgba(0,0,0,0.1)] rounded-[0.42rem] p-[0.36rem_0.4rem_0.27rem_0.61rem] bg-white text-[#0a0a0a] text-[0.76rem]/[1.09rem] font-medium cursor-pointer hover:bg-[rgb(233,235,239)]">
       <div className="flex items-center gap-[0.44rem]">
         <img src={feedbackIcon} alt="" />
         의견 제안

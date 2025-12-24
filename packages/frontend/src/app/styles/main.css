@@ -12,6 +12,12 @@
   --breakpoint-desktop: 960px;
   --breakpoint-large-desktop: 1280px;
   --radius-main: 0.55rem;
+  --radius-button: 0.42rem;
+}
+
+@utility bookmark-position {
+  top: 0.66rem;
+  right: 0.66rem;
 }
 
 /* Pretendard */

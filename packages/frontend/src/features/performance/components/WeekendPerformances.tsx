@@ -1,6 +1,6 @@
 import HomeWidgetHeader from "@/shared/layout/HomeWidgetHeader";
 import calendarIcon from "@shared/assets/icons/calendar-red.svg";
-import HomePerformanceAlbumItem from "@/features/performance/components/AlbumItem";
+import HomePerformanceAlbumItem from "@/features/performance/components/HomeAlbumItem";
 import ListItem from "./ListItem";
 import type { HomePerformance } from "@classic-hub/shared/types/performance";
 import rightArrow from "@shared/assets/icons/right-arrow-black.svg";

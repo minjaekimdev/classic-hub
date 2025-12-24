@@ -16,7 +16,7 @@ const MobileCard: React.FC<CardProps> = ({ imgSrc }) => {
         src={imgSrc}
         alt=""
       />
-      <Bookmark style={{ top: "0.66rem", right: "0.66rem" }} />
+      <Bookmark className="bookmark-position" />
     </div>
   );
 };

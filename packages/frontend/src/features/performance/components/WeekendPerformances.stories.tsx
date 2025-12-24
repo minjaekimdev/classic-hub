@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import HomePerformanceRanking from "./HomePerformanceRanking";
+import WeekendPerformances from "./WeekendPerformances";
 
 const meta = {
-  title: "features/performance/HomePerformanceRanking",
-  component: HomePerformanceRanking,
+  title: "features/performance/WeekendPerformances",
+  component: WeekendPerformances,
   tags: ["autodocs"],
   args: {
     performanceArray: [
@@ -104,7 +104,7 @@ const meta = {
       },
     ],
   },
-} satisfies Meta<typeof HomePerformanceRanking>;
+} satisfies Meta<typeof WeekendPerformances>;
 
 export default meta;
 

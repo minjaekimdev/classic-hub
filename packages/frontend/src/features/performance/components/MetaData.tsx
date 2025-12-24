@@ -36,7 +36,7 @@ const MetaData = ({
         </p>
         <p className="text-[#4a5565] text-[0.77rem]/[1.09rem]">{artist}</p>
       </div>
-      <div className="flex h-[2.66rem] overflow-hidden">
+      <div className="flex h-[1.22rem] overflow-hidden">
         <div className="flex flex-wrap gap-[0.22rem]">
           {composerArray.map((item: string) => (
             <ComposerTab composer={item} />

@@ -1,11 +1,11 @@
-import type { Region } from "./FilterTest";
+import type { Region } from "./FilterMobile";
 import { ChevronDown, ChevronUp, Check } from "lucide-react";
 
 interface LocationHallProps {
   regionArray: Region[];
   expandedRegion: string | null;
   selectedVenues: string[];
-  onToggleRegion: (regionId: string) => void; 
+  onToggleRegion: (regionId: string) => void;
   onToggleVenue: (venueId: string) => void;
 }
 
