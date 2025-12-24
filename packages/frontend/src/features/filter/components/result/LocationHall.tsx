@@ -1,5 +1,8 @@
+import CategoryHeader from "./CategoryHeader";
+import CategoryLayout from "./CategoryLayout";
 import type { Region } from "./FilterMobile";
 import { ChevronDown, ChevronUp, Check } from "lucide-react";
+import locationIcon from "@shared/assets/icons/location-black.svg";
 
 interface LocationHallProps {
   regionArray: Region[];
@@ -17,10 +20,8 @@ const LocationHall = ({
   onToggleVenue,
 }: LocationHallProps) => {
   return (
-    <section>
-      <h3 className="text-sm font-semibold text-gray-800 mb-3">
-        지역 · 공연장
-      </h3>
+    <CategoryLayout>
+      <CategoryHeader iconSrc={locationIcon} text="지역 · 공연장" />
       <div className="border border-gray-200 rounded-xl divide-y divide-gray-100 overflow-hidden">
         {regionArray.map((region) => {
           const isExpanded = expandedRegion === region.id;
@@ -112,7 +113,7 @@ const LocationHall = ({
           );
         })}
       </div>
-    </section>
+    </CategoryLayout>
   );
 };
 

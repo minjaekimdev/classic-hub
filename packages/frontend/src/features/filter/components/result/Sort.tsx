@@ -1,3 +1,6 @@
+import CategoryHeader from "./CategoryHeader";
+import CategoryLayout from "./CategoryLayout";
+
 const SORT_OPTIONS = [
   { id: "imminent", label: "공연임박순" },
   { id: "price_asc", label: "낮은가격순" },
@@ -11,8 +14,8 @@ interface SortProps {
 }
 const Sort = ({ selectedSort, handleSortChange }: SortProps) => {
   return (
-    <section>
-      <h3 className="text-sm font-semibold text-gray-800 mb-3">정렬</h3>
+    <CategoryLayout>
+      <CategoryHeader text="정렬" />
       <div className="flex flex-wrap gap-2">
         {SORT_OPTIONS.map((option) => (
           <button
@@ -29,7 +32,7 @@ const Sort = ({ selectedSort, handleSortChange }: SortProps) => {
           </button>
         ))}
       </div>
-    </section>
+    </CategoryLayout>
   );
 };
 
