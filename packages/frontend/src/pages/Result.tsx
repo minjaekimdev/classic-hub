@@ -1,0 +1,185 @@
+import MainLayout from "@/shared/layout/MainLayout";
+import filterIcon from "@shared/assets/icons/filter-dark.svg";
+import closeIcon from "@shared/assets/icons/close-white.svg";
+import { useState } from "react";
+import useResultFilter from "@/features/filter/hooks/useResultFilter";
+import ResultFilterDesktop from "@/features/filter/components/result/ResultFilterDesktop";
+import type { PerformanceSummary } from "@root-shared/types/performance";
+import ResultAlbumItem from "@/features/performance/components/ResultAlbumItem";
+import useWindowSize from "@/shared/hooks/useWindowSize";
+import ListItem from "@/features/performance/components/ListItem";
+import ResultFilterMobile from "@/features/filter/components/result/ResultFilterMobile";
+
+interface ResultSummaryProps {
+  count: number;
+  isOpen: boolean;
+}
+const ResultSummary = ({ count, isOpen }: ResultSummaryProps) => {
+  const buttonStyle =
+    "flex justify-center items-center gap-[0.44rem] rounded-button w-[5.26rem] h-[1.75rem] text-[0.77rem]/[1.09rem]";
+  return (
+    <div className="flex justify-between items-center h-[3.56rem] px-[0.88rem]">
+      <span className="text-dark text-[0.88rem]/[1.31rem] font-semibold">
+        {count}개의 클래식 공연
+      </span>
+      {isOpen ? (
+        <button className={`${buttonStyle} bg-main text-white`}>
+          <img src={closeIcon} alt="닫기 아이콘" />
+          필터 닫기
+        </button>
+      ) : (
+        <button className={`${buttonStyle} bg-white text-dark`}>
+          <img src={filterIcon} alt="필터 아이콘" />
+          필터 보기
+        </button>
+      )}
+    </div>
+  );
+};
+
+// 헤더의 Search Filter로 1차 검색된 결과물
+const MOCKUP_DATA: PerformanceSummary[] = [
+  {
+    id: "PF281871",
+    title: "이민성 피아노 리사이틀: DRAMA",
+    artist: "이민성", // 제목에서 유추
+    posterUrl:
+      "http://www.kopis.or.kr/upload/pfmPoster/PF_PF281871_251219_111529.gif",
+    date: {
+      start: "2025.12.21",
+      end: "2025.12.21",
+    },
+    venue: "금호아트홀 연세",
+    time: "오후 8시 00분", // 임의 생성
+    composerArray: ["쇼팽", "리스트", "라흐마니노프"], // 임의 생성
+    price: {
+      min: 30000, // 임의 생성
+      max: 50000,
+    },
+  },
+  {
+    id: "PF281717",
+    title: "장애인과 함께하는 음악회: 아름다운 동행 [성남]",
+    artist: "아름다운 동행 앙상블", // 임의 생성
+    posterUrl:
+      "http://www.kopis.or.kr/upload/pfmPoster/PF_PF281717_251217_104137.jpg",
+    date: {
+      start: "2025.12.21",
+      end: "2025.12.21",
+    },
+    venue: "성남아트센터",
+    time: "오후 5시 00분", // 임의 생성
+    composerArray: ["엘가", "비발디", "파헬벨"], // 임의 생성
+    price: {
+      min: 0, // 무료 공연 추정
+      max: 0,
+    },
+  },
+  {
+    id: "PF281644",
+    title: "제7회 GTG 청소년오케스트라 정기연주회",
+    artist: "GTG 청소년오케스트라", // 제목에서 유추
+    posterUrl:
+      "http://www.kopis.or.kr/upload/pfmPoster/PF_PF281644_251216_105921.png",
+    date: {
+      start: "2025.12.21",
+      end: "2025.12.21",
+    },
+    venue: "고양아람누리",
+    time: "오후 4시 00분", // 임의 생성
+    composerArray: ["드보르작", "베토벤"], // 임의 생성
+    price: {
+      min: 10000, // 청소년 연주회 통상 가격 추정
+      max: 10000,
+    },
+  },
+  {
+    id: "PF281617",
+    title: "임동혁의 크리스마스 음악선물 [화성]",
+    artist: "임동혁", // 제목에서 유추
+    posterUrl:
+      "http://www.kopis.or.kr/upload/pfmPoster/PF_PF281617_251215_150928.gif",
+    date: {
+      start: "2025.12.21",
+      end: "2025.12.21",
+    },
+    venue: "남양성모성지",
+    time: "오후 7시 30분", // 임의 생성
+    composerArray: ["슈베르트", "바흐", "크리스마스 캐롤"], // 임의 생성
+    price: {
+      min: 50000, // 임의 생성
+      max: 50000,
+    },
+  },
+  {
+    id: "PF281557",
+    title: "오잉클! (12월)",
+    artist: "오감 앙상블", // 임의 생성
+    posterUrl:
+      "http://www.kopis.or.kr/upload/pfmPoster/PF_PF281557_251215_124338.jpg",
+    date: {
+      start: "2025.12.21",
+      end: "2025.12.21",
+    },
+    venue: "오감클래식",
+    time: "오전 11시 00분", // 마티네 공연 추정
+    composerArray: ["생상스", "차이코프스키"], // 임의 생성
+    price: {
+      min: 20000, // 소규모 공연장 통상 가격 추정
+      max: 30000,
+    },
+    // rank는 선택적(optional) 속성이므로 일부러 제외한 케이스 예시
+  },
+];
+
+const Result = () => {
+  const [isFilterOpen, setIsFilterOpen] = useState(true);
+  const filter = useResultFilter();
+
+  const windowSize = useWindowSize();
+  let galleryStyle;
+  // 뷰포트 너비와 필터 열림 여부를 확인하여 그리드 열 개수 설정
+  if (960 <= windowSize && windowSize < 1280) {
+    galleryStyle = isFilterOpen ? "grid-cols-2" : "grid-cols-3";
+  } else {
+    galleryStyle = "grid-cols-4";
+  }
+
+  const handleClose = () => {
+    setIsFilterOpen(false);
+  };
+
+  return (
+    <MainLayout>
+      <ResultSummary count={24} isOpen={isFilterOpen} />
+      <div className="block desktop:hidden">
+        <ResultFilterMobile
+          isOpen={isFilterOpen}
+          onClose={handleClose}
+          filter={filter}
+          totalResultCount={MOCKUP_DATA.length}
+        />
+      </div>
+      <div className="fixed z-20 top-0 right-0 hidden desktop:block bg-white h-full">
+        <ResultFilterDesktop 
+          isOpen={isFilterOpen}
+          filter={filter}
+        />
+      </div>
+      <div
+        className={`hidden desktop:grid large-desktop:grid-cols-4 gap-[1.31rem] p-[0.88rem] ${galleryStyle}`}
+      >
+        {MOCKUP_DATA.map((item) => (
+          <ResultAlbumItem data={item} />
+        ))}
+      </div>
+      <div className="flex desktop:hidden flex-col gap-[0.88rem] w-full">
+        {MOCKUP_DATA.map((performance) => (
+          <ListItem key={performance.title} data={performance} />
+        ))}
+      </div>
+    </MainLayout>
+  );
+};
+
+export default Result;

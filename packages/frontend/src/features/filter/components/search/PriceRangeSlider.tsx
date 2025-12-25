@@ -1,19 +1,18 @@
 import { Slider } from "@shared/ui/shadcn/slider";
-import type { SetStateAction } from "react";
 import type { filterCategoryObjType } from "@/shared/model/filter";
 
 interface PriceRangeSliderProps {
   filterValue: filterCategoryObjType;
-  onSelect: React.Dispatch<SetStateAction<filterCategoryObjType>>;
+  onChange: (value: filterCategoryObjType) => void;
 }
 
 const $MAX_PRICE = 30;
-const PriceRangeSlider = ({ filterValue, onSelect }: PriceRangeSliderProps) => {
+const PriceRangeSlider = ({ filterValue, onChange }: PriceRangeSliderProps) => {
   const setPriceRange = (range: number[]) => {
     const startPrice = `${range[0]}만`;
     const endPrice = range[1] >= 30 ? `${range[1]}만+` : `${range[1]}만`;
 
-    onSelect({...filterValue, price: `${startPrice} - ${endPrice}`});
+    onChange({...filterValue, price: `${startPrice} - ${endPrice}`});
   };
   return (
     <div className="w-full" onClick={(e) => e.stopPropagation()}>

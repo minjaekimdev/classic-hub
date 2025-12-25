@@ -1,6 +1,6 @@
 import CategoryHeader from "./CategoryHeader";
 import CategoryLayout from "./CategoryLayout";
-import type { Region } from "./FilterMobile";
+import type { Region } from "./ResultFilterMobile";
 import { ChevronDown, ChevronUp, Check } from "lucide-react";
 import locationIcon from "@shared/assets/icons/location-black.svg";
 

@@ -1,13 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import AlbumItem from './AlbumItem';
+import Result from './Result';
 
 const meta = {
-  title: 'features/components/AlbumItem',
-  component: AlbumItem,
+  title: 'pages/Result',
+  component: Result,
   tags: ['autodocs'],
   args: { 
   },
-} satisfies Meta<typeof AlbumItem>;
+} satisfies Meta<typeof Result>;
 
 export default meta;
 

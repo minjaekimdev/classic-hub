@@ -1,25 +1,24 @@
-import React, { type SetStateAction } from "react";
 import type { filterCategoryObjType } from "@/shared/model/filter";
 
 interface LocationComponentProps {
   main: string;
   sub: string;
   selected: filterCategoryObjType;
-  onSelect: React.Dispatch<SetStateAction<filterCategoryObjType>>;
+  onChange: (value: filterCategoryObjType) => void;
 }
 
 const LocationComponent = ({
   main,
   sub,
   selected,
-  onSelect,
+  onChange,
 }: LocationComponentProps) => {
   const style = main === selected.location ? "border-main bg-[#fef2f2]" : "";
   return (
     <div
-      className={`flex flex-col border rounded-[0.55rem] p-[0.72rem] cursor-pointer ${style}`}
+      className={`flex flex-col border rounded-main p-[0.72rem] cursor-pointer ${style}`}
       onClick={() => {
-        onSelect({ ...selected, location: main });
+        onChange({ ...selected, location: main });
       }}
     >
       <span className="text-[#101828] text-[0.77rem]/[1.09rem] font-medium">
@@ -59,12 +58,12 @@ const locationArray = [
 
 interface LocationSelectMobileProps {
   filterValue: filterCategoryObjType;
-  setFilterValue: React.Dispatch<SetStateAction<filterCategoryObjType>>;
+  onChange: (value: filterCategoryObjType) => void;
 }
 
 const LocationSelectMobile = ({
   filterValue,
-  setFilterValue,
+  onChange,
 }: LocationSelectMobileProps) => {
   return (
     <div className="grid grid-cols-2 gap-[0.44rem]">
@@ -74,7 +73,7 @@ const LocationSelectMobile = ({
           main={item.main}
           sub={item.sub}
           selected={filterValue}
-          onSelect={setFilterValue}
+          onChange={onChange}
         />
       ))}
     </div>

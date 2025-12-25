@@ -20,7 +20,7 @@ const Header = ({ onClose }: HeaderProps) => {
   return (
     <div className="flex flex-col gap-[0.33rem] border-b border-b-[rgba(0,0,0,0.1)] px-[1.31rem] pt-[1.31rem] pb-[0.94rem]">
       <div className="flex justify-between items-center">
-        <h3 className="text-[#0a0a0a] text-[0.88rem]/[1.31rem] font-semibold">
+        <h3 className="text-dark text-[0.88rem]/[1.31rem] font-semibold">
           검색 필터
         </h3>
         <img
@@ -56,10 +56,10 @@ const filterFieldTitleArray = [
 ];
 
 interface FilterMobileProps {
-  onClose: React.Dispatch<SetStateAction<boolean>>;
+  onClickClose: () => void;
 }
 
-const FilterMobile = ({ onClose }: FilterMobileProps) => {
+const FilterMobile = ({ onClickClose }: FilterMobileProps) => {
   // 검색어는 별도의 상태로 관리
   const [searchText, setSearchText] = useState("");
   const [filterValue, setFilterValue] = useState<filterCategoryObjType>({
@@ -70,26 +70,30 @@ const FilterMobile = ({ onClose }: FilterMobileProps) => {
   // 현재 어떤 카테고리가 선택되었는지
   const [selectedField, setSelectedField] = useState<string | null>(null);
 
+  const filterValueChange = (value: filterCategoryObjType) => {
+    setFilterValue(value);
+  }
+
   const showFieldContent = () => {
     if (selectedField === "지역") {
       return (
         <LocationSelectMobile
           filterValue={filterValue}
-          setFilterValue={setFilterValue}
+          onChange={filterValueChange}
         />
       );
     } else if (selectedField === "날짜") {
       return (
-        <div className="border rounded-[0.55rem] border-[rgba(0,0,0,0.1)] p-[0.72rem]">
-          <Calendar05 filterValue={filterValue} onSelect={setFilterValue} />
+        <div className="border rounded-main border-[rgba(0,0,0,0.1)] p-[0.72rem]">
+          <Calendar05 filterValue={filterValue} onChange={filterValueChange} />
         </div>
       );
     } else if (selectedField === "가격대") {
       return (
-        <div className="bg-[#F9FAFB] rounded-[0.55rem]">
+        <div className="bg-[#F9FAFB] rounded-main">
           <PriceRangeSlider
             filterValue={filterValue}
-            onSelect={setFilterValue}
+            onChange={filterValueChange}
           />
         </div>
       );
@@ -99,7 +103,7 @@ const FilterMobile = ({ onClose }: FilterMobileProps) => {
   return (
     <div className="fixed bottom-0 z-99 left-0 flex flex-col rounded-tl-[1.31rem] rounded-tr-[1.31rem] bg-white w-screen h-[90vh]">
       <div className="flex-none">
-        <Header onClose={onClose} />
+        <Header onClose={onClickClose} />
         <div className="border-b border-b-[rgba(0,0,0,0.1)] px-[1.31rem] py-[0.88rem]">
           <FilterSearchInputMobile
             value={searchText}
@@ -132,10 +136,10 @@ const FilterMobile = ({ onClose }: FilterMobileProps) => {
 
       <div className="flex-none flex gap-[0.66rem] px-[1.31rem] py-[0.88rem]">
         <button
-          className="grow flex justify-center items-center rounded-[0.42rem] border border-[rgba(0,0,0,0.1)] h-[1.97rem] text-[#0a0a0a] text-[0.77rem]/[1.09rem]"
+          className="grow flex justify-center items-center button border border-[rgba(0,0,0,0.1)] h-[1.97rem] text-[#0a0a0a] text-[0.77rem]/[1.09rem]"
           onClick={() => {
             setSearchText("");
-            setFilterValue({
+            filterValueChange({
               location: "",
               date: "",
               price: "",
@@ -145,7 +149,7 @@ const FilterMobile = ({ onClose }: FilterMobileProps) => {
         >
           전체 삭제
         </button>
-        <button className="grow flex justify-center items-center gap-[0.88rem] rounded-[0.42rem] bg-main h-[1.97rem] text-white text-[0.77rem]/[1.09rem]">
+        <button className="grow flex justify-center items-center gap-[0.88rem] rounded-button bg-main h-[1.97rem] text-white text-[0.77rem]/[1.09rem]">
           <img src={searchWhite} alt="" className="" />
           검색
         </button>

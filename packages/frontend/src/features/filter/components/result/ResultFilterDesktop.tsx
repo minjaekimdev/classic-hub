@@ -4,7 +4,7 @@ import CategoryHeader from "./CategoryHeader";
 import Sort from "./Sort";
 import type useResultFilter from "../../hooks/useResultFilter";
 import LocationHall from "./LocationHall";
-import type { Region } from "./FilterMobile";
+import type { Region } from "./ResultFilterMobile";
 
 interface ResultCountProps {
   count: number;
@@ -61,7 +61,7 @@ const ResultFilterDesktop = ({ isOpen, filter }: ResultFilterDesktopProps) => {
   return (
     <>
       {isOpen && (
-        <div className="flex flex-col gap-[1.31rem]">
+        <div className="flex flex-col gap-[1.31rem] p-[1.31rem] w-70">
           <div className="flex justify-between">
             <CategoryHeader iconSrc={filterIcon} text="필터" />
             <button className="flex items-center h-7 px-[0.66rem] text-dark text-[0.77rem]/[1.09rem]">

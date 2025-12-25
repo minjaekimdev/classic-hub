@@ -1,10 +1,9 @@
 import searchIcon from "@shared/assets/icons/search-gray.svg";
-import type { SetStateAction } from "react";
 import type { filterCategoryObjType } from "@/shared/model/filter";
 
 interface SearchInputMobileProps {
   filterValue: filterCategoryObjType;
-  onChange: React.Dispatch<SetStateAction<filterCategoryObjType>>;
+  onChange: (value: filterCategoryObjType) => void;
 }
 
 const SearchInputMobile = ({

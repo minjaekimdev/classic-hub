@@ -1,4 +1,3 @@
-import { type SetStateAction } from "react";
 import locationIcon from "@shared/assets/icons/location-gray.svg";
 import calendarIcon from "@shared/assets/icons/calendar-gray.svg";
 import moneyIcon from "@shared/assets/icons/dollar-gray.svg";
@@ -33,18 +32,18 @@ const locationArray = [
 
 interface FilterDesktopProps {
   filterValue: filterCategoryObjType;
-  setFilterValue: React.Dispatch<SetStateAction<filterCategoryObjType>>;
+  onChange: (value: filterCategoryObjType) => void;
 }
 
-const FilterDesktop = ({ filterValue, setFilterValue }: FilterDesktopProps) => {
+const FilterDesktop = ({ filterValue, onChange }: FilterDesktopProps) => {
   return (
     <div className="grid grid-flow-col gap-[0.66rem] auto-cols-[2fr_1fr_1fr_1fr_auto] rounded-[0.875rem] border border-gray-200 bg-white shadow-xl p-[0.94rem] w-4xl">
-      <SearchField filterValue={filterValue} onChange={setFilterValue} />
+      <SearchField filterValue={filterValue} onChange={onChange} />
       <FilterFieldDesktop icon={locationIcon} label={filterValue.location}>
         {locationArray.map((item) => (
           <DropdownMenuItem
             className="text-xs cursor-pointer"
-            onSelect={() => setFilterValue({ ...filterValue, location: item })}
+            onSelect={() => onChange({ ...filterValue, location: item })}
           >
             {item}
           </DropdownMenuItem>
@@ -54,18 +53,18 @@ const FilterDesktop = ({ filterValue, setFilterValue }: FilterDesktopProps) => {
         <DropdownMenuItem className="focus:bg-transparent w-75">
           <PriceRangeSlider
             filterValue={filterValue}
-            onSelect={setFilterValue}
+            onChange={onChange}
           />
         </DropdownMenuItem>
       </FilterFieldDesktop>
       <FilterFieldDesktop icon={calendarIcon} label={filterValue.date}>
-        <Calendar05 filterValue={filterValue} onSelect={setFilterValue} />
+        <Calendar05 filterValue={filterValue} onChange={onChange} />
       </FilterFieldDesktop>
       <div className="flex gap-3">
         <button
-          className="p-[0.69rem_0.56rem] border border-gray-200 rounded-[0.55rem] bg-white text-[0.77rem] transition-transform duration-200 hover:scale-105"
+          className="p-[0.69rem_0.56rem] border border-gray-200 rounded-main bg-white text-[0.77rem] transition-transform duration-200 hover:scale-105"
           onClick={() => {
-            setFilterValue({
+            onChange({
               searchText: "",
               location: "지역",
               price: "가격",
@@ -75,7 +74,7 @@ const FilterDesktop = ({ filterValue, setFilterValue }: FilterDesktopProps) => {
         >
           <div className="flex items-center gap-[0.44rem] w-fit">초기화</div>
         </button>
-        <button className="p-[0.69rem_0.56rem] rounded-[0.55rem] bg-main text-white text-[0.77rem] transition-transform duration-200 hover:scale-105">
+        <button className="p-[0.69rem_0.56rem] rounded-main bg-main text-white text-[0.77rem] transition-transform duration-200 hover:scale-105">
           <div className="flex items-center gap-[0.44rem] w-fit">
             <img className="" src={searchIcon} alt="" />
             검색
