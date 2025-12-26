@@ -61,10 +61,13 @@ const ResultFilterDesktop = ({ isOpen, filter }: ResultFilterDesktopProps) => {
   return (
     <>
       {isOpen && (
-        <div className="flex flex-col gap-[1.31rem] p-[1.31rem] w-70">
+        <div className="flex flex-col gap-[1.31rem] border-l border-[rgba(0,0,0,0.1)] bg-white p-[1.31rem] w-70 h-full overflow-y-auto">
           <div className="flex justify-between">
             <CategoryHeader iconSrc={filterIcon} text="필터" />
-            <button className="flex items-center h-7 px-[0.66rem] text-dark text-[0.77rem]/[1.09rem]">
+            <button
+              className="flex items-center h-7 px-[0.66rem] text-dark text-[0.77rem]/[1.09rem]"
+              onClick={() => filter.actions.handleReset()}
+            >
               초기화
             </button>
           </div>

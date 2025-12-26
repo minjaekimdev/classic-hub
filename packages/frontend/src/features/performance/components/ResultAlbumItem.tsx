@@ -9,7 +9,7 @@ interface ResultAlbumItemProps {
 
 const ResultAlbumItem = ({ data }: ResultAlbumItemProps) => {
   return (
-    <div className="flex flex-col gap-[0.66rem]">
+    <div className="flex flex-col gap-[0.66rem] cursor-pointer">
       <div className="relative rounded-main border border-[rgba(0,0,0,0.1)] overflow-hidden aspect-10/14">
         <img className="w-full h-full" src={data.posterUrl} alt="공연 포스터" />
         <BookmarkButton className="bookmark-position" />

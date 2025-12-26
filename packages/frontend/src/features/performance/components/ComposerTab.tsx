@@ -4,7 +4,7 @@ interface ComposerTab {
 
 const ComposerTab = ({ composer }: ComposerTab) => {
   return (
-    <div className="flex justify-center items-center rounded-button border border-[#d1d5dc] bg-[#f9fafb] px-[0.44rem] h-[1.22rem] text-[#364153] text-[0.66rem]/[0.88rem]">
+    <div className="flex justify-center items-center rounded-button bg-[#eceef2] px-[0.44rem] py-[0.11rem] text-[#030213] text-[0.66rem]/[0.88rem] font-medium">
       {composer}
     </div>
   );

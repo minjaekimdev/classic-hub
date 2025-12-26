@@ -9,12 +9,14 @@ import ResultAlbumItem from "@/features/performance/components/ResultAlbumItem";
 import useWindowSize from "@/shared/hooks/useWindowSize";
 import ListItem from "@/features/performance/components/ListItem";
 import ResultFilterMobile from "@/features/filter/components/result/ResultFilterMobile";
+import useBodyScrollLock from "@/shared/hooks/useBodyScrollLock";
 
 interface ResultSummaryProps {
   count: number;
   isOpen: boolean;
+  onClick: () => void;
 }
-const ResultSummary = ({ count, isOpen }: ResultSummaryProps) => {
+const ResultSummary = ({ count, isOpen, onClick }: ResultSummaryProps) => {
   const buttonStyle =
     "flex justify-center items-center gap-[0.44rem] rounded-button w-[5.26rem] h-[1.75rem] text-[0.77rem]/[1.09rem]";
   return (
@@ -23,16 +25,78 @@ const ResultSummary = ({ count, isOpen }: ResultSummaryProps) => {
         {count}개의 클래식 공연
       </span>
       {isOpen ? (
-        <button className={`${buttonStyle} bg-main text-white`}>
+        <button
+          className={`${buttonStyle} bg-main text-white`}
+          onClick={() => onClick()}
+        >
           <img src={closeIcon} alt="닫기 아이콘" />
           필터 닫기
         </button>
       ) : (
-        <button className={`${buttonStyle} bg-white text-dark`}>
+        <button
+          className={`${buttonStyle} bg-white text-dark`}
+          onClick={() => onClick()}
+        >
           <img src={filterIcon} alt="필터 아이콘" />
           필터 보기
         </button>
       )}
+    </div>
+  );
+};
+
+interface ResultMobileProps {
+  filter: ReturnType<typeof useResultFilter>;
+  isFilterOpen: boolean;
+  onClickClose: () => void;
+}
+
+const ResultMobile = ({
+  filter,
+  isFilterOpen,
+  onClickClose,
+}: ResultMobileProps) => {
+  return (
+    <div className="">
+      <ResultFilterMobile
+        isOpen={isFilterOpen}
+        onClose={onClickClose}
+        filter={filter}
+        totalResultCount={MOCKUP_DATA.length}
+      />
+      <div className="flex flex-col gap-[0.88rem] w-full">
+        {MOCKUP_DATA.map((performance) => (
+          <ListItem key={performance.title} data={performance} />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+interface ResultDesktopProps {
+  filter: ReturnType<typeof useResultFilter>;
+  isOpen: boolean;
+}
+const ResultDesktop = ({ filter, isOpen }: ResultDesktopProps) => {
+  const windowSize = useWindowSize();
+  let galleryStyle;
+  // 뷰포트 너비와 필터 열림 여부를 확인하여 그리드 열 개수 설정
+  if (960 <= windowSize && windowSize < 1280) {
+    galleryStyle = isOpen ? "grid-cols-2" : "grid-cols-3";
+  } else {
+    galleryStyle = "grid-cols-4";
+  }
+
+  return (
+    <div className="flex overflow-hidden h-full">
+      <div
+        className={`flex-1 grid large-desktop:grid-cols-4 gap-[1.31rem] p-[0.88rem] overflow-y-auto ${galleryStyle}`}
+      >
+        {MOCKUP_DATA.map((item) => (
+          <ResultAlbumItem data={item} />
+        ))}
+      </div>
+      <ResultFilterDesktop isOpen={isOpen} filter={filter} />
     </div>
   );
 };
@@ -133,50 +197,37 @@ const MOCKUP_DATA: PerformanceSummary[] = [
 ];
 
 const Result = () => {
+  useBodyScrollLock();
   const [isFilterOpen, setIsFilterOpen] = useState(true);
+  const [isFilterOpen2, setIsFilterOpen2] = useState(true);
   const filter = useResultFilter();
 
-  const windowSize = useWindowSize();
-  let galleryStyle;
-  // 뷰포트 너비와 필터 열림 여부를 확인하여 그리드 열 개수 설정
-  if (960 <= windowSize && windowSize < 1280) {
-    galleryStyle = isFilterOpen ? "grid-cols-2" : "grid-cols-3";
-  } else {
-    galleryStyle = "grid-cols-4";
-  }
-
-  const handleClose = () => {
+  const closeFilter = () => {
     setIsFilterOpen(false);
+  };
+
+  const toggleDesktopFilter = () => {
+    setIsFilterOpen2((prev) => !prev);
   };
 
   return (
     <MainLayout>
-      <ResultSummary count={24} isOpen={isFilterOpen} />
-      <div className="block desktop:hidden">
-        <ResultFilterMobile
-          isOpen={isFilterOpen}
-          onClose={handleClose}
-          filter={filter}
-          totalResultCount={MOCKUP_DATA.length}
+      <div className="flex-col h-100">
+        <ResultSummary
+          count={24}
+          isOpen={isFilterOpen2}
+          onClick={toggleDesktopFilter}
         />
-      </div>
-      <div className="fixed z-20 top-0 right-0 hidden desktop:block bg-white h-full">
-        <ResultFilterDesktop 
-          isOpen={isFilterOpen}
-          filter={filter}
-        />
-      </div>
-      <div
-        className={`hidden desktop:grid large-desktop:grid-cols-4 gap-[1.31rem] p-[0.88rem] ${galleryStyle}`}
-      >
-        {MOCKUP_DATA.map((item) => (
-          <ResultAlbumItem data={item} />
-        ))}
-      </div>
-      <div className="flex desktop:hidden flex-col gap-[0.88rem] w-full">
-        {MOCKUP_DATA.map((performance) => (
-          <ListItem key={performance.title} data={performance} />
-        ))}
+        <div className="block desktop:hidden">
+          <ResultMobile
+            filter={filter}
+            isFilterOpen={isFilterOpen}
+            onClickClose={closeFilter}
+          />
+        </div>
+        <div className="hidden desktop:block h-full">
+          <ResultDesktop filter={filter} isOpen={isFilterOpen2} />
+        </div>
       </div>
     </MainLayout>
   );
