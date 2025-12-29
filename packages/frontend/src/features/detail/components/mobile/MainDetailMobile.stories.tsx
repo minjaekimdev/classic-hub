@@ -1,13 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import Summary from './Summary';
+import MainDetailMobile from './MainDetailMobile';
 
 const meta = {
-  title: 'Features/Module/Summary',
-  component: Summary,
+  title: 'features/detail/mobile/MainDetailMobile',
+  component: MainDetailMobile,
   tags: ['autodocs'],
   args: { 
   },
-} satisfies Meta<typeof Summary>;
+} satisfies Meta<typeof MainDetailMobile>;
 
 export default meta;
 

@@ -17,6 +17,13 @@ export interface PriceRange {
   max: number;
 }
 
+export interface ComposerPiece {
+  composer: string;
+  pieces: string[];
+}
+
+export type Program = ComposerPiece[];
+
 // 검색 결과 페이지 공연
 export interface PerformanceSummary extends Performance {
   composerArray: string[];
@@ -42,7 +49,11 @@ export interface SeatPriceInfo {
   price: number;
 }
 export interface DetailPerformance extends Performance {
+  venueId: string;
   time: string;
   runningTime: string;
+  age: string;
   priceInfo: SeatPriceInfo[];
+  programInfo: Program;
+  detailImages: string[];
 }

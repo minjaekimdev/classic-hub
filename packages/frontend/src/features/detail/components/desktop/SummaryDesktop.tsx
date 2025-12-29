@@ -1,13 +1,17 @@
 import React from 'react';
 
-const PriceInfo = () => {
-  
+const Program = () => {
+  return (
+    <div className="">
+
+    </div>
+  );
 }
 
-const Meta = () => {
+const Category = () => {
   return (
     <div className=""></div>
-  );
+  )
 }
 
 const Summary = () => {
