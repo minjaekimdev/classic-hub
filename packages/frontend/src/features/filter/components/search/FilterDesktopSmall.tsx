@@ -1,12 +1,15 @@
 import searchIcon from "@shared/assets/icons/search-white.svg";
-import type { filterCategoryObjType } from "@/shared/model/filter";
+import type { filterCategoryObjType } from "@/features/filter/model/filter";
 
 interface FilterDesktopSmallProps {
   filterValue: filterCategoryObjType;
   onFilterClick: () => void;
 }
 
-const FilterDesktopSmall = ({ filterValue, onFilterClick }: FilterDesktopSmallProps) => {
+const FilterDesktopSmall = ({
+  filterValue,
+  onFilterClick,
+}: FilterDesktopSmallProps) => {
   return (
     <div
       className="flex items-center gap-2 rounded-[0.875rem] border border-gray-200 my-auto bg-white p-2 px-2 min-w-80

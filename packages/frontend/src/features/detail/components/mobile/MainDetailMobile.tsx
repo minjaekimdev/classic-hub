@@ -2,8 +2,8 @@ import { useState } from "react";
 import ProgramInfo from "../shared/ProgramInfo";
 import DetailImages from "../shared/DetailImages";
 import { useDetail } from "../../model/useDetail";
-import PriceInfoMobile from "./PriceInfoMobile";
 import VenueInfo from "../shared/VenueInfo";
+import PriceInfo from "../shared/PriceInfo";
 
 interface TabProps {
   text: CategoryType;
@@ -59,7 +59,7 @@ const MainDetailMobile = () => {
 
   const detailObj: Record<CategoryType, React.ReactNode> = {
     공연상세: <Detail />,
-    가격정보: <PriceInfoMobile />,
+    가격정보: <PriceInfo />,
     장소정보: <VenueInfo />,
   };
 

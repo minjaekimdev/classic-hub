@@ -1,8 +1,5 @@
-import heartEmpty from "@shared/assets/icons/heart-black.svg";
-import heartFull from "@shared/assets/icons/heart-red.svg";
-import shareIcon from "@shared/assets/icons/share-black.svg";
-import { useState } from "react";
 import { useDetail } from "@features/detail/model/useDetail";
+import { BookmarkButton, ShareButton } from "../shared/ActionButton";
 
 interface InfoRowProps {
   label: string;
@@ -14,53 +11,6 @@ const InfoRow = ({ label, description }: InfoRowProps) => {
       <span className="text-[#4a5565] text-[0.77rem]/[1.09rem]">{label}</span>
       <span className="text-dark text-[0.77rem]/[1.09rem]">{description}</span>
     </li>
-  );
-};
-
-interface ButtonProps {
-  children: React.ReactNode;
-  handler: () => void;
-}
-const Button = ({ children, handler }: ButtonProps) => {
-  return (
-    <button
-      className="flex-1 flex justify-center items-center border border-[rgba(0,0,0,0.1)] rounded-main h-[2.31rem]"
-      onClick={() => handler()}
-    >
-      <div className="flex items-center gap-[0.44rem] text-dark text-[0.77rem]/[1.09rem]">
-        {children}
-      </div>
-    </button>
-  );
-};
-
-const BookmarkButton = () => {
-  const [isBookmarked, setIsBookmarked] = useState(false);
-
-  const bookmarkToggle = () => {
-    setIsBookmarked((prev) => !prev);
-  };
-
-  return (
-    <Button handler={bookmarkToggle}>
-      {isBookmarked ? (
-        <img src={heartEmpty} alt="찜하기" className="w-3.5 h-3.5" />
-      ) : (
-        <img src={heartFull} alt="찜하기 취소" className="w-3.5 h-3.5" />
-      )}
-      찜하기
-    </Button>
-  );
-};
-
-const ShareButton = () => {
-  const handler = () => {};
-
-  return (
-    <Button handler={handler}>
-      <img src={shareIcon} alt="공유하기" className="w-3.5 h-3.5" />
-      공유하기
-    </Button>
   );
 };
 

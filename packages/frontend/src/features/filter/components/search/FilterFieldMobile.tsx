@@ -1,5 +1,5 @@
 import { type SetStateAction } from "react";
-import type { filterCategoryObjType } from "@/shared/model/filter";
+import type { filterCategoryObjType } from "@/features/filter/model/filter";
 
 interface FilterFieldProps {
   iconSrc: string;

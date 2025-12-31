@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import type { filterCategoryObjType } from "../model/filter";
+import type { filterCategoryObjType } from "../../features/filter/model/filter";
 import useClickOutside from "./useClickOutside";
 
 const useHeader = () => {

@@ -1,19 +1,15 @@
 import { Slider } from "@shared/ui/shadcn/slider";
-import type { filterCategoryObjType } from "@/features/filter/model/filter";
-
-interface PriceRangeSliderProps {
-  filterValue: filterCategoryObjType;
-  onChange: (value: filterCategoryObjType) => void;
-}
+import { useFilter } from "@/features/filter/hooks/useSearchFilter";
 
 const $MAX_PRICE = 30;
-const PriceRangeSlider = ({ filterValue, onChange }: PriceRangeSliderProps) => {
-  
+const PriceRangeSlider = () => {
+  const {filterValue, changeValue} = useFilter();
+
   const setPriceRange = (range: number[]) => {
     const startPrice = `${range[0]}만`;
     const endPrice = range[1] >= 30 ? `${range[1]}만+` : `${range[1]}만`;
 
-    onChange({ ...filterValue, price: `${startPrice} - ${endPrice}` });
+    changeValue({ priceRange: `${startPrice} - ${endPrice}` });
   };
   return (
     <div className="w-full" onClick={(e) => e.stopPropagation()}>
@@ -21,7 +17,7 @@ const PriceRangeSlider = ({ filterValue, onChange }: PriceRangeSliderProps) => {
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-xs font-bold">가격 범위</h3>
           <span className="text-xs font-bold text-main">
-            {filterValue.price === "가격" ? "10 - 20만" : filterValue.price}
+            {filterValue.priceRange === "가격" ? "10 - 20만" : filterValue.priceRange}
           </span>
         </div>
         <Slider

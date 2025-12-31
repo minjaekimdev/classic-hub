@@ -8,13 +8,13 @@ import {
 
 interface FieldProps {
   icon: string;
-  label: string;
+  title: string;
   children: React.ReactNode;
 }
 
-const FilterFieldDesktop = ({ icon, label, children }: FieldProps) => {
+const FilterFieldDesktop = ({ icon, title, children }: FieldProps) => {
   const textStyle =
-    label === "지역" || label === "가격" || label === "날짜"
+    title === "지역" || title === "가격" || title === "날짜"
       ? "#867e7c"
       : "#000";
   return (
@@ -25,7 +25,7 @@ const FilterFieldDesktop = ({ icon, label, children }: FieldProps) => {
             <div className="flex items-center gap-[0.44rem]">
               <img className="w-3.5 h-3.5" src={icon} alt="" />
               <span className="text-[0.77rem]/[1.09rem]" style={{color: textStyle}}>
-                {label}
+                {title}
               </span>
             </div>
             <img className="w-3.5 h-3.5 mb-1" src={dropdownIcon} alt="" />

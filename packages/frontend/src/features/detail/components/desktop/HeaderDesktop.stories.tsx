@@ -1,13 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import SummaryDesktop from './SummaryDesktop';
+import HeaderDesktop from './HeaderDesktop';
 
 const meta = {
-  title: 'features/detail/Summary',
-  component: SummaryDesktop,
+  title: 'features/detail/desktop/HeaderDesktop',
+  component: HeaderDesktop,
   tags: ['autodocs'],
   args: { 
+    title: "조성진 피아노 리사이틀",
   },
-} satisfies Meta<typeof SummaryDesktop>;
+} satisfies Meta<typeof HeaderDesktop>;
 
 export default meta;
 

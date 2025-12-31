@@ -1,5 +1,5 @@
 import { useDetail } from "@features/detail/model/useDetail";
-import arrowIcon from "@shared/assets/icons/left-arrow-black.svg";
+import arrowIcon from "@shared/assets/icons/left-arrowhead-black.svg";
 
 const HeaderMobile = () => {
   const performance = useDetail();

@@ -8,14 +8,14 @@ import searchIcon from "@shared/assets/icons/search-gray.svg";
 import logoIcon from "@shared/assets/logos/classichub.svg";
 import FilterMobile from "@/features/filter/components/search/FilterMobile";
 import useHeader from "../hooks/useHeader";
-import type { filterCategoryObjType } from "../model/filter";
+import type { filterCategoryObjType } from "../../features/filter/model/filter";
 
 const MobileHeader = () => {
   const [isFilterActive, setIsFilterActive] = useState(false);
 
   const filterToggle = (isOpen: boolean) => {
     setIsFilterActive(isOpen);
-  }
+  };
 
   // 필터가 활성화된 상태라면 뷰포트의 스크롤을 해제
   useEffect(() => {
@@ -88,16 +88,16 @@ const DesktopHeader = ({ onExpandChange }: DesktopHeaderProps) => {
   // 축소된 필터(FilterDesktopSmall)에 클릭 시 확장을 위해 전달
   const filterOpen = () => {
     setIsFilterClicked(true);
-  }
+  };
 
   const filterValueChange = (value: filterCategoryObjType) => {
     setFilterValue(value);
-  }
+  };
 
   return (
     <div
       ref={headerRef}
-      className="fixed top-0 z-20 w-full bg-[linear-gradient(180deg,#FFF_39.9%,#F8F8F8_100%)] transition-height duration-200 ease-in-out"
+      className="fixed top-0 z-20 w-full bg-[linear-gradient(180deg,#FFF_39.9%,#F8F8F8_100%)]"
       onClick={(e) => e.stopPropagation()}
     >
       <div className="flex flex-col max-w-7xl m-[0_auto] px-7">
@@ -114,7 +114,9 @@ const DesktopHeader = ({ onExpandChange }: DesktopHeaderProps) => {
           ) : (
             <Menu />
           )}
-          <HeaderAuthButton />
+          <div className="mt-7">
+            <HeaderAuthButton />
+          </div>
         </div>
         {headerExpand && (
           <div className="flex justify-center pb-8">

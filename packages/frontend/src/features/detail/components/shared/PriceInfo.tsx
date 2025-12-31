@@ -18,10 +18,10 @@ const Item = ({ seat, price }: ItemProps) => {
   );
 };
 
-const PriceInfoMobile = () => {
+const PriceInfo = () => {
   const performance = useDetail();
   return (
-    <div className="flex flex-col gap-[0.44rem] p-[0.88rem]">
+    <div className="flex flex-col gap-[0.44rem] p-[0.88rem] desktop:p-0">
       {performance.priceInfo.map((item: SeatPriceInfo) => (
         <Item seat={item.seat} price={item.price} />
       ))}
@@ -29,4 +29,4 @@ const PriceInfoMobile = () => {
   );
 };
 
-export default PriceInfoMobile;
+export default PriceInfo;

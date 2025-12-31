@@ -4,6 +4,20 @@ import SummaryMobile from "@/features/detail/components/mobile/SummaryMobile";
 import MainDetailMobile from "@/features/detail/components/mobile/MainDetailMobile";
 import type { DetailPerformance } from "@classic-hub/shared/types/performance";
 import { DetailContext } from "@/features/detail/model/DetailContext";
+import SummaryDesktop from "@/features/detail/components/desktop/SummaryDesktop";
+import PriceInfoDesktop from "@/features/detail/components/desktop/PriceInfoDesktop";
+import DetailImages from "@/features/detail/components/shared/DetailImages";
+import VenueInfo from "@/features/detail/components/shared/VenueInfo";
+
+const MobileBookingButton = () => {
+  return (
+    <div className="sticky bottom-0 border-t border-[rgba(0,0,0,0.1)] bg-white px-[0.72rem] py-[0.88rem]">
+      <button className="flex justify-center items-center rounded-main bg-main w-full h-[2.63rem] text-white text-[0.77rem]/[1.09rem]">
+        예매하기
+      </button>
+    </div>
+  );
+};
 
 const Detail = () => {
   // 추후 api 호출
@@ -64,11 +78,26 @@ const Detail = () => {
 
   return (
     <DetailContext value={performance}>
-      <div className="flex flex-col">
+      <div className="flex desktop:hidden flex-col">
         <HeaderMobile />
         <PosterMobile />
         <SummaryMobile />
         <MainDetailMobile />
+        <MobileBookingButton />
+      </div>
+      <div className="hidden desktop:flex p-7">
+        <div className="flex-2 flex flex-col gap-[1.31rem]">
+          <SummaryDesktop />
+          <div className="rounded-main p-7 bg-white shadow-[0_1px_3px_0_rgba(0,0,0,0.1),0_1px_2px_-1px_rgba(0,0,0,0.1)]">
+            <DetailImages imgUrlArray={performance.detailImages} />
+          </div>
+          <div className="rounded-main p-7 bg-white shadow-[0_1px_3px_0_rgba(0,0,0,0.1),0_1px_2px_-1px_rgba(0,0,0,0.1)]">
+            <VenueInfo />
+          </div>
+        </div>
+        <div className="flex-1 pl-7">
+          <PriceInfoDesktop />
+        </div>
       </div>
     </DetailContext>
   );

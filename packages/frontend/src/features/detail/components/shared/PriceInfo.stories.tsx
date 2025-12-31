@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import PriceInfoMobile from "./PriceInfoMobile";
+import PriceInfoMobile from "./PriceInfo";
 
 const meta = {
   title: "features/detail/mobile/PriceInfoMobile",

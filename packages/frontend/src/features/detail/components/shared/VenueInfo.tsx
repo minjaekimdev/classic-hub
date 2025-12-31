@@ -65,7 +65,7 @@ const VenueInfo = () => {
   // 추후 api 호출
   const data = useVenueInfo(venueId);
   return (
-    <div className="flex flex-col gap-[0.88rem] px-[0.88rem] py-[1.09rem]">
+    <div className="flex flex-col gap-[0.88rem] px-[0.88rem] py-[1.09rem] desktop:p-0">
       <h3 className="text-dark text-[0.88rem]/[1.31rem] desktop:text-[1.31rem]/[1.75rem] font-semibold">
         공연장 정보
       </h3>
@@ -130,69 +130,6 @@ const VenueInfo = () => {
         </div>
       </div>
     </div>
-
-    // <DetailCategory title="공연장 정보">
-    //   <div className="flex flex-col gap-[1.31rem]">
-    //     <p className="text-[#717182] text-[0.88rem]/[1.31rem]">{venue}</p>
-    //     <div className="grid grid-cols-1 tablet:grid tablet:grid-cols-2 gap-[0.88rem]">
-    //       <Category iconSrc={locationIcon} title="주소">
-    //         <span className="text-[#4a5565] text-[0.88rem]/[1.31rem]">
-    //           {data ? data.address : "-"}
-    //         </span>
-    //       </Category>
-    //       <Category iconSrc={telIcon} title="전화번호">
-    //         <span className="text-[#4a5565] text-[0.88rem]/[1.31rem]">
-    //           {data ? data.tel : "-"}
-    //         </span>
-    //       </Category>
-    //       <Category iconSrc={telIcon} title="객석 수">
-    //         <span className="text-[#4a5565] text-[0.88rem]/[1.31rem]">
-    //           {data ? Number(data.seatscale).toLocaleString() : "-"}석
-    //         </span>
-    //       </Category>
-    //       <Category iconSrc={linkIcon} title="홈페이지">
-    //         <a
-    //           href=""
-    //           className="text-blue-600 text-[0.88rem]/[1.31rem] hover:underline"
-    //         >
-    //           {data ? data.link : "-"}
-    //         </a>
-    //       </Category>
-    //     </div>
-    //     <Category iconSrc={buildingIcon} title="편의시설">
-    //       <div className="flex flex-wrap gap-[0.44rem]">
-    //         {data
-    //           ? Object.entries(data.facilities)
-    //               .filter(([, value]) => value === true)
-    //               .map(([key]) => {
-    //                 if (key.includes("barrier")) {
-    //                   return (
-    //                     <Badge>
-    //                       <div className="flex items-center gap-[0.22rem]">
-    //                         <img
-    //                           src={disabledIcon}
-    //                           alt=""
-    //                           className="w-[0.66rem] h-[0.66rem]"
-    //                         />
-    //                         {FACILITY_LABELS[key as keyof Facility]}
-    //                       </div>
-    //                     </Badge>
-    //                   );
-    //                 }
-    //                 return (
-    //                   <Badge>{FACILITY_LABELS[key as keyof Facility]}</Badge>
-    //                 );
-    //               })
-    //           : "-"}
-    //       </div>
-    //     </Category>
-    //     {/* 공연장 지도 */}
-    //     <div className="flex flex-col gap-[0.44rem]">
-    //       <p className="text-dark text-[0.77rem]/[1.09rem]">위치</p>
-    //       <div className="rounded-main border border-[rgba(0,0,0,0.1)] h-56"></div>
-    //     </div>
-    //   </div>
-    // </DetailCategory>
   );
 };
 

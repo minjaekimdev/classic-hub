@@ -3,7 +3,7 @@ import calendarIcon from "@shared/assets/icons/calendar-red.svg";
 import HomePerformanceAlbumItem from "@/features/performance/components/HomeAlbumItem";
 import ListItem from "./ListItem";
 import type { PerformanceSummary } from "@classic-hub/shared/types/performance";
-import rightArrow from "@shared/assets/icons/right-arrow-black.svg";
+import rightArrow from "@shared/assets/icons/right-arrowhead-black.svg";
 
 interface WeekendPerformancesProps {
   performanceArray: PerformanceSummary[];

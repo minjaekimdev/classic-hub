@@ -5,7 +5,7 @@ import searchWhite from "@shared/assets/icons/search-white.svg";
 import closeIcon from "@shared/assets/icons/close-gray.svg";
 import FilterFieldMobile from "./FilterFieldMobile";
 import { useState, type SetStateAction } from "react";
-import type { filterCategoryObjType } from "@/shared/model/filter";
+import type { filterCategoryObjType } from "@/features/filter/model/filter";
 import LocationSelectMobile from "./LocationSelectMobile";
 import FilterSearchInputMobile from "./FilterSearchInputMobile";
 import FilterFieldContentMobile from "./FilterFieldContentMobile";
@@ -72,7 +72,7 @@ const FilterMobile = ({ onClickClose }: FilterMobileProps) => {
 
   const filterValueChange = (value: filterCategoryObjType) => {
     setFilterValue(value);
-  }
+  };
 
   const showFieldContent = () => {
     if (selectedField === "지역") {

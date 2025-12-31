@@ -7,7 +7,7 @@ import FilterFieldDesktop from "./FilterFieldDesktop";
 import { DropdownMenuItem } from "@shared/ui/shadcn/dropdown-menu";
 import PriceRangeSlider from "./PriceRangeSlider";
 import { Calendar05 } from "./Calendar";
-import type { filterCategoryObjType } from "@shared/model/filter";
+import type { filterCategoryObjType } from "@/features/filter/model/filter";
 
 const locationArray = [
   "전체",
@@ -39,7 +39,7 @@ const FilterDesktop = ({ filterValue, onChange }: FilterDesktopProps) => {
   return (
     <div className="grid grid-flow-col gap-[0.66rem] auto-cols-[2fr_1fr_1fr_1fr_auto] rounded-[0.875rem] border border-gray-200 bg-white shadow-xl p-[0.94rem] w-4xl">
       <SearchField filterValue={filterValue} onChange={onChange} />
-      <FilterFieldDesktop icon={locationIcon} label={filterValue.location}>
+      <FilterFieldDesktop icon={locationIcon} title={filterValue.location}>
         {locationArray.map((item) => (
           <DropdownMenuItem
             className="text-xs cursor-pointer"
@@ -49,15 +49,12 @@ const FilterDesktop = ({ filterValue, onChange }: FilterDesktopProps) => {
           </DropdownMenuItem>
         ))}
       </FilterFieldDesktop>
-      <FilterFieldDesktop icon={moneyIcon} label={filterValue.price}>
+      <FilterFieldDesktop icon={moneyIcon} title={filterValue.price}>
         <DropdownMenuItem className="focus:bg-transparent w-75">
-          <PriceRangeSlider
-            filterValue={filterValue}
-            onChange={onChange}
-          />
+          <PriceRangeSlider filterValue={filterValue} onChange={onChange} />
         </DropdownMenuItem>
       </FilterFieldDesktop>
-      <FilterFieldDesktop icon={calendarIcon} label={filterValue.date}>
+      <FilterFieldDesktop icon={calendarIcon} title={filterValue.date}>
         <Calendar05 filterValue={filterValue} onChange={onChange} />
       </FilterFieldDesktop>
       <div className="flex gap-3">
@@ -84,5 +81,7 @@ const FilterDesktop = ({ filterValue, onChange }: FilterDesktopProps) => {
     </div>
   );
 };
+
+
 
 export default FilterDesktop;
