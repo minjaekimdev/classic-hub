@@ -1,6 +1,8 @@
 import {
   useCallback,
+  useEffect,
   useImperativeHandle,
+  useRef,
   useState,
   type ReactNode,
   type Ref,
@@ -9,7 +11,7 @@ import {
   type FieldType,
   type FilterValue,
   FilterContext,
-  useFilter
+  useFilter,
 } from "../../../hooks/useSearchFilter";
 import searchIcon from "@shared/assets/icons/search-gray.svg";
 import bottomArrow from "@shared/assets/icons/bottom-arrow-gray.svg";
@@ -20,14 +22,15 @@ import {
 } from "@shared/ui/shadcn/dropdown-menu";
 
 const INITIAL_FILTER_VALUE = {
-  searchText: "",
-  location: "",
-  priceRange: "",
-  dateRange: "",
+  검색어: "",
+  지역: "",
+  가격: "",
+  날짜: "",
 };
 
 // 외부에서 ref로 사용할 메서드 타입 정의
 export interface FilterHandle {
+  activeField: FieldType | null;
   changeValue: (value: Partial<FilterValue>) => void;
 }
 
@@ -42,6 +45,7 @@ const FilterProvider = ({ ref, children }: FilterProviderProps) => {
 
   const changeValue = useCallback((value: Partial<FilterValue>) => {
     setFilterValue((prev) => ({ ...prev, ...value }));
+    // value의 프로퍼티 키가 검색어라면, setActiveField(지역) ...
   }, []);
   const reset = () => {
     setFilterValue(INITIAL_FILTER_VALUE);
@@ -56,12 +60,15 @@ const FilterProvider = ({ ref, children }: FilterProviderProps) => {
     setActiveField(null);
   };
 
+  // activeField가 null이 아니면 특정 field가 클릭(활성화)되었다는 의미
+  // 부모(Header)에서 크기 조절을 위해 ref로 이를 참조 가능하도록 만들기
   useImperativeHandle(
     ref,
     () => ({
+      activeField,
       changeValue,
     }),
-    [changeValue]
+    [activeField, changeValue]
   );
 
   return (
@@ -82,18 +89,28 @@ const FilterProvider = ({ ref, children }: FilterProviderProps) => {
 };
 
 const FilterSearchInput = () => {
-  const { filterValue, changeValue } = useFilter();
+  const { filterValue, activeField, changeValue, openField } = useFilter();
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    changeValue({ ...filterValue, searchText: e.target.value });
+    changeValue({ ...filterValue, 검색어: e.target.value });
   };
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (activeField === "검색어") {
+      inputRef.current?.focus();
+    }
+  }, [activeField]); 
+
   return (
-    <div className="flex items-center gap-[0.66rem] p-[0.22rem_0.66rem] h-[2.63rem]">
+    <div className="flex items-center gap-[0.66rem] p-[0.22rem_0.66rem]">
       <img src={searchIcon} alt="" />
       <input
+        ref={inputRef}
         className="w-full text-[0.77rem] placeholder:text-[0.77rem] focus-visible:outline-none"
         type="text"
         placeholder="공연명, 아티스트명, 작품명 등으로 검색해보세요!"
-        value={filterValue.searchText}
+        value={filterValue.검색어}
+        onFocus={() => openField("검색어")}
         onChange={handleChange}
       />
     </div>
@@ -106,13 +123,16 @@ interface FilterFieldProps {
   children: ReactNode;
 }
 const FilterField = ({ iconSrc, title, children }: FilterFieldProps) => {
-  const { activeField, openField, closeField } = useFilter();
+  const { filterValue, activeField, openField, closeField } = useFilter();
   const isOpen = title === activeField;
+  const titleColor = filterValue[title] ? "000" : "text-[#867e7c]";
+
   return (
     <DropdownMenu
       modal={false}
       open={isOpen}
       // isOpenNow에는 앞으로 변할 상태가 들어감(현재 닫힘 -> isOpenNow = true)
+      // 클릭과 같은 토글 이벤트가 발생할 때마다 실행됨
       onOpenChange={(isOpenNow: boolean) => {
         if (isOpenNow) {
           openField(title);
@@ -126,7 +146,9 @@ const FilterField = ({ iconSrc, title, children }: FilterFieldProps) => {
           <div className="flex place-content-between items-center w-full h-[1.97rem] p-[0_0.66rem]">
             <div className="flex items-center gap-[0.44rem]">
               <img className="w-3.5 h-3.5" src={iconSrc} alt="" />
-              <span className="text-[0.77rem]/[1.09rem]">{title}</span>
+              <span className={`text-[0.77rem]/[1.09rem] ${titleColor}`}>
+                {filterValue[title] ? filterValue[title] : title}
+              </span>
             </div>
             <img className="w-3.5 h-3.5 mb-1" src={bottomArrow} alt="" />
           </div>

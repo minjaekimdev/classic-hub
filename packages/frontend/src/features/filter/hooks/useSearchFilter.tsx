@@ -2,12 +2,7 @@ import { createContext, useContext } from "react";
 
 export type FieldType = "검색어" | "지역" | "가격" | "날짜";
 
-export interface FilterValue {
-  searchText: string;
-  location: string;
-  priceRange: string;
-  dateRange: string;
-}
+export type FilterValue = Record<FieldType, string>
 
 export interface FilterContextType {
   filterValue: FilterValue;

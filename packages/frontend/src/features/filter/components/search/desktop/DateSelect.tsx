@@ -6,7 +6,7 @@ export function DateSelect() {
   const {filterValue, changeValue} = useFilter();
   let calendarDateRange: DateRange | undefined;
   const isValidDateRange = /^\d{4}\/\d{2}\/\d{2} - \d{4}\/\d{2}\/\d{2}$/.test(
-    filterValue.dateRange
+    filterValue.날짜
   );
   if (!isValidDateRange) {
     calendarDateRange = {
@@ -14,7 +14,7 @@ export function DateSelect() {
       to: new Date(),
     };
   } else {
-    const [startDate, endDate] = filterValue.dateRange
+    const [startDate, endDate] = filterValue.날짜
       .split(" - ")
       .map((item: string) => item.replaceAll("/", "-"));
     calendarDateRange = {
@@ -26,7 +26,7 @@ export function DateSelect() {
   const handleSelect = (range: DateRange | undefined) => {
     // 1. 선택 취소되거나 값이 없으면 초기화
     if (!range?.from) {
-      changeValue({ dateRange: "날짜" });
+      changeValue({ 날짜: "날짜" });
       return;
     }
 
@@ -43,7 +43,7 @@ export function DateSelect() {
     const toStr = range.to ? formatDate(range.to) : fromStr;
 
     // 3. 부모에게 문자열로 전달
-    changeValue({ dateRange: `${fromStr} - ${toStr}` });
+    changeValue({ 날짜: `${fromStr} - ${toStr}` });
   };
 
   return (

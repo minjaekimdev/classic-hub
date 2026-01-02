@@ -1,52 +1,76 @@
-import { useRef } from "react";
-import { SearchFilter, type FilterHandle } from "./SearchFilter";
-import type {FilterValue} from "../../../hooks/useSearchFilter";
-import { LOCATION_LIST } from "../constants/location-list";
+import { SearchFilter } from "./SearchFilter";
+import { useFilter } from "../../../hooks/useSearchFilter";
 import locationIcon from "@shared/assets/icons/location-gray.svg";
 import moneyIcon from "@shared/assets/icons/dollar-gray.svg";
 import calendarIcon from "@shared/assets/icons/calendar-gray.svg";
 import { DropdownMenuItem } from "@/shared/ui/shadcn/dropdown-menu";
 import PriceRangeSlider from "./PriceRangeSlider";
 import { DateSelect } from "./DateSelect";
+import searchIcon from "@shared/assets/icons/search-white.svg";
+
+const LOCATION_LIST = [
+  "전체",
+  "서울",
+  "경기",
+  "인천",
+  "부산",
+  "대구",
+  "광주",
+  "대전",
+  "울산",
+  "세종",
+  "강원",
+  "충북",
+  "충남",
+  "전북",
+  "전남",
+  "경북",
+  "경남",
+  "제주",
+];
 
 const DesktopSearchFilter = () => {
-  const filterRef = useRef<FilterHandle>(null);
-
-  const handleChange = (value: Partial<FilterValue>) => {
-    filterRef.current?.changeValue(value);
-  }
+  const { changeValue } = useFilter();
 
   return (
-    <SearchFilter ref={filterRef}>
+    <div className="grid grid-cols-[2fr_1fr_1fr_1fr_auto] gap-[0.66rem] rounded-[0.875rem] border border-gray-200 bg-white shadow-xl p-[0.94rem] h-18">
       <SearchFilter.Input />
-      <SearchFilter.Field
-        iconSrc={locationIcon}
-        title="지역"
-      >
-        {LOCATION_LIST.map((item) => (
-          <DropdownMenuItem
-            className="text-xs cursor-pointer"
-            onSelect={() => handleChange({ location: item })}
-          >
-            {item}
-          </DropdownMenuItem>
-        ))}
+      <SearchFilter.Field iconSrc={locationIcon} title="지역">
+        <div onClick={(e) => e.stopPropagation()}>
+          {LOCATION_LIST.map((item) => (
+            <DropdownMenuItem
+              className="text-xs cursor-pointer"
+              onSelect={() => changeValue({ 지역: item })}
+            >
+              {item}
+            </DropdownMenuItem>
+          ))}
+        </div>
       </SearchFilter.Field>
-      <SearchFilter.Field
-        iconSrc={moneyIcon}
-        title="가격"
-      >
-        <DropdownMenuItem className="focus:bg-transparent w-75">
-          <PriceRangeSlider />
-        </DropdownMenuItem>
+      <SearchFilter.Field iconSrc={moneyIcon} title="가격">
+        <PriceRangeSlider />
       </SearchFilter.Field>
-      <SearchFilter.Field
-        iconSrc={calendarIcon}
-        title="날짜"
-      >
-        <DateSelect />
+      <SearchFilter.Field iconSrc={calendarIcon} title="날짜">
+        <div onClick={(e) => e.stopPropagation()}>
+          <DateSelect />
+        </div>
       </SearchFilter.Field>
-    </SearchFilter>
+      <div className="flex gap-3">
+        <SearchFilter.Reset>
+          <div className="p-[0.69rem_0.56rem] border border-gray-200 rounded-main bg-white text-[0.77rem] transition-transform duration-200 hover:scale-105">
+            <div className="flex items-center gap-[0.44rem] w-fit">초기화</div>
+          </div>
+        </SearchFilter.Reset>
+        <SearchFilter.Search>
+          <div className="p-[0.69rem_0.56rem] rounded-main bg-main text-white text-[0.77rem] transition-transform duration-200 hover:scale-105">
+            <div className="flex items-center gap-[0.44rem] w-fit">
+              <img className="" src={searchIcon} alt="" />
+              검색
+            </div>
+          </div>
+        </SearchFilter.Search>
+      </div>
+    </div>
   );
 };
 

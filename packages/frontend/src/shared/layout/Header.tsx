@@ -1,7 +1,7 @@
 import FilterDesktop from "@/features/filter/components/search/FilterDesktop";
 import Menu from "./HeaderMenu";
 import { useEffect, useState } from "react";
-import FilterDesktopSmall from "@/features/filter/components/search/FilterDesktopSmall";
+import FilterDesktopSmall from "@/features/filter/components/search/desktop/FilterDesktopSmall";
 import Logo from "@/shared/layout/Logo";
 import HeaderAuthButton from "@/shared/layout/HeaderAuthButton";
 import searchIcon from "@shared/assets/icons/search-gray.svg";

@@ -1,11 +1,71 @@
-// import Detail from "./Detail";
-import Home from "./Home";
+import HomeLayout from "@/features/filter/components/search/desktop/HomeLayout";
 
 const App = () => {
   return (
     <>
-      <Home />
-      {/* <Detail /> */}
+      <div className="">a</div>
+      <HomeLayout>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+        <div className="">a</div>
+      </HomeLayout>
     </>
   );
 };
