@@ -1,15 +1,18 @@
+import HomeLayout from "@/shared/layout/HomeLayout";
 import RankingPerformances from "@/features/performance/components/RankingPerformances";
 import WeekendPerformances from "@/features/performance/components/WeekendPerformances";
-import MainLayout from "@/shared/layout/MainLayout";
+// import MainLayout from "@/shared/layout/MainLayout";
 import type { HomePerformance } from "@classic-hub/shared/types/performance";
 
 // 목업 데이터
 const homeRankingData: HomePerformance[] = [
   {
     id: "rank-1",
-    posterUrl: "http://www.kopis.or.kr/upload/pfmPoster/PF_PF278593_251111_135635.gif",
+    posterUrl:
+      "http://www.kopis.or.kr/upload/pfmPoster/PF_PF278593_251111_135635.gif",
     rank: 1,
-    title: "동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라 만세 무궁화 삼천리 화려강산 대한사람 대한으로 길이 보전하세",
+    title:
+      "동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라 만세 무궁화 삼천리 화려강산 대한사람 대한으로 길이 보전하세",
     artist: "크리스티안 짐머만",
     date: { start: "2026년 1월 13일 (목)", end: "2026년 1월 13일 (목)" },
     venue: "롯데콘서트홀",
@@ -19,9 +22,11 @@ const homeRankingData: HomePerformance[] = [
   },
   {
     id: "rank-2",
-    posterUrl: "http://www.kopis.or.kr/upload/pfmPoster/PF_PF278593_251111_135635.gif",
+    posterUrl:
+      "http://www.kopis.or.kr/upload/pfmPoster/PF_PF278593_251111_135635.gif",
     rank: 1,
-    title: "동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라 만세 무궁화 삼천리 화려강산 대한사람 대한으로 길이 보전하세",
+    title:
+      "동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라 만세 무궁화 삼천리 화려강산 대한사람 대한으로 길이 보전하세",
     artist: "크리스티안 짐머만",
     date: { start: "2026년 1월 13일 (목)", end: "2026년 1월 13일 (목)" },
     venue: "롯데콘서트홀",
@@ -31,9 +36,11 @@ const homeRankingData: HomePerformance[] = [
   },
   {
     id: "rank-3",
-    posterUrl: "http://www.kopis.or.kr/upload/pfmPoster/PF_PF278593_251111_135635.gif",
+    posterUrl:
+      "http://www.kopis.or.kr/upload/pfmPoster/PF_PF278593_251111_135635.gif",
     rank: 1,
-    title: "동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라 만세 무궁화 삼천리 화려강산 대한사람 대한으로 길이 보전하세",
+    title:
+      "동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라 만세 무궁화 삼천리 화려강산 대한사람 대한으로 길이 보전하세",
     artist: "크리스티안 짐머만",
     date: { start: "2026년 1월 13일 (목)", end: "2026년 1월 13일 (목)" },
     venue: "롯데콘서트홀",
@@ -43,9 +50,11 @@ const homeRankingData: HomePerformance[] = [
   },
   {
     id: "rank-4",
-    posterUrl: "http://www.kopis.or.kr/upload/pfmPoster/PF_PF278593_251111_135635.gif",
+    posterUrl:
+      "http://www.kopis.or.kr/upload/pfmPoster/PF_PF278593_251111_135635.gif",
     rank: 1,
-    title: "동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라 만세 무궁화 삼천리 화려강산 대한사람 대한으로 길이 보전하세",
+    title:
+      "동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라 만세 무궁화 삼천리 화려강산 대한사람 대한으로 길이 보전하세",
     artist: "크리스티안 짐머만",
     date: { start: "2026년 1월 13일 (목)", end: "2026년 1월 13일 (목)" },
     venue: "롯데콘서트홀",
@@ -55,9 +64,11 @@ const homeRankingData: HomePerformance[] = [
   },
   {
     id: "rank-5",
-    posterUrl: "http://www.kopis.or.kr/upload/pfmPoster/PF_PF278593_251111_135635.gif",
+    posterUrl:
+      "http://www.kopis.or.kr/upload/pfmPoster/PF_PF278593_251111_135635.gif",
     rank: 1,
-    title: "동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라 만세 무궁화 삼천리 화려강산 대한사람 대한으로 길이 보전하세",
+    title:
+      "동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라 만세 무궁화 삼천리 화려강산 대한사람 대한으로 길이 보전하세",
     artist: "크리스티안 짐머만",
     date: { start: "2026년 1월 13일 (목)", end: "2026년 1월 13일 (목)" },
     venue: "롯데콘서트홀",
@@ -70,7 +81,8 @@ const homeRankingData: HomePerformance[] = [
 const homeWeekendData: HomePerformance[] = [
   {
     id: "wk-1",
-    posterUrl: "http://www.kopis.or.kr/upload/pfmPoster/PF_PF279144_251114_171830.gif",
+    posterUrl:
+      "http://www.kopis.or.kr/upload/pfmPoster/PF_PF279144_251114_171830.gif",
     title: "제16회 국민일보 영산아트홀 오르간 & 실내악 콩쿠르 입상자 연주회",
     artist: "국민일보 콩쿠르 입상자",
     date: { start: "2025.11.16", end: "2025.11.16" },
@@ -81,8 +93,10 @@ const homeWeekendData: HomePerformance[] = [
   },
   {
     id: "wk-2",
-    posterUrl: "http://www.kopis.or.kr/upload/pfmPoster/PF_PF279126_251114_161108.jpg",
-    title: "용인시립청소년오케스트라 & 용인시립소년소녀합창단 합동 정기연주회 [용인]",
+    posterUrl:
+      "http://www.kopis.or.kr/upload/pfmPoster/PF_PF279126_251114_161108.jpg",
+    title:
+      "용인시립청소년오케스트라 & 용인시립소년소녀합창단 합동 정기연주회 [용인]",
     artist: "용인시립 단원 일동",
     date: { start: "2025.11.16", end: "2025.11.16" },
     venue: "용인포은아트홀",
@@ -92,7 +106,8 @@ const homeWeekendData: HomePerformance[] = [
   },
   {
     id: "wk-3",
-    posterUrl: "http://www.kopis.or.kr/upload/pfmPoster/PF_PF279006_251113_141147.jpg",
+    posterUrl:
+      "http://www.kopis.or.kr/upload/pfmPoster/PF_PF279006_251113_141147.jpg",
     title: "비원뮤직홀 로맨틱 시리즈, 렉처콘서트: 당신 곁의 클래식",
     artist: "클래식 해설가 A",
     date: { start: "2025.11.15", end: "2025.11.15" },
@@ -103,7 +118,8 @@ const homeWeekendData: HomePerformance[] = [
   },
   {
     id: "wk-4",
-    posterUrl: "http://www.kopis.or.kr/upload/pfmPoster/PF_PF278862_251112_112952.png",
+    posterUrl:
+      "http://www.kopis.or.kr/upload/pfmPoster/PF_PF278862_251112_112952.png",
     title: "크리스마스 & 애니메이션 OST 섀도우콘서트 [제주]",
     artist: "제주 앙상블",
     date: { start: "2025.11.15", end: "2025.12.31" },
@@ -114,7 +130,8 @@ const homeWeekendData: HomePerformance[] = [
   },
   {
     id: "wk-5",
-    posterUrl: "http://www.kopis.or.kr/upload/pfmPoster/PF_PF278537_251110_104240.gif",
+    posterUrl:
+      "http://www.kopis.or.kr/upload/pfmPoster/PF_PF278537_251110_104240.gif",
     title: "제3회 KIMEEA 정기음악회",
     artist: "KIMEEA 회원",
     date: { start: "2025.11.16", end: "2025.11.16" },
@@ -127,10 +144,10 @@ const homeWeekendData: HomePerformance[] = [
 
 const Home = () => {
   return (
-    <MainLayout>
+    <HomeLayout>
       <RankingPerformances performanceArray={homeRankingData} />
       <WeekendPerformances performanceArray={homeWeekendData} />
-    </MainLayout>
+    </HomeLayout>
   );
 };
 

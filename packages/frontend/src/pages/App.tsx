@@ -1,71 +1,10 @@
-import HomeLayout from "@/features/filter/components/search/desktop/HomeLayout";
+// import HomeLayout from "@/features/filter/components/search/desktop/HomeLayout";
+import Home from "./Home";
 
 const App = () => {
   return (
     <>
-      <div className="">a</div>
-      <HomeLayout>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-        <div className="">a</div>
-      </HomeLayout>
+      <Home />
     </>
   );
 };

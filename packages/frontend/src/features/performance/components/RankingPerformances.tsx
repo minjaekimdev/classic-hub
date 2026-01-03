@@ -13,7 +13,7 @@ const HomePerformanceRanking: React.FC<HomePerformanceRankingProps> = ({
 }) => {
   return (
     <div className="w-full">
-      <div className="flex flex-col gap-[1.31rem] mx-auto max-w-7xl">
+      <div className="flex flex-col gap-[1.31rem] mx-auto max-w-7xl px-7">
         <HomeWidgetHeader
           icon={rankingIcon}
           mainTitle="오늘의 공연 랭킹"
