@@ -140,6 +140,78 @@ const homeWeekendData: HomePerformance[] = [
     time: "오후 3시 00분",
     price: { min: 10000, max: 10000 },
   },
+  {
+    id: "PF282526",
+    posterUrl:
+      "http://www.kopis.or.kr/upload/pfmPoster/PF_PF282526_260102_133310.gif",
+    title: "선데이콘서트, 엘림 리사이틀 시리즈: 김선아 피아노 독주회 [인천]",
+    artist: "김선아",
+    date: { start: "2026.01.11", end: "2026.01.11" },
+    venue: "엘림아트센터",
+    composerArray: ["쇼팽", "리스트"],
+    time: "오후 2시 00분",
+    price: { min: 20000, max: 20000 },
+  },
+  {
+    id: "PF282525",
+    posterUrl:
+      "http://www.kopis.or.kr/upload/pfmPoster/PF_PF282525_260102_133138.gif",
+    title: "제17회 ARKO한국창작음악제: 양악부문",
+    artist: "KBS교향악단 외",
+    date: { start: "2026.02.06", end: "2026.02.06" },
+    venue: "예술의전당 [서울]",
+    composerArray: ["한국 현대 작곡가 다수"],
+    time: "오후 7시 30분",
+    price: { min: 10000, max: 30000 },
+  },
+  {
+    id: "PF282520",
+    posterUrl:
+      "http://www.kopis.or.kr/upload/pfmPoster/PF_PF282520_260102_131712.gif",
+    title: "제83회 시티필하모니오케스트라 정기연주회",
+    artist: "시티필하모니오케스트라",
+    date: { start: "2026.01.12", end: "2026.01.12" },
+    venue: "영산아트홀",
+    composerArray: ["베토벤", "브람스"],
+    time: "오후 8시 00분",
+    price: { min: 30000, max: 100000 },
+  },
+  {
+    id: "PF282516",
+    posterUrl:
+      "http://www.kopis.or.kr/upload/pfmPoster/PF_PF282516_260102_130516.gif",
+    title: "김초아 피아노 독주회: 전통과 한국 현대음악을 잇는 피아노의 여정",
+    artist: "김초아",
+    date: { start: "2026.02.03", end: "2026.02.03" },
+    venue: "예술의전당 [서울]",
+    composerArray: ["윤이상", "드뷔시"],
+    time: "오후 7시 30분",
+    price: { min: 20000, max: 50000 },
+  },
+  {
+    id: "PF282509",
+    posterUrl:
+      "http://www.kopis.or.kr/upload/pfmPoster/PF_PF282509_260102_123348.gif",
+    title: "이홍규 교수 정년퇴임 음악회",
+    artist: "이홍규 및 제자 일동",
+    date: { start: "2026.01.31", end: "2026.01.31" },
+    venue: "영산아트홀",
+    composerArray: ["하이든", "모차르트"],
+    time: "오후 3시 00분",
+    price: { min: 0, max: 0 }, // 전석 초대일 가능성 고려
+  },
+  {
+    id: "PF282508",
+    posterUrl:
+      "http://www.kopis.or.kr/upload/pfmPoster/PF_PF282508_260102_123348.jpg",
+    title: "오감클래식 영유아 클래식 콘서트: Happy New Year! [일산] (1월)",
+    artist: "오감클래식 앙상블",
+    date: { start: "2026.01.01", end: "2026.01.17" },
+    venue: "오감클래식",
+    composerArray: ["요한 슈트라우스", "동요 메들리"],
+    time: "오전 11시 00분",
+    price: { min: 25000, max: 25000 },
+  },
 ];
 
 const Home = () => {
