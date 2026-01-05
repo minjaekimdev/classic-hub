@@ -5,10 +5,10 @@ import ListItem from "./ListItem";
 import type { PerformanceSummary } from "@classic-hub/shared/types/performance";
 import leftArrow from "@shared/assets/icons/left-slidearrow-black.svg";
 import rightArrow from "@shared/assets/icons/right-slidearrow-black.svg";
-import { useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Swiper as SwiperType } from "swiper";
 import "swiper/css";
+import useSwiper from "../hooks/useSwiper";
 
 interface WeekendPerformancesProps {
   performanceArray: PerformanceSummary[];
@@ -17,9 +17,14 @@ interface WeekendPerformancesProps {
 const WeekendPerformances = ({
   performanceArray,
 }: WeekendPerformancesProps) => {
-  const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
-  const [isBeginning, setIsBeginning] = useState(true); //
-  const [isEnd, setIsEnd] = useState(false);
+  const {
+    swiperInstance,
+    setSwiperInstance,
+    isBeginning,
+    isEnd,
+    updateNavigationState,
+  } = useSwiper();
+
   return (
     <div className="mt-14 w-full">
       <div className="flex flex-col items-center gap-[1.31rem] mx-auto px-7 max-w-7xl">
@@ -39,14 +44,14 @@ const WeekendPerformances = ({
           )}
           <Swiper
             onSwiper={(swiper: SwiperType) => {
+              console.log(
+                `weekendPerformance isBeginning: ${swiper.isBeginning}, isEnd: ${swiper.isEnd}`
+              );
               setSwiperInstance(swiper);
-              setIsBeginning(swiper.isBeginning);
-              setIsEnd(swiper.isEnd);
+              updateNavigationState(swiper);
             }}
-            onSlideChange={(swiper: SwiperType) => {
-              setIsBeginning(swiper.isBeginning);
-              setIsEnd(swiper.isEnd);
-            }}
+            onBreakpoint={updateNavigationState}
+            onSlideChange={updateNavigationState}
             spaceBetween={21}
             slidesPerView={4}
             allowTouchMove={false}
@@ -56,9 +61,7 @@ const WeekendPerformances = ({
           >
             {performanceArray.map((performance) => (
               <SwiperSlide key={performance.id}>
-                <HomePerformanceAlbumItem
-                  data={performance}
-                />
+                <HomePerformanceAlbumItem data={performance} />
               </SwiperSlide>
             ))}
           </Swiper>

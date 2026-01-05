@@ -5,11 +5,10 @@ import HomeWidgetHeader from "@/shared/layout/HomeWidgetHeader";
 import AlbumItem from "@/features/performance/components/HomeAlbumItem";
 import leftArrow from "@shared/assets/icons/left-slidearrow-black.svg";
 import rightArrow from "@shared/assets/icons/right-slidearrow-black.svg";
-import { useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Swiper as SwiperType } from "swiper";
 import "swiper/css";
-// import type { SwiperOptions } from "swiper/types";
+import useSwiper from "../hooks/useSwiper";
 
 interface HomePerformanceRankingProps {
   performanceArray: HomePerformance[];
@@ -18,31 +17,13 @@ interface HomePerformanceRankingProps {
 const HomePerformanceRanking: React.FC<HomePerformanceRankingProps> = ({
   performanceArray,
 }) => {
-  const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
-  const [isBeginning, setIsBeginning] = useState(true);
-  const [isEnd, setIsEnd] = useState(false);
-
-  // const updateNavigationState = (swiper: SwiperType) => {
-  //   setIsBeginning(swiper.isBeginning);
-  //   setIsEnd(swiper.isEnd);
-  // };
-  const updateNavigationState = (swiper: SwiperType) => {
-    swiper.update();
-    setIsBeginning(swiper.isBeginning);
-
-    // Swiper의 isEnd를 그대로 쓰지 않고,
-    // (전체 슬라이드 수) > (현재 설정된 slidesPerView) 인지 직접 체크합니다.
-    const totalSlides = swiper.slides.length;
-    const currentView = swiper.params.slidesPerView as number;
-
-    console.log(`totalSlides: ${totalSlides}, currentView: ${currentView}`);
-    if (totalSlides > currentView) {
-      setIsEnd(swiper.isEnd);
-    } else {
-      // 슬라이드가 보이는 것보다 적거나 같으면 무조건 버튼 숨김
-      setIsEnd(true);
-    }
-  };
+  const {
+    swiperInstance,
+    setSwiperInstance,
+    isBeginning,
+    isEnd,
+    updateNavigationState,
+  } = useSwiper();
 
   return (
     <div className="w-full">
@@ -63,6 +44,9 @@ const HomePerformanceRanking: React.FC<HomePerformanceRankingProps> = ({
           )}
           <Swiper
             onSwiper={(swiper: SwiperType) => {
+              console.log(
+                `isBeginning: ${swiper.isBeginning}, isEnd: ${swiper.isEnd}`
+              );
               setSwiperInstance(swiper);
               updateNavigationState(swiper);
             }}
