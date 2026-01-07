@@ -1,5 +1,5 @@
-import { createClient } from '@supabase/supabase-js'
-import 'dotenv/config';
+import { createClient } from "@supabase/supabase-js";
+import "dotenv/config";
 
 const supabaseUrl = "https://razltwjkvwqiyksaydcw.supabase.co";
 

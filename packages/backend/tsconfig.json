@@ -115,6 +115,9 @@
       "@/apis/*": ["apis/*"],
       "@/database/*": ["database/*"],
       "@/types/*": ["models/*"],
+      "@/domain/*": ["domain/*"],
+      "@/infrastructure/*": ["infrastructure/*"],
+      "@/models/*": ["models/*"],
     },
   },
 }

@@ -1,5 +1,6 @@
 import "dotenv/config";
-import { GoogleGenAI, Type } from "@google/genai";
+import { Type } from "@google/genai";
+import ai from "@/infrastructure/external-api/gemini";
 
 interface ProgramItem {
   composerEnglish: string;
@@ -9,8 +10,6 @@ interface ProgramItem {
 }
 
 export type ProgramArray = ProgramItem[];
-
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 // 공연 상세이미지 url로부터 바이너리 데이터를 받아 base64로 변환한 값을 리턴하는 함수
 const getBase64FromUrl = async (url: string) => {

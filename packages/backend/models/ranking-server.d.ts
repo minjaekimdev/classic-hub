@@ -1,4 +1,4 @@
-import type { TextNode, TicketLink} from "./common-server";
+import type { TextNode, TicketLink } from "./common-server";
 
 export interface RankingItem {
   rnum: TextNode;

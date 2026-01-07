@@ -33,7 +33,7 @@ const DesktopSearchFilter = () => {
   const { changeValue } = useFilter();
 
   return (
-    <div className="grid grid-cols-[2fr_1fr_1fr_1fr_auto] gap-[0.66rem] rounded-[0.875rem] border border-gray-200 bg-white shadow-xl p-[0.94rem] w-250 h-18">
+    <div className="grid grid-cols-[2fr_1fr_1fr_1fr_auto] gap-[0.66rem] rounded-[0.875rem] border border-gray-200 bg-white shadow-xl p-[0.94rem] w-230 h-18">
       <SearchFilter.Input />
       <SearchFilter.Field iconSrc={locationIcon} title="지역">
         <div onClick={(e) => e.stopPropagation()}>

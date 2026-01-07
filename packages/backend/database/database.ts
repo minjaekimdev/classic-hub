@@ -1,17 +1,18 @@
 // Edge Functions 밖 환경에서 사용
 
-import supabase from "../apis/supabase-client";
-import { API_URL, CLASSIC, SERVICE_KEY } from "../apis/kopis-client";
+import supabase from "@/infrastructure/external-api/supabase";
+import { API_URL, CLASSIC, SERVICE_KEY } from "@/infrastructure/external-api/kopis";
 import "dotenv/config";
 import dayjs from "dayjs";
 import convert, { ElementCompact } from "xml-js";
 import getProgramJSON from "./get-program";
-import { TextNode } from "@/types/common-server";
+import { TextNode } from "@/types/kopis";
 import { removeTextProperty } from "./preprocessing";
 import type { ProgramArray } from "./get-program";
 import { ComputeTokensResponse } from "@google/genai";
 
-const TARGET_PERIOD = 90;
+// 향후 6개월치의 공연을 대상
+const TARGET_PERIOD = 180;
 
 const now = dayjs();
 

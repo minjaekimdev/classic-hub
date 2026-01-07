@@ -9,8 +9,8 @@ import type { filterCategoryObjType } from "@/features/filter/model/filter";
 import LocationSelectMobile from "./LocationSelectMobile";
 import FilterSearchInputMobile from "./FilterSearchInputMobile";
 import FilterFieldContentMobile from "./FilterFieldContentMobile";
-import { Calendar05 } from "./Calendar";
-import PriceRangeSlider from "./PriceRangeSlider";
+import { Calendar05 } from "../Calendar";
+import PriceRangeSlider from "../PriceRangeSlider";
 
 interface HeaderProps {
   onClose: React.Dispatch<SetStateAction<boolean>>;
