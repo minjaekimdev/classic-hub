@@ -34,7 +34,7 @@ export interface Ranking {
 }
 
 // 공연 상세 조회 인터페이스
-interface PerformanceDetail {
+export interface PerformanceDetail {
   mt20id: string; // 공연 ID (예: PF178134)
   mt10id: string; // 공연시설 ID (예: FC001431)
   prfnm: string; // 공연명 (예: 우리연애할까)
@@ -115,4 +115,15 @@ export interface FacilityDetail {
   elevbarrier: "Y" | "N"; // 장애시설-엘리베이터
 
   mt13s: Facility[];
+}
+
+// 공연목록 조회 인터페이스
+export interface FacilitySummary {
+  mt10id: string; // 공연시설 ID (예: FC000517) 
+  fcltynm: string;  // 공연시설명 (예: 경주예술의전당)
+  mt13cnt: string;   // 공연장 수 (예: 2)
+  fcltychartr: string; // 시설특성 (예: 문예회관) 
+  sidonm: string;   // 지역(시도) (예: 경북) 
+  gugunnm: string;  // 지역(구군) (예: 경주시) 
+  opende: string | null;   // 개관연도 (예: 2010) 
 }

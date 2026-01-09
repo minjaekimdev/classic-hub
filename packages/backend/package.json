@@ -8,22 +8,16 @@
     "dotenv": "^17.2.0",
     "express": "^5.1.0",
     "tsconfig-paths": "^4.2.0",
+    "winston": "^3.19.0",
     "xml-js": "^1.6.11"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
     "supabase": "^2.39.2",
-    "ts-node": "^10.9.2",
+    "tsx": "^4.21.0",
     "typescript": "^5.8.3"
   },
   "scripts": {
-    "update-ranking": "ts-node -r tsconfig-paths/register ./database/update-ranking.ts",
-    "insert-latlng": "ts-node -r tsconfig-paths/register ./database/insert-latlng.ts",
-    "insert-latlng-old": "ts-node -r tsconfig-paths/register ./database/insert-latlng-old.ts",
-    "insert-location-info": "ts-node -r tsconfig-paths/register ./database/insert-location-info.ts",
-    "insert-program-info": "ts-node -r tsconfig-paths/register ./database/insert-program-info.ts",
-    "all-performance": "ts-node -r tsconfig-paths/register ./database/all-performance.ts",
-    "get-program": "ts-node -r tsconfig-paths/register ./database/get-program.ts",
-    "ranking-performance": "ts-node -r tsconfig-paths/register ./database/ranking-performance.ts"
+    "insert-facility": "npx tsx ./application/use-cases/insert-facility.ts"
   }
 }

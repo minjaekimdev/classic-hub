@@ -90,7 +90,7 @@ const getPerformanceDetail = async (
 const importPerformanceDetailToDB = async (pfDetail: PerformanceDetailType) => {
   const { error } = await supabase
     .from("performance_list")
-    .upsert(pfDetail, { onConflict: "mt20id" });
+    .upsert(pfDetail, { onConflict: "mt20id" }); // 중복의 기준을 PK인 공연코드(mt20id)로 정함, 중복된다면 덮어씌우기
 
   if (error) {
     console.log("performance_list에 공연 데이터 삽입 실패", error);
