@@ -69,7 +69,7 @@ export interface PerformanceDetail {
 }
 
 // 개별 공연장 인터페이스
-export interface Facility {
+export interface Hall {
   prfplcnm: string; // 공연장명 (예: KSPO DOME(체조경기장))
   mt13id: string; // 공연장 고유식별 ID (예: FC-001247-01)
   // ※ 명세상 seatscale이 중복 정의되어 있으며, 여기서는 개별 공연장의 좌석 규모를 의미함
@@ -86,7 +86,7 @@ export interface Facility {
 }
 
 // 공연시설 상세 조회 인터페이스
-export interface FacilityDetail {
+export interface Facility {
   // 기본 시설 정보
   mt10id: string; // 공연시설 ID (예: FC001247)
   fcltynm: string; // 공연시설명 (예: 올림픽공원)
@@ -114,7 +114,9 @@ export interface FacilityDetail {
   runwbarrier: "Y" | "N"; // 장애시설-경사로
   elevbarrier: "Y" | "N"; // 장애시설-엘리베이터
 
-  mt13s: Facility[];
+  mt13s: {
+    mt13: Hall[];
+  } 
 }
 
 // 공연목록 조회 인터페이스

@@ -1,7 +1,7 @@
 import logger from "./logger";
 
 // 1. Custom Error 클래스 생성
-class APIError extends Error {
+export class APIError extends Error {
   constructor(
     message: string,
     public statusCode: number = 500,
@@ -13,11 +13,8 @@ class APIError extends Error {
   }
 }
 
-const apiError = new APIError('API call failed');
-console.log(apiError);
-
 // 2. 중앙화된 에러 핸들러
-async function withErrorHandling<T>(
+export async function withErrorHandling<T>(
   operation: () => Promise<T>,
   fallback?: T
 ): Promise<T> {
@@ -32,5 +29,3 @@ async function withErrorHandling<T>(
     throw error;
   }
 }
-
-export default withErrorHandling;

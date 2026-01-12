@@ -27,7 +27,7 @@ const HomePerformanceRanking: React.FC<HomePerformanceRankingProps> = ({
 
   return (
     <div className="w-full">
-      <div className="flex flex-col gap-[1.31rem] mx-auto max-w-7xl px-7">
+      <div className="flex flex-col gap-[1.31rem] mx-auto max-w-7xl px-[0.88rem] desktop:px-7">
         <HomeWidgetHeader
           icon={rankingIcon}
           mainTitle="오늘의 공연 랭킹"
@@ -60,11 +60,11 @@ const HomePerformanceRanking: React.FC<HomePerformanceRankingProps> = ({
               1280: { slidesPerView: 5 },
             }}
           >
-            {performanceArray.map((performance) => (
-              <SwiperSlide key={performance.id}>
-                <AlbumItem data={performance} />
-              </SwiperSlide>
-            ))}
+              {performanceArray.map((performance) => (
+                <SwiperSlide key={performance.id}>
+                  <AlbumItem data={performance} />
+                </SwiperSlide>
+              ))}
           </Swiper>
           {!isEnd && (
             <button

@@ -8,6 +8,8 @@
   `_text` 프로퍼티를 제거하고, 순수한 값으로 언래핑
 */
 
+import { Facility } from "@/models/kopis";
+
 export type JsonValue = string | null | JsonObject | JsonArray;
 export interface JsonObject {
   [key: string]: JsonValue;

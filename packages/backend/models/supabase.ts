@@ -1,0 +1,73 @@
+import { JsonValue } from "@/database/preprocessing";
+
+// 공연장 데이터
+export interface DBFacility {
+  id: string;
+  name: string;
+  opening_year: string;
+  facility_type: string;
+  hall_count: number;
+  tel: string;
+  url: string;
+  adress: string;
+  latitude: number;
+  longitude: number;
+  has_restaurant: boolean;
+  has_cafe: boolean;
+  has_store: boolean;
+  has_nolibang: boolean;
+  has_suyu: boolean;
+  has_parking: boolean;
+  has_disabled_parking: boolean;
+  has_disabled_restroom: boolean;
+  has_disabled_ramp: boolean;
+  has_disabled_elevator: boolean;
+  seat_count: number;
+}
+
+export interface DBHall {
+  id: string;
+  name: string;
+  seat_count: number;
+  has_orchestra_pit: boolean;
+  has_practice_room: boolean;
+  has_dressing_room: boolean;
+  has_outdoor_stage: boolean;
+  disabled_seat_count: number;
+  disabled_stage_area: string;
+  facility_id: string; // FK
+}
+
+// 랭킹 데이터
+export interface DBRanking {
+  rank: number;
+  performance_name: string;
+  period: string;
+  area: string;
+  venue_name: string;
+  poster: string;
+  performance_id: string;
+}
+
+export interface DBDailyRanking extends DBRanking {
+  last_rank: number | null;
+}
+
+// 공연 데이터
+export interface DBPerformance {
+  performance_id: string;
+  venue_id: string;
+  performance_name: string;
+  period_from: string;
+  period_to: string;
+  venue_name: string;
+  cast: string;
+  runtime: string;
+  age: string;
+  price: JsonValue;
+  poster: string;
+  state: string;
+  detail_image: JsonValue;
+  time: JsonValue;
+  raw_data: JsonValue;
+}
