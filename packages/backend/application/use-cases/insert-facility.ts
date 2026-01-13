@@ -75,7 +75,7 @@ const getFacilityDetail = async (mt10id: string) => {
 
     if (!response.ok) {
       throw new APIError(
-        `FacilityDetail API call failed: ${response.status}`,
+        `API call failed: ${response.status}`,
         response.status,
       );
     }
@@ -87,7 +87,7 @@ const getFacilityDetail = async (mt10id: string) => {
 
     const result = removeTextProperty(parsedData.dbs.db);
     return result as unknown as Facility;
-  }, null);
+  }, null, "kopis");
 };
 
 // 공연시설 목록 조회
@@ -103,7 +103,7 @@ const getFacilityAndInsertToDB = async () => {
 
     if (!response.ok) {
       throw new APIError(
-        `page API call failed: ${response.status}`,
+        `API call failed: ${response.status}`,
         response.status,
       );
     }

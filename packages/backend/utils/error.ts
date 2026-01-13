@@ -9,22 +9,23 @@ export class APIError extends Error {
     public originalError?: unknown
   ) {
     super(message);
-    this.name = 'APIError';
+    this.name = "APIError";
   }
 }
 
 // 2. 중앙화된 에러 핸들러
 export async function withErrorHandling<T>(
   operation: () => Promise<T>,
-  fallback?: T
+  fallback?: T,
+  service: string = "default",
 ): Promise<T> {
   try {
     return await operation();
   } catch (error: any) {
-    logger.error('Operation failed', { error, stack: error.stack });
+    logger.error("Operation failed", { error, stack: error.stack, service });
 
     if (fallback !== undefined) {
-      return fallback;
+      return typeof fallback === "function" ? fallback() : fallback;
     }
     throw error;
   }
