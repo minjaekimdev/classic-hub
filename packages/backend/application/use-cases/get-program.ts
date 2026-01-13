@@ -87,14 +87,14 @@ export const getProgramJSON = async (
             // Math.max(item.date) 형식으로 며칠동안 하는지 알 수 있음
             type: "array",
             description:
-              "A comprehensive flat list of musical works extracted from the provided content.",
+              "A comprehensive flat list of musical works extracted from the provided content. CRITICAL RULE: If a work is performed on multiple dates (e.g., 'Dec 15 & 16' or 'Sat/Sun'), you MUST create separate objects for EACH date. Duplicate the work details exactly for each date sequence.",
             items: {
               type: "object",
               properties: {
                 date: {
                   type: "integer",
                   description:
-                    "The sequence number of the performance day (e.g., 1, 2). CRITICAL: If the program is a single-day event or no specific dates are distinguished, you MUST return 1.",
+                    "The sequence number of the performance day (e.g., 1, 2). CRITICAL: If the program is a single-day event or no specific dates are distinguished, you MUST return 1. If a work is played on days 1 and 2, create two separate objects: one with date=1 and another with date=2.",
                 },
                 composerNameEn: {
                   type: ["string", "null"],
