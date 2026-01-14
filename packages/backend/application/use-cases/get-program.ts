@@ -49,8 +49,7 @@ const buildContentFromUrls = async (imgURLs: string[]) => {
   return [...imageParts];
 };
 
-const systemInstruction =
-  "Persona: You are a professional Music Metadata Engineer with expert-level knowledge in Classical repertoire, Film scores, and Anime soundtracks.";
+const systemInstruction = `Persona: You are a Forensic Data Entry Clerk specializing in music catalogs. You have expert-level knowledge in identifying musical structures (Composers, Titles, Catalog numbers), but you have ZERO authorization to infer or add any information not visually present in the provided content.`;
 
 // generateContent 옵션 및 응답 형식 지정, 모델에 요청
 export const getProgramJSON = async (
@@ -78,6 +77,7 @@ export const getProgramJSON = async (
         model: "gemini-2.5-flash-lite",
         contents: contents,
         config: {
+          temperature: 0,
           maxOutputTokens: 15000,
           thinkingConfig: {
             thinkingBudget: 10000,
@@ -87,45 +87,37 @@ export const getProgramJSON = async (
             // Math.max(item.date) 형식으로 며칠동안 하는지 알 수 있음
             type: "array",
             description:
-              "A comprehensive flat list of musical works extracted from the provided content. CRITICAL RULE: If a work is performed on multiple dates (e.g., 'Dec 15 & 16' or 'Sat/Sun'), you MUST create separate objects for EACH date. Duplicate the work details exactly for each date sequence.",
+              "A comprehensive flat list of musical works extracted from the provided content's program list.",
             items: {
               type: "object",
               properties: {
-                date: {
-                  type: "integer",
-                  description:
-                    "The sequence number of the performance day (e.g., 1, 2). CRITICAL: If the program is a single-day event or no specific dates are distinguished, you MUST return 1. If a work is played on days 1 and 2, create two separate objects: one with date=1 and another with date=2.",
-                },
                 composerNameEn: {
                   type: ["string", "null"],
                   description:
-                    "Full name of the composer in English (e.g., 'Ludwig van Beethoven').",
+                    "Full name of the composer in English. Extract data ONLY from the provided content's program list. Return null if unidentified.",
                 },
                 composerNameKr: {
                   type: ["string", "null"],
                   description:
-                    "Full name of the composer in Korean (e.g., '베토벤').",
+                    "Full name of the composer in Korean.  Extract data ONLY from the provided content's program list. Return null if unidentified.",
                 },
                 workTitleEn: {
                   type: ["string", "null"],
                   description:
-                    "Title of the work in English. Exclude catalog numbers (e.g., 'Piano Sonata No. 14').",
+                    "Title of the work in English. Exclude catalog numbers. Extract data ONLY from the provided content's program list. Return null if unidentified.",
                 },
                 workTitleKr: {
                   type: ["string", "null"],
                   description:
-                    "Title of the work in Korean. Exclude catalog numbers.",
+                    "Title of the work in Korean. Exclude catalog numbers. Extract data ONLY from the provided content's program list. Return null if unidentified.",
                 },
                 catalogNumber: {
                   type: ["string", "null"],
                   description:
-                    "Opus or catalog number (e.g., 'Op. 27, No. 2', 'K. 448'). Keep standard Latin prefixes.",
+                    "Opus or catalog number of the work. Extract data ONLY from the provided content's program list. Return null if unidentified.",
                 },
               },
-              // 모든 필드를 필수(required)로 지정하되, 값이 없으면 null을 넣도록 유도하는 것이
-              // AI가 구조를 건너뛰지 않게 하는 데 유리할 수 있습니다.
               required: [
-                "date",
                 "composerNameEn",
                 "composerNameKr",
                 "workTitleEn",
