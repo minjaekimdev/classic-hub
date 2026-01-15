@@ -53,7 +53,6 @@ const systemInstruction = `Persona: You are a Forensic Data Entry Clerk speciali
 
 // generateContent 옵션 및 응답 형식 지정, 모델에 요청
 export const getProgramJSON = async (
-  performanceId: string,
   sty: string | { styurl: string | string[] }
 ): Promise<ProgramExtractionResponse | []> => {
   let contents;
@@ -91,6 +90,10 @@ export const getProgramJSON = async (
             items: {
               type: "object",
               properties: {
+                order: {
+                  type: ["integer"],
+                  description: "A sequential integer indicating the order in which the work appears in the provided content, starting from 1.",
+                },
                 composerNameEn: {
                   type: ["string", "null"],
                   description:
@@ -133,26 +136,17 @@ export const getProgramJSON = async (
       if (!response?.text) {
         throw new APIError("Gemini API response has no data!");
       }
-      console.log(response.usageMetadata); // 사용 토큰 수 출력
-      console.log(response.text); // 프로그램 출력
 
-      try {
-        logger.info("program extract succeeded", { service: "gemini" });
-        return JSON.parse(response.text);
-      } catch (error) {
-        // JSON 형식이 올바르지 않은 경우
-        logger.error("JSON parsing failed!", { performanceId, error });
-        return [];
-      }
-    },
-    // API 요청 자체가 도달하지 못한 경우, 응답은 도달했지만 결과 데이터가 없는 경우 실행될 fallback
-    () => {
-      logger.error("Gemini API request failed!", {
-        performanceId,
+      logger.info("gemini usage & result", {
         service: "gemini",
+        program: response.text,
+        usage: response.usageMetadata,
       });
-      return [];
+
+      // 파싱한 JSON 프로그램 데이터 반환
+      return JSON.parse(response.text);
     },
+    null,
     "gemini"
   );
 };

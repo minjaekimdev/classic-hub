@@ -1,4 +1,4 @@
-// KOPIS에서 받아오는 Original DTO를 정의(전처리 이후)
+// KOPIS에서 받아오는 Original DTO를 정의
 
 // 예매처 정보 인터페이스
 export interface BookingLink {

@@ -1,3 +1,5 @@
+// 전체 공연시설을 DB에 import하는 파일
+
 import { API_URL, SERVICE_KEY } from "@/infrastructure/external-api/kopis";
 import convert, { ElementCompact } from "xml-js";
 import { removeTextProperty } from "../services/preprocessing";

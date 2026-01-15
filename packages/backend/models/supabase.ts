@@ -55,8 +55,8 @@ export interface DBDailyRanking extends DBRanking {
 
 // 공연 데이터
 export interface DBPerformance {
-  performance_id: string;
-  venue_id: string;
+  performance_id: string; // 공연 id
+  venue_id: string; // 공연시설 id
   performance_name: string;
   period_from: string;
   period_to: string;
@@ -64,10 +64,13 @@ export interface DBPerformance {
   cast: string;
   runtime: string;
   age: string;
-  price: JsonValue;
+  price: {
+    seatType: string;
+    price: number;
+  }[];
   poster: string;
   state: string;
-  detail_image: JsonValue;
-  time: JsonValue;
-  raw_data: JsonValue;
+  detail_image: string[]; // 상세이미지 url을 배열로 담기
+  time: string;
+  raw_data: any;
 }

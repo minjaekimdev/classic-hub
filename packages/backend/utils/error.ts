@@ -16,8 +16,8 @@ export class APIError extends Error {
 // 2. 중앙화된 에러 핸들러
 export async function withErrorHandling<T>(
   operation: () => Promise<T>,
-  fallback?: T,
-  service: string = "default",
+  fallback?: T | (() => T),
+  service: string = "default"
 ): Promise<T> {
   try {
     return await operation();
@@ -25,7 +25,9 @@ export async function withErrorHandling<T>(
     logger.error("Operation failed", { error, stack: error.stack, service });
 
     if (fallback !== undefined) {
-      return typeof fallback === "function" ? fallback() : fallback;
+      return typeof fallback === "function"
+        ? (fallback as () => T)()
+        : fallback;
     }
     throw error;
   }

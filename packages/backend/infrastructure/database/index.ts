@@ -1,21 +1,19 @@
+import { APIError } from "utils/error";
 import supabase from "../external-api/supabase";
 import logger from "utils/logger";
 
-// DB performance_list 테이블에 존재하는 공연id를 배열로 반환하는 함수
-export const fetchColumnData = async (
+// DB 테이블에 존재하는 데이터의 값만을 배열로 반환
+// ex) [ {mt20id: PF1234}, ... ] -> [ PF1234, ... ]
+export const getColumnData = async (
   table: string,
   column: string
 ): Promise<string[]> => {
   const { data, error } = await supabase.from(table).select(column);
 
   if (error) {
-    logger.error("column data fetch 실패", {
-      error,
-      service: "supabase",
-    });
-    return [];
+    throw new APIError(`DB fetch failed: ${error.message}`);
   } else {
-    return data.map((element: Record<string, any>) => element.mt20id);
+    return data.map((element: Record<string, any>) => element.column);
   }
 };
 
@@ -23,24 +21,21 @@ export const fetchColumnData = async (
 export const deleteData = async <T>(
   table: string,
   column: string,
-  value: T
+  data: Array<T>
 ) => {
-  const { error } = await supabase.from(table).delete().eq(column, value);
+  const { error } = await supabase.from(table).delete().in(column, data);
 
   if (error) {
-    logger.error("data delete failed!", {
-      error,
-      service: "supabase",
-    });
+    throw new APIError(`DB delete failed: ${error.message}`);
   } else {
-    logger.info("data delete succeeded", {
+    logger.info("DB delete succeeded", {
       service: "supabase",
       table,
     });
   }
 };
 
-// 하나의 데이터를 DB에 삽입
+// 데이터를 DB에 삽입
 export const insertData = async <T>(
   table: string,
   data: T,
@@ -49,12 +44,9 @@ export const insertData = async <T>(
   const { error } = await supabase.from(table).upsert(data, { onConflict });
 
   if (error) {
-    logger.error("data insert failed!", {
-      error,
-      service: "supabase",
-    });
+    throw new APIError(`DB insert failed: ${error.message}`);
   } else {
-    logger.info("data insert succeeded", {
+    logger.info("DB insert succeeded", {
       service: "supabase",
       table,
     });
