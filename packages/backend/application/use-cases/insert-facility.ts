@@ -70,26 +70,30 @@ const insertFacilityToDB = async (facilityDetail: Facility) => {
 
 // 공연시설 상세 조회
 const getFacilityDetail = async (mt10id: string) => {
-  return withErrorHandling(async () => {
-    const response: ElementCompact = await fetch(
-      `${API_URL}/prfplc/${mt10id}?service=${SERVICE_KEY}`
-    );
-
-    if (!response.ok) {
-      throw new APIError(
-        `API call failed: ${response.status}`,
-        response.status,
+  return withErrorHandling(
+    async () => {
+      const response: ElementCompact = await fetch(
+        `${API_URL}/prfplc/${mt10id}?service=${SERVICE_KEY}`
       );
-    }
 
-    const xmlText = await response.text();
-    const parsedData: ElementCompact = convert.xml2js(xmlText, {
-      compact: true,
-    });
+      if (!response.ok) {
+        throw new APIError(
+          `API call failed: ${response.status}`,
+          response.status
+        );
+      }
 
-    const result = removeTextProperty(parsedData.dbs.db);
-    return result as unknown as Facility;
-  }, null, "kopis");
+      const xmlText = await response.text();
+      const parsedData: ElementCompact = convert.xml2js(xmlText, {
+        compact: true,
+      });
+
+      const result = removeTextProperty(parsedData.dbs.db);
+      return result as unknown as Facility;
+    },
+    null,
+    "kopis"
+  );
 };
 
 // 공연시설 목록 조회
@@ -106,7 +110,7 @@ const getFacilityAndInsertToDB = async () => {
     if (!response.ok) {
       throw new APIError(
         `API call failed: ${response.status}`,
-        response.status,
+        response.status
       );
     }
 
@@ -141,4 +145,6 @@ const getFacilityAndInsertToDB = async () => {
 };
 
 const KOPISrateLimiter = new RateLimiter(100);
-getFacilityAndInsertToDB();
+(async () => {
+  await getFacilityAndInsertToDB();
+})();

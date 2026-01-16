@@ -17,82 +17,6 @@ import {
 import RateLimiter from "utils/rateLimiter";
 import logger from "utils/logger";
 
-const getPerformanceIdsInPage = async (
-  page: number,
-  startDate: string,
-  endDate: string
-) => {
-  return withErrorHandling(
-    async () => {
-      const response = await fetch(
-        `${API_URL}/pblprfr?service=${SERVICE_KEY}&stdate=${startDate}&eddate=${endDate}&cpage=${page}&rows=${100}&shcate=${CLASSIC}`
-      );
-
-      // HTTP 에러일 경우 (503 등)
-      if (!response.ok) {
-        throw new APIError(
-          `KOPIS performance page API request failed at page ${page}`,
-          response.status
-        );
-      }
-
-      const xmlText = await response.text();
-      const parsedData: ElementCompact = convert.xml2js(xmlText, {
-        compact: true,
-      });
-
-      // API 요청에는 성공했으나 더이상 데이터가 없는 경우
-      if (!parsedData.dbs.db) {
-        return null;
-      }
-
-      // _text 프로퍼티를 제거하여 순수 공연 id만으로 이루어진 배열 반환
-      const processedResult = removeTextProperty(parsedData.dbs.db);
-      const performanceSummaryArray = (Array.isArray(processedResult)
-        ? processedResult
-        : [processedResult]) as unknown as PerformanceSummary[];
-
-      return performanceSummaryArray.map(
-        (item: PerformanceSummary) => item.mt20id
-      );
-    },
-    [],
-    "kopis"
-  );
-};
-
-const getPerformanceDetail = async (
-  performanceId: string
-): Promise<PerformanceDetail | null> => {
-  return withErrorHandling(
-    async () => {
-      const response: ElementCompact = await fetch(
-        `${API_URL}/pblprfr/${performanceId}?service=${SERVICE_KEY}`
-      );
-
-      if (!response.ok) {
-        throw new APIError(
-          `KOPIS performance detail API request failed at id ${performanceId}`,
-          response.status
-        );
-      }
-
-      const xmlText = await response.text();
-      const parsedData: ElementCompact = convert.xml2js(xmlText, {
-        compact: true,
-      });
-
-      const result = removeTextProperty(
-        parsedData.dbs.db
-      ) as unknown as PerformanceDetail;
-
-      return result;
-    },
-    null,
-    "kopis"
-  );
-};
-
 // "전석 40,000원" 형태인 경우 [ { seatType: '전석', price: 40000 } ]
 // "전석무료" 인 경우 빈 배열 반환
 const getParsedPrice = (originPrice: string) => {
@@ -152,26 +76,92 @@ const getMappedPerformanceDetail = (
   };
 };
 
-// 오늘 ~ 대상 기간동안의 새 공연 데이터 id 배열 리턴하기
-const getPerformances = async (startDate: string, endDate: string) => {
+const getPerformanceIdsInPage = async (api: string) => {
+  return withErrorHandling(
+    async () => {
+      const response = await fetch(api);
+
+      // HTTP 에러일 경우 (503 등)
+      if (!response.ok) {
+        throw new APIError(
+          "KOPIS performance page API request failed!",
+          response.status
+        );
+      }
+
+      const xmlText = await response.text();
+      const parsedData: ElementCompact = convert.xml2js(xmlText, {
+        compact: true,
+      });
+
+      // API 요청에는 성공했으나 더이상 데이터가 없는 경우
+      if (!parsedData.dbs.db) {
+        return null;
+      }
+
+      // _text 프로퍼티를 제거하여 순수 공연 id만으로 이루어진 배열 반환
+      const processedResult = removeTextProperty(parsedData.dbs.db);
+      const performanceSummaryArray = (Array.isArray(processedResult)
+        ? processedResult
+        : [processedResult]) as unknown as PerformanceSummary[];
+
+      return performanceSummaryArray.map(
+        (item: PerformanceSummary) => item.mt20id
+      );
+    },
+    [],
+    "kopis"
+  );
+};
+
+const getUpdatedPerformaces = async (
+  afterDate: string,
+  startDate: string,
+  endDate: string
+) => {
   const result = [];
 
   let page = 1;
   while (true) {
+    const api = `${API_URL}/pblprfr?service=${SERVICE_KEY}&stdate=${startDate}&eddate=${endDate}&cpage=${page++}&rows=${100}&shcate=${CLASSIC}&afterdate=${afterDate}`;
     const performanceIdArray = await kopisRateLimiter.execute(async () => {
-      return await getPerformanceIdsInPage(page, startDate, endDate);
+      return getPerformanceIdsInPage(api);
     });
-    page++;
 
     // 더 이상 데이터가 없는 경우 반복문 빠져나오기
     if (!performanceIdArray) {
       break;
     }
 
-    // 새 공연 데이터를 받아올 때 에러가 발생한 경우,
+    // 어제 이후로 업데이트된 페이지당 공연 id를 가져올 때 에러가 발생한 경우
+    if (performanceIdArray.length === 0) {
+      throw new Error(`KOPIS API updated performance get call failed`);
+    }
+    result.push(...performanceIdArray);
+  }
+  return result;
+};
+
+// 오늘 ~ 대상 기간동안의 새 공연 데이터 id 배열 리턴하기
+const getPerformances = async (startDate: string, endDate: string) => {
+  const result = [];
+
+  let page = 1;
+  while (true) {
+    const api = `${API_URL}/pblprfr?service=${SERVICE_KEY}&stdate=${startDate}&eddate=${endDate}&cpage=${page++}&rows=${100}&shcate=${CLASSIC}`;
+    const performanceIdArray = await kopisRateLimiter.execute(async () => {
+      return await getPerformanceIdsInPage(api);
+    });
+
+    // 더 이상 데이터가 없는 경우 반복문 빠져나오기
+    if (!performanceIdArray) {
+      break;
+    }
+
+    // 페이지별 새 공연 id 배열을 받아올 때 에러가 발생한 경우,
     // 추후 업데이트에도 영향을 미치므로 에러를 throw하여 프로그램 실행 종료시키기(예외처리 X)
     if (performanceIdArray.length === 0) {
-      throw new Error("KOPIS API new performance call failed!");
+      throw new Error(`KOPIS API new performance get call failed`);
     }
     result.push(...performanceIdArray);
   }
@@ -179,10 +169,63 @@ const getPerformances = async (startDate: string, endDate: string) => {
   return result;
 };
 
+const getPerformanceDetail = async (
+  performanceId: string
+): Promise<PerformanceDetail | null> => {
+  return withErrorHandling(
+    async () => {
+      const response: ElementCompact = await fetch(
+        `${API_URL}/pblprfr/${performanceId}?service=${SERVICE_KEY}`
+      );
+
+      if (!response.ok) {
+        throw new APIError(
+          `KOPIS performance detail API request failed at id ${performanceId}`,
+          response.status
+        );
+      }
+
+      const xmlText = await response.text();
+      const parsedData: ElementCompact = convert.xml2js(xmlText, {
+        compact: true,
+      });
+
+      const result = removeTextProperty(
+        parsedData.dbs.db
+      ) as unknown as PerformanceDetail;
+
+      return result;
+    },
+    null,
+    "kopis"
+  );
+};
+
+const getPerformaceDetailArray = async (idsToInsert: string[]) => {
+  const successes: DBPerformance[] = [];
+  const failures: { id: string; error: any }[] = [];
+
+  for (const id of idsToInsert) {
+    const performanceDetail = await kopisRateLimiter.execute(async () => {
+      return await getPerformanceDetail(id);
+    });
+
+    if (!performanceDetail) {
+      failures.push({ id, error: "APIError" });
+      continue;
+    }
+    successes.push(getMappedPerformanceDetail(performanceDetail));
+  }
+
+  return { successes, failures };
+};
+
 const updatePerformancesInDB = async () => {
   const now = dayjs();
   const startDate = now.format("YYYYMMDD");
   const endDate = now.add(365, "days").format("YYYYMMDD");
+  const afterDate = now.subtract(1, "days").format("YYYYMMDD");
+  const updateEndDate = now.add(364, "days").format("YYYYMMDD");
 
   const newPerformances = new Set(await getPerformances(startDate, endDate));
   const dbPerformances = new Set(
@@ -198,35 +241,40 @@ const updatePerformancesInDB = async () => {
     (id) => !dbPerformances.has(id)
   );
 
-  await deleteData("performances", "performance_id", [...idsToDelete]);
-
-  // 배열에 공연 상세 데이터를 한꺼번에 모아 bulk insert
-  const performanceDetailArray: DBPerformance[] = [];
-  for (const id of idsToInsert) {
-    const performanceDetail = await kopisRateLimiter.execute(async () => {
-      return await getPerformanceDetail(id);
-    });
-
-    if (!performanceDetail) {
-      continue;
-    }
-
-    const mappedData = getMappedPerformanceDetail(performanceDetail);
-    performanceDetailArray.push(mappedData);
+  // 데이터 삭제
+  await deleteData("performances", "performance_id", idsToDelete);
+  // 데이터 삽입
+  const { successes: insertDataList, failures: insertFailures } =
+    await getPerformaceDetailArray(idsToInsert);
+  if (insertDataList.length > 0) {
+    await insertData("performances", insertDataList, "performance_id");
+  }
+  if (insertFailures.length > 0) {
+    logger.warn(
+      `[INSERT_FAIL] ${
+        insertFailures.length
+      } items failed. IDs: ${insertFailures.map((f) => f.id).join(", ")}`
+    );
   }
 
-  await withErrorHandling(
-    async () => {
-      await insertData(
-        "performances",
-        performanceDetailArray,
-        "performance_id"
-      );
-    },
-    () => {
-      logger.error(`performance insert failed: ${startDate} ~ ${endDate}`);
-    }
+  // update 관련 로직은 상대적으로 중요도가 낮으므로 새 공연 데이터 삽입이 완료된 이후에 실행
+  const idsToUpdate = await getUpdatedPerformaces(
+    afterDate,
+    startDate,
+    updateEndDate
   );
+  const { successes: updateDataList, failures: updateFailures } =
+    await getPerformaceDetailArray(idsToUpdate);
+  if (updateDataList.length > 0) {
+    await insertData("performances", updateDataList, "performance_id");
+  }
+  if (updateFailures.length > 0) {
+    logger.warn(
+      `[UPDATE_FAIL] ${
+        updateFailures.length
+      } items failed. IDs: ${updateFailures.map((f) => f.id).join(", ")}`
+    );
+  }
 };
 
 // 초당 10회 호출 제한이지만, 넉넉하게 초당 5회 호출

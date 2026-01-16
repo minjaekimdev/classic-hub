@@ -17,12 +17,12 @@ export const getColumnData = async (
   }
 };
 
-// 특정 공연 데이터 삭제
+// 데이터 삭제
 export const deleteData = async <T>(
   table: string,
   column: string,
   data: Array<T>
-) => {
+) => {  
   const { error } = await supabase.from(table).delete().in(column, data);
 
   if (error) {
