@@ -16,7 +16,7 @@ export class APIError extends Error {
 // 2. 중앙화된 에러 핸들러
 export async function withErrorHandling<T>(
   operation: () => Promise<T>,
-  fallback?: T | (() => T),
+  fallback?: any,
   service: string = "default"
 ): Promise<T> {
   try {
@@ -26,7 +26,7 @@ export async function withErrorHandling<T>(
 
     if (fallback !== undefined) {
       return typeof fallback === "function"
-        ? (fallback as () => T)()
+        ? await fallback()
         : fallback;
     }
     throw error;

@@ -5,7 +5,7 @@ name: Performance Update
 on:
   schedule:
     # UTC 기준 매일 15:00 (한국 시간 자정)에 실행
-    - cron: '0 15 * * *'
+    - cron: "0 15 * * *"
 
   workflow_dispatch:
     # 수동 실행을 위한 버튼 제공
@@ -22,27 +22,27 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2. Node.js 실행 환경 설치 
+      # 2. Node.js 실행 환경 설치
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20' # 안정적인 최신 LTS 버전 사용
+          node-version: "20" # 안정적인 최신 LTS 버전 사용
 
       # 3. 필요한 라이브러리 설치 (npm 사용)
       # package.json 파일에 명시된 모든 의존성을 설치합니다.
       - name: Install dependencies
         run: npm install
-        working-directory: ./backend
+        working-directory: ./packages/backend
 
       # 4. 데이터 업데이트 스크립트 실행
       # 'deno run' 대신 'npx ts-node'를 사용해 TypeScript 파일을 직접 실행
       - name: Run daily tasks runner script
-        run: "npx ts-node -r tsconfig-paths/register ./database/cron/all-performance.ts"
-        working-directory: ./backend
-        
+        run: "npx tsx ./application/use-cases/update-performances.ts"
+        working-directory: ./packages/backend
+
         # 환경 변수 주입 방식은 동일합니다.
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           KOPIS_SERVICE_KEY: ${{ secrets.KOPIS_SERVICE_KEY }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

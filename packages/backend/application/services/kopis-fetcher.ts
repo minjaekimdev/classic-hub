@@ -4,7 +4,7 @@ import convert, { ElementCompact } from "xml-js";
 export const kopisFetcher = async (api: string) => {
   const response = await fetch(api);
 
-  // HTTP 에러일 경우 (503 등)
+  // HTTP 에러일 경우 
   if (!response.ok) {
     throw new APIError(
       "KOPIS API request failed!",

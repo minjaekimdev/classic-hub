@@ -5,7 +5,7 @@ import {
 } from "@/infrastructure/external-api/kopis";
 import { PerformanceDetail, PerformanceSummary } from "@/models/kopis";
 import dayjs from "dayjs";
-import { withErrorHandling } from "utils/error";
+import { APIError, withErrorHandling } from "utils/error";
 import { removeTextProperty } from "../services/preprocessor";
 import { DBPerformance } from "@/models/supabase";
 import {
@@ -16,6 +16,7 @@ import {
 import RateLimiter from "utils/rateLimiter";
 import logger from "utils/logger";
 import { kopisFetcher } from "../services/kopis-fetcher";
+import { sendSlackNotification } from "utils/monitor";
 
 // "전석 40,000원" 형태인 경우 [ { seatType: '전석', price: 40000 } ]
 // "전석무료" 인 경우 빈 배열 반환
@@ -35,7 +36,7 @@ const getParsedPrice = (originPrice: string) => {
 };
 
 const getMappedPerformanceDetail = (
-  performanceDetail: PerformanceDetail
+  performanceDetail: PerformanceDetail,
 ): DBPerformance => {
   const {
     mt20id,
@@ -93,18 +94,18 @@ const getPerformanceIdsInPage = async (api: string) => {
         : [processedResult]) as unknown as PerformanceSummary[];
 
       return performanceSummaryArray.map(
-        (item: PerformanceSummary) => item.mt20id
+        (item: PerformanceSummary) => item.mt20id,
       );
     },
     [],
-    "kopis"
+    "kopis",
   );
 };
 
 const getUpdatedPerformaces = async (
   afterDate: string,
   startDate: string,
-  endDate: string
+  endDate: string,
 ) => {
   const result = [];
 
@@ -130,25 +131,31 @@ const getUpdatedPerformaces = async (
 };
 
 // 오늘 ~ 대상 기간동안의 새 공연 데이터 id 배열 리턴하기
-const getPerformances = async (startDate: string, endDate: string) => {
+const getPerformanceIds = async (startDate: string, endDate: string) => {
   const result = [];
 
   let page = 1;
   while (true) {
-    const api = `${API_URL}/pblprfr?service=${SERVICE_KEY}&stdate=${startDate}&eddate=${endDate}&cpage=${page++}&rows=${100}&shcate=${CLASSIC}`;
+    const api = `${API_URL}/pblprfr?service=${SERVICE_KEY}&stdate=${startDate}&eddate=${endDate}&cpage=${page}&rows=${100}&shcate=${CLASSIC}`;
     const performanceIdArray = await kopisRateLimiter.execute(async () => {
       return await getPerformanceIdsInPage(api);
     });
+
+    let currentPage = page++;
 
     // 더 이상 데이터가 없는 경우 반복문 빠져나오기
     if (!performanceIdArray) {
       break;
     }
 
-    // 페이지별 새 공연 id 배열을 받아올 때 에러가 발생한 경우,
-    // 추후 업데이트에도 영향을 미치므로 에러를 throw하여 프로그램 실행 종료시키기(예외처리 X)
+    // 무한루프 도는지 파악을 위한 로깅
+    logger.debug(
+      `[FETCH_PAGE] Page ${currentPage}: Found ${performanceIdArray.length} items`,
+    );
+
+    // 페이지별 새 공연 id 배열을 받아올 때 에러가 발생한 경우 빈 배열 리턴
     if (performanceIdArray.length === 0) {
-      throw new Error(`KOPIS API new performance get call failed`);
+      return [];
     }
     result.push(...performanceIdArray);
   }
@@ -157,22 +164,22 @@ const getPerformances = async (startDate: string, endDate: string) => {
 };
 
 const getPerformanceDetail = async (
-  performanceId: string
+  performanceId: string,
 ): Promise<PerformanceDetail | null> => {
   return withErrorHandling(
     async () => {
       const parsedData = await kopisFetcher(
-        `${API_URL}/pblprfr/${performanceId}?service=${SERVICE_KEY}`
+        `${API_URL}/pblprfr/${performanceId}?service=${SERVICE_KEY}`,
       );
 
       const result = removeTextProperty(
-        parsedData.dbs.db
+        parsedData.dbs.db,
       ) as unknown as PerformanceDetail;
 
       return result;
     },
     null,
-    "kopis"
+    "kopis",
   );
 };
 
@@ -204,34 +211,95 @@ const updatePerformancesInDB = async () => {
   const afterDate = now.subtract(1, "days").format("YYYYMMDD");
   const updateEndDate = now.add(364, "days").format("YYYYMMDD");
 
-  const newPerformances = new Set(await getPerformances(startDate, endDate));
-  const dbPerformances = new Set(
-    await getColumnData("performances", "performance_id")
+  const newPerformances = await withErrorHandling(async () => {
+    const result = await getPerformanceIds(startDate, endDate);
+
+    if (result.length === 0) {
+      logger.error("[FETCH_FAIL] new data fetch failed", {
+        service: "kopis",
+      });
+      await sendSlackNotification("❌ [FETCH_FAIL] new data fetch failed");
+      throw new APIError("[FETCH_FAIL] new data fetch failed");
+    }
+
+    return result;
+  }); // 추후 업데이트에도 영향을 미치므로 fallback을 지정하지 않음
+
+  const dbPerformances = await withErrorHandling(
+    async () => {
+      return await getColumnData("performances", "performance_id");
+    },
+    async () => {
+      logger.error("[FETCH_FAIL] old DB data fetch failed", {
+        service: "supabase",
+      });
+      await sendSlackNotification("❌ [FETCH_FAIL] old DB data fetch failed");
+      throw new Error("Operation Failed");
+    },
   );
+
+  const newPerformancesSet = new Set(newPerformances);
+  const dbPerformancesSet = new Set(dbPerformances);
 
   // DB에는 있지만 새 공연 데이터에는 없는 id -> 삭제 대상
   const idsToDelete = [...dbPerformances].filter(
-    (id) => !newPerformances.has(id)
+    (id) => !newPerformancesSet.has(id),
   );
   // 새 공연 데이터에는 있지만 DB에는 없는 id -> 삽입 대상
   const idsToInsert = [...newPerformances].filter(
-    (id) => !dbPerformances.has(id)
+    (id) => !dbPerformancesSet.has(id),
   );
 
   // 데이터 삭제
-  await deleteData("performances", "performance_id", idsToDelete);
+  await withErrorHandling(
+    async () => {
+      await deleteData("performances", "performance_id", idsToDelete);
+      logger.info(
+        `[DELETE_SUCCESS] data delete succeeded`, {service: "supabase"}
+      );
+      await sendSlackNotification("✅ [DELETE_SUCCESS] data delete succeeded");
+    },
+    async () => {
+      logger.error("[DELETE_FAIL] data delete Failed", {
+        service: "supabase",
+      });
+      await sendSlackNotification("❌ [DELETE_FAIL] data delete Failed");
+    },
+  );
 
   // 데이터 삽입
-  const { successes: insertDataList, failures: insertFailures } =
+  const { successes: toInsertDataList, failures: toInsertFailures } =
     await getPerformaceDetailArray(idsToInsert);
-  if (insertDataList.length > 0) {
-    await insertData("performances", insertDataList, "performance_id");
+  if (toInsertDataList.length > 0) {
+    await withErrorHandling(
+      async () => {
+        await insertData("performances", toInsertDataList, "performance_id");
+        logger.info(
+          `[INSERT_SUCCESS] ${toInsertDataList.length} items succeeded`, {service: "supabase"}
+        );
+        await sendSlackNotification(
+          `✅ [INSERT_SUCCESS] ${toInsertDataList.length} items succeeded`,
+        );
+      },
+      async () => {
+        logger.error(`[INSERT_FAIL] ${toInsertDataList.length} items failed`, {
+          service: "supabase",
+        });
+        await sendSlackNotification(
+          `[INSERT_FAIL] ${toInsertDataList.length} items failed`,
+        );
+      },
+    );
   }
-  if (insertFailures.length > 0) {
-    logger.warn(
-      `[INSERT_FAIL] ${
-        insertFailures.length
-      } items failed. IDs: ${insertFailures.map((f) => f.id).join(", ")}`
+  if (toInsertFailures.length > 0) {
+    logger.error(
+      `[FETCH_FAIL] ${
+        toInsertFailures.length
+      } performance detail fetch failed. IDs: ${toInsertFailures.map((f) => f.id).join(", ")}`,
+      { service: "kopis" },
+    );
+    await sendSlackNotification(
+      `❌ [FETCH_FAIL] ${toInsertFailures.length} performance detail fetch failed.`,
     );
   }
 
@@ -239,18 +307,36 @@ const updatePerformancesInDB = async () => {
   const idsToUpdate = await getUpdatedPerformaces(
     afterDate,
     startDate,
-    updateEndDate
+    updateEndDate,
   );
-  const { successes: updateDataList, failures: updateFailures } =
+  const { successes: toUpdateDataList, failures: toUpdateFailures } =
     await getPerformaceDetailArray(idsToUpdate);
-  if (updateDataList.length > 0) {
-    await insertData("performances", updateDataList, "performance_id");
+  if (toUpdateDataList.length > 0) {
+    await withErrorHandling(
+      async () => {
+        await insertData("performances", toUpdateDataList, "performance_id");
+        logger.info(
+          `[UPDATE_SUCCESS] Updated ${toUpdateDataList.length} items`, {service: "supabase"}
+        );
+        await sendSlackNotification(
+          `✅ [UPDATE_SUCCESS] Updated ${toUpdateDataList.length} items`,
+        );
+      },
+      async () => {
+        logger.error(`[UPDATE_FAIL] ${toUpdateFailures.length} items failed`, {
+          service: "supabase",
+        });
+        await sendSlackNotification(
+          `❌ [UPDATE_FAIL] ${toUpdateFailures.length} items failed`,
+        );
+      },
+    );
   }
-  if (updateFailures.length > 0) {
+  if (toUpdateFailures.length > 0) {
     logger.warn(
       `[UPDATE_FAIL] ${
-        updateFailures.length
-      } items failed. IDs: ${updateFailures.map((f) => f.id).join(", ")}`
+        toUpdateFailures.length
+      } performance detail fetch failed. IDs: ${toUpdateFailures.map((f) => f.id).join(", ")}`,
     );
   }
 };

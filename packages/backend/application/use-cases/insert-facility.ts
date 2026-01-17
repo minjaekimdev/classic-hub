@@ -8,6 +8,7 @@ import { insertData } from "@/infrastructure/database";
 import { APIError, withErrorHandling } from "utils/error";
 import { DBFacility, DBHall } from "@/models/supabase";
 import RateLimiter from "utils/rateLimiter";
+import { kopisFetcher } from "../services/kopis-fetcher";
 
 // 공연장은 facilities 테이블에, 세부 공연장은 halls 테이블에 저장
 const insertFacilityToDB = async (facilityDetail: Facility) => {
@@ -72,27 +73,15 @@ const insertFacilityToDB = async (facilityDetail: Facility) => {
 const getFacilityDetail = async (mt10id: string) => {
   return withErrorHandling(
     async () => {
-      const response: ElementCompact = await fetch(
-        `${API_URL}/prfplc/${mt10id}?service=${SERVICE_KEY}`
+      const parsedData = await kopisFetcher(
+        `${API_URL}/prfplc/${mt10id}?service=${SERVICE_KEY}`,
       );
-
-      if (!response.ok) {
-        throw new APIError(
-          `API call failed: ${response.status}`,
-          response.status
-        );
-      }
-
-      const xmlText = await response.text();
-      const parsedData: ElementCompact = convert.xml2js(xmlText, {
-        compact: true,
-      });
 
       const result = removeTextProperty(parsedData.dbs.db);
       return result as unknown as Facility;
     },
     null,
-    "kopis"
+    "kopis",
   );
 };
 
@@ -102,22 +91,9 @@ const getFacilityAndInsertToDB = async () => {
 
   while (true) {
     console.log(`page: ${page}`);
-
-    const response: ElementCompact = await KOPISrateLimiter.execute(() =>
-      fetch(`${API_URL}/prfplc?service=${SERVICE_KEY}&cpage=${page++}&rows=100`)
+    const parsedData = await kopisFetcher(
+      `${API_URL}/prfplc?service=${SERVICE_KEY}&cpage=${page++}&rows=100`,
     );
-
-    if (!response.ok) {
-      throw new APIError(
-        `API call failed: ${response.status}`,
-        response.status
-      );
-    }
-
-    const xmlText = await response.text();
-    const parsedData: ElementCompact = convert.xml2js(xmlText, {
-      compact: true,
-    });
 
     // 배열로 구성된 공연장 목록 데이터(전처리 이전)
     const rawArray = parsedData.dbs.db;
@@ -132,14 +108,14 @@ const getFacilityAndInsertToDB = async () => {
         const mt10id = item.mt10id._text;
 
         const facility = await KOPISrateLimiter.execute(() =>
-          getFacilityDetail(mt10id)
+          getFacilityDetail(mt10id),
         );
 
         // null 체크: facility가 null이 아닐 때만 저장
         if (facility) {
           await insertFacilityToDB(facility);
         }
-      })
+      }),
     );
   }
 };
