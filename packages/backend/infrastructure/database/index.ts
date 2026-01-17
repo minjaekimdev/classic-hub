@@ -22,7 +22,7 @@ export const deleteData = async <T>(
   table: string,
   column: string,
   data: Array<T>
-) => {  
+) => {
   const { error } = await supabase.from(table).delete().in(column, data);
 
   if (error) {
@@ -49,6 +49,19 @@ export const insertData = async <T>(
     logger.info("DB insert succeeded", {
       service: "supabase",
       table,
+    });
+  }
+};
+
+export const callDatabaseFunction = async <T>(fnName: string, args?: T) => {
+  const { error } = await supabase.rpc(fnName, args);
+
+  if (error) {
+    throw new APIError(`RPC Failed: ${error.message}`);
+  } else {
+    logger.info("DB RPC succeeded", {
+      service: "supabase",
+      fnName,
     });
   }
 };

@@ -2,7 +2,7 @@
 
 import { API_URL, SERVICE_KEY } from "@/infrastructure/external-api/kopis";
 import convert, { ElementCompact } from "xml-js";
-import { removeTextProperty } from "../services/preprocessing";
+import { removeTextProperty } from "../services/preprocessor";
 import { Facility, FacilitySummary } from "@/models/kopis";
 import { insertData } from "@/infrastructure/database";
 import { APIError, withErrorHandling } from "utils/error";

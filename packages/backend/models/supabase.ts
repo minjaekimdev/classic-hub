@@ -1,5 +1,3 @@
-import { JsonValue } from "@/database/preprocessing";
-
 // 공연장 데이터
 export interface DBFacility {
   id: string;
@@ -40,17 +38,16 @@ export interface DBHall {
 
 // 랭킹 데이터
 export interface DBRanking {
-  rank: number;
+  performance_id: string;
+  current_rank: number;
+  last_rank: number;
   performance_name: string;
   period: string;
   area: string;
   venue_name: string;
+  seat_scale: number;
+  performance_count: number;
   poster: string;
-  performance_id: string;
-}
-
-export interface DBDailyRanking extends DBRanking {
-  last_rank: number | null;
 }
 
 // 공연 데이터

@@ -20,6 +20,7 @@
   "scripts": {
     "insert-facility": "npx tsx ./application/use-cases/insert-facility.ts",
     "get-program-test": "npx tsx ./test/get-program-test.ts",
-    "update-performances": "npx tsx ./application/use-cases/update-performances.ts"
+    "update-performances": "npx tsx ./application/use-cases/update-performances.ts",
+    "update-ranking": "npx tsx ./application/use-cases/update-ranking.ts"
   }
 }

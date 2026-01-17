@@ -5,9 +5,8 @@ import {
 } from "@/infrastructure/external-api/kopis";
 import { PerformanceDetail, PerformanceSummary } from "@/models/kopis";
 import dayjs from "dayjs";
-import { APIError, withErrorHandling } from "utils/error";
-import convert, { ElementCompact } from "xml-js";
-import { removeTextProperty } from "../services/preprocessing";
+import { withErrorHandling } from "utils/error";
+import { removeTextProperty } from "../services/preprocessor";
 import { DBPerformance } from "@/models/supabase";
 import {
   deleteData,
@@ -16,6 +15,7 @@ import {
 } from "@/infrastructure/database";
 import RateLimiter from "utils/rateLimiter";
 import logger from "utils/logger";
+import { kopisFetcher } from "../services/kopis-fetcher";
 
 // "전석 40,000원" 형태인 경우 [ { seatType: '전석', price: 40000 } ]
 // "전석무료" 인 경우 빈 배열 반환
@@ -79,20 +79,7 @@ const getMappedPerformanceDetail = (
 const getPerformanceIdsInPage = async (api: string) => {
   return withErrorHandling(
     async () => {
-      const response = await fetch(api);
-
-      // HTTP 에러일 경우 (503 등)
-      if (!response.ok) {
-        throw new APIError(
-          "KOPIS performance page API request failed!",
-          response.status
-        );
-      }
-
-      const xmlText = await response.text();
-      const parsedData: ElementCompact = convert.xml2js(xmlText, {
-        compact: true,
-      });
+      const parsedData = await kopisFetcher(api);
 
       // API 요청에는 성공했으나 더이상 데이터가 없는 경우
       if (!parsedData.dbs.db) {
@@ -174,21 +161,9 @@ const getPerformanceDetail = async (
 ): Promise<PerformanceDetail | null> => {
   return withErrorHandling(
     async () => {
-      const response: ElementCompact = await fetch(
+      const parsedData = await kopisFetcher(
         `${API_URL}/pblprfr/${performanceId}?service=${SERVICE_KEY}`
       );
-
-      if (!response.ok) {
-        throw new APIError(
-          `KOPIS performance detail API request failed at id ${performanceId}`,
-          response.status
-        );
-      }
-
-      const xmlText = await response.text();
-      const parsedData: ElementCompact = convert.xml2js(xmlText, {
-        compact: true,
-      });
 
       const result = removeTextProperty(
         parsedData.dbs.db
@@ -201,7 +176,9 @@ const getPerformanceDetail = async (
   );
 };
 
+// KOPIS에 idsToInsert에 있는 공연들에 대한 상세 데이터를 받아온 뒤 DB 엔티티에 맞게 매핑하여 반환하는 함수
 const getPerformaceDetailArray = async (idsToInsert: string[]) => {
+  // 상세 데이터를 가져오는 데 성공한 공연, 실패한 공연 id를 따로 저장
   const successes: DBPerformance[] = [];
   const failures: { id: string; error: any }[] = [];
 
@@ -243,6 +220,7 @@ const updatePerformancesInDB = async () => {
 
   // 데이터 삭제
   await deleteData("performances", "performance_id", idsToDelete);
+
   // 데이터 삽입
   const { successes: insertDataList, failures: insertFailures } =
     await getPerformaceDetailArray(idsToInsert);
