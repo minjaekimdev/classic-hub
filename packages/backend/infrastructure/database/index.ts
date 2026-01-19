@@ -45,11 +45,6 @@ export const insertData = async <T>(
 
   if (error) {
     throw new APIError(`DB insert failed: ${error.message}`);
-  } else {
-    logger.info("DB insert succeeded", {
-      service: "supabase",
-      table,
-    });
   }
 };
 

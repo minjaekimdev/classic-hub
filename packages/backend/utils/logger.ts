@@ -39,14 +39,14 @@ const logger = winston.createLogger({
   format: winston.format.combine(
     winston.format.errors({ stack: true }),
     winston.format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
-    winston.format.json()
+    winston.format.json(),
   ),
   transports: [
     new winston.transports.Console({
       // 콘솔 출력용 포맷 (색상 적용)
       format: winston.format.combine(
         winston.format.colorize(), // level(error, info)에 색상 입히기
-        colorizedServiceFormat // 서비스별 색상 입히기
+        colorizedServiceFormat, // 서비스별 색상 입히기
       ),
     }),
   ],

@@ -9,6 +9,7 @@ import { APIError, withErrorHandling } from "utils/error";
 import { DBFacility, DBHall } from "@/models/supabase";
 import RateLimiter from "utils/rateLimiter";
 import { kopisFetcher } from "../services/kopis-fetcher";
+import logger from "utils/logger";
 
 // 공연장은 facilities 테이블에, 세부 공연장은 halls 테이블에 저장
 const insertFacilityToDB = async (facilityDetail: Facility) => {
@@ -24,7 +25,7 @@ const insertFacilityToDB = async (facilityDetail: Facility) => {
 
     // 숫자 변환 (String -> Number)
     hall_count: Number(facility.mt13cnt),
-    seat_count: Number(facility.seatscale),
+    seat_count: Number(facility.seatscale?.replaceAll(",", "")),
     latitude: Number(facility.la),
     longitude: Number(facility.lo),
 
@@ -54,19 +55,28 @@ const insertFacilityToDB = async (facilityDetail: Facility) => {
   const DBhallData = hallList.map((hall) => ({
     id: hall.mt13id,
     name: hall.prfplcnm,
-    seat_count: Number(hall.seatscale),
+    seat_count: Number(hall.seatscale?.replaceAll(",", "")),
     has_orchestra_pit: hall.stageorchat === "Y",
     has_practice_room: hall.stagepracat === "Y",
     has_dressing_room: hall.stagedresat === "Y",
     has_outdoor_stage: hall.stageoutdrat === "Y",
-    disabled_seat_count: Number(hall.disabledseatscale),
+    disabled_seat_count: Number(hall.disabledseatscale?.replaceAll(",", "")),
     disabled_stage_area: hall.stagearea,
     facility_id: facility.mt10id,
   }));
 
   // PK가 존재하는 facilities 데이터가 먼저 삽입되어야 함(halls FK -> facilities PK)
-  await insertData("facilities", DBfaciltyData, "id");
-  await insertData("halls", DBhallData, "id");
+  await withErrorHandling(
+    async () => {
+      await insertData("facilities", DBfaciltyData, "id");
+      await insertData("halls", DBhallData, "id");
+    },
+    () => {
+      logger.warn(
+        `[INSERT_FAIL] facility detail insert failed: ${facility.mt10id}`,
+      );
+    },
+  );
 };
 
 // 공연시설 상세 조회
@@ -80,14 +90,16 @@ const getFacilityDetail = async (mt10id: string) => {
       const result = removeTextProperty(parsedData.dbs.db);
       return result as unknown as Facility;
     },
-    null,
+    () => {
+      logger.warn(`[FETCH_FAIL] facility detail fetch failed: ${mt10id}`);
+    },
     "kopis",
   );
 };
 
 // 공연시설 목록 조회
 const getFacilityAndInsertToDB = async () => {
-  let page = 28;
+  let page = 1;
 
   while (true) {
     console.log(`page: ${page}`);
