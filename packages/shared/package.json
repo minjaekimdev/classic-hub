@@ -2,7 +2,8 @@
   "name": "@classic-hub/shared",
   "version": "1.0.0",
   "exports": {
-    "./types/performance": "./types/performance.ts",
+    "./types/client": "./types/client.ts",
+    "./types/database": "./types/database.ts",
     "./utils": "./utils/index.ts"
   }
 }

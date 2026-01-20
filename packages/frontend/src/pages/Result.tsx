@@ -4,7 +4,7 @@ import closeIcon from "@shared/assets/icons/close-white.svg";
 import { useState } from "react";
 import useResultFilter from "@/features/filter/hooks/useResultFilter";
 import ResultFilterDesktop from "@/features/filter/components/result/ResultFilterDesktop";
-import type { PerformanceSummary } from "@root-shared/types/performance";
+import type { PerformanceSummary } from "@classic-hub/shared/types/client";
 import ResultAlbumItem from "@/features/performance/components/ResultAlbumItem";
 import useWindowSize from "@/shared/hooks/useWindowSize";
 import ListItem from "@/features/performance/components/ListItem";
@@ -115,7 +115,6 @@ const MOCKUP_DATA: PerformanceSummary[] = [
     },
     venue: "금호아트홀 연세",
     time: "오후 8시 00분", // 임의 생성
-    composerArray: ["쇼팽", "리스트", "라흐마니노프"], // 임의 생성
     price: {
       min: 30000, // 임의 생성
       max: 50000,
@@ -133,7 +132,6 @@ const MOCKUP_DATA: PerformanceSummary[] = [
     },
     venue: "성남아트센터",
     time: "오후 5시 00분", // 임의 생성
-    composerArray: ["엘가", "비발디", "파헬벨"], // 임의 생성
     price: {
       min: 0, // 무료 공연 추정
       max: 0,
@@ -151,7 +149,6 @@ const MOCKUP_DATA: PerformanceSummary[] = [
     },
     venue: "고양아람누리",
     time: "오후 4시 00분", // 임의 생성
-    composerArray: ["드보르작", "베토벤"], // 임의 생성
     price: {
       min: 10000, // 청소년 연주회 통상 가격 추정
       max: 10000,
@@ -169,7 +166,6 @@ const MOCKUP_DATA: PerformanceSummary[] = [
     },
     venue: "남양성모성지",
     time: "오후 7시 30분", // 임의 생성
-    composerArray: ["슈베르트", "바흐", "크리스마스 캐롤"], // 임의 생성
     price: {
       min: 50000, // 임의 생성
       max: 50000,
@@ -187,7 +183,6 @@ const MOCKUP_DATA: PerformanceSummary[] = [
     },
     venue: "오감클래식",
     time: "오전 11시 00분", // 마티네 공연 추정
-    composerArray: ["생상스", "차이코프스키"], // 임의 생성
     price: {
       min: 20000, // 소규모 공연장 통상 가격 추정
       max: 30000,

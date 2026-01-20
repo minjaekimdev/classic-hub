@@ -19,6 +19,7 @@
     "typescript": "^5.8.3"
   },
   "scripts": {
+    "test": "npx tsx ./tests/index.ts",
     "insert-facility": "npx tsx ./application/use-cases/insert-facility.ts",
     "get-program-test": "npx tsx ./test/get-program-test.ts",
     "update-performances": "npx tsx ./application/use-cases/update-performances.ts",

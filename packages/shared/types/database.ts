@@ -50,6 +50,22 @@ export interface DBRanking {
   poster: string;
 }
 
+export interface Price {
+  seatType: string;
+  price: number;
+}
+
+export interface DBdailyRankingWithDetails {
+  current_rank: number;
+  performance_id: string;
+  poster: string;
+  performance_name: string;
+  period: string;
+  venue_name: string;
+  cast: string;
+  price: Price[];
+}
+
 // 공연 데이터
 export interface DBPerformance {
   performance_id: string; // 공연 id
@@ -61,10 +77,7 @@ export interface DBPerformance {
   cast: string;
   runtime: string;
   age: string;
-  price: {
-    seatType: string;
-    price: number;
-  }[];
+  price: Price[];
   poster: string;
   state: string;
   detail_image: string[]; // 상세이미지 url을 배열로 담기

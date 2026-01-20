@@ -1,7 +1,7 @@
 import React from "react";
 import RankBadge from "@/shared/ui/badges/RankBadge";
 import Bookmark from "@/shared/ui/buttons/BookmarkButton";
-import type { HomePerformance } from "@classic-hub/shared/types/performance";
+import type { HomePerformance } from "@classic-hub/shared/types/client";
 import PerformanceAlbumMeta from "@/features/performance/components/MetaData";
 import PriceDisplay from "./PriceDisplay";
 
@@ -26,13 +26,11 @@ const Card: React.FC<CardProps> = ({ imgSrc, rank }) => {
   );
 };
 
-type InfoProps = Omit<HomePerformance, "id" | "posterUrl" | "rank">;
+type InfoProps = Omit<HomePerformance, "id" | "poster" | "rank" | "poster">;
 const Info = ({
   title,
   artist,
-  composerArray,
   date,
-  time,
   venue,
   price,
 }: InfoProps) => {
@@ -41,9 +39,7 @@ const Info = ({
       <PerformanceAlbumMeta
         title={title}
         artist={artist}
-        composerArray={composerArray}
         date={date}
-        time={time}
         venue={venue}
       />
       <div className="mt-3">
@@ -65,13 +61,11 @@ const AlbumItem = ({ data }: AlbumItemProps) => {
   return (
     // group 클래스를 지정하여 해당 요소 hover시 자식의 스타일이 바뀌도록(transform: scale(1.05))
     <div className="group flex flex-col rounded-main bg-white w-full shadow-[0_1px_3px_0_rgba(0,0,0,0.1),0_1px_2px_-1px_rgba(0,0,0,0.1)] overflow-hidden transition-shadow duration-200 ease-in-out hover:shadow-[0_10px_15px_-3px_rgba(0,0,0,0.1),0_4px_6px_-4px_rgba(0,0,0,0.1)] cursor-pointer">
-      <Card imgSrc={data.posterUrl} rank={data.rank} />
+      <Card imgSrc={data.poster} rank={data.rank} />
       <Info
         title={data.title}
         artist={data.artist}
-        composerArray={data.composerArray}
         date={data.date}
-        time={data.time}
         venue={data.venue}
         price={data.price}
       />

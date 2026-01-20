@@ -1,9 +1,7 @@
 import React from "react";
-import type { HomePerformance } from "@classic-hub/shared/types/performance";
+import type { HomePerformance } from "@classic-hub/shared/types/client";
 import calendarIcon from "@shared/assets/icons/calendar-gray.svg";
-import clockIcon from "@shared/assets/icons/clock-gray.svg";
 import locationIcon from "@shared/assets/icons/location-gray.svg";
-import ComposerTab from "./ComposerTab";
 
 interface MetaItemProps {
   iconSrc: string;
@@ -19,14 +17,12 @@ const MetaItem = ({ iconSrc, children }: MetaItemProps) => {
   );
 };
 
-type MetaDataProps = Omit<HomePerformance, "id" | "rank" | "posterUrl" | "price">;
+type MetaDataProps = Omit<HomePerformance, "id" | "rank" | "poster" | "price">;
 const MetaData = ({
   title,
   artist,
   date,
-  time,
   venue,
-  composerArray,
 }: MetaDataProps) => {
   return (
     <div className="flex flex-col gap-[0.66rem]">
@@ -36,26 +32,11 @@ const MetaData = ({
         </p>
         <p className="text-[#4a5565] text-[0.77rem]/[1.09rem]">{artist}</p>
       </div>
-      <div className="flex h-[1.22rem] overflow-hidden">
-        <div className="flex flex-wrap gap-[0.22rem]">
-          {composerArray.map((item: string) => (
-            <ComposerTab composer={item} />
-          ))}
-        </div>
-      </div>
       <div className="flex flex-col">
         <ul className="flex flex-col gap-[0.33rem]">
           <MetaItem iconSrc={calendarIcon}>
-            <div>
-              <span>{date.start}</span>
-              {date.start !== date.end && (
-                <>
-                  <br />~ <span>{date.end}</span>
-                </>
-              )}
-            </div>
+            {date}
           </MetaItem>
-          <MetaItem iconSrc={clockIcon}>{time}</MetaItem>
           <MetaItem iconSrc={locationIcon}>{venue}</MetaItem>
         </ul>
       </div>

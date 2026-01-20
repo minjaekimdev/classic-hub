@@ -3,4 +3,4 @@ node_modules
 .vscode
 *storybook.log
 storybook-static
-logs
+packages/backend/tests

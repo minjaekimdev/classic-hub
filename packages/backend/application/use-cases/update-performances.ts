@@ -7,7 +7,7 @@ import { PerformanceDetail, PerformanceSummary } from "@/models/kopis";
 import dayjs from "dayjs";
 import { APIError, withErrorHandling } from "utils/error";
 import { removeTextProperty } from "../services/preprocessor";
-import { DBPerformance } from "@/models/supabase";
+import { DBPerformance } from "@classic-hub/shared/types/database";
 import {
   deleteData,
   getColumnData,

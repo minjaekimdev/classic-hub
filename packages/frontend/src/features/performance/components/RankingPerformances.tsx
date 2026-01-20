@@ -1,6 +1,5 @@
-import React from "react";
 import rankingIcon from "@shared/assets/icons/ranking-red.svg";
-import type { HomePerformance } from "@classic-hub/shared/types/performance";
+import type { HomePerformance } from "@classic-hub/shared/types/client";
 import HomeWidgetHeader from "@/shared/layout/HomeWidgetHeader";
 import AlbumItem from "@/features/performance/components/HomeAlbumItem";
 import leftArrow from "@shared/assets/icons/left-slidearrow-black.svg";
@@ -8,22 +7,32 @@ import rightArrow from "@shared/assets/icons/right-slidearrow-black.svg";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Swiper as SwiperType } from "swiper";
 import "swiper/css";
-import useSwiper from "../hooks/useSwiper";
+import supabase from "@/app/api/supabase-client";
+import { useEffect, useState } from "react";
+import mapToHomePerformance from "../mappers/home-ranking-mapper";
+import { Navigation } from "swiper/modules";
 
-interface HomePerformanceRankingProps {
-  performanceArray: HomePerformance[];
-}
+const HomePerformanceRanking = () => {
+  const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
+  const [data, setData] = useState<HomePerformance[]>([]);
 
-const HomePerformanceRanking: React.FC<HomePerformanceRankingProps> = ({
-  performanceArray,
-}) => {
-  const {
-    swiperInstance,
-    setSwiperInstance,
-    isBeginning,
-    isEnd,
-    updateNavigationState,
-  } = useSwiper();
+  useEffect(() => {
+    const fetchPerformances = async () => {
+      const { data, error } = await supabase
+        .from("daily_ranking_with_details") // 테이블 이름
+        .select("*")
+        .gte("current_rank", 1)
+        .lte("current_rank", 5)
+        .order("current_rank", { ascending: true });
+
+      if (error) {
+        console.log("Error:", error);
+      } else {
+        setData(data.map((item) => mapToHomePerformance(item)));
+      }
+    };
+    fetchPerformances();
+  }, []);
 
   return (
     <div className="w-full">
@@ -34,24 +43,21 @@ const HomePerformanceRanking: React.FC<HomePerformanceRankingProps> = ({
           subTitle="티켓판매액 기준 인기 공연"
         />
         <div className="relative w-full">
-          {!isBeginning && (
-            <button
-              className="hidden desktop:flex absolute z-10 top-[50%] left-0 w-13 h-13 justify-center items-center border border-[rgba(0,0,0,0.1)] rounded-full bg-[rgba(255,255,255,0.9)] shadow-[0_0_8px_0_rgba(0, 0, 0, 0.13)] translate-y-[-50%] translate-x-[-50%]"
-              onClick={() => swiperInstance?.slidePrev()}
-            >
-              <img src={leftArrow} alt="" />
-            </button>
-          )}
+          <button
+            className="prev-btn hidden desktop:flex absolute z-10 top-[50%] left-0 w-13 h-13 justify-center items-center border border-[rgba(0,0,0,0.1)] rounded-full bg-[rgba(255,255,255,0.9)] shadow-[0_0_8px_0_rgba(0, 0, 0, 0.13)] translate-y-[-50%] translate-x-[-50%] disabled:hidden"
+            onClick={() => swiperInstance?.slidePrev()}
+          >
+            <img src={leftArrow} alt="" />
+          </button>
           <Swiper
-            onSwiper={(swiper: SwiperType) => {
-              console.log(
-                `isBeginning: ${swiper.isBeginning}, isEnd: ${swiper.isEnd}`
-              );
-              setSwiperInstance(swiper);
-              updateNavigationState(swiper);
+            modules={[Navigation]}
+            navigation={{
+              prevEl: ".prev-btn",
+              nextEl: ".next-btn",
             }}
-            onBreakpoint={updateNavigationState}
-            onSlideChange={updateNavigationState}
+            onSwiper={(swiper: SwiperType) => {
+              setSwiperInstance(swiper);
+            }}
             spaceBetween={21}
             slidesPerView={2.2}
             breakpoints={{
@@ -60,20 +66,18 @@ const HomePerformanceRanking: React.FC<HomePerformanceRankingProps> = ({
               1280: { slidesPerView: 5 },
             }}
           >
-              {performanceArray.map((performance) => (
-                <SwiperSlide key={performance.id}>
-                  <AlbumItem data={performance} />
-                </SwiperSlide>
-              ))}
+            {data.map((performance) => (
+              <SwiperSlide key={performance.id}>
+                <AlbumItem data={performance} />
+              </SwiperSlide>
+            ))}
           </Swiper>
-          {!isEnd && (
-            <button
-              className="hidden desktop:flex absolute z-10 top-[50%] right-0 w-13 h-13 justify-center items-center border border-[rgba(0,0,0,0.1)] rounded-full bg-[rgba(255,255,255,0.9)] shadow-[0_0_8px_0_rgba(0, 0, 0, 0.13)] translate-y-[-50%] translate-x-[50%]"
-              onClick={() => swiperInstance?.slideNext()}
-            >
-              <img src={rightArrow} alt="" />
-            </button>
-          )}
+          <button
+            className="next-btn hidden desktop:flex absolute z-10 top-[50%] right-0 w-13 h-13 justify-center items-center border border-[rgba(0,0,0,0.1)] rounded-full bg-[rgba(255,255,255,0.9)] shadow-[0_0_8px_0_rgba(0, 0, 0, 0.13)] translate-y-[-50%] translate-x-[50%] disabled:hidden"
+            onClick={() => swiperInstance?.slideNext()}
+          >
+            <img src={rightArrow} alt="" />
+          </button>
         </div>
       </div>
     </div>

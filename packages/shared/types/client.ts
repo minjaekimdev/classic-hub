@@ -1,39 +1,39 @@
+// 공연 시작일, 종료일
 export interface Date {
   start: string;
   end: string;
 }
 
+// 공통으로 사용되는 프로퍼티 모음
 export interface Performance {
   id: string;
-  posterUrl: string;
+  poster: string;
   title: string;
   artist: string;
   date: Date;
   venue: string;
 }
 
-export interface PriceRange {
+interface Price {
   min: number;
   max: number;
 }
 
-export interface ComposerPiece {
-  composer: string;
-  pieces: string[];
-}
-
-export type Program = ComposerPiece[];
-
 // 검색 결과 페이지 공연
 export interface PerformanceSummary extends Performance {
-  composerArray: string[];
   time: string;
-  price: PriceRange;
+  price: Price;
 }
 
-// 홈페이지 공연
-export interface HomePerformance extends PerformanceSummary {
-  rank?: number; // '오늘의 공연 랭킹'을 제외하곤 랭킹을 보여주지 않음
+export interface HomePerformance {
+  id: string;
+  rank?: number;
+  poster: string;
+  title: string;
+  artist: string;
+  date: string;
+  venue: string;
+  price: Price;
 }
 
 // 랭킹 페이지 공연
@@ -44,8 +44,8 @@ export interface RankingPerformance extends Performance {
 
 // 상세 정보에서 사용
 // 좌석 및 가격 정보
-export interface SeatPriceInfo { 
-  seat: string;
+export interface SeatPriceInfo {
+  seatType: string;
   price: number;
 }
 export interface DetailPerformance extends Performance {
@@ -54,6 +54,5 @@ export interface DetailPerformance extends Performance {
   runningTime: string;
   age: string;
   priceInfo: SeatPriceInfo[];
-  programInfo: Program;
   detailImages: string[];
 }
