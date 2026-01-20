@@ -28,7 +28,7 @@ export default defineConfig({
         replacement: resolve(__dirname, "src/app"),
       },
       {
-        find: "@root-shared",
+        find: "@classic-hub/shared",
         replacement: resolve(__dirname, "../shared"),
       },
       {

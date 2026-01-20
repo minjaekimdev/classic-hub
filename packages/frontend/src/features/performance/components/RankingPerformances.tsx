@@ -1,5 +1,4 @@
 import rankingIcon from "@shared/assets/icons/ranking-red.svg";
-import type { HomePerformance } from "@classic-hub/shared/types/client";
 import HomeWidgetHeader from "@/shared/layout/HomeWidgetHeader";
 import AlbumItem from "@/features/performance/components/HomeAlbumItem";
 import leftArrow from "@shared/assets/icons/left-slidearrow-black.svg";
@@ -7,32 +6,13 @@ import rightArrow from "@shared/assets/icons/right-slidearrow-black.svg";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Swiper as SwiperType } from "swiper";
 import "swiper/css";
-import supabase from "@/app/api/supabase-client";
-import { useEffect, useState } from "react";
-import mapToHomePerformance from "../mappers/home-ranking-mapper";
 import { Navigation } from "swiper/modules";
+import useHomeRanking from "../hooks/useHomeRanking";
+import { useState } from "react";
 
 const HomePerformanceRanking = () => {
   const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
-  const [data, setData] = useState<HomePerformance[]>([]);
-
-  useEffect(() => {
-    const fetchPerformances = async () => {
-      const { data, error } = await supabase
-        .from("daily_ranking_with_details") // 테이블 이름
-        .select("*")
-        .gte("current_rank", 1)
-        .lte("current_rank", 5)
-        .order("current_rank", { ascending: true });
-
-      if (error) {
-        console.log("Error:", error);
-      } else {
-        setData(data.map((item) => mapToHomePerformance(item)));
-      }
-    };
-    fetchPerformances();
-  }, []);
+  const data = useHomeRanking(10);
 
   return (
     <div className="w-full">
@@ -44,7 +24,7 @@ const HomePerformanceRanking = () => {
         />
         <div className="relative w-full">
           <button
-            className="prev-btn hidden desktop:flex absolute z-10 top-[50%] left-0 w-13 h-13 justify-center items-center border border-[rgba(0,0,0,0.1)] rounded-full bg-[rgba(255,255,255,0.9)] shadow-[0_0_8px_0_rgba(0, 0, 0, 0.13)] translate-y-[-50%] translate-x-[-50%] disabled:hidden"
+            className="prev-btn-ranking hidden desktop:flex absolute z-10 top-[50%] left-0 w-13 h-13 justify-center items-center border border-[rgba(0,0,0,0.1)] rounded-full bg-[rgba(255,255,255,0.9)] shadow-[0_0_8px_0_rgba(0, 0, 0, 0.13)] translate-y-[-50%] translate-x-[-50%] disabled:hidden"
             onClick={() => swiperInstance?.slidePrev()}
           >
             <img src={leftArrow} alt="" />
@@ -52,8 +32,8 @@ const HomePerformanceRanking = () => {
           <Swiper
             modules={[Navigation]}
             navigation={{
-              prevEl: ".prev-btn",
-              nextEl: ".next-btn",
+              prevEl: ".prev-btn-ranking",
+              nextEl: ".next-btn-ranking",
             }}
             onSwiper={(swiper: SwiperType) => {
               setSwiperInstance(swiper);
@@ -73,7 +53,7 @@ const HomePerformanceRanking = () => {
             ))}
           </Swiper>
           <button
-            className="next-btn hidden desktop:flex absolute z-10 top-[50%] right-0 w-13 h-13 justify-center items-center border border-[rgba(0,0,0,0.1)] rounded-full bg-[rgba(255,255,255,0.9)] shadow-[0_0_8px_0_rgba(0, 0, 0, 0.13)] translate-y-[-50%] translate-x-[50%] disabled:hidden"
+            className="next-btn-ranking hidden desktop:flex absolute z-10 top-[50%] right-0 w-13 h-13 justify-center items-center border border-[rgba(0,0,0,0.1)] rounded-full bg-[rgba(255,255,255,0.9)] shadow-[0_0_8px_0_rgba(0, 0, 0, 0.13)] translate-y-[-50%] translate-x-[50%] disabled:hidden"
             onClick={() => swiperInstance?.slideNext()}
           >
             <img src={rightArrow} alt="" />
