@@ -34,6 +34,7 @@ export interface Ranking {
 }
 
 // 공연 상세 조회 인터페이스
+
 export interface PerformanceDetail {
   mt20id: string; // 공연 ID (예: PF178134)
   mt10id: string; // 공연시설 ID (예: FC001431)
@@ -62,6 +63,9 @@ export interface PerformanceDetail {
   musicallicense: "Y" | "N"; // 뮤지컬 라이센스 여부
   musicalcreate: "Y" | "N"; // 뮤지컬 창작 여부
   updatedate: string; // 최종수정일 (예: 2019-07-25 10:03:14)
+  relates: { // 예매처 목록
+    relate: BookingLink | BookingLink[];
+  }
   styurls: {
     styurl: string | string[]; // 소개이미지 목록 (1~4개)
   };

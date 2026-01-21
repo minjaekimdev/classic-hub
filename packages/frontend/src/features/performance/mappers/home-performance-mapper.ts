@@ -1,13 +1,13 @@
 import type {
-  DBdailyRankingWithDetails,
   DBPerformance,
+  DBRankingWithDetails,
 } from "@classic-hub/shared/types/database";
 import type { HomePerformance } from "@classic-hub/shared/types/client";
-import formatDateRange from "@/shared/utils/formatDate";
+import formatDateRange from "@/shared/utils/formatDateRange";
 import formatMinMaxPrice from "@/shared/utils/formatMinMaxPrice";
 
-const mapBasePerformance = (
-  raw: DBPerformance | DBdailyRankingWithDetails,
+export const mapBasePerformance = (
+  raw: DBPerformance | DBRankingWithDetails,
 ) => ({
   id: raw.performance_id,
   title: raw.performance_name,
@@ -21,17 +21,5 @@ export const mapToHomePerformance = (raw: DBPerformance): HomePerformance => {
   return {
     ...mapBasePerformance(raw),
     date: formatDateRange(raw.period_from, raw.period_to),
-  };
-};
-
-export const mapToHomeRanking = (
-  raw: DBdailyRankingWithDetails,
-): HomePerformance => {
-  const [startDate, endDate] = raw.period.split("~");
-
-  return {
-    ...mapBasePerformance(raw),
-    rank: raw.current_rank,
-    date: formatDateRange(startDate, endDate),
   };
 };

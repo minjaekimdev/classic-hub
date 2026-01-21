@@ -33,8 +33,8 @@ const WeekendPerformances = () => {
           <Swiper
             modules={[Navigation]}
             navigation={{
-              prevEl: "prev-btn-weekend",
-              nextEl: "next-btn-weekend",
+              prevEl: ".prev-btn-weekend",
+              nextEl: ".next-btn-weekend",
             }}
             onSwiper={(swiper: SwiperType) => {
               setSwiperInstance(swiper);

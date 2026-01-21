@@ -1,10 +1,11 @@
-// import HomeLayout from "@/features/filter/components/search/desktop/HomeLayout";
-import Home from "./Home";
+// import Home from "./Home";
+import Ranking from "./Ranking";
 
 const App = () => {
   return (
     <>
-      <Home />
+      {/* <Home /> */}
+      <Ranking />
     </>
   );
 };

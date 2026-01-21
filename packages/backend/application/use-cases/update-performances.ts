@@ -3,11 +3,18 @@ import {
   CLASSIC,
   SERVICE_KEY,
 } from "@/infrastructure/external-api/kopis";
-import { PerformanceDetail, PerformanceSummary } from "@/models/kopis";
+import {
+  BookingLink,
+  PerformanceDetail,
+  PerformanceSummary,
+} from "@/models/kopis";
 import dayjs from "dayjs";
 import { APIError, withErrorHandling } from "utils/error";
 import { removeTextProperty } from "../services/preprocessor";
-import { DBPerformance } from "@classic-hub/shared/types/database";
+import {
+  DBbookingLink,
+  DBPerformance,
+} from "@classic-hub/shared/types/database";
 import {
   deleteData,
   getColumnData,
@@ -20,11 +27,11 @@ import { sendSlackNotification } from "utils/monitor";
 
 // "전석 40,000원" 형태인 경우 [ { seatType: '전석', price: 40000 } ]
 // "전석무료" 인 경우 빈 배열 반환
-const getParsedPrice = (originPrice: string) => {
+const getParsedPrice = (raw: string) => {
   // "R석 12,345원" 형태의 그룹을 캡쳐하기 위한 정규표현식
   const regex = /([가-힣A-Z]+)\s+([\d,]+)원/g;
 
-  const matches = originPrice.matchAll(regex);
+  const matches = raw.matchAll(regex);
   const parsedPrice = [];
   for (const match of matches) {
     const seatType = match[1];
@@ -33,6 +40,16 @@ const getParsedPrice = (originPrice: string) => {
   }
 
   return parsedPrice;
+};
+
+const getParsedBookingLinks = (
+  raw: BookingLink | BookingLink[],
+): DBbookingLink[] => {
+  const bookingLinks = Array.isArray(raw) ? raw : [raw];
+  return bookingLinks.map((item) => ({
+    name: item.relatenm,
+    url: item.relateurl,
+  }));
 };
 
 const getMappedPerformanceDetail = (
@@ -51,6 +68,7 @@ const getMappedPerformanceDetail = (
     pcseguidance,
     poster,
     prfstate,
+    relates,
     styurls,
     dtguidance,
     ...rest
@@ -69,6 +87,7 @@ const getMappedPerformanceDetail = (
     price: getParsedPrice(pcseguidance), // 필요시 여기서 파싱 로직 추가
     poster: poster,
     state: prfstate,
+    booking_links: getParsedBookingLinks(relates.relate),
     detail_image: Array.isArray(styurls.styurl)
       ? styurls.styurl
       : [styurls.styurl], // 배열로 통일
@@ -254,9 +273,9 @@ const updatePerformancesInDB = async () => {
   await withErrorHandling(
     async () => {
       await deleteData("performances", "performance_id", idsToDelete);
-      logger.info(
-        `[DELETE_SUCCESS] data delete succeeded`, {service: "supabase"}
-      );
+      logger.info(`[DELETE_SUCCESS] data delete succeeded`, {
+        service: "supabase",
+      });
       await sendSlackNotification("✅ [DELETE_SUCCESS] data delete succeeded");
     },
     async () => {
@@ -275,7 +294,8 @@ const updatePerformancesInDB = async () => {
       async () => {
         await insertData("performances", toInsertDataList, "performance_id");
         logger.info(
-          `[INSERT_SUCCESS] ${toInsertDataList.length} items succeeded`, {service: "supabase"}
+          `[INSERT_SUCCESS] ${toInsertDataList.length} items succeeded`,
+          { service: "supabase" },
         );
         await sendSlackNotification(
           `✅ [INSERT_SUCCESS] ${toInsertDataList.length} items succeeded`,
@@ -316,7 +336,8 @@ const updatePerformancesInDB = async () => {
       async () => {
         await insertData("performances", toUpdateDataList, "performance_id");
         logger.info(
-          `[UPDATE_SUCCESS] Updated ${toUpdateDataList.length} items`, {service: "supabase"}
+          `[UPDATE_SUCCESS] Updated ${toUpdateDataList.length} items`,
+          { service: "supabase" },
         );
         await sendSlackNotification(
           `✅ [UPDATE_SUCCESS] Updated ${toUpdateDataList.length} items`,

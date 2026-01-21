@@ -1,3 +1,5 @@
+import type { BookingLink, Price } from "./common";
+
 // 공연장 데이터
 export interface DBFacility {
   id: string;
@@ -50,13 +52,9 @@ export interface DBRanking {
   poster: string;
 }
 
-export interface Price {
-  seatType: string;
-  price: number;
-}
-
-export interface DBdailyRankingWithDetails {
+export interface DBRankingWithDetails {
   current_rank: number;
+  last_rank: number;
   performance_id: string;
   poster: string;
   performance_name: string;
@@ -64,9 +62,11 @@ export interface DBdailyRankingWithDetails {
   venue_name: string;
   cast: string;
   price: Price[];
+  booking_links: BookingLink[];
 }
 
 // 공연 데이터
+
 export interface DBPerformance {
   performance_id: string; // 공연 id
   venue_id: string; // 공연시설 id
@@ -80,6 +80,7 @@ export interface DBPerformance {
   price: Price[];
   poster: string;
   state: string;
+  booking_links: BookingLink[];
   detail_image: string[]; // 상세이미지 url을 배열로 담기
   time: string;
   raw_data: any;

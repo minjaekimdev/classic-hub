@@ -1,5 +1,5 @@
 import HomeLayout from "@/shared/layout/HomeLayout";
-import RankingPerformances from "@/features/performance/components/RankingPerformances";
+import RankingPerformances from "@/features/ranking/components/HomeRanking";
 import WeekendPerformances from "@/features/performance/components/WeekendPerformances";
 
 const Home = () => {

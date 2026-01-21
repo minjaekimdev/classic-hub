@@ -1,40 +1,40 @@
-import React, { useState, type SetStateAction } from "react";
 import rankingIcon from "@shared/assets/icons/ranking-white.svg";
+import type { Period } from "@classic-hub/shared/types/client";
 
-interface ToggleButtonProps {
-  text: string;
-  selected: string;
-  onClick: React.Dispatch<SetStateAction<string>>;
+const PERIOD_LABEL = {
+  daily: "일간",
+  weekly: "주간",
+  monthly: "월간"
 }
 
-const ToggleButton = ({ text, selected, onClick }: ToggleButtonProps) => {
+interface ToggleButtonProps {
+  text: Period;
+  selected: Period;
+  onClick: (period: Period) => void;
+}
+
+const ToggleButton = ({ text, selected, onClick }: ToggleButtonProps) => {  
   return (
     <button
       className={`px-[0.44rem] py-[0.22rem] rounded-full ${
-        selected === text ? "bg-main text-white" : "bg-transparent text-[#0a0a0a]"
+        selected === text ? "bg-main text-white" : "bg-transparent text-dark"
       }`}
       onClick={() => onClick(text)}
     >
-      <span className="text-[0.77rem]/[1.09rem] font-medium">{text}</span>
+      <span className="text-[0.77rem]/[1.09rem] font-medium">{PERIOD_LABEL[text]}</span>
     </button>
   );
 };
 
-const PeriodToggle = () => {
-  const [selected, setSelected] = useState("일간");
-  return (
-    <div className="flex bg-[#ececf0] p-[0.22rem] rounded-[0.8rem]">
-      <ToggleButton text="일간" selected={selected} onClick={setSelected} />
-      <ToggleButton text="주간" selected={selected} onClick={setSelected} />
-      <ToggleButton text="월간" selected={selected} onClick={setSelected} />
-    </div>
-  );
-};
+interface RankingHeaderProps {
+  period: Period;
+  onToggle: (period: Period) => void;
+}
 
-const RankingHeader = () => {
+const RankingHeader = ({ period, onToggle }: RankingHeaderProps) => {
   return (
     <div className="flex items-center gap-[0.66rem]">
-      <div className="flex justify-center items-center bg-main rounded-[0.55rem] w-[3.06rem] h-[3.06rem]">
+      <div className="flex justify-center items-center bg-main rounded-main w-[3.06rem] h-[3.06rem]">
         <img src={rankingIcon} alt="" />
       </div>
       <div className="grow flex flex-col">
@@ -45,7 +45,15 @@ const RankingHeader = () => {
           티켓판매액을 기반으로 한 공연 순위 (Top 50)
         </span>
       </div>
-      <PeriodToggle />
+      <div className="flex bg-[#ececf0] p-[0.22rem] rounded-[0.8rem]">
+        <ToggleButton text="daily" selected={period} onClick={onToggle} />
+        <ToggleButton text="weekly" selected={period} onClick={onToggle} />
+        <ToggleButton
+          text="monthly"
+          selected={period}
+          onClick={onToggle}
+        />
+      </div>
     </div>
   );
 };
