@@ -2,8 +2,8 @@ import type { RankingPerformance } from "@classic-hub/shared/types/client";
 import type { DBRankingWithDetails } from "@classic-hub/shared/types/database";
 
 const mapToRanking = (raw: DBRankingWithDetails): RankingPerformance => ({
-  rank: raw.current_rank,
-  rankChange: raw.last_rank - raw.current_rank,
+  current_rank: raw.current_rank,
+  last_rank: raw.last_rank,
   bookingLinks: raw.booking_links,
   id: raw.performance_id,
   poster: raw.poster,

@@ -5,6 +5,8 @@ import badgeIcon from "@shared/assets/icons/badge-bronze.svg";
 import type { Performance } from "@classic-hub/shared/types/client";
 import Modal, { useModal } from "@/shared/ui/modals/Modal";
 import type { BookingLink } from "@classic-hub/shared/types/common";
+import rankingDownIcon from "@shared/assets/icons/ranking-down-arrow.svg";
+import rankingUpIcon from "@shared/assets/icons/ranking-up-arrow.svg";
 
 const Rank = ({ rank }: { rank: number }) => {
   let backgroundStyle =
@@ -50,13 +52,71 @@ const Rank = ({ rank }: { rank: number }) => {
   );
 };
 
+const RankComponent = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <div className="shrink-0 flex flex-col items-center gap-[0.22rem]">
+      {children}
+      <span className="text-[#717182] text-[0.66rem]/[0.88rem] font-normal">
+        순위 변동
+      </span>
+    </div>
+  );
+};
+
+interface RankChangeProps {
+  currentRank: number;
+  lastRank: number | null;
+}
+const RankChange = ({ currentRank, lastRank }: RankChangeProps) => {
+  const renderRankChange = () => {
+    if (lastRank === null) {
+      return (
+        <div className="flex justify-center items-center h-5.25 rounded-[0.22rem] bg-[#06f] pl-2 pr-[0.46rem] text-[0.77rem]/[1.31rem] text-white">
+          NEW
+        </div>
+      );
+    }
+    if (currentRank === lastRank) {
+      return (
+        <RankComponent>
+          <span className="text-[#717182] font-semibold text-[1.13rem]/[1.31rem]">
+            -
+          </span>
+        </RankComponent>
+      );
+    }
+
+    const isUp = currentRank < lastRank;
+    const diff = Math.abs(currentRank - lastRank);
+
+    return (
+      <RankComponent>
+        <div className="flex items-center gap-[0.22rem]">
+          <img
+            src={isUp ? rankingUpIcon : rankingDownIcon}
+            alt={isUp ? "랭킹 상승" : "랭킹 하락"}
+          />
+          <span
+            className={`text-[0.88rem]/[1.31rem] ${isUp ? "text-[#096]" : "text-main"}  font-semibold`}
+          >
+            {diff}
+          </span>
+        </div>
+      </RankComponent>
+    );
+  };
+  return <>{renderRankChange()}</>;
+};
+
 interface RankingItemProps extends Performance {
+  currentRank: number;
+  lastRank: number | null;
   bookingLinks: BookingLink[];
-  rank: number;
 }
 
 const RankingItem = ({
-  rank,
+  currentRank,
+  lastRank,
   poster,
   title,
   artist,
@@ -64,14 +124,14 @@ const RankingItem = ({
   venue,
   bookingLinks,
 }: RankingItemProps) => {
-  const {sendData} = useModal();
+  const { sendData } = useModal();
   return (
     <div className="flex gap-[0.88rem] items-center rounded-main px-[0.66rem] h-[6.34rem] cursor-pointer hover:bg-[rgba(236,236,240,0.5)]">
-      <Rank rank={rank} />
+      <Rank rank={currentRank} />
       <div className="shrink-0 w-14 h-[4.67rem] rounded-[0.22rem] overflow-hidden">
         <img className="w-full h-full" src={poster}></img>
       </div>
-      <div className="grow">
+      <div className="grow flex justify-between items-center">
         <ul className="flex flex-col ">
           <li className="mb-[0.16rem] text-dark text-[0.77rem]/[1.09rem] font-semibold">
             {title}
@@ -83,10 +143,12 @@ const RankingItem = ({
           </li>
           <li className="ranking-info-text">{venue}</li>
         </ul>
+        <RankChange currentRank={currentRank} lastRank={lastRank} />
       </div>
       <Modal.Trigger>
-        <button className="shrink-0 justify-center items-center px-[0.43rem] py-[0.40rem] bg-main rounded-button text-white text-[0.77rem]/[1.09rem] font-medium"
-        onClick={() => sendData(bookingLinks)}
+        <button
+          className="shrink-0 justify-center items-center px-[0.43rem] py-[0.40rem] bg-main rounded-button text-white text-[0.77rem]/[1.09rem] font-medium"
+          onClick={() => sendData(bookingLinks)}
         >
           예매하기
         </button>

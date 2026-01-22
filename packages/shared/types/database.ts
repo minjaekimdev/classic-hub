@@ -54,7 +54,7 @@ export interface DBRanking {
 
 export interface DBRankingWithDetails {
   current_rank: number;
-  last_rank: number;
+  last_rank: number | null;
   performance_id: string;
   poster: string;
   performance_name: string;
