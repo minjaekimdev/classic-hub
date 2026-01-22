@@ -5,14 +5,19 @@ import FilterDesktopSmall from "@features/filter/components/search/desktop/Filte
 import { SearchFilter } from "@/features/filter/components/search/shared/SearchFilter";
 import type { FilterHandle } from "@/features/filter/components/search/shared/SearchFilter";
 import useClickOutside from "@/shared/hooks/useClickOutside";
-import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 interface MenuItemProps {
   icon: string;
   text: string;
-  selected: string;
+  selected: string | undefined;
   onSelect: (text: string) => void;
 }
+
+const MAP_LINK: Record<string, string> = {
+  홈: "/",
+  "공연 랭킹": "/ranking",
+};
 
 const MenuItem = ({ icon, text, selected, onSelect }: MenuItemProps) => {
   const isSelected = selected === text;
@@ -28,7 +33,6 @@ const MenuItem = ({ icon, text, selected, onSelect }: MenuItemProps) => {
     >
       <div
         className={`flex items-center gap-3 ${textColorClass}`}
-        onClick={() => onSelect(text)}
       >
         <span className="text-[2.13rem]/[2.13rem]">{icon}</span>
         <span className="shrink-0 text-[0.88rem]/[1.13rem] font-medium">
@@ -54,7 +58,23 @@ const menuItemArray = [
 ];
 
 const Menu = () => {
-  const [selected, setSelected] = useState("홈");
+  // 메뉴 클릭 시 이동을 위해 useNavigate 사용
+  const navigate = useNavigate(); 
+  
+  // useState를 사용 시 페이지 이동에 따라 Header가 언마운트되어 상태가 초기화되므로 useLocation 사용
+  // location.pathname(ranking 등 경로명)을 가져와 MenuItem의 selected로 활용
+  const location = useLocation(); 
+
+  const handleSelected = (text: string) => {
+    const targetPath = `${MAP_LINK[text]}`;
+    if (location.pathname === targetPath) {
+      return;
+    }
+    navigate(`${MAP_LINK[text]}`);
+  }
+
+  const selected = menuItemArray.find((item) => MAP_LINK[item.text] === location.pathname)?.text;
+  
   return (
     <div className="shrink-0 flex gap-[1.56rem]">
       {menuItemArray.map((item) => (
@@ -63,7 +83,7 @@ const Menu = () => {
           icon={item.icon}
           text={item.text}
           selected={selected}
-          onSelect={setSelected}
+          onSelect={handleSelected}
         />
       ))}
     </div>

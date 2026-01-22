@@ -13,15 +13,14 @@ const MainLayout = ({ children }: MainLayoutProps) => {
     setIsHeaderExpand(expand)
   }
 
-  const desktopMarginClass = isHeaderExpand
-    ? "min-[600px]:mt-[13.12rem]"
-    : "min-[600px]:mt-[5rem]";
-
   return (
     <>
       <Header isExpand={isHeaderExpand} onChangeFilterState={headerToggle} />
+      {isHeaderExpand && (
+        <div className="fixed top-0 left-0 z-15 bg-[rgba(0,0,0,0.3)] w-full h-full"></div>
+      )}
       <main
-        className={`pt-6 tablet:pt-8 mt-[9.12rem] ${desktopMarginClass} pb-[6.12rem] px-7 bg-white max-w-7xl mx-auto`}
+        className={`pt-6 tablet:pt-8 mt-20 pb-[6.12rem] px-7 bg-white max-w-7xl mx-auto`}
       >
         {children}
       </main>

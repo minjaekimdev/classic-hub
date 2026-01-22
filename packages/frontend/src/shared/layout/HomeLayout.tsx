@@ -30,7 +30,7 @@ const HomeLayout = ({ children }: { children: ReactNode }) => {
 
   return (
     <>
-      <Header isExpand={isExpand} changeFilterState={changeFilterState} />
+      <Header isExpand={isExpand} onChangeFilterState={changeFilterState} />
       {isFilterActive && (
         <div className="fixed top-0 left-0 z-15 bg-[rgba(0,0,0,0.3)] w-full h-full"></div>
       )}

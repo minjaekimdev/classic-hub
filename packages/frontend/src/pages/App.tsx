@@ -1,11 +1,9 @@
-// import Home from "./Home";
-import Ranking from "./Ranking";
+import { Outlet } from "react-router-dom";
 
 const App = () => {
   return (
     <>
-      {/* <Home /> */}
-      <Ranking />
+      <Outlet />
     </>
   );
 };
