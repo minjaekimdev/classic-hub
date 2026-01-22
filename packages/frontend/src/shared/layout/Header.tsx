@@ -86,14 +86,14 @@ const HeaderAuthButton = () => {
 // 헤더는 확장되어야 하는지 아닌지 여부만 props로 전달받기
 interface HeaderProps {
   isExpand: boolean;
-  changeFilterState: (isFilterActive: boolean) => void;
+  onChangeFilterState: (isFilterActive: boolean) => void;
 }
-const Header = ({ isExpand, changeFilterState }: HeaderProps) => {
+const Header = ({ isExpand, onChangeFilterState }: HeaderProps) => {
   const headerRef = useRef<HTMLDivElement>(null);
   const filterRef = useRef<FilterHandle>(null);
 
   // 헤더의 외부를 클릭하면 축소
-  useClickOutside(headerRef, () => changeFilterState(false));
+  useClickOutside(headerRef, () => onChangeFilterState(false));
   // 애니메이션 설정
 
   // 헤더가 확장되어야 하는 경우와 그렇지 않은 경우의 높이를 달리하기
@@ -118,7 +118,7 @@ const Header = ({ isExpand, changeFilterState }: HeaderProps) => {
             </div>
           ) : (
             <div className="flex justify-center mt-4">
-              <FilterDesktopSmall onFilterFieldClick={changeFilterState} />
+              <FilterDesktopSmall onFilterFieldClick={onChangeFilterState} />
             </div>
           )}
 

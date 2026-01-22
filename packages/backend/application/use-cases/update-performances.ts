@@ -4,17 +4,15 @@ import {
   SERVICE_KEY,
 } from "@/infrastructure/external-api/kopis";
 import {
-  BookingLink,
+  BookingLink as KopisBookingLink,
   PerformanceDetail,
   PerformanceSummary,
 } from "@/models/kopis";
 import dayjs from "dayjs";
 import { APIError, withErrorHandling } from "utils/error";
 import { removeTextProperty } from "../services/preprocessor";
-import {
-  DBbookingLink,
-  DBPerformance,
-} from "@classic-hub/shared/types/database";
+import { DBPerformance } from "@classic-hub/shared/types/database";
+import { BookingLink } from "@classic-hub/shared/types/common";
 import {
   deleteData,
   getColumnData,
@@ -43,8 +41,8 @@ const getParsedPrice = (raw: string) => {
 };
 
 const getParsedBookingLinks = (
-  raw: BookingLink | BookingLink[],
-): DBbookingLink[] => {
+  raw: KopisBookingLink | KopisBookingLink[],
+): BookingLink[] => {
   const bookingLinks = Array.isArray(raw) ? raw : [raw];
   return bookingLinks.map((item) => ({
     name: item.relatenm,
@@ -223,6 +221,62 @@ const getPerformaceDetailArray = async (idsToInsert: string[]) => {
   return { successes, failures };
 };
 
+const fetchAndInsertPerformances = async (ids: string[], log?: string) => {
+  // 데이터 삽입
+  const { successes, failures } = await getPerformaceDetailArray(ids);
+  if (successes.length > 0) {
+    await withErrorHandling(
+      async () => {
+        await insertData("performances", successes, "performance_id");
+        logger.info(
+          `[INSERT_SUCCESS] ${successes.length} items succeeded(${log})`,
+          { service: "supabase" },
+        );
+        await sendSlackNotification(
+          `✅ [INSERT_SUCCESS] ${successes.length} items succeeded(${log})`,
+        );
+      },
+      async () => {
+        logger.error(`[INSERT_FAIL] ${successes.length} items failed(${log})`, {
+          service: "supabase",
+        });
+        await sendSlackNotification(
+          `[INSERT_FAIL] ${successes.length} items failed(${log})`,
+        );
+      },
+    );
+  }
+  if (failures.length > 0) {
+    logger.error(
+      `[FETCH_FAIL] ${
+        failures.length
+      } performance detail fetch failed.(${log}) IDs: ${failures.map((f) => f.id).join(", ")}`,
+      { service: "kopis" },
+    );
+    await sendSlackNotification(
+      `❌ [FETCH_FAIL] ${failures.length} performance detail fetch failed.(${log})`,
+    );
+  }
+};
+
+const deletePerformances = async (ids: string[]) => {
+  await withErrorHandling(
+    async () => {
+      await deleteData("performances", "performance_id", ids);
+      logger.info(`[DELETE_SUCCESS] data delete succeeded`, {
+        service: "supabase",
+      });
+      await sendSlackNotification("✅ [DELETE_SUCCESS] data delete succeeded");
+    },
+    async () => {
+      logger.error("[DELETE_FAIL] data delete Failed", {
+        service: "supabase",
+      });
+      await sendSlackNotification("❌ [DELETE_FAIL] data delete Failed");
+    },
+  );
+};
+
 const updatePerformancesInDB = async () => {
   const now = dayjs();
   const startDate = now.format("YYYYMMDD");
@@ -253,7 +307,7 @@ const updatePerformancesInDB = async () => {
         service: "supabase",
       });
       await sendSlackNotification("❌ [FETCH_FAIL] old DB data fetch failed");
-      throw new Error("Operation Failed");
+      throw new Error("[FETCH_FAIL] old DB data fetch failed");
     },
   );
 
@@ -269,59 +323,8 @@ const updatePerformancesInDB = async () => {
     (id) => !dbPerformancesSet.has(id),
   );
 
-  // 데이터 삭제
-  await withErrorHandling(
-    async () => {
-      await deleteData("performances", "performance_id", idsToDelete);
-      logger.info(`[DELETE_SUCCESS] data delete succeeded`, {
-        service: "supabase",
-      });
-      await sendSlackNotification("✅ [DELETE_SUCCESS] data delete succeeded");
-    },
-    async () => {
-      logger.error("[DELETE_FAIL] data delete Failed", {
-        service: "supabase",
-      });
-      await sendSlackNotification("❌ [DELETE_FAIL] data delete Failed");
-    },
-  );
-
-  // 데이터 삽입
-  const { successes: toInsertDataList, failures: toInsertFailures } =
-    await getPerformaceDetailArray(idsToInsert);
-  if (toInsertDataList.length > 0) {
-    await withErrorHandling(
-      async () => {
-        await insertData("performances", toInsertDataList, "performance_id");
-        logger.info(
-          `[INSERT_SUCCESS] ${toInsertDataList.length} items succeeded`,
-          { service: "supabase" },
-        );
-        await sendSlackNotification(
-          `✅ [INSERT_SUCCESS] ${toInsertDataList.length} items succeeded`,
-        );
-      },
-      async () => {
-        logger.error(`[INSERT_FAIL] ${toInsertDataList.length} items failed`, {
-          service: "supabase",
-        });
-        await sendSlackNotification(
-          `[INSERT_FAIL] ${toInsertDataList.length} items failed`,
-        );
-      },
-    );
-  }
-  if (toInsertFailures.length > 0) {
-    logger.error(
-      `[FETCH_FAIL] ${
-        toInsertFailures.length
-      } performance detail fetch failed. IDs: ${toInsertFailures.map((f) => f.id).join(", ")}`,
-      { service: "kopis" },
-    );
-    await sendSlackNotification(
-      `❌ [FETCH_FAIL] ${toInsertFailures.length} performance detail fetch failed.`,
-    );
-  }
+  await deletePerformances(idsToDelete);
+  await fetchAndInsertPerformances(idsToInsert, "new datas");
 
   // update 관련 로직은 상대적으로 중요도가 낮으므로 새 공연 데이터 삽입이 완료된 이후에 실행
   const idsToUpdate = await getUpdatedPerformaces(
@@ -329,37 +332,8 @@ const updatePerformancesInDB = async () => {
     startDate,
     updateEndDate,
   );
-  const { successes: toUpdateDataList, failures: toUpdateFailures } =
-    await getPerformaceDetailArray(idsToUpdate);
-  if (toUpdateDataList.length > 0) {
-    await withErrorHandling(
-      async () => {
-        await insertData("performances", toUpdateDataList, "performance_id");
-        logger.info(
-          `[UPDATE_SUCCESS] Updated ${toUpdateDataList.length} items`,
-          { service: "supabase" },
-        );
-        await sendSlackNotification(
-          `✅ [UPDATE_SUCCESS] Updated ${toUpdateDataList.length} items`,
-        );
-      },
-      async () => {
-        logger.error(`[UPDATE_FAIL] ${toUpdateFailures.length} items failed`, {
-          service: "supabase",
-        });
-        await sendSlackNotification(
-          `❌ [UPDATE_FAIL] ${toUpdateFailures.length} items failed`,
-        );
-      },
-    );
-  }
-  if (toUpdateFailures.length > 0) {
-    logger.warn(
-      `[UPDATE_FAIL] ${
-        toUpdateFailures.length
-      } performance detail fetch failed. IDs: ${toUpdateFailures.map((f) => f.id).join(", ")}`,
-    );
-  }
+
+  await fetchAndInsertPerformances(idsToUpdate, "updated datas");
 };
 
 // 초당 10회 호출 제한이지만, 넉넉하게 초당 5회 호출

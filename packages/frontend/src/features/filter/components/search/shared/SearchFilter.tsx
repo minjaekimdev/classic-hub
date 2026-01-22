@@ -29,6 +29,7 @@ const INITIAL_FILTER_VALUE = {
 };
 
 // 외부에서 ref로 사용할 메서드 타입 정의
+// 부모에서 자식(헤더)의 상태를 알아야 하는 경우
 export interface FilterHandle {
   activeField: FieldType | null;
   changeValue: (value: Partial<FilterValue>) => void;

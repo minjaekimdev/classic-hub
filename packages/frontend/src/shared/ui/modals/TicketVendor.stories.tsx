@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import ModalTicketVendor from "./index";
+import ModalTicketVendor from "./TicketVendor";
 
 const meta = {
-  title: "Features/Booking/ModalTicketVendor",
+  title: "features/modal/ModalTicketVendor",
   component: ModalTicketVendor,
   tags: ["autodocs"],
   args: {

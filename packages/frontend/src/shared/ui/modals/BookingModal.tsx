@@ -1,0 +1,58 @@
+import TicketVendor from "./TicketVendor";
+import Modal, { useModal } from "@/shared/ui/modals/Modal";
+import type { BookingLink } from "@classic-hub/shared/types/common";
+
+const iconArr = [
+  {
+    icon: "🎫",
+    background: "#2B7FFF",
+  },
+  {
+    icon: "🎭",
+    background: "#00C950",
+  },
+  {
+    icon: "🎵",
+    background: "#00BC7D",
+  },
+  {
+    icon: "🎪",
+    background: "#AD46FF",
+  },
+  {
+    icon: "️🏛️",
+    background: "#615FFF",
+  },
+  {
+    icon: "🎨",
+    background: "#FF2056",
+  },
+];
+
+const BookingModal = () => {
+  const {modalData} = useModal();
+  const bookingLinksArray = (modalData as BookingLink[]) || [];
+  return (
+    <Modal.Wrapper>
+      <div className="flex flex-col gap-7">
+        <Modal.Header main="예매처 선택" sub="원하시는 예매처를 선택해주세요" />
+        <div className="grid grid-cols-[repeat(2,minmax(6rem,13.9rem))] gap-[0.66rem] ">
+          {bookingLinksArray.map((item, index) => {
+            const theme = iconArr[index % iconArr.length];
+            return (
+              <TicketVendor
+                key={item.name}
+                icon={theme.icon}
+                background={theme.background}
+                name={item.name}
+                url={item.url}
+              />
+            );
+          })}
+        </div>
+      </div>
+    </Modal.Wrapper>
+  );
+};
+
+export default BookingModal;

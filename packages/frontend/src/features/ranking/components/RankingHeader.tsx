@@ -1,11 +1,6 @@
 import rankingIcon from "@shared/assets/icons/ranking-white.svg";
 import type { Period } from "@classic-hub/shared/types/client";
-
-const PERIOD_LABEL = {
-  daily: "일간",
-  weekly: "주간",
-  monthly: "월간"
-}
+import { PERIOD_LABEL } from "../constants/period-label";
 
 interface ToggleButtonProps {
   text: Period;

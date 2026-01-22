@@ -19,7 +19,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
 
   return (
     <>
-      <Header onExpandChange={headerToggle} />
+      <Header isExpand={isHeaderExpand} onChangeFilterState={headerToggle} />
       <main
         className={`pt-6 tablet:pt-8 mt-[9.12rem] ${desktopMarginClass} pb-[6.12rem] px-7 bg-white max-w-7xl mx-auto`}
       >

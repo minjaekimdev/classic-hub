@@ -3,6 +3,8 @@ import crownIcon from "@shared/assets/icons/crown-gold.svg";
 import medalIcon from "@shared/assets/icons/medal-silver.svg";
 import badgeIcon from "@shared/assets/icons/badge-bronze.svg";
 import type { Performance } from "@classic-hub/shared/types/client";
+import Modal, { useModal } from "@/shared/ui/modals/Modal";
+import type { BookingLink } from "@classic-hub/shared/types/common";
 
 const Rank = ({ rank }: { rank: number }) => {
   let backgroundStyle =
@@ -49,6 +51,7 @@ const Rank = ({ rank }: { rank: number }) => {
 };
 
 interface RankingItemProps extends Performance {
+  bookingLinks: BookingLink[];
   rank: number;
 }
 
@@ -59,7 +62,9 @@ const RankingItem = ({
   artist,
   period,
   venue,
+  bookingLinks,
 }: RankingItemProps) => {
+  const {sendData} = useModal();
   return (
     <div className="flex gap-[0.88rem] items-center rounded-main px-[0.66rem] h-[6.34rem] cursor-pointer hover:bg-[rgba(236,236,240,0.5)]">
       <Rank rank={rank} />
@@ -79,9 +84,13 @@ const RankingItem = ({
           <li className="ranking-info-text">{venue}</li>
         </ul>
       </div>
-      <button className="shrink-0 justify-center items-center px-[0.43rem] py-[0.40rem] bg-main rounded-button text-white text-[0.77rem]/[1.09rem] font-medium">
-        예매하기
-      </button>
+      <Modal.Trigger>
+        <button className="shrink-0 justify-center items-center px-[0.43rem] py-[0.40rem] bg-main rounded-button text-white text-[0.77rem]/[1.09rem] font-medium"
+        onClick={() => sendData(bookingLinks)}
+        >
+          예매하기
+        </button>
+      </Modal.Trigger>
     </div>
   );
 };
