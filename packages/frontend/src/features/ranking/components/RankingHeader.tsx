@@ -28,11 +28,11 @@ interface RankingHeaderProps {
 
 const RankingHeader = ({ period, onToggle }: RankingHeaderProps) => {
   return (
-    <div className="flex items-center gap-[0.66rem]">
+    <div className="flex flex-col tablet:flex-row items-center gap-[0.66rem]">
       <div className="flex justify-center items-center bg-main rounded-main w-[3.06rem] h-[3.06rem]">
         <img src={rankingIcon} alt="" />
       </div>
-      <div className="grow flex flex-col">
+      <div className="grow flex flex-col items-center tablet:items-start">
         <h1 className="text-[#101828] text-[1.64rem]/[1.97rem] font-bold">
           클래식 공연 랭킹
         </h1>
