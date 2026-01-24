@@ -21,7 +21,7 @@ type MetaDataProps = Omit<HomePerformance, "id" | "rank" | "poster" | "price">;
 const MetaData = ({
   title,
   artist,
-  date,
+  period,
   venue,
 }: MetaDataProps) => {
   return (
@@ -35,7 +35,7 @@ const MetaData = ({
       <div className="flex flex-col">
         <ul className="flex flex-col gap-[0.33rem]">
           <MetaItem iconSrc={calendarIcon}>
-            {date}
+            {period}
           </MetaItem>
           <MetaItem iconSrc={locationIcon}>{venue}</MetaItem>
         </ul>

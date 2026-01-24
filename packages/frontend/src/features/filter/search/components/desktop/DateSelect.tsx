@@ -1,12 +1,12 @@
 import { type DateRange } from "react-day-picker";
 import { Calendar } from "@shared/ui/shadcn/calendar";
-import { useFilter } from "@/features/filter/hooks/useSearchFilter";
+import { useFilter } from "./SearchFilter";
 
 export function DateSelect() {
-  const {filterValue, changeValue} = useFilter();
+  const { filterValue, changeValue } = useFilter();
   let calendarDateRange: DateRange | undefined;
   const isValidDateRange = /^\d{4}\/\d{2}\/\d{2} - \d{4}\/\d{2}\/\d{2}$/.test(
-    filterValue.날짜
+    filterValue.날짜,
   );
   if (!isValidDateRange) {
     calendarDateRange = {

@@ -1,4 +1,4 @@
-import type { filterCategoryObjType } from "@/features/filter/model/filter";
+import type { filterCategoryObjType } from "@/features/filter/search/components/mobile/filter";
 
 interface LocationComponentProps {
   main: string;

@@ -10,7 +10,7 @@ import { Navigation } from "swiper/modules";
 import useHomeRanking from "../hooks/useHomeRanking";
 import { useState } from "react";
 
-const HomePerformanceRanking = () => {
+const RankingPerformances = () => {
   const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
   const data = useHomeRanking(10);
 
@@ -64,4 +64,4 @@ const HomePerformanceRanking = () => {
   );
 };
 
-export default HomePerformanceRanking;
+export default RankingPerformances;

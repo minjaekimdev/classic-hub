@@ -2,7 +2,7 @@ import RankingHeader from "@/features/ranking/components/RankingHeader";
 import RankingList from "@/features/ranking/components/RankingList";
 import useRankingPerformance from "@/features/ranking/hooks/useRankingPerformance";
 import Modal from "@/shared/ui/modals/Modal";
-import MainLayout from "@/shared/layout/MainLayout";
+import MainLayout from "@/shared/layout/desktop/MainLayout";
 import type { Period } from "@classic-hub/shared/types/client";
 import { useState } from "react";
 import BookingModal from "@/shared/ui/modals/BookingModal";

@@ -13,8 +13,10 @@
   --breakpoint-large-desktop: 1280px;
   --radius-main: 0.55rem;
   --radius-button: 0.42rem;
-  --spacing-header-expanded: 13.19rem;
-  --spacing-header-shrinked: 5.25rem;
+  --spacing-desktop-header-expanded: 13.19rem;
+  --spacing-desktop-header-shrinked: 5.25rem;
+  --spacing-mobile-header-expanded: 8.75rem;
+  --spacing-mobile-header-shrinked: 5.88rem;
 }
 
 @utility bookmark-position {

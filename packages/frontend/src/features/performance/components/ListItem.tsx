@@ -1,5 +1,5 @@
 import Bookmark from "@/shared/ui/buttons/BookmarkButton";
-import type { PerformanceSummary } from "@classic-hub/shared/types/performance";
+import type { HomePerformance } from "@classic-hub/shared/types/client";
 import PerformanceAlbumMeta from "./MetaData";
 import PriceDisplay from "./PriceDisplay";
 
@@ -22,20 +22,18 @@ const MobileCard: React.FC<CardProps> = ({ imgSrc }) => {
 };
 
 type ListItemProps = {
-  data: PerformanceSummary;
+  data: HomePerformance;
 };
 const ListItem = ({ data }: ListItemProps) => {
   return (
     <li className="group flex destkop:hidden gap-[1.31rem] p-[0.94rem] h-62 rounded-main border border-[rgba(0,0,0,0.1)] bg-white cursor-pointer hover:shadow-[0_10px_15px_-3px_rgba(0,0,0,0.1),0_4px_6px_-4px_rgba(0,0,0,0.1)]">
-      <MobileCard imgSrc={data.posterUrl} />
+      <MobileCard imgSrc={data.poster} />
       <div className="flex flex-col justify-between">
         <div className="flex flex-col gap-[0.6rem]">
           <PerformanceAlbumMeta
             title={data.title}
             artist={data.artist}
-            composerArray={data.composerArray}
-            date={data.date}
-            time={data.time}
+            period={data.period}
             venue={data.venue}
           />
         </div>

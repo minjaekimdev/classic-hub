@@ -20,6 +20,6 @@ export const mapBasePerformance = (
 export const mapToHomePerformance = (raw: DBPerformance): HomePerformance => {
   return {
     ...mapBasePerformance(raw),
-    date: formatDateRange(raw.period_from, raw.period_to),
+    period: formatDateRange(raw.period_from, raw.period_to),
   };
 };

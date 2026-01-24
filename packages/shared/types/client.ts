@@ -28,7 +28,7 @@ export interface HomePerformance {
   poster: string;
   title: string;
   artist: string;
-  date: string;
+  period: string;
   venue: string;
   price: Price;
 }

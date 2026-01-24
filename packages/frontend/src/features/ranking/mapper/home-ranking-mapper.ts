@@ -11,7 +11,7 @@ const mapToHomeRanking = (
   return {
     ...mapBasePerformance(raw),
     rank: raw.current_rank,
-    date: formatDateRange(startDate, endDate),
+    period: formatDateRange(startDate, endDate),
   };
 };
 

@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import Header from '@shared/layout/Header';
-import Footer from '@shared/layout/Footer';
+import { useState } from "react";
+import Header from "./Header";
+import Footer from "@shared/layout/Footer";
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -10,8 +10,8 @@ const MainLayout = ({ children }: MainLayoutProps) => {
   const [isHeaderExpand, setIsHeaderExpand] = useState(false);
 
   const headerToggle = (expand: boolean) => {
-    setIsHeaderExpand(expand)
-  }
+    setIsHeaderExpand(expand);
+  };
 
   return (
     <>

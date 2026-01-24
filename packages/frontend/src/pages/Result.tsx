@@ -1,8 +1,8 @@
-import MainLayout from "@/shared/layout/MainLayout";
+import MainLayout from "@/shared/layout/desktop/MainLayout";
 import filterIcon from "@shared/assets/icons/filter-dark.svg";
 import closeIcon from "@shared/assets/icons/close-white.svg";
 import { useState } from "react";
-import useResultFilter from "@/features/filter/hooks/useResultFilter";
+import useResultFilter from "@/features/filter/result/hooks/useResultFilter";
 import ResultFilterDesktop from "@/features/filter/components/result/ResultFilterDesktop";
 import type { PerformanceSummary } from "@classic-hub/shared/types/client";
 import ResultAlbumItem from "@/features/performance/components/ResultAlbumItem";

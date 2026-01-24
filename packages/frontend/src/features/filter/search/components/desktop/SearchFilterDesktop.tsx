@@ -1,12 +1,13 @@
-import { SearchFilter } from "../shared/SearchFilter";
-import { useFilter } from "../../../hooks/useSearchFilter";
+import { SearchFilter, useFilter } from "./SearchFilter";
 import locationIcon from "@shared/assets/icons/location-gray.svg";
 import moneyIcon from "@shared/assets/icons/dollar-gray.svg";
 import calendarIcon from "@shared/assets/icons/calendar-gray.svg";
 import { DropdownMenuItem } from "@/shared/ui/shadcn/dropdown-menu";
-import PriceRangeSlider from "../shared/PriceRangeSlider";
-import { DateSelect } from "../shared/DateSelect";
+import PriceRangeSlider from "./PriceRangeSlider";
+import { DateSelect } from "./DateSelect";
 import searchIcon from "@shared/assets/icons/search-white.svg";
+import SearchFilterInput from "./SearchFilterInput";
+import SearchFilterField from "./SearchFilterField";
 
 const LOCATION_LIST = [
   "전체",
@@ -29,13 +30,13 @@ const LOCATION_LIST = [
   "제주",
 ];
 
-const DesktopSearchFilter = () => {
+const SearchFilterDesktop = () => {
   const { changeValue } = useFilter();
 
   return (
     <div className="grid grid-cols-[2fr_1fr_1fr_1fr_auto] gap-[0.66rem] rounded-[0.875rem] border border-gray-200 bg-white shadow-xl p-[0.94rem] w-230 h-18">
-      <SearchFilter.Input />
-      <SearchFilter.Field iconSrc={locationIcon} title="지역">
+      <SearchFilterInput />
+      <SearchFilterField iconSrc={locationIcon} title="지역">
         <div onClick={(e) => e.stopPropagation()}>
           {LOCATION_LIST.map((item) => (
             <DropdownMenuItem
@@ -46,15 +47,15 @@ const DesktopSearchFilter = () => {
             </DropdownMenuItem>
           ))}
         </div>
-      </SearchFilter.Field>
-      <SearchFilter.Field iconSrc={moneyIcon} title="가격">
+      </SearchFilterField>
+      <SearchFilterField iconSrc={moneyIcon} title="가격">
         <PriceRangeSlider />
-      </SearchFilter.Field>
-      <SearchFilter.Field iconSrc={calendarIcon} title="날짜">
+      </SearchFilterField>
+      <SearchFilterField iconSrc={calendarIcon} title="날짜">
         <div onClick={(e) => e.stopPropagation()}>
           <DateSelect />
         </div>
-      </SearchFilter.Field>
+      </SearchFilterField>
       <div className="flex gap-3">
         <SearchFilter.Reset>
           <div className="p-[0.69rem_0.56rem] border border-gray-200 rounded-main bg-white text-[0.77rem] transition-transform duration-200 hover:scale-105">
@@ -74,4 +75,4 @@ const DesktopSearchFilter = () => {
   );
 };
 
-export default DesktopSearchFilter;
+export default SearchFilterDesktop;

@@ -30,7 +30,7 @@ type InfoProps = Omit<HomePerformance, "id" | "poster" | "rank" | "poster">;
 const Info = ({
   title,
   artist,
-  date,
+  period,
   venue,
   price,
 }: InfoProps) => {
@@ -39,7 +39,7 @@ const Info = ({
       <PerformanceAlbumMeta
         title={title}
         artist={artist}
-        date={date}
+        period={period}
         venue={venue}
       />
       <div className="mt-3">
@@ -65,7 +65,7 @@ const AlbumItem = ({ data }: AlbumItemProps) => {
       <Info
         title={data.title}
         artist={data.artist}
-        date={data.date}
+        period={data.period}
         venue={data.venue}
         price={data.price}
       />

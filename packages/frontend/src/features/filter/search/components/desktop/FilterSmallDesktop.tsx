@@ -1,5 +1,5 @@
 import searchIcon from "@shared/assets/icons/search-white.svg";
-import { useFilter, type FieldType } from "../../../hooks/useSearchFilter";
+import { useFilter, type FieldType } from "./SearchFilter";
 
 const field: FieldType[] = ["지역", "가격", "날짜"];
 

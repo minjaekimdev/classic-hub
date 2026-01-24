@@ -1,11 +1,10 @@
 import Logo from "@/shared/ui/logos/Logo";
-import DesktopSearchFilter from "@features/filter/components/search/desktop/DesktopSearchFilter";
 import { useRef } from "react";
-import FilterDesktopSmall from "@features/filter/components/search/desktop/FilterDesktopSmall";
-import { SearchFilter } from "@/features/filter/components/search/shared/SearchFilter";
-import type { FilterHandle } from "@/features/filter/components/search/shared/SearchFilter";
 import useClickOutside from "@/shared/hooks/useClickOutside";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { SearchFilter } from "@/features/filter/search/components/desktop/SearchFilter";
+import FilterDesktopSmall from "@/features/filter/search/components/desktop/FilterSmallDesktop";
+import SearchFilterDesktop from "@/features/filter/search/components/desktop/SearchFilterDesktop";
 
 interface MenuItemProps {
   icon: string;
@@ -31,9 +30,7 @@ const MenuItem = ({ icon, text, selected, onSelect }: MenuItemProps) => {
       className={"flex flex-col gap-[0.69rem] cursor-pointer"}
       onClick={() => onSelect(text)}
     >
-      <div
-        className={`flex items-center gap-3 ${textColorClass}`}
-      >
+      <div className={`flex items-center gap-3 ${textColorClass}`}>
         <span className="text-[2.13rem]/[2.13rem]">{icon}</span>
         <span className="shrink-0 text-[0.88rem]/[1.13rem] font-medium">
           {text}
@@ -59,11 +56,11 @@ const menuItemArray = [
 
 const Menu = () => {
   // 메뉴 클릭 시 이동을 위해 useNavigate 사용
-  const navigate = useNavigate(); 
-  
+  const navigate = useNavigate();
+
   // useState를 사용 시 페이지 이동에 따라 Header가 언마운트되어 상태가 초기화되므로 useLocation 사용
   // location.pathname(ranking 등 경로명)을 가져와 MenuItem의 selected로 활용
-  const location = useLocation(); 
+  const location = useLocation();
 
   const handleSelected = (text: string) => {
     const targetPath = `${MAP_LINK[text]}`;
@@ -71,10 +68,12 @@ const Menu = () => {
       return;
     }
     navigate(`${MAP_LINK[text]}`);
-  }
+  };
 
-  const selected = menuItemArray.find((item) => MAP_LINK[item.text] === location.pathname)?.text;
-  
+  const selected = menuItemArray.find(
+    (item) => MAP_LINK[item.text] === location.pathname,
+  )?.text;
+
   return (
     <div className="shrink-0 flex gap-[1.56rem]">
       {menuItemArray.map((item) => (
@@ -110,7 +109,6 @@ interface HeaderProps {
 }
 const Header = ({ isExpand, onChangeFilterState }: HeaderProps) => {
   const headerRef = useRef<HTMLDivElement>(null);
-  const filterRef = useRef<FilterHandle>(null);
 
   // 헤더의 외부를 클릭하면 축소
   useClickOutside(headerRef, () => onChangeFilterState(false));
@@ -122,16 +120,20 @@ const Header = ({ isExpand, onChangeFilterState }: HeaderProps) => {
   return (
     <div
       ref={headerRef}
-      className={`fixed top-0 z-20 bg-[linear-gradient(180deg,#FFF_39.9%,#F8F8F8_100%)] w-full ${height}`}
+      className={`hidden min-[740px]:block fixed top-0 z-20 bg-[linear-gradient(180deg,#FFF_39.9%,#F8F8F8_100%)] w-full ${height}`}
     >
       <div className="absolute left-7 top-0">
-        <Logo />
+        <Link to="/">
+          <div className="self-start flex p-[1.62rem_0]">
+            <Logo />
+          </div>
+        </Link>
       </div>
       <div className="absolute top-7 right-7">
         <HeaderAuthButton />
       </div>
       <div className="flex flex-col px-7 w-full max-w-[1920px]">
-        <SearchFilter ref={filterRef}>
+        <SearchFilter>
           {isExpand ? (
             <div className="flex justify-center mt-[1.87rem] mb-6">
               <Menu />
@@ -144,7 +146,7 @@ const Header = ({ isExpand, onChangeFilterState }: HeaderProps) => {
 
           {isExpand && (
             <div className="flex justify-center mb-8">
-              <DesktopSearchFilter />
+              <SearchFilterDesktop />
             </div>
           )}
         </SearchFilter>
