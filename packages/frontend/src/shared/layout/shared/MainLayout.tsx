@@ -1,6 +1,6 @@
 import { useState } from "react";
-import Header from "./Header";
-import Footer from "@shared/layout/Footer";
+import Header from "../desktop/HeaderDesktop";
+import Footer from "@/shared/layout/shared/Footer";
 
 interface MainLayoutProps {
   children: React.ReactNode;

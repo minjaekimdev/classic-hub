@@ -9,21 +9,23 @@ const useHomeLayout = () => {
   const { ref, isIntersecting } = useIntersectionObserver();
   
   const [isFilterActive, setIsFilterActive] = useState(false);
-  const changeFilterState = (isFilterActive: boolean) => {
+  const onFilterClick = (isFilterActive: boolean) => {
     setIsFilterActive(isFilterActive);
   };
 
   const isMobile = useIsMobile(740);
 
-  // 스크롤이 맨 위로 올라갈 떄마다 isFilterActive를 초기화
-  // 초기화하지 않으면 스크롤을 내려도 필터가 확장된 상태가 유지됨
+  // 스크롤이 맨 위로 올라갈 떄마다 isFilterActive를 false로 초기화
   useEffect(() => {
     if (isIntersecting) {
       setIsFilterActive(false);
     }
   }, [isIntersecting]);
+
+  // 헤더가 확장되는 경우는 scroll이 맨 위에 있거나 필터가 클릭되는 경우
   const isExpand = isIntersecting || isFilterActive;
 
+  // 모바일일 때와 데스크톱일 때 메인 영역의 상단 여백을 결정
   const getMarginTop = () => {
     let marginTop;
     if (isMobile) {
@@ -44,7 +46,7 @@ const useHomeLayout = () => {
     isFilterActive,
     isMobile,
     setIsFilterActive,
-    changeFilterState,
+    onFilterClick,
     isExpand,
     getMarginTop
   }

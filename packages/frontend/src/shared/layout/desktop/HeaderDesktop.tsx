@@ -105,13 +105,13 @@ const HeaderAuthButton = () => {
 // 헤더는 확장되어야 하는지 아닌지 여부만 props로 전달받기
 interface HeaderProps {
   isExpand: boolean;
-  onChangeFilterState: (isFilterActive: boolean) => void;
+  onFilterClick: (isFilterActive: boolean) => void;
 }
-const Header = ({ isExpand, onChangeFilterState }: HeaderProps) => {
+const HeaderDesktop = ({ isExpand, onFilterClick }: HeaderProps) => {
   const headerRef = useRef<HTMLDivElement>(null);
 
   // 헤더의 외부를 클릭하면 축소
-  useClickOutside(headerRef, () => onChangeFilterState(false));
+  useClickOutside(headerRef, () => onFilterClick(false));
   // 애니메이션 설정
 
   // 헤더가 확장되어야 하는 경우와 그렇지 않은 경우의 높이를 달리하기
@@ -120,7 +120,7 @@ const Header = ({ isExpand, onChangeFilterState }: HeaderProps) => {
   return (
     <div
       ref={headerRef}
-      className={`hidden min-[740px]:block fixed top-0 z-20 bg-[linear-gradient(180deg,#FFF_39.9%,#F8F8F8_100%)] w-full ${height}`}
+      className={`fixed top-0 z-20 bg-[linear-gradient(180deg,#FFF_39.9%,#F8F8F8_100%)] w-full ${height}`}
     >
       <div className="absolute left-7 top-0">
         <Link to="/">
@@ -135,18 +135,17 @@ const Header = ({ isExpand, onChangeFilterState }: HeaderProps) => {
       <div className="flex flex-col px-7 w-full max-w-[1920px]">
         <SearchFilter>
           {isExpand ? (
-            <div className="flex justify-center mt-[1.87rem] mb-6">
-              <Menu />
-            </div>
+            <>
+              <div className="flex justify-center mt-[1.87rem] mb-6">
+                <Menu />
+              </div>
+              <div className="flex justify-center mb-8">
+                <SearchFilterDesktop />
+              </div>
+            </>
           ) : (
             <div className="flex justify-center mt-4">
-              <FilterDesktopSmall onFilterFieldClick={onChangeFilterState} />
-            </div>
-          )}
-
-          {isExpand && (
-            <div className="flex justify-center mb-8">
-              <SearchFilterDesktop />
+              <FilterDesktopSmall onFilterClick={onFilterClick} />
             </div>
           )}
         </SearchFilter>
@@ -155,4 +154,4 @@ const Header = ({ isExpand, onChangeFilterState }: HeaderProps) => {
   );
 };
 
-export default Header;
+export default HeaderDesktop;

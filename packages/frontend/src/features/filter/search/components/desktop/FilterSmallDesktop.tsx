@@ -5,9 +5,9 @@ const field: FieldType[] = ["지역", "가격", "날짜"];
 
 interface FieldProps {
   field: FieldType;
-  onFilterFieldClick: (isFilterActive: boolean) => void;
+  onFilterClick: (isFilterActive: boolean) => void;
 }
-const Field = ({ field, onFilterFieldClick }: FieldProps) => {
+const Field = ({ field, onFilterClick }: FieldProps) => {
   const { filterValue, openField } = useFilter();
 
   return (
@@ -16,7 +16,7 @@ const Field = ({ field, onFilterFieldClick }: FieldProps) => {
       onClick={(e) => {
         e.stopPropagation();
         openField(field);
-        onFilterFieldClick(true);
+        onFilterClick(true);
       }}
     >
       {filterValue[field] ? filterValue[field] : field}
@@ -25,10 +25,10 @@ const Field = ({ field, onFilterFieldClick }: FieldProps) => {
 };
 
 interface FilterDesktopSmallProps {
-  onFilterFieldClick: (isFilterActive: boolean) => void;
+  onFilterClick: (isFilterActive: boolean) => void;
 }
 const FilterDesktopSmall = ({
-  onFilterFieldClick,
+  onFilterClick,
 }: FilterDesktopSmallProps) => {
   const { openField, filterValue } = useFilter();
 
@@ -42,7 +42,7 @@ const FilterDesktopSmall = ({
         onClick={(e) => {
           e.stopPropagation();
           openField("검색어");
-          onFilterFieldClick(true);
+          onFilterClick(true);
         }}
       >
         {filterValue.검색어 ? filterValue.검색어 : "검색어"}
@@ -50,7 +50,7 @@ const FilterDesktopSmall = ({
       {field.map((item) => (
         <div key={item} className="grow flex">
           <div className="flex-none w-px h-5 bg-[#E5E7EB]"></div>
-          <Field field={item} onFilterFieldClick={onFilterFieldClick} />
+          <Field field={item} onFilterClick={onFilterClick} />
         </div>
       ))}
       <button className="shrink-0 p-[0.69rem_0.56rem] rounded-main bg-main text-white text-[0.77rem] transition-transform duration-200 hover:scale-105">

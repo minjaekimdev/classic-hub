@@ -1,4 +1,4 @@
-import MainLayout from "@/shared/layout/desktop/MainLayout";
+import MainLayout from "@/shared/layout/shared/MainLayout";
 import filterIcon from "@shared/assets/icons/filter-dark.svg";
 import closeIcon from "@shared/assets/icons/close-white.svg";
 import { useState } from "react";

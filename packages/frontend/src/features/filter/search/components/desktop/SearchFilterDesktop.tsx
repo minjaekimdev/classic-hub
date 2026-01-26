@@ -54,7 +54,7 @@ const SearchFilterDesktop = () => {
       <SearchFilterField iconSrc={calendarIcon} title="날짜">
         <div onClick={(e) => e.stopPropagation()}>
           <DateSelect />
-        </div>
+        </div> 
       </SearchFilterField>
       <div className="flex gap-3">
         <SearchFilter.Reset>

@@ -1,4 +1,4 @@
-import HomeLayout from "@/shared/layout/desktop/HomeLayout";
+import HomeLayout from "@/shared/layout/shared/HomeLayout";
 import RankingPerformances from "@/features/ranking/components/HomeRanking";
 import WeekendPerformances from "@/features/performance/components/WeekendPerformances";
 

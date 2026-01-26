@@ -2,10 +2,10 @@ import Logo from "@/shared/ui/logos/Logo";
 import { useModal } from "@/shared/ui/modals/Modal";
 import searchIcon from "@shared/assets/icons/search-gray.svg";
 
-const HomeMobileHeader = ({ isExpand }: { isExpand: boolean }) => {
+const HomeHeaderMobile = ({ isExpand }: { isExpand: boolean }) => {
   const { open } = useModal();
   return (
-    <header className="min-[740px]:hidden fixed top-0 z-20 flex flex-col justify-center w-full px-[1.09rem] py-6 bg-[#f3f3f3]">
+    <header className="fixed top-0 z-20 flex flex-col justify-center w-full px-[1.09rem] py-6 bg-[#f3f3f3]">
       <div className="flex flex-col gap-4 items-center">
         {isExpand && <Logo />}
         <div
@@ -28,4 +28,4 @@ const HomeMobileHeader = ({ isExpand }: { isExpand: boolean }) => {
   );
 };
 
-export default HomeMobileHeader;
+export default HomeHeaderMobile;
