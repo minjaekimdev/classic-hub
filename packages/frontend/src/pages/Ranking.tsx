@@ -23,7 +23,7 @@ const Ranking = () => {
   return (
     <MainLayout>
       <Modal>
-        <BookingModal></BookingModal>
+          <BookingModal />
         <div className="flex flex-col gap-[2.19rem]">
           <RankingHeader period={period} onToggle={handlePeriod} />
           <RankingList period={period} data={rankingDataObj[period]} />

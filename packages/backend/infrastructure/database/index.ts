@@ -48,6 +48,7 @@ export const insertData = async <T>(
   }
 };
 
+// rpc 호출
 export const callDatabaseFunction = async <T>(fnName: string, args?: T) => {
   const { error } = await supabase.rpc(fnName, args);
 

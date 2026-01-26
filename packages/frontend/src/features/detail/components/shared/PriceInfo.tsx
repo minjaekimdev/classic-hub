@@ -1,5 +1,5 @@
-import type { SeatPriceInfo } from "@classic-hub/shared/types/performance";
-import { useDetail } from "../../model/useDetail";
+import { useDetail } from "@/pages/Detail";
+import type { Price } from "@classic-hub/shared/types/common";
 
 interface ItemProps {
   seat: string;
@@ -22,8 +22,8 @@ const PriceInfo = () => {
   const performance = useDetail();
   return (
     <div className="flex flex-col gap-[0.44rem] p-[0.88rem] desktop:p-0">
-      {performance.priceInfo.map((item: SeatPriceInfo) => (
-        <Item seat={item.seat} price={item.price} />
+      {performance.priceInfo.map((item: Price) => (
+        <Item seat={item.seatType} price={item.price} />
       ))}
     </div>
   );

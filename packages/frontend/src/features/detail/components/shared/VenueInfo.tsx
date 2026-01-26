@@ -4,8 +4,8 @@ import disabledIcon from "@shared/assets/icons/disabled-black.svg";
 import buildingIcon from "@shared/assets/icons/building-lightgray.svg";
 import linkIcon from "@shared/assets/icons/link-lightgray.svg";
 import Badge from "@/shared/ui/badges/Badge";
-import { useDetail } from "../../model/useDetail";
-import { useVenueInfo } from "../../model/useVenueInfo";
+import { useVenueInfo } from "../../hooks/useVenueInfo";
+import { useDetail } from "@/pages/Detail";
 
 interface CategoryProps {
   iconSrc: string;
@@ -66,11 +66,13 @@ const VenueInfo = () => {
   const data = useVenueInfo(venueId);
   return (
     <div className="flex flex-col gap-[0.88rem] px-[0.88rem] py-[1.09rem] desktop:p-0">
-      <h3 className="text-dark text-[0.88rem]/[1.31rem] desktop:text-[1.31rem]/[1.75rem] font-semibold">
+      <h3 className="text-dark text-[0.88rem]/[1.31rem] font-semibold">
         공연장 정보
       </h3>
       <div className="flex flex-col gap-[1.31rem]">
-        <p className="text-[#717182] text-[0.77rem]/[1.09rem] desktop:text-[0.88rem]/[1.31rem]">{venue}</p>
+        <p className="text-[#717182] text-[0.77rem]/[1.09rem] desktop:text-[0.88rem]/[1.31rem]">
+          {venue}
+        </p>
         <div className="grid grid-cols-1 tablet:grid tablet:grid-cols-2 gap-[0.88rem]">
           <Category iconSrc={locationIcon} title="주소">
             <span className="text-[#4a5565] text-[0.88rem]/[1.31rem]">
@@ -123,11 +125,6 @@ const VenueInfo = () => {
               : "-"}
           </div>
         </Category>
-        {/* 공연장 지도 */}
-        <div className="flex flex-col gap-[0.44rem]">
-          <p className="text-dark text-[0.77rem]/[1.09rem]">위치</p>
-          <div className="rounded-main border border-[rgba(0,0,0,0.1)] h-56"></div>
-        </div>
       </div>
     </div>
   );

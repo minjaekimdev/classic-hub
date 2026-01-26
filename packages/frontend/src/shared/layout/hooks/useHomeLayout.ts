@@ -1,19 +1,19 @@
 import { useIntersectionObserver } from "@/shared/hooks/useIntersectionObserver";
-import useIsMobile from "@/shared/hooks/useIsMobile";
 import { useEffect, useState } from "react";
+import useBreakpoint from "@/shared/hooks/useBreakpoint";
 
 const useHomeLayout = () => {
   // div가 화면에서 사라지는지, 나타나는지 관찰
   // 화면에 아직 참조된 요소가 보이면 isIntersecting: true, 스크롤 발생 X
   // 보이지 않으면 false, 스크롤 발생 O
   const { ref, isIntersecting } = useIntersectionObserver();
-  
+
   const [isFilterActive, setIsFilterActive] = useState(false);
   const onFilterClick = (isFilterActive: boolean) => {
     setIsFilterActive(isFilterActive);
   };
 
-  const isMobile = useIsMobile(740);
+  const isMobile = useBreakpoint(740);
 
   // 스크롤이 맨 위로 올라갈 떄마다 isFilterActive를 false로 초기화
   useEffect(() => {
@@ -48,8 +48,8 @@ const useHomeLayout = () => {
     setIsFilterActive,
     onFilterClick,
     isExpand,
-    getMarginTop
-  }
-}
+    getMarginTop,
+  };
+};
 
 export default useHomeLayout;

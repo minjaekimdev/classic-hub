@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 interface ModalContextType {
   isOpen: boolean;
@@ -34,6 +34,27 @@ const ModalProvider = ({ children }: ModalProviderProps) => {
   );
 };
 
+export const ModalWrapper = ({ children }: { children: React.ReactNode }) => {
+  const { close } = useModal();
+
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = "visible";
+    };
+  }, []);
+
+  return (
+    <div
+      className="fixed top-0 left-0 w-full h-full z-50 flex justify-center items-center p-[6.8rem] bg-[rgba(0,0,0,0.5)]"
+      onClick={close}
+    >
+      {children}
+    </div>
+  );
+};
+
 // eslint-disable-next-line react-refresh/only-export-components
 export const useModal = () => {
   const context = useContext(ModalContext);
@@ -46,7 +67,7 @@ export const useModal = () => {
 const ModalTrigger = ({ children }: { children: React.ReactNode }) => {
   const { open } = useModal();
 
-  return <button onClick={open}>{children}</button>;
+  return <div onClick={open}>{children}</div>;
 };
 
 interface ModalRootProps {
@@ -59,6 +80,7 @@ const ModalRoot = ({ children }: ModalRootProps) => {
 
 const Modal = Object.assign(ModalRoot, {
   Trigger: ModalTrigger,
+  Wrapper: ModalWrapper,
 });
 
 export default Modal;

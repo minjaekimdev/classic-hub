@@ -1,9 +1,8 @@
 import { useState } from "react";
-import ProgramInfo from "../shared/ProgramInfo";
 import DetailImages from "../shared/DetailImages";
-import { useDetail } from "../../model/useDetail";
 import VenueInfo from "../shared/VenueInfo";
 import PriceInfo from "../shared/PriceInfo";
+import { useDetail } from "@/pages/Detail";
 
 interface TabProps {
   text: CategoryType;
@@ -25,24 +24,13 @@ const Tab = ({ text, selected, onClick }: TabProps) => {
   );
 };
 
-// 상세정보의 각 카테고리(프로그램, 공연 상세 이미지, 공연장 정보 등)에 여백 설정
-interface SectionLayoutProps {
-  children: React.ReactNode;
-}
-const SectionLayout = ({ children }: SectionLayoutProps) => {
-  return <section className="px-[0.88rem] py-[1.09rem]">{children}</section>;
-};
-
 const Detail = () => {
-  const performance = useDetail();
+  const { detailImages } = useDetail();
   return (
     <div className="flex flex-col gap-[0.44rem]">
-      <SectionLayout>
-        <ProgramInfo programInfo={performance.programInfo} />
-      </SectionLayout>
-      <SectionLayout>
-        <DetailImages imgUrlArray={performance.detailImages} />
-      </SectionLayout>
+      <section className="px-[0.88rem] py-[1.09rem]">
+        <DetailImages imgUrlArray={detailImages} />
+      </section>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import { useDetail } from "@features/detail/model/useDetail";
+import { useDetail } from "@/pages/Detail";
 import { BookmarkButton, ShareButton } from "../shared/ActionButton";
 
 interface InfoRowProps {
@@ -15,28 +15,20 @@ const InfoRow = ({ label, description }: InfoRowProps) => {
 };
 
 const SummaryMobile = () => {
-  const performance = useDetail();
-  if (!performance) {
-    throw new Error("useDetailContext must be used within a DetailProvider");
-  }
+  const { title, artist, venue, period, time, runningTime } = useDetail();
   return (
     <div className="flex flex-col gap-[0.81rem] p-[1.09rem]">
       <div className="flex flex-col gap-[0.22rem]">
         <h1 className="text-dark text-[1.09rem]/[1.53rem] font-semibold">
-          {performance.title}
+          {title}
         </h1>
-        <p className="text-[#4a5565] text-[0.77rem]/[1.09rem]">
-          {performance.artist}
-        </p>
+        <p className="text-[#4a5565] text-[0.77rem]/[1.09rem]">{artist}</p>
       </div>
       <ul className="flex flex-col gap-[0.41rem]">
-        <InfoRow label="장소" description={performance.venue} />
-        <InfoRow
-          label="기간"
-          description={`${performance.date.start} ~ ${performance.date.end}`}
-        />
-        <InfoRow label="공연시간" description={performance.time} />
-        <InfoRow label="관람시간" description={performance.runningTime} />
+        <InfoRow label="장소" description={venue} />
+        <InfoRow label="기간" description={period} />
+        <InfoRow label="공연시간" description={time} />
+        <InfoRow label="관람시간" description={runningTime} />
       </ul>
       <div className="flex gap-[0.66rem]">
         <BookmarkButton />

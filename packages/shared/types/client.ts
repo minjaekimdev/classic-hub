@@ -51,4 +51,5 @@ export interface DetailPerformance extends Performance {
   age: string;
   priceInfo: SeatPrice[];
   detailImages: string[];
+  bookingLinks: BookingLink[];
 }
