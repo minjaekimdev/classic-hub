@@ -1,5 +1,5 @@
 import { type ReactNode } from "react";
-import Footer from "@/shared/layout/shared/Footer";
+import Footer from "@/layout/shared/Footer";
 import HomeHeaderMobile from "../mobile/HomeHeaderMobile";
 import useHomeLayout from "../hooks/useHomeLayout";
 import Modal from "@/shared/ui/modals/Modal";

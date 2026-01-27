@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Header from "../desktop/HeaderDesktop";
-import Footer from "@/shared/layout/shared/Footer";
+import Footer from "@/layout/shared/Footer";
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -15,7 +15,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
 
   return (
     <>
-      <Header isExpand={isHeaderExpand} onChangeFilterState={headerToggle} />
+      <Header isExpand={isHeaderExpand} onFilterClick={headerToggle} />
       {isHeaderExpand && (
         <div className="fixed top-0 left-0 z-15 bg-[rgba(0,0,0,0.3)] w-full h-full"></div>
       )}

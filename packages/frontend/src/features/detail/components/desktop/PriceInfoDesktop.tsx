@@ -8,7 +8,7 @@ const PriceInfoDesktop = () => {
   const { sendData } = useModal();
 
   return (
-    <div className="sticky top-0 rounded-main shadow-[0_1px_3px_0_rgba(0,0,0,0.1),0_1px_2px_-1px_rgba(0,0,0,0.1)] p-[1.31rem]">
+    <div className="sticky top-[6.8rem] rounded-main shadow-[0_1px_3px_0_rgba(0,0,0,0.1),0_1px_2px_-1px_rgba(0,0,0,0.1)] p-[1.31rem]">
       <p className="text-dark text-[0.98rem]/[1.53rem] font-semibold">
         좌석 및 가격 정보
       </p>

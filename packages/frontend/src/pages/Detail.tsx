@@ -7,6 +7,8 @@ import BookingModal from "@/shared/ui/modals/BookingModal";
 import useBreakpoint from "@/shared/hooks/useBreakpoint";
 import DetailMobile from "@/features/detail/components/mobile/DetailMobile";
 import DetailDesktop from "@/features/detail/components/desktop/DetailDesktop";
+import MainLayout from "@/layout/shared/MainLayout";
+import { Toaster } from "sonner";
 
 const DetailContext = createContext<DetailPerformance | null>(null);
 
@@ -39,7 +41,14 @@ export const Detail = () => {
     <DetailContext value={performance}>
       <Modal>
         <BookingModal />
-        {isMobile ? <DetailMobile /> : <DetailDesktop />}
+        {isMobile ? (
+          <DetailMobile />
+        ) : (
+          <MainLayout>
+            <Toaster />
+            <DetailDesktop />
+          </MainLayout>
+        )}
       </Modal>
     </DetailContext>
   );

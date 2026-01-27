@@ -1,4 +1,4 @@
-import HomeWidgetHeader from "@/shared/layout/shared/HomeWidgetHeader";
+import HomeWidgetHeader from "@/layout/shared/HomeWidgetHeader";
 import calendarIcon from "@shared/assets/icons/calendar-red.svg";
 import HomePerformanceAlbumItem from "@/features/performance/components/HomeAlbumItem";
 import ListItem from "./ListItem";

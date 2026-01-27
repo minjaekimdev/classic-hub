@@ -1,5 +1,5 @@
 import rankingIcon from "@shared/assets/icons/ranking-red.svg";
-import HomeWidgetHeader from "@/shared/layout/shared/HomeWidgetHeader";
+import HomeWidgetHeader from "@/layout/shared/HomeWidgetHeader";
 import AlbumItem from "@/features/performance/components/HomeAlbumItem";
 import leftArrow from "@shared/assets/icons/left-slidearrow-black.svg";
 import rightArrow from "@shared/assets/icons/right-slidearrow-black.svg";

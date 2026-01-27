@@ -1,15 +1,15 @@
-import MainLayout from "@/shared/layout/shared/MainLayout";
+import MainLayout from "@/layout/shared/MainLayout";
 import filterIcon from "@shared/assets/icons/filter-dark.svg";
 import closeIcon from "@shared/assets/icons/close-white.svg";
 import { useState } from "react";
 import useResultFilter from "@/features/filter/result/hooks/useResultFilter";
-import ResultFilterDesktop from "@/features/filter/components/result/ResultFilterDesktop";
 import type { PerformanceSummary } from "@classic-hub/shared/types/client";
 import ResultAlbumItem from "@/features/performance/components/ResultAlbumItem";
 import useWindowSize from "@/shared/hooks/useWindowSize";
 import ListItem from "@/features/performance/components/ListItem";
-import ResultFilterMobile from "@/features/filter/components/result/ResultFilterMobile";
 import useBodyScrollLock from "@/shared/hooks/useBodyScrollLock";
+import ResultFilterMobile from "@/features/filter/result/components/ResultFilterMobile";
+import ResultFilterDesktop from "@/features/filter/result/components/ResultFilterDesktop";
 
 interface ResultSummaryProps {
   count: number;

@@ -16,7 +16,7 @@ const DetailMobile = () => {
       <SummaryMobile />
       <MainDetailMobile />
       <Modal.Trigger>
-        <div className="sticky bottom-0 border-t border-[rgba(0,0,0,0.1)] bg-white px-[0.72rem] py-[0.88rem]">
+        <div className="fixed bottom-0 border-t border-[rgba(0,0,0,0.1)] bg-white px-[0.72rem] py-[0.88rem] w-full">
           <button
             className="flex justify-center items-center rounded-main bg-main w-full h-[2.63rem] text-white text-[0.77rem]/[1.09rem]"
             onClick={() => sendData(bookingLinks)}

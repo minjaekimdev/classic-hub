@@ -16,7 +16,7 @@ interface CategoryProps {
 }
 const Category = ({ iconSrc, title, children }: CategoryProps) => {
   return (
-    <div className="shrink-0 flex gap-[0.66rem]">
+    <div className="flex gap-[0.66rem]">
       <img
         src={iconSrc}
         alt="아이콘"
@@ -57,9 +57,6 @@ const VenueInfo = () => {
     handleVenueInfo();
   }, [venueId, venue]);
 
-  console.log("asdf");
-  console.log(venueData);
-
   return (
     <div className="flex flex-col gap-[0.88rem] px-[0.88rem] py-[1.09rem] desktop:p-0">
       <h3 className="text-dark text-[0.88rem]/[1.31rem] font-semibold">
@@ -69,7 +66,7 @@ const VenueInfo = () => {
         <p className="text-[#717182] text-[0.77rem]/[1.09rem] desktop:text-[0.88rem]/[1.31rem]">
           {venue}
         </p>
-        <div className="grid grid-cols-1 tablet:grid tablet:grid-cols-2 gap-[0.88rem]">
+        <div className="grid grid-cols-2 gap-[0.88rem]">
           <Category iconSrc={locationIcon} title="주소">
             <span className="text-[#4a5565] text-[0.88rem]/[1.31rem]">
               {venueData ? venueData.address : "-"}
@@ -86,12 +83,16 @@ const VenueInfo = () => {
             </span>
           </Category>
           <Category iconSrc={linkIcon} title="홈페이지">
-            <a
-              href=""
-              className="text-blue-600 text-[0.88rem]/[1.31rem] hover:underline"
-            >
-              {venueData ? venueData.url : "-"}
-            </a>
+            {venueData && venueData.url ? (
+              <a
+                href={venueData.url}
+                className="text-blue-600 text-[0.88rem]/[1.31rem] hover:underline break-all"
+              >
+                {venueData.url}
+              </a>
+            ) : (
+              "-"
+            )}
           </Category>
         </div>
         <Category iconSrc={buildingIcon} title="편의시설">

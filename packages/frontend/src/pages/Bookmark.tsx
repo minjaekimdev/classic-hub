@@ -1,8 +1,8 @@
-import MainLayout from "@/shared/layout/MainLayout";
 import BookmarkHeader from "@/features/bookmark/BookmarkHeader";
 import BookmarkSearchBox from "@/features/bookmark/BookmarkSearchBox";
 import BookmarkFilter from "@/features/bookmark/BookmarkFilter";
 import BookmarkPerformance from "@/features/performance/components/BookmarkPerformance";
+import MainLayout from "@/layout/shared/MainLayout";
 
 const Bookmark = () => {
   // 추후 api 호출
