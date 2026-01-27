@@ -1,7 +1,7 @@
 import type { PerformanceSummary } from "@classic-hub/shared/types/performance";
 import MetaData from "./MetaData";
 import ResultPriceDisplay from "./ResultPriceDisplay";
-import BookmarkButton from "@/shared/ui/buttons/BookmarkButton";
+import BookmarkButton from "@/shared/ui/buttons/BookmarkButtonMobile";
 
 interface ResultAlbumItemProps {
   data: PerformanceSummary;

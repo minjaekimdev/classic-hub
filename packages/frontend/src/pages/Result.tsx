@@ -6,7 +6,7 @@ import useResultFilter from "@/features/filter/result/hooks/useResultFilter";
 import type { PerformanceSummary } from "@classic-hub/shared/types/client";
 import ResultAlbumItem from "@/features/performance/components/ResultAlbumItem";
 import useWindowSize from "@/shared/hooks/useWindowSize";
-import ListItem from "@/features/performance/components/ListItem";
+import ListItem from "@/features/performance/components/PerformanceListCard";
 import useBodyScrollLock from "@/shared/hooks/useBodyScrollLock";
 import ResultFilterMobile from "@/features/filter/result/components/ResultFilterMobile";
 import ResultFilterDesktop from "@/features/filter/result/components/ResultFilterDesktop";

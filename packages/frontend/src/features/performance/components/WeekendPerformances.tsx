@@ -1,7 +1,7 @@
 import HomeWidgetHeader from "@/layout/shared/HomeWidgetHeader";
 import calendarIcon from "@shared/assets/icons/calendar-red.svg";
-import HomePerformanceAlbumItem from "@/features/performance/components/HomeAlbumItem";
-import ListItem from "./ListItem";
+import HomePerformanceAlbumCard from "@/features/performance/components/HomePerformanceAlbumCard";
+import ListItem from "./PerformanceListCard";
 import leftArrow from "@shared/assets/icons/left-slidearrow-black.svg";
 import rightArrow from "@shared/assets/icons/right-slidearrow-black.svg";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -48,7 +48,7 @@ const WeekendPerformances = () => {
           >
             {performanceArray.map((performance) => (
               <SwiperSlide key={performance.id}>
-                <HomePerformanceAlbumItem data={performance} />
+                <HomePerformanceAlbumCard data={performance} />
               </SwiperSlide>
             ))}
           </Swiper>

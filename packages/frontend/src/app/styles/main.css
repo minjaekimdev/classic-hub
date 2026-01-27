@@ -20,6 +20,8 @@
 }
 
 @utility bookmark-position {
+  position: absolute;
+  z-index: 10;
   top: 0.66rem;
   right: 0.66rem;
 }

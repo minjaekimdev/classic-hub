@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import HomeAlbumItem from "./HomeAlbumItem";
+import HomeAlbumItem from "./HomePerformanceAlbumCard";
 
 const meta = {
   title: "features/performance/AlbumItem",
@@ -13,7 +13,14 @@ const meta = {
         "http://www.kopis.or.kr/upload/pfmPoster/PF_PF278593_251111_135635.gif",
       title: "크리스티안 짐머만 피아노 리사이틀",
       artist: "크리스티안 짐머만",
-      composerArray: ["베토벤", "리스트", "라흐마니노프", "포레", "생상스", "시마노프스키"],
+      composerArray: [
+        "베토벤",
+        "리스트",
+        "라흐마니노프",
+        "포레",
+        "생상스",
+        "시마노프스키",
+      ],
       date: {
         start: "2026년 1월 13일 (목)",
         end: "2026년 1월 13일 (목)",

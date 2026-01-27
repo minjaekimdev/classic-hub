@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import PerformanceListItem from "./ListItem";
+import PerformanceListItem from "./PerformanceListCard";
 
 const DEFAULT_DATA = {
   id: "PF12345",

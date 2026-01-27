@@ -1,6 +1,6 @@
 import rankingIcon from "@shared/assets/icons/ranking-red.svg";
 import HomeWidgetHeader from "@/layout/shared/HomeWidgetHeader";
-import AlbumItem from "@/features/performance/components/HomeAlbumItem";
+import HomePerformanceAlbumCard from "@/features/performance/components/HomePerformanceAlbumCard";
 import leftArrow from "@shared/assets/icons/left-slidearrow-black.svg";
 import rightArrow from "@shared/assets/icons/right-slidearrow-black.svg";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -48,7 +48,7 @@ const RankingPerformances = () => {
           >
             {data.map((performance) => (
               <SwiperSlide key={performance.id}>
-                <AlbumItem data={performance} />
+                <HomePerformanceAlbumCard data={performance} />
               </SwiperSlide>
             ))}
           </Swiper>

@@ -1,5 +1,6 @@
 import { useDetail } from "@/pages/Detail";
-import { BookmarkButton, ShareButton } from "../shared/ActionButton";
+import BookmarkButton from "@/shared/ui/buttons/BookmarkButtonWithText";
+import ShareButton from "@/shared/ui/buttons/ShareButtonWithText";
 
 interface InfoRowProps {
   label: string;
@@ -32,7 +33,7 @@ const SummaryMobile = () => {
       </ul>
       <div className="flex gap-[0.66rem]">
         <BookmarkButton />
-        <ShareButton />
+        <ShareButton/>
       </div>
     </div>
   );

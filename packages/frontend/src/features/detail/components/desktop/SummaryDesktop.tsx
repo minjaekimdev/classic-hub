@@ -1,10 +1,11 @@
-import { BookmarkButton, ShareButton } from "../shared/ActionButton";
 import locationIcon from "@shared/assets/icons/location-gray2.svg";
 import calendarIcon from "@shared/assets/icons/calendar-gray2.svg";
 import clockIcon from "@shared/assets/icons/clock-gray2.svg";
 import timerIcon from "@shared/assets/icons/timer-gray2.svg";
 import { useDetail } from "@/pages/Detail";
 import VenueInfo from "../shared/VenueInfo";
+import ShareButton from "@/shared/ui/buttons/ShareButtonWithText";
+import BookmarkButton from "@/shared/ui/buttons/BookmarkButtonWithText";
 
 interface CategoryItem {
   iconSrc?: string;
@@ -77,7 +78,7 @@ const SummaryDesktop = () => {
           <div className="rounded-main aspect-10/14 overflow-hidden">
             <img src={poster} alt="" className="w-full h-full" />
           </div>
-          <div className="flex gap-[0.44rem]">
+          <div className="flex gap-[0.44rem] h-7">
             <BookmarkButton />
             <ShareButton />
           </div>
