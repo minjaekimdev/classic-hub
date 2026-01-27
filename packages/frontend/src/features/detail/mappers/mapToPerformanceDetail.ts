@@ -3,7 +3,6 @@ import type { DetailPerformance } from "@classic-hub/shared/types/client";
 import type { DBPerformance } from "@classic-hub/shared/types/database";
 
 const mapToPerformanceDetail = (raw: DBPerformance): DetailPerformance => {
-  console.log(raw);
   return {
     id: raw.performance_id,
     poster: raw.poster,

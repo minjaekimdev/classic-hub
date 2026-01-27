@@ -9,7 +9,7 @@ const DetailImages = () => {
       </h3>
       <div className="flex flex-col rounded-main border border-[rgba(0,0,0,0.1)] overflow-hidden">
         {detailImages.map((item) => (
-          <img src={item} alt="상세이미지" className="w-full" />
+          <img key={item} src={item} alt="상세이미지" className="w-full" />
         ))}
       </div>
     </div>

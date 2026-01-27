@@ -53,3 +53,21 @@ export interface DetailPerformance extends Performance {
   detailImages: string[];
   bookingLinks: BookingLink[];
 }
+
+export interface Hall {
+  name: string | null;
+  tel: string | null;
+  url: string | null;
+  address: string | null;
+  seatCount: number
+  restaurant: boolean;
+  cafe: boolean;
+  store: boolean;
+  nolibang: boolean;
+  suyu: boolean;
+  parking: boolean;
+  disabledParking: boolean;
+  disabledRestroom: boolean;
+  disabledRamp: boolean;
+  disabledElevator: boolean;
+}

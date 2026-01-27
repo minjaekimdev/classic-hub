@@ -1,5 +1,5 @@
 import { useLoaderData, type LoaderFunctionArgs } from "react-router-dom";
-import getPerformance from "@/features/detail/fetcher/getPerformance";
+import getPerformance from "@/features/detail/fetchers/getPerformance";
 import type { DetailPerformance } from "@classic-hub/shared/types/client";
 import { createContext, useContext } from "react";
 import Modal from "@/shared/ui/modals/Modal";
@@ -39,11 +39,7 @@ export const Detail = () => {
     <DetailContext value={performance}>
       <Modal>
         <BookingModal />
-        {isMobile ? (
-          <DetailMobile />
-        ) : (
-          <DetailDesktop />
-        )}
+        {isMobile ? <DetailMobile /> : <DetailDesktop />}
       </Modal>
     </DetailContext>
   );

@@ -34,7 +34,6 @@ const BookingModal = () => {
   const { isOpen, modalData } = useModal();
   const bookingLinkArray = (modalData as BookingLink[]) || [];
 
-  console.log(modalData);
   return (
     <>
       {isOpen && (

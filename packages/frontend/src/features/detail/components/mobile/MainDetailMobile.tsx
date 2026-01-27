@@ -2,7 +2,6 @@ import { useState } from "react";
 import DetailImages from "../shared/DetailImages";
 import VenueInfo from "../shared/VenueInfo";
 import PriceInfo from "../shared/PriceInfo";
-import { useDetail } from "@/pages/Detail";
 
 interface TabProps {
   text: CategoryType;
@@ -25,11 +24,10 @@ const Tab = ({ text, selected, onClick }: TabProps) => {
 };
 
 const Detail = () => {
-  const { detailImages } = useDetail();
   return (
     <div className="flex flex-col gap-[0.44rem]">
       <section className="px-[0.88rem] py-[1.09rem]">
-        <DetailImages imgUrlArray={detailImages} />
+        <DetailImages />
       </section>
     </div>
   );

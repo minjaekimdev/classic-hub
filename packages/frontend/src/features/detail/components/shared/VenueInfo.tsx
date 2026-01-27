@@ -4,8 +4,10 @@ import disabledIcon from "@shared/assets/icons/disabled-black.svg";
 import buildingIcon from "@shared/assets/icons/building-lightgray.svg";
 import linkIcon from "@shared/assets/icons/link-lightgray.svg";
 import Badge from "@/shared/ui/badges/Badge";
-import { useVenueInfo } from "../../hooks/useVenueInfo";
+import getVenueInfo from "../../fetchers/getVenueInfo";
 import { useDetail } from "@/pages/Detail";
+import { useEffect, useState } from "react";
+import type { Hall } from "@classic-hub/shared/types/client";
 
 interface CategoryProps {
   iconSrc: string;
@@ -28,42 +30,36 @@ const Category = ({ iconSrc, title, children }: CategoryProps) => {
   );
 };
 
-interface Facility {
-  restaurant: boolean;
-  cafe: boolean;
-  store: boolean;
-  nolibang: boolean;
-  suyu: boolean;
-  parkbarrier: boolean;
-  restbarrier: boolean;
-  runwbarrier: boolean;
-  elevbarrier: boolean;
-  parkinglot: boolean;
-}
-const FACILITY_LABELS: Record<keyof Facility, string> = {
+const FACILITY_LABELS: Partial<Record<keyof Hall, string>> = {
   restaurant: "레스토랑",
   cafe: "카페",
   store: "편의점",
   nolibang: "놀이방",
   suyu: "수유실",
-  parkbarrier: "장애인 주차구역",
-  restbarrier: "장애인 화장실",
-  runwbarrier: "휠체어 경사로",
-  elevbarrier: "엘리베이터",
-  parkinglot: "주차시설",
+  parking: "주차시설",
+  disabledParking: "장애인 주차구역",
+  disabledRestroom: "장애인 화장실",
+  disabledRamp: "휠체어 경사로",
+  disabledElevator: "엘리베이터",
 };
 
-export interface VenueData {
-  address: string; // 주소
-  tel: string; // 전화번호
-  seatscale: string; // 객석 수
-  link: string; // 홈페이지 링크
-  facilities: Facility;
-}
 const VenueInfo = () => {
   const { venue, venueId } = useDetail();
   // 추후 api 호출
-  const data = useVenueInfo(venueId);
+  const [venueData, setVenueData] = useState<Hall | null>(null);
+
+  useEffect(() => {
+    const handleVenueInfo = async () => {
+      const result = await getVenueInfo(venueId, venue);
+
+      setVenueData(result);
+    };
+    handleVenueInfo();
+  }, [venueId, venue]);
+
+  console.log("asdf");
+  console.log(venueData);
+
   return (
     <div className="flex flex-col gap-[0.88rem] px-[0.88rem] py-[1.09rem] desktop:p-0">
       <h3 className="text-dark text-[0.88rem]/[1.31rem] font-semibold">
@@ -76,17 +72,17 @@ const VenueInfo = () => {
         <div className="grid grid-cols-1 tablet:grid tablet:grid-cols-2 gap-[0.88rem]">
           <Category iconSrc={locationIcon} title="주소">
             <span className="text-[#4a5565] text-[0.88rem]/[1.31rem]">
-              {data ? data.address : "-"}
+              {venueData ? venueData.address : "-"}
             </span>
           </Category>
           <Category iconSrc={telIcon} title="전화번호">
             <span className="text-[#4a5565] text-[0.88rem]/[1.31rem]">
-              {data ? data.tel : "-"}
+              {venueData ? venueData.tel : "-"}
             </span>
           </Category>
           <Category iconSrc={telIcon} title="객석 수">
             <span className="text-[#4a5565] text-[0.88rem]/[1.31rem]">
-              {data ? Number(data.seatscale).toLocaleString() : "-"}석
+              {venueData ? Number(venueData.seatCount).toLocaleString() : "-"}석
             </span>
           </Category>
           <Category iconSrc={linkIcon} title="홈페이지">
@@ -94,17 +90,17 @@ const VenueInfo = () => {
               href=""
               className="text-blue-600 text-[0.88rem]/[1.31rem] hover:underline"
             >
-              {data ? data.link : "-"}
+              {venueData ? venueData.url : "-"}
             </a>
           </Category>
         </div>
         <Category iconSrc={buildingIcon} title="편의시설">
           <div className="flex flex-wrap gap-[0.44rem]">
-            {data
-              ? Object.entries(data.facilities)
+            {venueData
+              ? Object.entries(venueData)
                   .filter(([, value]) => value === true)
                   .map(([key]) => {
-                    if (key.includes("barrier")) {
+                    if (key.includes("disabled")) {
                       return (
                         <Badge>
                           <div className="flex items-center gap-[0.22rem]">
@@ -113,14 +109,12 @@ const VenueInfo = () => {
                               alt=""
                               className="w-[0.66rem] h-[0.66rem]"
                             />
-                            {FACILITY_LABELS[key as keyof Facility]}
+                            {FACILITY_LABELS[key as keyof Hall]}
                           </div>
                         </Badge>
                       );
                     }
-                    return (
-                      <Badge>{FACILITY_LABELS[key as keyof Facility]}</Badge>
-                    );
+                    return <Badge>{FACILITY_LABELS[key as keyof Hall]}</Badge>;
                   })
               : "-"}
           </div>
