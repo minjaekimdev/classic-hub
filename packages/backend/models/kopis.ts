@@ -34,7 +34,6 @@ export interface Ranking {
 }
 
 // 공연 상세 조회 인터페이스
-
 export interface PerformanceDetail {
   mt20id: string; // 공연 ID (예: PF178134)
   mt10id: string; // 공연시설 ID (예: FC001431)
@@ -53,6 +52,7 @@ export interface PerformanceDetail {
   pcseguidance: string; // 티켓가격 (예: 전석 30,000 원)
   poster: string; // 포스터이미지경로
   sty: string; // 줄거리
+  area: string; // 지역 (예: 서울특별시)
   genrenm: string; // 공연장르명 (예: 연극)
   prfstate: string; // 공연상태 (예: 공연중)
   openrun: "Y" | "N"; // 오픈런 여부
@@ -123,7 +123,7 @@ export interface Facility {
   } 
 }
 
-// 공연목록 조회 인터페이스
+// 공연장 목록 조회 인터페이스
 export interface FacilitySummary {
   mt10id: string; // 공연시설 ID (예: FC000517) 
   fcltynm: string;  // 공연시설명 (예: 경주예술의전당)

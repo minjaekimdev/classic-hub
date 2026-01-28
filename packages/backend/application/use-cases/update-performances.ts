@@ -69,6 +69,7 @@ const getMappedPerformanceDetail = (
     relates,
     styurls,
     dtguidance,
+    area,
     ...rest
   } = performanceDetail;
 
@@ -76,6 +77,7 @@ const getMappedPerformanceDetail = (
     performance_id: mt20id,
     venue_id: mt10id,
     performance_name: prfnm,
+    area: area,
     period_from: prfpdfrom,
     period_to: prfpdto,
     venue_name: fcltynm,

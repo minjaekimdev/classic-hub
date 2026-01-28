@@ -23,11 +23,11 @@ const FormField: React.FC<FormFieldProps> = ({
 }) => {
   return (
     <div className="flex flex-col gap-[0.44rem]">
-      <label className="text-[#0a0a0a] text-[0.77rem] font-medium" htmlFor={id}>
+      <label className="text-dark text-[0.77rem] font-medium" htmlFor={id}>
         {label}
       </label>
       <div
-        className="px-[0.66rem] rounded-[0.42rem] bg-[#f3f3f5]"
+        className="px-[0.66rem] rounded-main bg-[#f3f3f5]"
         style={{
           paddingTop: `${verticalPadding}`,
           paddingBottom: `${verticalPadding}`,

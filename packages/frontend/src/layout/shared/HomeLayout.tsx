@@ -5,6 +5,7 @@ import useHomeLayout from "../hooks/useHomeLayout";
 import Modal from "@/shared/ui/modals/Modal";
 import SearchFilterMobile from "@/features/filter/search/components/mobile/FilterMobile";
 import HeaderDesktop from "../desktop/HeaderDesktop";
+import FeedbackModal from "@/shared/ui/modals/FeedbackModal";
 
 const HomeLayout = ({ children }: { children: ReactNode }) => {
   const {
@@ -18,13 +19,16 @@ const HomeLayout = ({ children }: { children: ReactNode }) => {
   } = useHomeLayout();
 
   return (
-    <>
+    <Modal>
+      <FeedbackModal />
       {isMobile ? (
-        <Modal>
-          <SearchFilterMobile />
-          {/* 모바일 헤더는 스크롤이 내려갈 때에만 축소되므로 isIntersecting만으로 확대축소 여부 판단 */}
-          <HomeHeaderMobile isExpand={isIntersecting} />
-        </Modal>
+        <>
+          <Modal>
+            <SearchFilterMobile />
+            {/* 모바일 헤더는 스크롤이 내려갈 때에만 축소되므로 isIntersecting만으로 확대축소 여부 판단 */}
+            <HomeHeaderMobile isExpand={isIntersecting} />
+          </Modal>
+        </>
       ) : (
         <>
           <HeaderDesktop isExpand={isExpand} onFilterClick={onFilterClick} />
@@ -37,7 +41,7 @@ const HomeLayout = ({ children }: { children: ReactNode }) => {
       <div ref={ref} className="h-1 bg-transparent"></div>
       <main className={`pt-6 pb-[6.12rem] ${getMarginTop()}`}>{children}</main>
       <Footer />
-    </>
+    </Modal>
   );
 };
 

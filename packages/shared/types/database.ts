@@ -71,6 +71,7 @@ export interface DBPerformance {
   performance_id: string; // 공연 id
   venue_id: string; // 공연시설 id
   performance_name: string;
+  area: string;
   period_from: string;
   period_to: string;
   venue_name: string;
