@@ -26,7 +26,7 @@ const SearchFilterField = ({ iconSrc, title, children }: FilterFieldProps) => {
         if (isOpenNow) {
           openField(title);
         } else {
-          closeField();
+          closeField(); 
         }
       }}
     >
@@ -43,7 +43,7 @@ const SearchFilterField = ({ iconSrc, title, children }: FilterFieldProps) => {
           </div>
         </div>
       </DropdownMenuTrigger>
-      <DropdownMenuContent>{children}</DropdownMenuContent>
+      <DropdownMenuContent className="z-(--z-header-dropdown)">{children}</DropdownMenuContent>
     </DropdownMenu>
   );
 };

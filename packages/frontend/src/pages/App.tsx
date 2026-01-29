@@ -1,9 +1,11 @@
-import { Outlet } from "react-router-dom";
+// import { Outlet } from "react-router-dom";
+import ResultLayout from "@/pages/Result";
 
 const App = () => {
   return (
     <>
-      <Outlet />
+      <ResultLayout />
+      {/* <Outlet /> */}
     </>
   );
 };

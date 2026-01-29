@@ -4,15 +4,19 @@ import { useFilter } from "./SearchFilter";
 
 export function DateSelect() {
   const { filterValue, changeValue } = useFilter();
+
+  // 오늘 날짜 (시간 제거)
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
   let calendarDateRange: DateRange | undefined;
   const isValidDateRange = /^\d{4}\/\d{2}\/\d{2} - \d{4}\/\d{2}\/\d{2}$/.test(
     filterValue.날짜,
   );
+
   if (!isValidDateRange) {
-    calendarDateRange = {
-      from: new Date(),
-      to: new Date(),
-    };
+    // 날짜가 선택되지 않으면 undefined로 표시 (아무것도 선택 안 함)
+    calendarDateRange = undefined;
   } else {
     const [startDate, endDate] = filterValue.날짜
       .split(" - ")
@@ -23,10 +27,16 @@ export function DateSelect() {
     };
   }
 
+  // 오늘 이전 날짜 비활성화
+  const isDateDisabled = (date: Date) => {
+    const checkDate = new Date(date);
+    checkDate.setHours(0, 0, 0, 0);
+    return checkDate < today;
+  };
+
   const handleSelect = (range: DateRange | undefined) => {
     // 1. 선택 취소되거나 값이 없으면 초기화
     if (!range?.from) {
-      changeValue({ 날짜: "날짜" });
       return;
     }
 
@@ -49,10 +59,11 @@ export function DateSelect() {
   return (
     <Calendar
       mode="range"
-      defaultMonth={calendarDateRange.from}
+      defaultMonth={today}
       selected={calendarDateRange}
       onSelect={handleSelect}
       numberOfMonths={2}
+      disabled={isDateDisabled}
       className="rounded-lg
       /* 1. 단일 선택 날짜 (Single Selected) */
         /* 배경을 #c00으로, 글자는 흰색으로, 호버 시 약간 진하게 */

@@ -6,14 +6,29 @@ interface PriceRangeSliderProps {
   onChange: (value: filterCategoryObjType) => void;
 }
 
-const $MAX_PRICE = 30;
+const $MAX_PRICE = 50;
 const PriceRangeSlider = ({ filterValue, onChange }: PriceRangeSliderProps) => {
   const setPriceRange = (range: number[]) => {
     const startPrice = `${range[0]}만`;
-    const endPrice = range[1] >= 30 ? `${range[1]}만+` : `${range[1]}만`;
+    const endPrice = range[1] >= 50 ? `${range[1]}만+` : `${range[1]}만`;
 
     onChange({ ...filterValue, price: `${startPrice} - ${endPrice}` });
   };
+
+  const getCurrentSliderValue = () => {
+    if (!filterValue.price) {
+      return [0, 50];
+    }
+
+    const [startPrice, endPrice] = filterValue.price
+      .split(" - ")
+      .map((item) => parseInt(item.replace("만+", "").replace("만", "").trim()));
+
+    return [startPrice, endPrice];
+  };
+
+  const sliderValue = getCurrentSliderValue();
+
   return (
     <div className="w-full" onClick={(e) => e.stopPropagation()}>
       <div className="mx-auto p-4">
@@ -24,7 +39,7 @@ const PriceRangeSlider = ({ filterValue, onChange }: PriceRangeSliderProps) => {
           </span>
         </div>
         <Slider
-          defaultValue={[10, 20]}
+          value={sliderValue}
           onValueChange={setPriceRange}
           min={0}
           max={30}

@@ -8,6 +8,7 @@ import { DateSelect } from "./DateSelect";
 import searchIcon from "@shared/assets/icons/search-white.svg";
 import SearchFilterInput from "./SearchFilterInput";
 import SearchFilterField from "./SearchFilterField";
+import { Check } from "lucide-react";
 
 const LOCATION_LIST = [
   "전체",
@@ -31,8 +32,10 @@ const LOCATION_LIST = [
 ];
 
 const SearchFilterDesktop = () => {
-  const { changeValue } = useFilter();
+  const { filterValue, changeValue } = useFilter();
 
+  console.log(filterValue);
+  
   return (
     <div className="grid grid-cols-[2fr_1fr_1fr_1fr_auto] gap-[0.66rem] rounded-[0.875rem] border border-gray-200 bg-white shadow-xl p-[0.94rem] w-230 h-18">
       <SearchFilterInput />
@@ -40,10 +43,12 @@ const SearchFilterDesktop = () => {
         <div onClick={(e) => e.stopPropagation()}>
           {LOCATION_LIST.map((item) => (
             <DropdownMenuItem
-              className="text-xs cursor-pointer"
+              className="text-xs cursor-pointer flex justify-between items-center"
               onSelect={() => changeValue({ 지역: item })}
+              key={item}
             >
-              {item}
+              <span>{item}</span>
+              {filterValue.지역 === item && <Check className="w-4 h-4 text-main" />}
             </DropdownMenuItem>
           ))}
         </div>

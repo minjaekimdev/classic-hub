@@ -1,10 +1,7 @@
-import {
-  useCallback,
-  useState,
-  type ReactNode,
-} from "react";
+import { useCallback, useState, type ReactNode } from "react";
 
 import { createContext, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 
 export type FieldType = "검색어" | "지역" | "가격" | "날짜";
 export type FilterValue = Record<FieldType, string>;
@@ -31,24 +28,63 @@ export const FilterContext = createContext<FilterContextType | null>(null);
 interface FilterProviderProps {
   children: ReactNode;
 }
+
 const FilterProvider = ({ children }: FilterProviderProps) => {
   const [filterValue, setFilterValue] =
     useState<FilterValue>(INITIAL_FILTER_VALUE);
   const [activeField, setActiveField] = useState<FieldType | null>(null);
+  const navigate = useNavigate();
 
   const changeValue = useCallback((value: Partial<FilterValue>) => {
     setFilterValue((prev) => ({ ...prev, ...value }));
     // value의 프로퍼티 키가 검색어라면, setActiveField(지역) ...
   }, []);
+
   const reset = () => {
     setFilterValue(INITIAL_FILTER_VALUE);
   };
+
   const search = () => {
-    // 추후 내용 추가하기(실제 검색 로직)
+    const getUrlDate = (raw: string) => {
+      return raw.replaceAll("/", "-");
+    };
+    const getUrlPrice = (raw: string) => {
+      return String(parseFloat(raw.replace("만", "")) * 10000);
+    };
+    const params = new URLSearchParams();
+
+    if (filterValue.검색어) {
+      params.append("keyword", filterValue.검색어);
+    }
+    if (filterValue.지역) {
+      params.append("location", filterValue.지역);
+    }
+    if (filterValue.가격) {
+      const [minPrice, maxPrice] = filterValue.가격.split(" - ");
+
+      params.append("min_price", getUrlPrice(minPrice));
+      
+      // 가격 상한을 선택하지 않아 maxPrice가 "50만+"인 경우
+      if (!maxPrice.includes("+")) {
+        params.append("max_price", maxPrice);
+      }
+    }
+    if (filterValue.날짜) {
+      const [startDate, endDate] = filterValue.날짜
+        .split(" - ")
+        .map(getUrlDate);
+      params.append("start_date", startDate);
+      params.append("end_date", endDate);
+    }
+
+    const queryString = params.toString();
+    navigate(queryString ? `/results?${queryString}` : "/results");
   };
+
   const openField = (field: FieldType) => {
     setActiveField(field);
   };
+
   const closeField = () => {
     setActiveField(null);
   };

@@ -1,27 +1,23 @@
-import type { PerformanceSummary } from "@classic-hub/shared/types/performance";
+import type { PerformanceSummary } from "@classic-hub/shared/types/client";
 import MetaData from "./MetaData";
 import ResultPriceDisplay from "./ResultPriceDisplay";
 import BookmarkButton from "@/shared/ui/buttons/BookmarkButtonMobile";
 
-interface ResultAlbumItemProps {
-  data: PerformanceSummary;
-}
-
-const ResultAlbumItem = ({ data }: ResultAlbumItemProps) => {
+const ResultAlbumItem = ({ data }: {data: PerformanceSummary}) => {
   return (
     <div className="flex flex-col gap-[0.66rem] cursor-pointer">
       <div className="relative rounded-main border border-[rgba(0,0,0,0.1)] overflow-hidden aspect-10/14">
-        <img className="w-full h-full" src={data.posterUrl} alt="공연 포스터" />
-        <BookmarkButton className="bookmark-position" />
+        <img className="w-full h-full" src={data.poster} alt="공연 포스터" />
+        <div className="bookmark-position">
+          <BookmarkButton />
+        </div>
       </div>
       <div className="grow flex flex-col justify-between rounded-[0.8rem] border border-[rgba(0,0,0,0.1)] bg-white p-[0.88rem]">
         <MetaData
           title={data.title}
           artist={data.artist}
-          date={data.date}
-          time={data.time}
+          period={data.period}
           venue={data.venue}
-          composerArray={data.composerArray}
         />
         <div className="flex justify-between items-center mt-4">
           <ResultPriceDisplay

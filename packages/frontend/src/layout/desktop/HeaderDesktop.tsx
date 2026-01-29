@@ -91,7 +91,7 @@ const Menu = () => {
 
 const HeaderAuthButton = () => {
   return (
-    <div className="flex gap-[0.44rem]">
+    <div className="flex gap-[0.44rem] h-8">
       <button className="shrink-0 flex justify-center items-center rounded-button p-[0.31rem_0.59rem] text-dark text-[0.77rem]/[1.09rem] font-medium">
         로그인
       </button>
@@ -107,6 +107,7 @@ interface HeaderProps {
   isExpand: boolean;
   onFilterClick: (isFilterActive: boolean) => void;
 }
+
 const HeaderDesktop = ({ isExpand, onFilterClick }: HeaderProps) => {
   const headerRef = useRef<HTMLDivElement>(null);
 
@@ -120,19 +121,16 @@ const HeaderDesktop = ({ isExpand, onFilterClick }: HeaderProps) => {
   return (
     <div
       ref={headerRef}
-      className={`fixed top-0 z-20 bg-[linear-gradient(180deg,#FFF_39.9%,#F8F8F8_100%)] w-full ${height}`}
+      className={`fixed top-0 z-(--z-header) bg-[linear-gradient(180deg,#FFF_39.9%,#F8F8F8_100%)] w-full ${height}`}
     >
-      <div className="absolute left-7 top-0">
-        <Link to="/">
-          <div className="self-start flex p-[1.62rem_0]">
-            <Logo />
-          </div>
-        </Link>
-      </div>
-      <div className="absolute top-7 right-7">
-        <HeaderAuthButton />
-      </div>
-      <div className="flex flex-col px-7 w-full max-w-[1920px]">
+      <div className="fixed inset-x-0 mx-auto flex flex-col px-7 w-full max-w-7xl">
+        <div className="absolute left-7 top-0">
+          <Link to="/">
+            <div className="self-start flex p-[1.62rem_0]">
+              <Logo />
+            </div>
+          </Link>
+        </div>
         <SearchFilter>
           {isExpand ? (
             <>
@@ -149,6 +147,9 @@ const HeaderDesktop = ({ isExpand, onFilterClick }: HeaderProps) => {
             </div>
           )}
         </SearchFilter>
+        <div className="absolute top-7 right-7">
+          <HeaderAuthButton />
+        </div>
       </div>
     </div>
   );
