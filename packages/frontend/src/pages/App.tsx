@@ -1,10 +1,14 @@
 // import { Outlet } from "react-router-dom";
-import ResultLayout from "@/pages/Result";
+// import ResultLayout from "@/pages/Result";
+
+import Home from "./Home";
+
 
 const App = () => {
   return (
     <>
-      <ResultLayout />
+      <Home />
+      {/* <ResultLayout /> */}
       {/* <Outlet /> */}
     </>
   );

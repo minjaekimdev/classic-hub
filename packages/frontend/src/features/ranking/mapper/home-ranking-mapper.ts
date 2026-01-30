@@ -1,4 +1,4 @@
-import { mapBasePerformance } from "@/features/performance/mappers/home-performance-mapper";
+import { mapBasePerformance } from "@/features/performance/hooks/home-performance-mapper";
 import formatDateRange from "@/shared/utils/formatDateRange";
 import type { HomePerformance } from "@classic-hub/shared/types/client";
 import type { DBRankingWithDetails } from "@classic-hub/shared/types/database";
