@@ -14,7 +14,7 @@ const HomeSectionLayout = ({
   children,
 }: HomeSectionLayoutProps) => {
   return (
-    <div className="mt-14 w-full">
+    <div className="mb-14 w-full">
       <div className="flex flex-col items-center gap-[1.31rem] mx-auto px-[0.88rem] desktop:px-7 max-w-7xl">
         <HomeWidgetHeader
           icon={calendarIcon}

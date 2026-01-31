@@ -1,7 +1,7 @@
 import HomeLayout from "@/layout/shared/HomeLayout";
-import RankingPerformances from "@/features/ranking/components/HomeRanking";
 import { Toaster } from "sonner";
 import WeekendPerformances from "@/widgets/home/ui/weekend-performances";
+import RankingPerformances from "@/widgets/home/ui/ranking-performances";
 
 const Home = () => {
   return (
