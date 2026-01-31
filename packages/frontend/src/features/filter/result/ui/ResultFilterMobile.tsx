@@ -3,20 +3,7 @@ import { X } from "lucide-react";
 import LocationHall from "./LocationHall";
 import Sort from "./Sort";
 import useResultFilter from "../hooks/useResultFilter";
-
-// 예시 데이터 타입 정의
-type Venue = {
-  id: string;
-  name: string;
-  count: number;
-};
-
-export type Region = {
-  id: string;
-  name: string;
-  totalCount: number; // 해당 지역 공연장들의 합산 개수
-  venues: Venue[];
-};
+import type { Region } from "../../types";
 
 // Mock Data (실제 데이터로 교체 필요)
 const MOCK_REGIONS: Region[] = [

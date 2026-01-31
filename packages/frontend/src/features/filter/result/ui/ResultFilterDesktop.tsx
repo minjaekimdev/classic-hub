@@ -1,10 +1,10 @@
 import noteIcon from "@shared/assets/icons/musical-note-red.svg";
 import filterIcon from "@shared/assets/icons/filter-black.svg";
-import CategoryHeader from "./CategoryHeader";
 import Sort from "./Sort";
 import LocationHall from "./LocationHall";
-import type { Region } from "./ResultFilterMobile";
 import useResultFilter from "../hooks/useResultFilter";
+import CategoryHeader from "./CategoryHeader";
+import type { Region } from "../../types";
 
 const MOCK_REGIONS: Region[] = [
   {
@@ -35,6 +35,33 @@ const MOCK_REGIONS: Region[] = [
   },
 ];
 
+const FilterHeader = () => {
+  const { reset } = useResultFilter();
+  return (
+    <div className="flex justify-between">
+      <CategoryHeader iconSrc={filterIcon} text="필터" />
+      <button
+        className="flex items-center h-7 px-[0.66rem] text-dark text-[0.77rem]/[1.09rem]"
+        onClick={reset}
+      >
+        초기화
+      </button>
+    </div>
+  );
+};
+
+const Summary = () => {
+  return (
+    <div className="flex flex-col gap-[0.44rem] rounded-main bg-[#f9fafb] px-[0.88rem] pt-[0.87rem] pb-[0.37rem]">
+      <CategoryHeader iconSrc={noteIcon} text="검색 결과" />
+      <span className="text-main text-[1.31rem]/[1.75rem] font-bold">13개</span>
+      <span className="text-[#6a7282] text-[0.77rem]/[1.09rem]">
+        클래식 공연
+      </span>
+    </div>
+  );
+};
+
 const ResultFilterDesktop = ({ isOpen }: { isOpen: boolean }) => {
   const {
     sortBy,
@@ -43,31 +70,14 @@ const ResultFilterDesktop = ({ isOpen }: { isOpen: boolean }) => {
     changeSort,
     toggleRegion,
     toggleVenue,
-    reset,
   } = useResultFilter();
   return (
     <>
       {isOpen && (
         <div className="flex flex-col gap-[1.31rem] border-l border-[rgba(0,0,0,0.1)] bg-white p-[1.31rem] w-70 h-view-minus-header overflow-y-auto overscroll-contain">
-          <div className="flex justify-between">
-            <CategoryHeader iconSrc={filterIcon} text="필터" />
-            <button
-              className="flex items-center h-7 px-[0.66rem] text-dark text-[0.77rem]/[1.09rem]"
-              onClick={reset}
-            >
-              초기화
-            </button>
-          </div>
+          <FilterHeader />
           {/* 검색된 공연 개수가 보여지는 영역 */}
-          <div className="flex flex-col gap-[0.44rem] rounded-main bg-[#f9fafb] px-[0.88rem] pt-[0.87rem] pb-[0.37rem]">
-            <CategoryHeader iconSrc={noteIcon} text="검색 결과" />
-            <span className="text-main text-[1.31rem]/[1.75rem] font-bold">
-              13개
-            </span>
-            <span className="text-[#6a7282] text-[0.77rem]/[1.09rem]">
-              클래식 공연
-            </span>
-          </div>
+          <Summary />
           {/* 구분선 */}
           <div className="bg-[rgba(0,0,0,0.1)] h-[0.06rem]"></div>
           <Sort selectedSort={sortBy} handleSortChange={changeSort} />

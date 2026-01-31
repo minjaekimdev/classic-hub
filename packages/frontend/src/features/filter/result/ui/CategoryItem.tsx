@@ -15,7 +15,7 @@ const CategoryItem = ({ text, selected, count, onSelect }: CategoryItemProps) =>
       : "border-[#e5e7eb] text-[#0a0a0a]";
   return (
     <div
-      className={`flex justify-between rounded-[0.55rem] border p-[0.72rem] ${style}`}
+      className={`flex justify-between rounded-main border p-[0.72rem] ${style}`}
       onClick={() => onSelect(text)}
     >
       <span className="text-[0.88rem]/[1.31rem]">{text}</span>
