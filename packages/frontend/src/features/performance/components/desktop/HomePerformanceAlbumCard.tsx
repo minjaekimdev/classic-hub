@@ -1,10 +1,26 @@
-import RankBadge from "@/shared/ui/badges/RankBadge";
 import type { HomePerformance } from "@classic-hub/shared/types/client";
-import PerformanceAlbumMeta from "@/features/performance/components/MetaData";
-import PriceDisplay from "./PriceDisplay";
+import PerformanceAlbumMeta from "@/features/performance/components/shared/PerformanceMeta";
+import PriceDisplay from "../shared/PriceDisplay";
 import { Link } from "react-router-dom";
 import BookmarkButtonMobile from "@/shared/ui/buttons/BookmarkButtonMobile";
 import BookmarkButtonDesktop from "@/shared/ui/buttons/BookmarkButtonDesktop";
+
+interface CardBadgeProps {
+  children: React.ReactNode;
+  className?: string;
+}
+
+const RankBadge = ({ children, className }: CardBadgeProps) => {
+  return (
+    <div
+      className={`absolute z-10 shrink-0 flex justify-center items-center rounded-full p-[0.47rem_0.65rem_0.38rem] bg-linear-to-b from-[#cc0000] to-[#990000] text-white text-[0.77rem]/[1.09rem] font-bold ${
+        className || ""
+      }`}
+    >
+      {children}
+    </div>
+  );
+};
 
 const HomePerformanceAlbumCard = ({ data }: { data: HomePerformance }) => {
   return (

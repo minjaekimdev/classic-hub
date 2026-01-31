@@ -1,12 +1,12 @@
 import { useLoaderData, type LoaderFunctionArgs } from "react-router-dom";
-import getPerformance from "@/features/detail/fetchers/getPerformance";
+import getPerformance from "@/features/performance/detail/fetchers/getPerformance";
 import type { DetailPerformance } from "@classic-hub/shared/types/client";
 import { createContext, useContext } from "react";
 import Modal from "@/shared/ui/modals/Modal";
 import BookingModal from "@/shared/ui/modals/BookingModal";
 import useBreakpoint from "@/shared/hooks/useBreakpoint";
-import DetailMobile from "@/features/detail/components/mobile/DetailMobile";
-import DetailDesktop from "@/features/detail/components/desktop/DetailDesktop";
+import DetailMobile from "@/features/performance/detail/components/mobile/DetailMobile";
+import DetailDesktop from "@/features/performance/detail/components/desktop/DetailDesktop";
 import MainLayout from "@/layout/shared/MainLayout";
 import { Toaster } from "sonner";
 

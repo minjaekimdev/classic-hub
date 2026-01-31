@@ -1,9 +1,9 @@
 import type { PerformanceSummary } from "@classic-hub/shared/types/client";
-import MetaData from "./MetaData";
+import MetaData from "../shared/PerformanceMeta";
 import ResultPriceDisplay from "./ResultPriceDisplay";
 import BookmarkButton from "@/shared/ui/buttons/BookmarkButtonMobile";
 
-const ResultAlbumItem = ({ data }: {data: PerformanceSummary}) => {
+const ResultPerformanceAlbumCard = ({ data }: { data: PerformanceSummary }) => {
   return (
     <div className="flex flex-col gap-[0.66rem] cursor-pointer">
       <div className="relative rounded-main border border-[rgba(0,0,0,0.1)] overflow-hidden aspect-10/14">
@@ -33,4 +33,4 @@ const ResultAlbumItem = ({ data }: {data: PerformanceSummary}) => {
   );
 };
 
-export default ResultAlbumItem;
+export default ResultPerformanceAlbumCard;

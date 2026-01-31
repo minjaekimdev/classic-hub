@@ -1,9 +1,9 @@
 import supabase from "@/app/api/supabase-client";
 import type { HomePerformance } from "@classic-hub/shared/types/client";
 import { useEffect, useState } from "react";
-import mapToHomeRanking from "../../../ranking/mapper/home-ranking-mapper";
+import mapToHomeRanking from "../mappers/home-ranking-mapper";
 
-const useRankingPerformance = (limit: number) => {
+const useHomeRankingPerformance = (limit: number) => {
   const [data, setData] = useState<HomePerformance[]>([]);
 
   useEffect(() => {
@@ -27,4 +27,4 @@ const useRankingPerformance = (limit: number) => {
   return data;
 };
 
-export default useRankingPerformance;
+export default useHomeRankingPerformance;

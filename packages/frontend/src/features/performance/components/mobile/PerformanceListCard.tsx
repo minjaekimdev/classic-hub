@@ -1,6 +1,6 @@
 import type { HomePerformance } from "@classic-hub/shared/types/client";
-import PerformanceAlbumMeta from "./MetaData";
-import PriceDisplay from "./PriceDisplay";
+import PerformanceAlbumMeta from "../shared/PerformanceMeta";
+import PriceDisplay from "../shared/PriceDisplay";
 import BookmarkButton from "@/shared/ui/buttons/BookmarkButtonMobile";
 
 type ListItemProps = {

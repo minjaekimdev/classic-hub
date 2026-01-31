@@ -4,7 +4,7 @@ import type {
   RankingPerformance,
 } from "@classic-hub/shared/types/client";
 import { useEffect, useState } from "react";
-import mapToRanking from "../mapper/ranking-mapper";
+import mapToRanking from "../mappers/ranking-mapper";
 
 const useRankingPerformance = (period: Period) => {
   const [performance, setPerformance] = useState<RankingPerformance[]>([]);

@@ -1,13 +1,13 @@
 // import { Outlet } from "react-router-dom";
 // import ResultLayout from "@/pages/Result";
 
-import Home from "./Home";
-
+import Ranking from "./Ranking";
 
 const App = () => {
   return (
     <>
-      <Home />
+      {/* <Home /> */}
+      <Ranking />
       {/* <ResultLayout /> */}
       {/* <Outlet /> */}
     </>

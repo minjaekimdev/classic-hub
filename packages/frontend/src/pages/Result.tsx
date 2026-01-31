@@ -6,9 +6,9 @@ import filterIcon from "@shared/assets/icons/filter-dark.svg";
 import closeIcon from "@shared/assets/icons/close-white.svg";
 import ResultFilterMobile from "@/features/filter/result/components/ResultFilterMobile";
 import ResultFilterDesktop from "@/features/filter/result/components/ResultFilterDesktop";
-import ResultAlbumItem from "@/features/performance/components/ResultAlbumItem";
+import ResultAlbumItem from "@/features/performance/components/desktop/ResultPerformanceAlbumCard";
 import useBreakpoint from "@/shared/hooks/useBreakpoint";
-import PerformanceListCard from "@/features/performance/components/PerformanceListCard";
+import PerformanceListCard from "@/features/performance/components/mobile/PerformanceListCard";
 import type {
   DetailPerformance,
   PerformanceSummary,
@@ -219,23 +219,23 @@ const Result = () => {
 
   return (
     // <ResultContext.Provider value={performances}>
-      <Modal>
-        <Header isExpand={isHeaderExpand} onFilterClick={headerToggle} />
-        <ResultHeader count={24} isOpen={isFilterOpen} onClick={toggleFilter} />
-        {isHeaderExpand && (
-          <div className="fixed top-0 left-0 z-15 bg-[rgba(0,0,0,0.3)] w-full h-full"></div>
-        )}
-        <main className="bg-white max-w-7xl mx-auto mt-desktop-header-shrinked">
-          <div>
-            <ResultMobile
-              isFilterOpen={isFilterOpen}
-              onClickClose={closeFilter}
-            />
-            <ResultDesktop isOpen={isFilterOpen} />
-          </div>
-        </main>
-        <Footer />
-      </Modal>
+    <Modal>
+      <Header isExpand={isHeaderExpand} onFilterClick={headerToggle} />
+      <ResultHeader count={24} isOpen={isFilterOpen} onClick={toggleFilter} />
+      {isHeaderExpand && (
+        <div className="fixed top-0 left-0 z-15 bg-[rgba(0,0,0,0.3)] w-full h-full"></div>
+      )}
+      <main className="bg-white max-w-7xl mx-auto mt-desktop-header-shrinked">
+        <div>
+          <ResultMobile
+            isFilterOpen={isFilterOpen}
+            onClickClose={closeFilter}
+          />
+          <ResultDesktop isOpen={isFilterOpen} />
+        </div>
+      </main>
+      <Footer />
+    </Modal>
     // </ResultContext.Provider>
   );
 };

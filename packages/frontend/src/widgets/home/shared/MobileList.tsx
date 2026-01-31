@@ -1,4 +1,4 @@
-import PerformanceListCard from "@/features/performance/components/PerformanceListCard";
+import PerformanceListCard from "@/features/performance/components/mobile/PerformanceListCard";
 import type { HomePerformance } from "@classic-hub/shared/types/client";
 
 const MobileList = ({

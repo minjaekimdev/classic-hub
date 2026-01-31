@@ -2,7 +2,7 @@ import "swiper/css";
 import useRankingPerformance from "../../../features/performance/api/hooks/use-home-ranking-performance";
 import HomeSectionLayout from "../shared/HomeSectionLayout";
 import BaseCarousel from "../shared/DesktopCarousel";
-import HomePerformanceAlbumCard from "@/features/performance/components/HomePerformanceAlbumCard";
+import HomePerformanceAlbumCard from "@/features/performance/components/desktop/HomePerformanceAlbumCard";
 import rankingIcon from "@shared/assets/icons/ranking-red.svg";
 
 const RankingPerformances = () => {

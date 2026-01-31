@@ -1,6 +1,6 @@
 import rankingIcon from "@shared/assets/icons/ranking-white.svg";
 import type { Period } from "@classic-hub/shared/types/client";
-import { PERIOD_LABEL } from "../constants/period-label";
+import { PERIOD_LABEL } from "../../features/performance/constants/ranking-period-label";
 
 interface ToggleButtonProps {
   text: Period;
@@ -8,7 +8,7 @@ interface ToggleButtonProps {
   onClick: (period: Period) => void;
 }
 
-const ToggleButton = ({ text, selected, onClick }: ToggleButtonProps) => {  
+const ToggleButton = ({ text, selected, onClick }: ToggleButtonProps) => {
   return (
     <button
       className={`px-[0.44rem] py-[0.22rem] rounded-full ${
@@ -16,7 +16,9 @@ const ToggleButton = ({ text, selected, onClick }: ToggleButtonProps) => {
       }`}
       onClick={() => onClick(text)}
     >
-      <span className="text-[0.77rem]/[1.09rem] font-medium">{PERIOD_LABEL[text]}</span>
+      <span className="text-[0.77rem]/[1.09rem] font-medium">
+        {PERIOD_LABEL[text]}
+      </span>
     </button>
   );
 };
@@ -43,11 +45,7 @@ const RankingHeader = ({ period, onToggle }: RankingHeaderProps) => {
       <div className="flex bg-[#ececf0] p-[0.22rem] rounded-[0.8rem]">
         <ToggleButton text="daily" selected={period} onClick={onToggle} />
         <ToggleButton text="weekly" selected={period} onClick={onToggle} />
-        <ToggleButton
-          text="monthly"
-          selected={period}
-          onClick={onToggle}
-        />
+        <ToggleButton text="monthly" selected={period} onClick={onToggle} />
       </div>
     </div>
   );

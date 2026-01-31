@@ -18,7 +18,7 @@ const MetaItem = ({ iconSrc, children }: MetaItemProps) => {
 };
 
 type MetaDataProps = Omit<HomePerformance, "id" | "rank" | "poster" | "price">;
-const MetaData = ({
+const PerformanceMeta = ({
   title,
   artist,
   period,
@@ -44,4 +44,4 @@ const MetaData = ({
   );
 };
 
-export default MetaData;
+export default PerformanceMeta;
