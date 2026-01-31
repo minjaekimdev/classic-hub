@@ -1,7 +1,7 @@
 import supabase from "@/app/api/supabase-client";
-import { mapToHomePerformance } from "@/features/performance/mappers/home-performance-mapper";
 import type { HomePerformance } from "@classic-hub/shared/types/client";
 import { useEffect, useState } from "react";
+import { mapToHomePerformance } from "../mappers/home-performance-mapper";
 
 // Date 형식의 날짜 데이터를 DB에 맞는 YYYY.MM.DD 형식으로 변환
 const getParsedDate = (date: Date) => {

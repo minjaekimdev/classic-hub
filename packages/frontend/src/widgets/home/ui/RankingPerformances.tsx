@@ -1,8 +1,9 @@
 import "swiper/css";
-import useRankingPerformance from "./useRankingPerformance";
-import HomeSectionLayout from "../../shared/HomeSectionLayout";
-import BaseCarousel from "../../shared/DesktopCarousel";
+import useRankingPerformance from "../../../features/performance/api/hooks/use-home-ranking-performance";
+import HomeSectionLayout from "../shared/HomeSectionLayout";
+import BaseCarousel from "../shared/DesktopCarousel";
 import HomePerformanceAlbumCard from "@/features/performance/components/HomePerformanceAlbumCard";
+import rankingIcon from "@shared/assets/icons/ranking-red.svg";
 
 const RankingPerformances = () => {
   const performanceArray = useRankingPerformance(10);
@@ -17,6 +18,7 @@ const RankingPerformances = () => {
     <HomeSectionLayout
       mainTitle="오늘의 공연 랭킹"
       subTitle="티켓판매액 기준 인기 공연"
+      headerIcon={rankingIcon}
     >
       <BaseCarousel
         items={performanceArray}
