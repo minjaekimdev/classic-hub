@@ -1,5 +1,4 @@
 import musicIcon from "@shared/assets/icons/musical-note-red.svg";
-import HeaderAuthButton from "@/shared/layout/HeaderAuthButton";
 import arrowIcon from "@shared/assets/icons/left-arrow-dark.svg";
 
 const HeaderDesktop = ({title}: {title: string}) => {
@@ -18,7 +17,6 @@ const HeaderDesktop = ({title}: {title: string}) => {
           </div>
         </div>
       </div>
-      <HeaderAuthButton />
     </header>
   );
 };

@@ -1,8 +1,8 @@
 import supabase from "@/app/api/supabase-client";
-import mapToPerformanceDetail from "../mappers/mapToPerformanceDetail";
 import type { DBPerformance } from "@classic-hub/shared/types/database";
+import mapToPerformanceDetail from "../mappers/detail-performance-mapper";
 
-const getPerformance = async (id: string) => {
+const getPerformanceDetail = async (id: string) => {
   const { error, data } = await supabase
     .from("performances")
     .select("*")
@@ -15,4 +15,4 @@ const getPerformance = async (id: string) => {
   }
 };
 
-export default getPerformance;
+export default getPerformanceDetail;

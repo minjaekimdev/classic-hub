@@ -1,10 +1,27 @@
 import Modal, { useModal } from "@/shared/ui/modals/Modal";
-import PriceInfo from "../shared/PriceInfo";
 import ticketIcon from "@shared/assets/icons/ticket-white.svg";
 import { useDetail } from "@/pages/Detail";
+import type { Price } from "@classic-hub/shared/types/common";
+
+interface ItemProps {
+  seat: string;
+  price: number;
+}
+const PriceItem = ({ seat, price }: ItemProps) => {
+  return (
+    <div className="flex justify-between items-center rounded-main bg-[#f9fafb] px-[0.66rem] h-[2.63rem]">
+      <span className="text-dark text-[0.88rem]/[1.31rem] font-medium">
+        {seat}
+      </span>
+      <span className="text-main text-[0.88rem]/[1.31rem] font-bold">
+        {price.toLocaleString()}원
+      </span>
+    </div>
+  );
+};
 
 const PriceInfoDesktop = () => {
-  const { bookingLinks } = useDetail();
+  const { bookingLinks, priceInfo } = useDetail();
   const { sendData } = useModal();
 
   return (
@@ -13,7 +30,11 @@ const PriceInfoDesktop = () => {
         좌석 및 가격 정보
       </p>
       <div className="mt-[0.88rem]">
-        <PriceInfo />
+        <div className="flex flex-col gap-[0.44rem] p-[0.88rem] desktop:p-0">
+          {priceInfo.map((item: Price) => (
+            <PriceItem seat={item.seatType} price={item.price} />
+          ))}
+        </div>
       </div>
       <div className="h-px bg-black/10 my-[1.31rem]"></div>
       <Modal.Trigger>

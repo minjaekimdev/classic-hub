@@ -31,7 +31,7 @@ const SummaryMobile = () => {
         <InfoRow label="공연시간" description={time} />
         <InfoRow label="관람시간" description={runningTime} />
       </ul>
-      <div className="flex gap-[0.66rem]">
+      <div className="flex gap-[0.66rem] h-10">
         <BookmarkButton />
         <ShareButton/>
       </div>

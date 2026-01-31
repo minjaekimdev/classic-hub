@@ -1,14 +1,14 @@
 import { useLoaderData, type LoaderFunctionArgs } from "react-router-dom";
-import getPerformance from "@/features/performance/detail/fetchers/getPerformance";
 import type { DetailPerformance } from "@classic-hub/shared/types/client";
 import { createContext, useContext } from "react";
 import Modal from "@/shared/ui/modals/Modal";
 import BookingModal from "@/shared/ui/modals/BookingModal";
 import useBreakpoint from "@/shared/hooks/useBreakpoint";
-import DetailMobile from "@/features/performance/detail/components/mobile/DetailMobile";
-import DetailDesktop from "@/features/performance/detail/components/desktop/DetailDesktop";
+import DetailMobile from "@/widgets/detail/mobile";
+import DetailDesktop from "@/widgets/detail/desktop";
 import MainLayout from "@/layout/shared/MainLayout";
 import { Toaster } from "sonner";
+import getPerformance from "@/features/performance/api/fetchers/get-performance-detail";
 
 const DetailContext = createContext<DetailPerformance | null>(null);
 
@@ -38,7 +38,8 @@ export const Detail = () => {
   const isMobile = useBreakpoint(960);
 
   return (
-    <DetailContext value={performance}>
+    <DetailContext.Provider value={performance}>
+      <Toaster />
       <Modal>
         <BookingModal />
         {isMobile ? (
@@ -50,6 +51,6 @@ export const Detail = () => {
           </MainLayout>
         )}
       </Modal>
-    </DetailContext>
+    </DetailContext.Provider>
   );
 };

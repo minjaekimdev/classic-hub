@@ -1,9 +1,9 @@
 import type { HomePerformance } from "@classic-hub/shared/types/client";
-import PerformanceAlbumMeta from "@/features/performance/components/shared/PerformanceMeta";
 import PriceDisplay from "../shared/PriceDisplay";
 import { Link } from "react-router-dom";
 import BookmarkButtonMobile from "@/shared/ui/buttons/BookmarkButtonMobile";
 import BookmarkButtonDesktop from "@/shared/ui/buttons/BookmarkButtonDesktop";
+import PerformanceMeta from "../shared/PerformanceMeta";
 
 interface CardBadgeProps {
   children: React.ReactNode;
@@ -46,7 +46,7 @@ const HomePerformanceAlbumCard = ({ data }: { data: HomePerformance }) => {
           </div>
         </div>
         <div className="grow flex flex-col justify-between p-[0.88rem]">
-          <PerformanceAlbumMeta
+          <PerformanceMeta
             title={data.title}
             artist={data.artist}
             period={data.period}

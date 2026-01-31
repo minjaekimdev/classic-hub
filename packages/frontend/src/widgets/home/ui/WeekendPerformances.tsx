@@ -3,9 +3,9 @@ import MobileList from "../shared/MobileList";
 import useBreakpoint from "@/shared/hooks/useBreakpoint";
 import HomeSectionLayout from "../shared/HomeSectionLayout";
 import BaseCarousel from "../shared/DesktopCarousel";
-import HomePerformanceAlbumCard from "@/features/performance/components/desktop/HomePerformanceAlbumCard";
 import useWeekendPerformance from "@/features/performance/api/hooks/use-weekend-performance";
 import calendarIcon from "@shared/assets/icons/calendar-red.svg";
+import HomePerformanceAlbumCard from "@/features/performance/ui/desktop/HomePerformanceAlbumCard";
 
 const WeekendPerformances = () => {
   const performanceArray = useWeekendPerformance();

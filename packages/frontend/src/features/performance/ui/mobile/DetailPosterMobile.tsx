@@ -1,6 +1,5 @@
 import { useDetail } from "@/pages/Detail";
 
-
 const PosterMobile = () => {
   const { poster } = useDetail();
   if (!performance) {

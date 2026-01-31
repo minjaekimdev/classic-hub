@@ -1,7 +1,8 @@
+import DetailImages from "@/features/performance/ui/shared/DetailImages";
+import PriceInfoDesktop from "@/features/performance/ui/shared/DetailPriceInfo";
+import DetailVenueInfo from "@/features/performance/ui/shared/DetailVenueInfo";
 import { useState } from "react";
-import DetailImages from "../shared/DetailImages";
-import VenueInfo from "../shared/VenueInfo";
-import PriceInfo from "../shared/PriceInfo";
+
 
 interface TabProps {
   text: CategoryType;
@@ -45,8 +46,8 @@ const MainDetailMobile = () => {
 
   const detailObj: Record<CategoryType, React.ReactNode> = {
     공연상세: <Detail />,
-    가격정보: <PriceInfo />,
-    장소정보: <VenueInfo />,
+    가격정보: <PriceInfoDesktop />,
+    장소정보: <DetailVenueInfo />,
   };
 
   return (

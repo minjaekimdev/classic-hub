@@ -4,7 +4,7 @@ import type {
   RankingPerformance,
 } from "@classic-hub/shared/types/client";
 import { PERIOD_LABEL } from "../../features/performance/constants/ranking-period-label";
-import RankingItem from "../../features/performance/components/shared/RankItem";
+import RankingItem from "@/features/performance/ui/shared/RankItem";
 
 interface RankingListProps {
   period: Period;

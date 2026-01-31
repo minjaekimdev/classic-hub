@@ -4,10 +4,10 @@ import disabledIcon from "@shared/assets/icons/disabled-black.svg";
 import buildingIcon from "@shared/assets/icons/building-lightgray.svg";
 import linkIcon from "@shared/assets/icons/link-lightgray.svg";
 import Badge from "@/shared/ui/badges/Badge";
-import getVenueInfo from "../../fetchers/getVenueInfo";
 import { useDetail } from "@/pages/Detail";
 import { useEffect, useState } from "react";
 import type { Hall } from "@classic-hub/shared/types/client";
+import getVenueInfo from "../../api/fetchers/get-venue-detail";
 
 interface CategoryProps {
   iconSrc: string;
@@ -43,7 +43,7 @@ const FACILITY_LABELS: Partial<Record<keyof Hall, string>> = {
   disabledElevator: "엘리베이터",
 };
 
-const VenueInfo = () => {
+const DetailVenueInfo = () => {
   const { venue, venueId } = useDetail();
   // 추후 api 호출
   const [venueData, setVenueData] = useState<Hall | null>(null);
@@ -125,4 +125,4 @@ const VenueInfo = () => {
   );
 };
 
-export default VenueInfo;
+export default DetailVenueInfo;
