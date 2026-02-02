@@ -1,6 +1,6 @@
 import { useModal } from "@/shared/ui/modals/Modal";
 import { useEffect, useState } from "react";
-import type { filterCategoryObjType } from "../components/mobile/filter";
+import type { filterCategoryObjType } from "../types";
 
 const useSearchFilterMobile = () => {
   // 검색어는 별도의 상태로 관리

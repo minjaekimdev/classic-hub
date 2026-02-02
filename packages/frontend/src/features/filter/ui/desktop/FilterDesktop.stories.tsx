@@ -1,16 +1,14 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import ResultFilterMobile from "./ResultFilterMobile";
+import FilterDesktop from "./FilterDesktop";
 
 const meta = {
-  title: "features/filter/result/FilterMobile",
-  component: ResultFilterMobile,
+  title: "features/filter/FilterDesktop",
+  component: FilterDesktop,
   tags: ["autodocs"],
   args: {
     isOpen: true,
-    onClose: () => {},
-    totalResultCount: 13,
   },
-} satisfies Meta<typeof ResultFilterMobile>;
+} satisfies Meta<typeof FilterDesktop>;
 
 export default meta;
 

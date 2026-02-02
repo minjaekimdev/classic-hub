@@ -1,19 +1,20 @@
-import type { SortType } from "../hooks/useResultFilter";
+import type { SortType } from "../../hooks/useFilter";
 import CategoryHeader from "./CategoryHeader";
 import CategoryLayout from "./CategoryLayout";
 
 const SORT_MAP: Record<SortType, string> = {
-  "imminent": "공연임박순",
+  imminent: "공연임박순",
   "price-low": "낮은가격순",
   "price-high": "높은가격순",
-  "alphabetical": "가나다순"
-}
+  alphabetical: "가나다순",
+};
 
 interface SortProps {
   selectedSort: string;
   handleSortChange: (id: SortType) => void;
 }
-const Sort = ({ selectedSort, handleSortChange }: SortProps) => {
+
+const SortSelector = ({ selectedSort, handleSortChange }: SortProps) => {
   return (
     <CategoryLayout>
       <CategoryHeader text="정렬" />
@@ -37,4 +38,4 @@ const Sort = ({ selectedSort, handleSortChange }: SortProps) => {
   );
 };
 
-export default Sort;
+export default SortSelector;

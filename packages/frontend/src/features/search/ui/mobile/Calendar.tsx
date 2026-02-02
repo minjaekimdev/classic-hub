@@ -2,7 +2,7 @@
 
 import { type DateRange } from "react-day-picker";
 import { Calendar } from "@shared/ui/shadcn/calendar";
-import type { filterCategoryObjType } from "@/features/filter/search/components/mobile/filter";
+import type { filterCategoryObjType } from "../../types";
 
 interface CalendarProps {
   filterValue: filterCategoryObjType;

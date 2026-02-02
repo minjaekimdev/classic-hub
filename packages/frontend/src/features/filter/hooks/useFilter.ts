@@ -2,7 +2,7 @@ import { useState } from "react";
 
 export type SortType = "imminent" | "price-low" | "price-high" | "alphabetical";
 
-const useResultFilter = () => {
+const useFilter = () => {
   // --- States ---
   const [sortBy, setSortBy] = useState<SortType>("imminent"); // 정렬 순서(기본값: 공연임박순)
   const [selectedArea, setSelectedArea] = useState<string | null>(null); // 선택된 지역
@@ -48,4 +48,4 @@ const useResultFilter = () => {
   };
 };
 
-export default useResultFilter;
+export default useFilter;

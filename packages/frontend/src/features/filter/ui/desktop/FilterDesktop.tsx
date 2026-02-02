@@ -1,10 +1,10 @@
 import noteIcon from "@shared/assets/icons/musical-note-red.svg";
 import filterIcon from "@shared/assets/icons/filter-black.svg";
-import Sort from "./Sort";
-import LocationHall from "./LocationHall";
-import useResultFilter from "../hooks/useResultFilter";
-import CategoryHeader from "./CategoryHeader";
+import Sort from "../shared/SortSelector";
+import useResultFilter from "../../hooks/useFilter";
+import CategoryHeader from "../shared/CategoryHeader";
 import type { Region } from "../../types";
+import LocationSelector from "../shared/LocationSelector";
 
 const MOCK_REGIONS: Region[] = [
   {
@@ -62,7 +62,7 @@ const Summary = () => {
   );
 };
 
-const ResultFilterDesktop = ({ isOpen }: { isOpen: boolean }) => {
+const FilterDesktop = ({ isOpen }: { isOpen: boolean }) => {
   const {
     sortBy,
     selectedArea,
@@ -81,7 +81,7 @@ const ResultFilterDesktop = ({ isOpen }: { isOpen: boolean }) => {
           {/* 구분선 */}
           <div className="bg-[rgba(0,0,0,0.1)] h-[0.06rem]"></div>
           <Sort selectedSort={sortBy} handleSortChange={changeSort} />
-          <LocationHall
+          <LocationSelector
             regionArray={MOCK_REGIONS}
             expandedRegion={selectedArea}
             selectedVenues={selectedVenues}
@@ -94,4 +94,4 @@ const ResultFilterDesktop = ({ isOpen }: { isOpen: boolean }) => {
   );
 };
 
-export default ResultFilterDesktop;
+export default FilterDesktop;

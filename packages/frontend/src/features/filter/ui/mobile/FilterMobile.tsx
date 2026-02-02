@@ -1,9 +1,9 @@
 // import { useState } from "react";
 import { X } from "lucide-react";
-import LocationHall from "./LocationHall";
-import Sort from "./Sort";
-import useResultFilter from "../hooks/useResultFilter";
 import type { Region } from "../../types";
+import LocationSelector from "../shared/LocationSelector";
+import SortSelector from "../shared/SortSelector";
+import useFilter from "../../hooks/useFilter";
 
 // Mock Data (실제 데이터로 교체 필요)
 const MOCK_REGIONS: Region[] = [
@@ -41,7 +41,7 @@ interface FilterBottomSheetProps {
   totalResultCount: number; // 1. 검색된 공연 결과 개수
 }
 
-const ResultFilterMobile = ({
+const FilterMobile = ({
   isOpen,
   onClose,
   totalResultCount,
@@ -54,7 +54,7 @@ const ResultFilterMobile = ({
     toggleRegion,
     toggleVenue,
     reset,
-  } = useResultFilter();
+  } = useFilter();
 
   // 5. 결과보기 (적용 및 닫기)
   const handleApply = () => {
@@ -93,9 +93,12 @@ const ResultFilterMobile = ({
             {/* Scrollable Content */}
             <div className="flex-1 overflow-y-auto p-5 space-y-8 pb-24">
               {/* 2. 정렬 카테고리 */}
-              <Sort selectedSort={sortBy} handleSortChange={changeSort} />
+              <SortSelector
+                selectedSort={sortBy}
+                handleSortChange={changeSort}
+              />
               {/* 3. 지역 · 공연장 카테고리 */}
-              <LocationHall
+              <LocationSelector
                 regionArray={MOCK_REGIONS}
                 expandedRegion={selectedArea}
                 selectedVenues={selectedVenues}
@@ -126,4 +129,4 @@ const ResultFilterMobile = ({
   );
 };
 
-export default ResultFilterMobile;
+export default FilterMobile;

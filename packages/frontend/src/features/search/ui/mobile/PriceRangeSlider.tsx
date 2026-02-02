@@ -1,5 +1,5 @@
 import { Slider } from "@shared/ui/shadcn/slider";
-import type { filterCategoryObjType } from "@/features/filter/search/components/mobile/filter";
+import type { filterCategoryObjType } from "../../types";
 
 interface PriceRangeSliderProps {
   filterValue: filterCategoryObjType;

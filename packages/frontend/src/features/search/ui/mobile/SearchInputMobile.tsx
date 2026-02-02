@@ -1,5 +1,5 @@
 import searchIcon from "@shared/assets/icons/search-gray.svg";
-import type { filterCategoryObjType } from "@/features/filter/search/components/mobile/filter";
+import type { filterCategoryObjType } from "../../types";
 
 interface SearchInputMobileProps {
   filterValue: filterCategoryObjType;

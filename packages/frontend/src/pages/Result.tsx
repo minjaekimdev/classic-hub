@@ -5,7 +5,7 @@ import Modal from "@/shared/ui/modals/Modal";
 import filterIcon from "@shared/assets/icons/filter-dark.svg";
 import closeIcon from "@shared/assets/icons/close-white.svg";
 import ResultFilterMobile from "@/features/filter/result/ui/ResultFilterMobile";
-import ResultFilterDesktop from "@/features/filter/result/ui/ResultFilterDesktop";
+import ResultFilterDesktop from "@/features/filter/ui/desktop/FilterDesktop";
 import ResultAlbumItem from "@/features/performance/components/desktop/ResultPerformanceAlbumCard";
 import useBreakpoint from "@/shared/hooks/useBreakpoint";
 import PerformanceListCard from "@/features/performance/components/mobile/PerformanceListCard";

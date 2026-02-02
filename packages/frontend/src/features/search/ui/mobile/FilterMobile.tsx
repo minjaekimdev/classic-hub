@@ -9,7 +9,7 @@ import FilterSearchInputMobile from "./FilterSearchInputMobile";
 import FilterFieldContentMobile from "./FilterFieldContentMobile";
 import { Calendar05 } from "./Calendar";
 import PriceRangeSlider from "./PriceRangeSlider";
-import useSearchFilterMobile from "@/features/filter/search/hooks/useSearchFilterMobile";
+import useSearchFilterMobile from "../../hooks/useSearchFilterMobile";
 
 const Header = () => {
   const { close } = useSearchFilterMobile();
