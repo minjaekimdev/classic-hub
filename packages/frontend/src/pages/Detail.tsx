@@ -2,13 +2,13 @@ import { useLoaderData, type LoaderFunctionArgs } from "react-router-dom";
 import type { DetailPerformance } from "@classic-hub/shared/types/client";
 import { createContext, useContext } from "react";
 import Modal from "@/shared/ui/modals/Modal";
-import BookingModal from "@/shared/ui/modals/BookingModal";
 import useBreakpoint from "@/shared/hooks/useBreakpoint";
 import DetailMobile from "@/widgets/detail/mobile";
 import DetailDesktop from "@/widgets/detail/desktop";
 import MainLayout from "@/layout/shared/MainLayout";
 import { Toaster } from "sonner";
 import getPerformanceDetail from "@/entities/performance/api/fetchers/get-performance-detail";
+import BookingModal from "@/features/booking/BookingModal";
 
 const DetailContext = createContext<DetailPerformance | null>(null);
 

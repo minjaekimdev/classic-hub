@@ -2,10 +2,10 @@ import Modal from "@/shared/ui/modals/Modal";
 import MainLayout from "@/layout/shared/MainLayout";
 import type { Period } from "@classic-hub/shared/types/client";
 import { useState } from "react";
-import BookingModal from "@/shared/ui/modals/BookingModal";
 import RankingHeader from "@/widgets/ranking/RankingHeader";
 import RankList from "@/widgets/ranking/RankList";
 import useRankingPerformance from "@/entities/performance/api/hooks/use-ranking-performance";
+import BookingModal from "@/features/booking/BookingModal";
 
 const Ranking = () => {
   const [period, setPeriod] = useState<Period>("daily");
