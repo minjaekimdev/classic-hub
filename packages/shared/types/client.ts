@@ -18,18 +18,7 @@ interface Price {
 
 // 검색 결과 페이지 공연
 export interface PerformanceSummary extends Performance {
-  time: string;
-  price: Price;
-}
-
-export interface HomePerformance {
-  id: string;
   rank?: number;
-  poster: string;
-  title: string;
-  artist: string;
-  period: string;
-  venue: string;
   price: Price;
 }
 

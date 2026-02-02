@@ -1,4 +1,4 @@
-import Modal from "@/shared/ui/modals/Modal";
+import Modal from "@/shared/ui/modal/Modal";
 import feedbackIcon from "@shared/assets/icons/feedback.svg";
 
 const Footer = () => {

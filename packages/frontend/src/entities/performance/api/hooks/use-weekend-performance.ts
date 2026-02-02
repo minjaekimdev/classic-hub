@@ -1,5 +1,5 @@
 import supabase from "@/app/api/supabase-client";
-import type { HomePerformance } from "@classic-hub/shared/types/client";
+import type { PerformanceSummary } from "@classic-hub/shared/types/client";
 import { useEffect, useState } from "react";
 import { mapToHomePerformance } from "../mappers/home-performance-mapper";
 
@@ -12,7 +12,7 @@ const getParsedDate = (date: Date) => {
 };
 
 const useWeekendPerformance = () => {
-  const [performances, setPerformances] = useState<HomePerformance[]>([]);
+  const [performances, setPerformances] = useState<PerformanceSummary[]>([]);
 
   const now = new Date();
   const nowDay = now.getDay();

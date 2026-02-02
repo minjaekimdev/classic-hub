@@ -2,9 +2,9 @@
 // import ModalHeader from "./ModalHeader";
 // import FormField from "./FormField";
 import ButtonGroup from "@/shared/ui/buttons/CancelConfirmButtons";
-import FormField from "@/shared/ui/modals/FormField";
-import Modal, { useModal } from "@/shared/ui/modals/Modal";
-import ModalHeader from "@/shared/ui/modals/ModalHeader";
+import FormField from "@/shared/ui/modal/FormField";
+import Modal, { useModal } from "@/shared/ui/modal/Modal";
+import ModalHeader from "@/shared/ui/modal/ModalHeader";
 
 const FeedbackModal = () => {
   const { isOpen } = useModal();

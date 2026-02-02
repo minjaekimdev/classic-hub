@@ -1,17 +1,20 @@
-
 import bottomArrow from "@shared/assets/icons/bottom-arrow-gray.svg";
-import { useFilter, type FieldType } from "./SearchFilter";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/shared/ui/shadcn/dropdown-menu";
+import { useSearch, type FieldType } from "./Search";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/shared/ui/shadcn/dropdown-menu";
 
 interface FilterFieldProps {
   iconSrc: string;
   title: FieldType;
   children: React.ReactNode;
 }
-const SearchFilterField = ({ iconSrc, title, children }: FilterFieldProps) => {
-  const { filterValue, activeField, openField, closeField } = useFilter();
+const SearchField = ({ iconSrc, title, children }: FilterFieldProps) => {
+  const { searchValue, activeField, openField, closeField } = useSearch();
   const isOpen = title === activeField;
-  const titleColor = filterValue[title] ? "000" : "text-[#867e7c]";
+  const titleColor = searchValue[title] ? "000" : "text-[#867e7c]";
 
   return (
     <DropdownMenu
@@ -23,7 +26,7 @@ const SearchFilterField = ({ iconSrc, title, children }: FilterFieldProps) => {
         if (isOpenNow) {
           openField(title);
         } else {
-          closeField(); 
+          closeField();
         }
       }}
     >
@@ -33,16 +36,18 @@ const SearchFilterField = ({ iconSrc, title, children }: FilterFieldProps) => {
             <div className="flex items-center gap-[0.44rem]">
               <img className="w-3.5 h-3.5" src={iconSrc} alt="" />
               <span className={`text-[0.77rem]/[1.09rem] ${titleColor}`}>
-                {filterValue[title] ? filterValue[title] : title}
+                {searchValue[title] ? searchValue[title] : title}
               </span>
             </div>
             <img className="w-3.5 h-3.5 mb-1" src={bottomArrow} alt="" />
           </div>
         </div>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="z-(--z-header-dropdown)">{children}</DropdownMenuContent>
+      <DropdownMenuContent className="z-(--z-header-dropdown)">
+        {children}
+      </DropdownMenuContent>
     </DropdownMenu>
   );
 };
 
-export default SearchFilterField;
+export default SearchField;

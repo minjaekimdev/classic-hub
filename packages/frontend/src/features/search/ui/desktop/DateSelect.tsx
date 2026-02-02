@@ -1,9 +1,9 @@
 import { type DateRange } from "react-day-picker";
-import { useFilter } from "./SearchFilter";
 import { Calendar } from "@/shared/ui/shadcn/calendar";
+import { useSearch } from "./Search";
 
 export function DateSelect() {
-  const { filterValue, changeValue } = useFilter();
+  const { searchValue, changeValue } = useSearch();
 
   // 오늘 날짜 (시간 제거)
   const today = new Date();
@@ -11,14 +11,14 @@ export function DateSelect() {
 
   let calendarDateRange: DateRange | undefined;
   const isValidDateRange = /^\d{4}\/\d{2}\/\d{2} - \d{4}\/\d{2}\/\d{2}$/.test(
-    filterValue.날짜,
+    searchValue.날짜,
   );
 
   if (!isValidDateRange) {
     // 날짜가 선택되지 않으면 undefined로 표시 (아무것도 선택 안 함)
     calendarDateRange = undefined;
   } else {
-    const [startDate, endDate] = filterValue.날짜
+    const [startDate, endDate] = searchValue.날짜
       .split(" - ")
       .map((item: string) => item.replaceAll("/", "-"));
     calendarDateRange = {

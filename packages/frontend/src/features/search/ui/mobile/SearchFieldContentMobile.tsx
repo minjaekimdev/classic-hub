@@ -1,5 +1,5 @@
 import React from "react";
-import FilterFieldHeaderMobile from "./FilterFieldHeaderMobile";
+import FilterFieldHeaderMobile from "./SearchFieldHeaderMobile";
 
 interface FilterFieldContentMobileProps {
   fieldName: string | null;

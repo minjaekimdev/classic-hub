@@ -1,11 +1,11 @@
 import { type ReactNode } from "react";
 import Footer from "@/layout/shared/Footer";
 import HomeHeaderMobile from "../mobile/HomeHeaderMobile";
-import useHomeLayout from "../hooks/useHomeLayout";
-import Modal from "@/shared/ui/modals/Modal";
+import Modal from "@/shared/ui/modal/Modal";
 import HeaderDesktop from "../desktop/HeaderDesktop";
-import FeedbackModal from "@/shared/ui/modals/FeedbackModal";
-import SearchFilterMobile from "@/features/search/ui/mobile/FilterMobile";
+import SearchFilterMobile from "@/features/search/ui/mobile/SearchFilterMobile";
+import FeedbackModal from "@/features/feedback/FeedbackModal";
+import BottomSheet from "@/shared/ui/bottom-sheet/BottomSheet";
 
 const HomeLayout = ({ children }: { children: ReactNode }) => {
   const {
@@ -22,13 +22,11 @@ const HomeLayout = ({ children }: { children: ReactNode }) => {
     <Modal>
       <FeedbackModal />
       {isMobile ? (
-        <>
-          <Modal>
-            <SearchFilterMobile />
-            {/* 모바일 헤더는 스크롤이 내려갈 때에만 축소되므로 isIntersecting만으로 확대축소 여부 판단 */}
-            <HomeHeaderMobile isExpand={isIntersecting} />
-          </Modal>
-        </>
+        <BottomSheet>
+          <SearchFilterMobile />
+          {/* 모바일 헤더는 스크롤이 내려갈 때에만 축소되므로 isIntersecting만으로 확대축소 여부 판단 */}
+          <HomeHeaderMobile isExpand={isIntersecting} />
+        </BottomSheet>
       ) : (
         <>
           <HeaderDesktop isExpand={isExpand} onFilterClick={onFilterClick} />

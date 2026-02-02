@@ -1,32 +1,30 @@
-import { type SetStateAction } from "react";
-import type { filterCategoryObjType } from "../../types";
+import type { SearchCategory } from "../../types";
+import { useSearchMobile } from "../../hooks/SearchMobile";
 
 interface FilterFieldProps {
   iconSrc: string;
   label: string;
   subtitle: string;
-  filterValue: filterCategoryObjType;
-  onSelect: React.Dispatch<SetStateAction<string | null>>;
 }
 
-const LABEL_TO_KEY: Record<string, keyof filterCategoryObjType> = {
+const LABEL_TO_KEY: Record<string, keyof SearchCategory> = {
+  검색어: "keyword",
   지역: "location",
   날짜: "date",
   가격대: "price",
 };
 
-const FilterFieldMobile = ({
+const SearchFieldMobile = ({
   iconSrc,
   label,
   subtitle,
-  filterValue,
-  onSelect,
 }: FilterFieldProps) => {
+  const {filters, changeActiveCategory} = useSearchMobile();
   const categoryKey = LABEL_TO_KEY[label];
   return (
     <div
       className="flex gap-[0.66rem] rounded-[0.797rem] bg-[#f9fafb] p-[0.88rem] cursor-pointer"
-      onClick={() => onSelect(label)}
+      onClick={() => changeActiveCategory(categoryKey)}
     >
       <div className="flex justify-center items-center w-[1.97rem] h-[1.97rem]">
         <img src={iconSrc} alt="" />
@@ -38,9 +36,9 @@ const FilterFieldMobile = ({
         <span className="text-[#4a5565] text-[0.77rem]/[1.09rem]">
           {subtitle}
         </span>
-        {filterValue[categoryKey] && (
+        {filters[categoryKey] && (
           <span className="text-main text-[0.77rem]/[1.09rem]">
-            선택됨: {filterValue[categoryKey]}
+            선택됨: {filters[categoryKey]}
           </span>
         )}
       </div>
@@ -48,4 +46,4 @@ const FilterFieldMobile = ({
   );
 };
 
-export default FilterFieldMobile;
+export default SearchFieldMobile;

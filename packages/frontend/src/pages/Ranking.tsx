@@ -1,4 +1,4 @@
-import Modal from "@/shared/ui/modals/Modal";
+import Modal from "@/shared/ui/modal/Modal";
 import MainLayout from "@/layout/shared/MainLayout";
 import type { Period } from "@classic-hub/shared/types/client";
 import { useState } from "react";

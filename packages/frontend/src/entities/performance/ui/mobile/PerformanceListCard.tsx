@@ -1,10 +1,10 @@
-import type { HomePerformance } from "@classic-hub/shared/types/client";
+import type { PerformanceSummary } from "@classic-hub/shared/types/client";
 import PerformanceAlbumMeta from "../shared/PerformanceMeta";
 import PriceDisplay from "../shared/PriceDisplay";
 import BookmarkButton from "@/shared/ui/buttons/BookmarkButtonMobile";
 
 type ListItemProps = {
-  data: HomePerformance;
+  data: PerformanceSummary;
 };
 const PerformanceListCard = ({ data }: ListItemProps) => {
   return (

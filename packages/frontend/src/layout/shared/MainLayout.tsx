@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Header from "../desktop/HeaderDesktop";
 import Footer from "@/layout/shared/Footer";
-import Modal from "@/shared/ui/modals/Modal";
+import Modal from "@/shared/ui/modal/Modal";
 
 interface MainLayoutProps {
   children: React.ReactNode;

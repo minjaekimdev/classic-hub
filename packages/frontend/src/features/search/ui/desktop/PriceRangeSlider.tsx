@@ -1,9 +1,9 @@
 import { Slider } from "@radix-ui/react-slider";
-import { useFilter } from "./SearchFilter";
+import { useSearch } from "./Search";
 
-const $MAX_PRICE = 30;
+const $MAX_PRICE = 50;
 const PriceRangeSlider = () => {
-  const { filterValue, changeValue } = useFilter();
+  const { searchValue, changeValue } = useSearch();
 
   const setPriceRange = (range: number[]) => {
     const startPrice = `${range[0]}만`;
@@ -13,11 +13,11 @@ const PriceRangeSlider = () => {
   };
 
   const getCurrentSliderValue = () => {
-    if (!filterValue.가격) {
+    if (!searchValue.가격) {
       return [0, 50];
     }
 
-    const [startPrice, endPrice] = filterValue.가격
+    const [startPrice, endPrice] = searchValue.가격
       .split(" - ")
       .map((item) =>
         parseInt(item.replace("만+", "").replace("만", "").trim()),
@@ -34,7 +34,7 @@ const PriceRangeSlider = () => {
         <div className="flex justify-between items-center mb-4 w-60">
           <h3 className="text-xs font-bold">가격 범위</h3>
           <span className="text-xs font-bold text-main">
-            {filterValue.가격 ? filterValue.가격 : "0 - 50만+"}
+            {searchValue.가격 ? searchValue.가격 : "0 - 50만+"}
           </span>
         </div>
         <Slider

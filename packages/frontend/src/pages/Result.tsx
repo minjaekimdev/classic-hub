@@ -1,19 +1,16 @@
-import { createContext, useState } from "react";
+import { useState } from "react";
 import Header from "../layout/desktop/HeaderDesktop";
 import Footer from "@/layout/shared/Footer";
-import Modal from "@/shared/ui/modals/Modal";
-import filterIcon from "@shared/assets/icons/filter-dark.svg";
-import closeIcon from "@shared/assets/icons/close-white.svg";
-import ResultFilterMobile from "@/features/filter/result/ui/ResultFilterMobile";
+import Modal from "@/shared/ui/modal/Modal";
 import ResultFilterDesktop from "@/features/filter/ui/desktop/FilterDesktop";
-import ResultAlbumItem from "@/features/performance/components/desktop/ResultPerformanceAlbumCard";
 import useBreakpoint from "@/shared/hooks/useBreakpoint";
-import PerformanceListCard from "@/features/performance/components/mobile/PerformanceListCard";
 import type {
-  DetailPerformance,
   PerformanceSummary,
 } from "@classic-hub/shared/types/client";
-import { useSearchParams } from "react-router-dom";
+import FilterMobile from "@/features/filter/ui/mobile/FilterMobile";
+import ResultPerformanceAlbumCard from "@/entities/performance/ui/desktop/ResultPerformanceAlbumCard";
+import PerformanceListCard from "@/entities/performance/ui/mobile/PerformanceListCard";
+import ResultHeader from "@/widgets/result/ResultHeader";
 
 // 헤더의 Search Filter로 1차 검색된 결과물
 const MOCKUP_DATA: PerformanceSummary[] = [
@@ -90,43 +87,6 @@ const MOCKUP_DATA: PerformanceSummary[] = [
   },
 ];
 
-interface ResultSummaryProps {
-  count: number;
-  isOpen: boolean;
-  onClick: () => void;
-}
-const ResultHeader = ({ count, isOpen, onClick }: ResultSummaryProps) => {
-  const buttonStyle =
-    "flex justify-center items-center gap-[0.44rem] rounded-button w-[5.26rem] h-[1.75rem] text-[0.77rem]/[1.09rem]";
-
-  return (
-    <div className="fixed z-70 top-desktop-header-shrinked border-b border-black/10 w-screen">
-      <div className="bg-white flex justify-between items-center max-w-7xl mx-auto h-[3.56rem] px-7">
-        <span className="text-dark text-[0.88rem]/[1.31rem] font-semibold">
-          {count}개의 클래식 공연
-        </span>
-        {isOpen ? (
-          <button
-            className={`${buttonStyle} bg-main text-white`}
-            onClick={onClick}
-          >
-            <img src={closeIcon} alt="닫기 아이콘" />
-            필터 닫기
-          </button>
-        ) : (
-          <button
-            className={`${buttonStyle} border border-black/10 bg-white text-dark`}
-            onClick={onClick}
-          >
-            <img src={filterIcon} alt="필터 아이콘" />
-            필터 보기
-          </button>
-        )}
-      </div>
-    </div>
-  );
-};
-
 interface ResultMobileProps {
   isFilterOpen: boolean;
   onClickClose: () => void;
@@ -135,7 +95,7 @@ interface ResultMobileProps {
 const ResultMobile = ({ isFilterOpen, onClickClose }: ResultMobileProps) => {
   return (
     <div className="block desktop:hidden">
-      <ResultFilterMobile
+      <FilterMobile
         isOpen={isFilterOpen}
         onClose={onClickClose}
         totalResultCount={MOCKUP_DATA.length}
@@ -170,7 +130,7 @@ const ResultDesktop = ({ isOpen }: ResultDesktopProps) => {
         className={`flex-1 grid large-desktop:grid-cols-4 gap-[1.31rem] p-[0.88rem] overflow-y-auto ${galleryStyle}`}
       >
         {MOCKUP_DATA.map((item) => (
-          <ResultAlbumItem data={item} />
+          <ResultPerformanceAlbumCard data={item} />
         ))}
       </div>
       <ResultFilterDesktop isOpen={isOpen} />
@@ -178,18 +138,15 @@ const ResultDesktop = ({ isOpen }: ResultDesktopProps) => {
   );
 };
 
+const DesktopLayout = () => {
+  const [isHeaderExpand, setIsHeaderExpand] = useState(false);
+
+}
+
 // const ResultContext = createContext<DetailPerformance[] | null>(null);
 
 const Result = () => {
-  // 최상단 헤더의 열고닫음 상태를 관리
-  const [isHeaderExpand, setIsHeaderExpand] = useState(false);
-  // 오른쪽 필터의 열고닫음 상태를 관리
-  const [isFilterOpen, setIsFilterOpen] = useState(true);
-
-  // 헤더 클릭 시 열고닫는 핸들러
-  const headerToggle = (expand: boolean) => {
-    setIsHeaderExpand(expand);
-  };
+  const {is}
 
   // 필터 버튼 클릭시 열고닫는 핸들러
   const toggleFilter = () => {
@@ -213,13 +170,14 @@ const Result = () => {
   //   location,
   //   minPrice,
   //   maxPrice,
-  //   startDate,
+  //   startDate, 
   //   endDate,
   // });
 
   return (
     // <ResultContext.Provider value={performances}>
     <Modal>
+
       <Header isExpand={isHeaderExpand} onFilterClick={headerToggle} />
       <ResultHeader count={24} isOpen={isFilterOpen} onClick={toggleFilter} />
       {isHeaderExpand && (

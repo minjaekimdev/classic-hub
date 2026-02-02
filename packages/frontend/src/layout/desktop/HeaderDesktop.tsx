@@ -2,12 +2,10 @@ import Logo from "@/shared/ui/logos/Logo";
 import { useRef } from "react";
 import useClickOutside from "@/shared/hooks/useClickOutside";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { SearchFilter } from "@/features/search/ui/desktop/SearchFilter";
-import SearchFilterDesktop from "@/features/search/ui/desktop/SearchFilterDesktop";
-import FilterDesktopSmall from "@/features/search/ui/desktop/FilterSmallDesktop";
-// import { SearchFilter } from "@/features/filter/search/components/desktop/SearchFilter";
-// import FilterDesktopSmall from "@/features/filter/search/components/desktop/FilterSmallDesktop";
-// import SearchFilterDesktop from "@/features/filter/search/components/desktop/SearchFilterDesktop";
+import { Search } from "@/features/search/ui/desktop/Search";
+import SearchDesktop from "@/features/search/ui/desktop/SearchDesktop";
+import SearchSmall from "@/features/search/ui/desktop/SearchSmall";
+import { useHomeLayoutDesktop } from "./HomeLayoutDesktop";
 
 interface MenuItemProps {
   icon: string;
@@ -105,17 +103,13 @@ const HeaderAuthButton = () => {
   );
 };
 
-// 헤더는 확장되어야 하는지 아닌지 여부만 props로 전달받기
-interface HeaderProps {
-  isExpand: boolean;
-  onFilterClick: (isFilterActive: boolean) => void;
-}
 
-const HeaderDesktop = ({ isExpand, onFilterClick }: HeaderProps) => {
+const HeaderDesktop = () => {
+  const {isExpand, expand, shrink} = useHomeLayoutDesktop();
   const headerRef = useRef<HTMLDivElement>(null);
 
   // 헤더의 외부를 클릭하면 축소
-  useClickOutside(headerRef, () => onFilterClick(false));
+  useClickOutside(headerRef, shrink);
   // 애니메이션 설정
 
   // 헤더가 확장되어야 하는 경우와 그렇지 않은 경우의 높이를 달리하기
@@ -134,22 +128,22 @@ const HeaderDesktop = ({ isExpand, onFilterClick }: HeaderProps) => {
             </div>
           </Link>
         </div>
-        <SearchFilter>
+        <Search>
           {isExpand ? (
             <>
               <div className="flex justify-center mt-[1.87rem] mb-6">
                 <Menu />
               </div>
               <div className="flex justify-center mb-8">
-                <SearchFilterDesktop />
+                <SearchDesktop />
               </div>
             </>
           ) : (
             <div className="flex justify-center mt-4">
-              <FilterDesktopSmall onFilterClick={onFilterClick} />
+              <SearchSmall onFilterClick={expand} />
             </div>
           )}
-        </SearchFilter>
+        </Search>
         <div className="absolute top-7 right-7">
           <HeaderAuthButton />
         </div>

@@ -1,7 +1,7 @@
 import TicketVendor from "./TicketVendor";
-import Modal, { useModal } from "@/shared/ui/modals/Modal";
+import Modal, { useModal } from "@/shared/ui/modal/Modal";
+import ModalHeader from "@/shared/ui/modal/ModalHeader";
 import type { BookingLink } from "@classic-hub/shared/types/common";
-import ModalHeader from "./ModalHeader";
 
 const iconArr = [
   {

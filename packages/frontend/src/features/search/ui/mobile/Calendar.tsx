@@ -1,16 +1,12 @@
 import { type DateRange } from "react-day-picker";
-import type { filterCategoryObjType } from "../../types";
 import { Calendar } from "@/shared/ui/shadcn/calendar";
+import { useSearchMobile } from "../../hooks/SearchMobile";
 
-interface CalendarProps {
-  filterValue: filterCategoryObjType;
-  onChange: (value: filterCategoryObjType) => void;
-}
-
-export function Calendar05({ filterValue, onChange }: CalendarProps) {
+export function Calendar05() {
+  const {filters, updateFilters} = useSearchMobile();
   let calendarDateRange: DateRange | undefined;
   const isValidDateRange = /^\d{4}\/\d{2}\/\d{2} - \d{4}\/\d{2}\/\d{2}$/.test(
-    filterValue.date,
+    filters.date,
   );
   if (!isValidDateRange) {
     calendarDateRange = {
@@ -18,7 +14,7 @@ export function Calendar05({ filterValue, onChange }: CalendarProps) {
       to: new Date(),
     };
   } else {
-    const [startDate, endDate] = filterValue.date
+    const [startDate, endDate] = filters.date
       .split(" - ")
       .map((item: string) => item.replaceAll("/", "-"));
     calendarDateRange = {
@@ -30,7 +26,7 @@ export function Calendar05({ filterValue, onChange }: CalendarProps) {
   const handleSelect = (range: DateRange | undefined) => {
     // 1. 선택 취소되거나 값이 없으면 초기화
     if (!range?.from) {
-      onChange({ ...filterValue, date: "날짜" });
+      updateFilters({ ...filters, date: "날짜" });
       return;
     }
 
@@ -47,7 +43,7 @@ export function Calendar05({ filterValue, onChange }: CalendarProps) {
     const toStr = range.to ? formatDate(range.to) : fromStr;
 
     // 3. 부모에게 문자열로 전달
-    onChange({ ...filterValue, date: `${fromStr} - ${toStr}` });
+    updateFilters({ ...filters, date: `${fromStr} - ${toStr}` });
   };
 
   return (

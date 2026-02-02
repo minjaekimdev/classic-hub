@@ -1,6 +1,6 @@
 import calendarIcon from "@shared/assets/icons/calendar-gray.svg";
 import type { Performance } from "@classic-hub/shared/types/client";
-import Modal, { useModal } from "@/shared/ui/modals/Modal";
+import Modal, { useModal } from "@/shared/ui/modal/Modal";
 import type { BookingLink } from "@classic-hub/shared/types/common";
 import RankChange from "./RankChange";
 import { First, Other, Second, Third } from "./Rank";

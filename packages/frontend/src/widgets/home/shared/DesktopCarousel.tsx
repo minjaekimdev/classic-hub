@@ -5,11 +5,11 @@ import { Swiper as SwiperType } from "swiper";
 import type { SwiperOptions } from "swiper/types"; // 타입 지원을 위해
 import leftArrow from "@shared/assets/icons/left-slidearrow-black.svg";
 import rightArrow from "@shared/assets/icons/right-slidearrow-black.svg";
-import type { HomePerformance } from "@classic-hub/shared/types/client";
+import type { PerformanceSummary } from "@classic-hub/shared/types/client";
 
 interface DesktopCarouselProps {
-  items: HomePerformance[];
-  renderItem: (item: HomePerformance) => React.ReactNode;
+  items: PerformanceSummary[];
+  renderItem: (item: PerformanceSummary) => React.ReactNode;
   breakpoints?: SwiperOptions["breakpoints"];
   slidesPerView?: number | "auto";
   spaceBetween?: number;

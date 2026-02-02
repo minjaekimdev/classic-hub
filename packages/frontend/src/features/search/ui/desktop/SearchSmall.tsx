@@ -1,5 +1,5 @@
 import searchIcon from "@shared/assets/icons/search-white.svg";
-import { useFilter, type FieldType } from "./SearchFilter";
+import { useSearch, type FieldType } from "./Search";
 
 const field: FieldType[] = ["지역", "가격", "날짜"];
 
@@ -8,7 +8,7 @@ interface FieldProps {
   onFilterClick: (isFilterActive: boolean) => void;
 }
 const Field = ({ field, onFilterClick }: FieldProps) => {
-  const { filterValue, openField } = useFilter();
+  const { searchValue, openField } = useSearch();
 
   return (
     <div
@@ -19,7 +19,7 @@ const Field = ({ field, onFilterClick }: FieldProps) => {
         onFilterClick(true);
       }}
     >
-      {filterValue[field] ? filterValue[field] : field}
+      {searchValue[field] ? searchValue[field] : field}
     </div>
   );
 };
@@ -27,10 +27,8 @@ const Field = ({ field, onFilterClick }: FieldProps) => {
 interface FilterDesktopSmallProps {
   onFilterClick: (isFilterActive: boolean) => void;
 }
-const FilterDesktopSmall = ({
-  onFilterClick,
-}: FilterDesktopSmallProps) => {
-  const { openField, filterValue } = useFilter();
+const SearchSmall = ({ onFilterClick }: FilterDesktopSmallProps) => {
+  const { openField, searchValue } = useSearch();
 
   return (
     <div
@@ -45,7 +43,7 @@ const FilterDesktopSmall = ({
           onFilterClick(true);
         }}
       >
-        {filterValue.검색어 ? filterValue.검색어 : "검색어"}
+        {searchValue.검색어 ? searchValue.검색어 : "검색어"}
       </div>
       {field.map((item) => (
         <div key={item} className="grow flex">
@@ -62,4 +60,4 @@ const FilterDesktopSmall = ({
   );
 };
 
-export default FilterDesktopSmall;
+export default SearchSmall;

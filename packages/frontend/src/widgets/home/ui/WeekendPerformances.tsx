@@ -6,10 +6,11 @@ import BaseCarousel from "../shared/DesktopCarousel";
 import calendarIcon from "@shared/assets/icons/calendar-red.svg";
 import HomePerformanceAlbumCard from "@/entities/performance/ui/desktop/HomePerformanceAlbumCard";
 import useWeekendPerformance from "@/entities/performance/api/hooks/use-weekend-performance";
+import { BREAKPOINTS } from "@/shared/constants";
 
 const WeekendPerformances = () => {
   const performanceArray = useWeekendPerformance();
-  const isMobile = useBreakpoint(960);
+  const isMobile = useBreakpoint(BREAKPOINTS.TABLET);
 
   const breakpoints = {
     1280: { slidesPerView: 5 },

@@ -1,24 +1,21 @@
-import type { filterCategoryObjType } from "../../types";
+import { useSearchMobile } from "../../hooks/SearchMobile";
 
 interface LocationComponentProps {
   main: string;
   sub: string;
-  selected: filterCategoryObjType;
-  onChange: (value: filterCategoryObjType) => void;
 }
 
 const LocationComponent = ({
   main,
   sub,
-  selected,
-  onChange,
 }: LocationComponentProps) => {
-  const style = main === selected.location ? "border-main bg-[#fef2f2]" : "";
+  const {filters, updateFilters} = useSearchMobile();
+  const style = main === filters.location ? "border-main bg-[#fef2f2]" : "";
   return (
     <div
       className={`flex flex-col border rounded-main p-[0.72rem] cursor-pointer ${style}`}
       onClick={() => {
-        onChange({ ...selected, location: main });
+        updateFilters({ ...filters, location: main });
       }}
     >
       <span className="text-[#101828] text-[0.77rem]/[1.09rem] font-medium">
@@ -56,15 +53,7 @@ const locationArray = [
   },
 ];
 
-interface LocationSelectMobileProps {
-  filterValue: filterCategoryObjType;
-  onChange: (value: filterCategoryObjType) => void;
-}
-
-const LocationSelectMobile = ({
-  filterValue,
-  onChange,
-}: LocationSelectMobileProps) => {
+const LocationSelectMobile = () => {
   return (
     <div className="grid grid-cols-2 gap-[0.44rem]">
       {locationArray.map((item) => (
@@ -72,8 +61,6 @@ const LocationSelectMobile = ({
           key={item.main}
           main={item.main}
           sub={item.sub}
-          selected={filterValue}
-          onChange={onChange}
         />
       ))}
     </div>

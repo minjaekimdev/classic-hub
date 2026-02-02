@@ -1,26 +1,22 @@
 import { Slider } from "@/shared/ui/shadcn/slider";
-import type { filterCategoryObjType } from "../../types";
-
-interface PriceRangeSliderProps {
-  filterValue: filterCategoryObjType;
-  onChange: (value: filterCategoryObjType) => void;
-}
+import { useSearchMobile } from "../../hooks/SearchMobile";
 
 const $MAX_PRICE = 50;
-const PriceRangeSlider = ({ filterValue, onChange }: PriceRangeSliderProps) => {
+const PriceRangeSlider = () => {
+  const {filters, updateFilters} = useSearchMobile();
   const setPriceRange = (range: number[]) => {
     const startPrice = `${range[0]}만`;
     const endPrice = range[1] >= 50 ? `${range[1]}만+` : `${range[1]}만`;
 
-    onChange({ ...filterValue, price: `${startPrice} - ${endPrice}` });
+    updateFilters({ ...filters, price: `${startPrice} - ${endPrice}` });
   };
 
   const getCurrentSliderValue = () => {
-    if (!filterValue.price) {
+    if (!filters.price) {
       return [0, 50];
     }
 
-    const [startPrice, endPrice] = filterValue.price
+    const [startPrice, endPrice] = filters.price
       .split(" - ")
       .map((item) => parseInt(item.replace("만+", "").replace("만", "").trim()));
 
@@ -35,7 +31,7 @@ const PriceRangeSlider = ({ filterValue, onChange }: PriceRangeSliderProps) => {
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-xs font-bold">가격 범위</h3>
           <span className="text-xs font-bold text-main">
-            {filterValue.price === "가격" ? "10 - 20만" : filterValue.price}
+            {filters.price === "가격" ? "10 - 20만" : filters.price}
           </span>
         </div>
         <Slider

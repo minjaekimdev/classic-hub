@@ -1,7 +1,7 @@
 import musicIcon from "@shared/assets/icons/musical-note-red.svg";
 import arrowIcon from "@shared/assets/icons/left-arrow-dark.svg";
 
-const HeaderDesktop = ({title}: {title: string}) => {
+const DetailHeader = ({title}: {title: string}) => {
   return (
     <header className="flex items-center justify-between px-7 h-14">
       <div className="flex items-center gap-[0.66rem]">
@@ -21,4 +21,4 @@ const HeaderDesktop = ({title}: {title: string}) => {
   );
 };
 
-export default HeaderDesktop;
+export default DetailHeader;

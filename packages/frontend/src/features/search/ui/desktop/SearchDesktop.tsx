@@ -1,14 +1,14 @@
-import { SearchFilter, useFilter } from "./SearchFilter";
 import locationIcon from "@shared/assets/icons/location-gray.svg";
 import moneyIcon from "@shared/assets/icons/dollar-gray.svg";
 import calendarIcon from "@shared/assets/icons/calendar-gray.svg";
 import PriceRangeSlider from "./PriceRangeSlider";
 import { DateSelect } from "./DateSelect";
 import searchIcon from "@shared/assets/icons/search-white.svg";
-import SearchFilterInput from "./SearchFilterInput";
-import SearchFilterField from "./SearchFilterField";
 import { Check } from "lucide-react";
 import { DropdownMenuItem } from "@/shared/ui/shadcn/dropdown-menu";
+import { Search, useSearch } from "./Search";
+import SearchInput from "./SearchInput";
+import SearchField from "./SearchField";
 
 const LOCATION_LIST = [
   "전체",
@@ -31,15 +31,13 @@ const LOCATION_LIST = [
   "제주",
 ];
 
-const SearchFilterDesktop = () => {
-  const { filterValue, changeValue } = useFilter();
+const SearchDesktop = () => {
+  const { searchValue, changeValue } = useSearch();
 
-  console.log(filterValue);
-  
   return (
     <div className="grid grid-cols-[2fr_1fr_1fr_1fr_auto] gap-[0.66rem] rounded-[0.875rem] border border-gray-200 bg-white shadow-xl p-[0.94rem] w-230 h-18">
-      <SearchFilterInput />
-      <SearchFilterField iconSrc={locationIcon} title="지역">
+      <SearchInput />
+      <SearchField iconSrc={locationIcon} title="지역">
         <div onClick={(e) => e.stopPropagation()}>
           {LOCATION_LIST.map((item) => (
             <DropdownMenuItem
@@ -48,36 +46,38 @@ const SearchFilterDesktop = () => {
               key={item}
             >
               <span>{item}</span>
-              {filterValue.지역 === item && <Check className="w-4 h-4 text-main" />}
+              {searchValue.지역 === item && (
+                <Check className="w-4 h-4 text-main" />
+              )}
             </DropdownMenuItem>
           ))}
         </div>
-      </SearchFilterField>
-      <SearchFilterField iconSrc={moneyIcon} title="가격">
+      </SearchField>
+      <SearchField iconSrc={moneyIcon} title="가격">
         <PriceRangeSlider />
-      </SearchFilterField>
-      <SearchFilterField iconSrc={calendarIcon} title="날짜">
+      </SearchField>
+      <SearchField iconSrc={calendarIcon} title="날짜">
         <div onClick={(e) => e.stopPropagation()}>
           <DateSelect />
-        </div> 
-      </SearchFilterField>
+        </div>
+      </SearchField>
       <div className="flex gap-3">
-        <SearchFilter.Reset>
+        <Search.Reset>
           <div className="p-[0.69rem_0.56rem] border border-gray-200 rounded-main bg-white text-[0.77rem] transition-transform duration-200 hover:scale-105">
             <div className="flex items-center gap-[0.44rem] w-fit">초기화</div>
           </div>
-        </SearchFilter.Reset>
-        <SearchFilter.Search>
+        </Search.Reset>
+        <Search.Apply>
           <div className="p-[0.69rem_0.56rem] rounded-main bg-main text-white text-[0.77rem] transition-transform duration-200 hover:scale-105">
             <div className="flex items-center gap-[0.44rem] w-fit">
               <img className="" src={searchIcon} alt="" />
               검색
             </div>
           </div>
-        </SearchFilter.Search>
+        </Search.Apply>
       </div>
     </div>
   );
 };
 
-export default SearchFilterDesktop;
+export default SearchDesktop;

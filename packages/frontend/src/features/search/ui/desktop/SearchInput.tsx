@@ -1,11 +1,11 @@
 import { useEffect, useRef } from "react";
 import searchIcon from "@shared/assets/icons/search-gray.svg";
-import { useFilter } from "./SearchFilter";
+import { useSearch } from "./Search";
 
-const SearchFilterInput = () => {
-  const { filterValue, activeField, changeValue, openField } = useFilter();
+const SearchInput = () => {
+  const { searchValue, activeField, changeValue, openField } = useSearch();
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    changeValue({ ...filterValue, 검색어: e.target.value });
+    changeValue({ ...searchValue, 검색어: e.target.value });
   };
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -23,7 +23,7 @@ const SearchFilterInput = () => {
         className="w-full text-[0.77rem] placeholder:text-[0.77rem] focus-visible:outline-none"
         type="text"
         placeholder="공연명, 아티스트명 등으로 검색해보세요!"
-        value={filterValue.검색어}
+        value={searchValue.검색어}
         onFocus={() => openField("검색어")}
         onChange={handleChange}
       />
@@ -31,4 +31,4 @@ const SearchFilterInput = () => {
   );
 };
 
-export default SearchFilterInput;
+export default SearchInput;
