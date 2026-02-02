@@ -8,7 +8,7 @@ import DetailMobile from "@/widgets/detail/mobile";
 import DetailDesktop from "@/widgets/detail/desktop";
 import MainLayout from "@/layout/shared/MainLayout";
 import { Toaster } from "sonner";
-import getPerformance from "@/features/performance/api/fetchers/get-performance-detail";
+import getPerformanceDetail from "@/entities/performance/api/fetchers/get-performance-detail";
 
 const DetailContext = createContext<DetailPerformance | null>(null);
 
@@ -27,7 +27,7 @@ export const useDetail = () => {
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   const { performanceId } = params;
 
-  const performance = await getPerformance(performanceId as unknown as string);
+  const performance = await getPerformanceDetail(performanceId as unknown as string);
 
   return performance;
 };

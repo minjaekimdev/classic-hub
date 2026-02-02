@@ -3,9 +3,9 @@ import Footer from "@/layout/shared/Footer";
 import HomeHeaderMobile from "../mobile/HomeHeaderMobile";
 import useHomeLayout from "../hooks/useHomeLayout";
 import Modal from "@/shared/ui/modals/Modal";
-import SearchFilterMobile from "@/features/filter/search/components/mobile/FilterMobile";
 import HeaderDesktop from "../desktop/HeaderDesktop";
 import FeedbackModal from "@/shared/ui/modals/FeedbackModal";
+import SearchFilterMobile from "@/features/search/ui/mobile/FilterMobile";
 
 const HomeLayout = ({ children }: { children: ReactNode }) => {
   const {

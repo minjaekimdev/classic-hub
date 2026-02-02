@@ -1,12 +1,12 @@
 import "swiper/css";
-import useRankingPerformance from "../../../features/performance/api/hooks/use-home-ranking-performance";
 import HomeSectionLayout from "../shared/HomeSectionLayout";
 import BaseCarousel from "../shared/DesktopCarousel";
 import rankingIcon from "@shared/assets/icons/ranking-red.svg";
-import HomePerformanceAlbumCard from "@/features/performance/ui/desktop/HomePerformanceAlbumCard";
+import HomePerformanceAlbumCard from "@/entities/performance/ui/desktop/HomePerformanceAlbumCard";
+import useHomeRankingPerformance from "@/entities/performance/api/hooks/use-home-ranking-performance";
 
 const RankingPerformances = () => {
-  const performanceArray = useRankingPerformance(10);
+  const performanceArray = useHomeRankingPerformance(10);
 
   const rankingBreakpoints = {
     600: { slidesPerView: 3.2 },

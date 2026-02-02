@@ -1,6 +1,6 @@
 import { type DateRange } from "react-day-picker";
-import { Calendar } from "@shared/ui/shadcn/calendar";
 import { useFilter } from "./SearchFilter";
+import { Calendar } from "@/shared/ui/shadcn/calendar";
 
 export function DateSelect() {
   const { filterValue, changeValue } = useFilter();

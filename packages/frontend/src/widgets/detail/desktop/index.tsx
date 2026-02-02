@@ -1,6 +1,6 @@
-import DetailImages from "@/features/performance/ui/shared/DetailImages";
+import DetailImages from "@/entities/performance/ui/shared/DetailImages";
 import SummaryDesktop from "./DetailTopSectionDesktop";
-import PriceInfoDesktop from "@/features/performance/ui/shared/DetailPriceInfo";
+import PriceInfoDesktop from "@/entities/performance/ui/shared/DetailPriceInfo";
 
 const DetailDesktop = () => {
   return (

@@ -1,4 +1,4 @@
-import { Slider } from "@shared/ui/shadcn/slider";
+import { Slider } from "@radix-ui/react-slider";
 import { useFilter } from "./SearchFilter";
 
 const $MAX_PRICE = 30;

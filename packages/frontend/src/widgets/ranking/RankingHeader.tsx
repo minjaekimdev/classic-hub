@@ -1,6 +1,6 @@
 import rankingIcon from "@shared/assets/icons/ranking-white.svg";
 import type { Period } from "@classic-hub/shared/types/client";
-import { PERIOD_LABEL } from "../../features/performance/constants/ranking-period-label";
+import { PERIOD_LABEL } from "@/entities/performance/constants/ranking-period-label";
 
 interface ToggleButtonProps {
   text: Period;

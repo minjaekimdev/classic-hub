@@ -61,6 +61,7 @@ const RegionItem = ({
           {region.venues.map((venue) => {
             return (
               <VenueItem
+                key={venue.id}
                 isSelected={selectedVenues.includes(venue.id)}
                 onToggleVenue={onToggleVenue}
                 venue={venue}

@@ -1,4 +1,4 @@
-import { Slider } from "@shared/ui/shadcn/slider";
+import { Slider } from "@/shared/ui/shadcn/slider";
 import type { filterCategoryObjType } from "../../types";
 
 interface PriceRangeSliderProps {

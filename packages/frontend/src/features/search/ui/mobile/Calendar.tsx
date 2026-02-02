@@ -1,8 +1,6 @@
-"use client";
-
 import { type DateRange } from "react-day-picker";
-import { Calendar } from "@shared/ui/shadcn/calendar";
 import type { filterCategoryObjType } from "../../types";
+import { Calendar } from "@/shared/ui/shadcn/calendar";
 
 interface CalendarProps {
   filterValue: filterCategoryObjType;

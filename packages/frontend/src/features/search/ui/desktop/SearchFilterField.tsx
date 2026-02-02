@@ -1,10 +1,7 @@
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@/shared/ui/shadcn/dropdown-menu";
+
 import bottomArrow from "@shared/assets/icons/bottom-arrow-gray.svg";
 import { useFilter, type FieldType } from "./SearchFilter";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/shared/ui/shadcn/dropdown-menu";
 
 interface FilterFieldProps {
   iconSrc: string;

@@ -1,7 +1,7 @@
-import { mapBasePerformance } from "@/features/performance/api/mappers/home-performance-mapper";
 import formatDateRange from "@/shared/utils/formatDateRange";
 import type { HomePerformance } from "@classic-hub/shared/types/client";
 import type { DBRankingWithDetails } from "@classic-hub/shared/types/database";
+import { mapBasePerformance } from "./home-performance-mapper";
 
 const mapToHomeRanking = (raw: DBRankingWithDetails): HomePerformance => {
   const [startDate, endDate] = raw.period.split("~");

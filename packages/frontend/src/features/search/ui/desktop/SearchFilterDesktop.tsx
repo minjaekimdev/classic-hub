@@ -2,13 +2,13 @@ import { SearchFilter, useFilter } from "./SearchFilter";
 import locationIcon from "@shared/assets/icons/location-gray.svg";
 import moneyIcon from "@shared/assets/icons/dollar-gray.svg";
 import calendarIcon from "@shared/assets/icons/calendar-gray.svg";
-import { DropdownMenuItem } from "@/shared/ui/shadcn/dropdown-menu";
 import PriceRangeSlider from "./PriceRangeSlider";
 import { DateSelect } from "./DateSelect";
 import searchIcon from "@shared/assets/icons/search-white.svg";
 import SearchFilterInput from "./SearchFilterInput";
 import SearchFilterField from "./SearchFilterField";
 import { Check } from "lucide-react";
+import { DropdownMenuItem } from "@/shared/ui/shadcn/dropdown-menu";
 
 const LOCATION_LIST = [
   "전체",

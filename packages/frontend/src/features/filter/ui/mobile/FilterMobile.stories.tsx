@@ -1,13 +1,17 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import FeedbackModal from './FeedbackModal';
+import ComponentName from './FilterMobile';
+import { fn } from 'storybook/test';
 
 const meta = {
-  title: 'features/modal/FeedbackModal',
-  component: FeedbackModal,
+  title: 'Features/Module/ComponentName',
+  component: ComponentName,
   tags: ['autodocs'],
   args: { 
+    isOpen: true,
+    onClose: fn(),
+    totalResultCount: 13,
   },
-} satisfies Meta<typeof FeedbackModal>;
+} satisfies Meta<typeof ComponentName>;
 
 export default meta;
 

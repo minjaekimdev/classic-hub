@@ -2,9 +2,12 @@ import Logo from "@/shared/ui/logos/Logo";
 import { useRef } from "react";
 import useClickOutside from "@/shared/hooks/useClickOutside";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { SearchFilter } from "@/features/filter/search/components/desktop/SearchFilter";
-import FilterDesktopSmall from "@/features/filter/search/components/desktop/FilterSmallDesktop";
-import SearchFilterDesktop from "@/features/filter/search/components/desktop/SearchFilterDesktop";
+import { SearchFilter } from "@/features/search/ui/desktop/SearchFilter";
+import SearchFilterDesktop from "@/features/search/ui/desktop/SearchFilterDesktop";
+import FilterDesktopSmall from "@/features/search/ui/desktop/FilterSmallDesktop";
+// import { SearchFilter } from "@/features/filter/search/components/desktop/SearchFilter";
+// import FilterDesktopSmall from "@/features/filter/search/components/desktop/FilterSmallDesktop";
+// import SearchFilterDesktop from "@/features/filter/search/components/desktop/SearchFilterDesktop";
 
 interface MenuItemProps {
   icon: string;

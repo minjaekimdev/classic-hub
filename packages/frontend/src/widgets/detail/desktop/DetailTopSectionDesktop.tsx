@@ -1,5 +1,5 @@
-import DetailMainInfo from "@/features/performance/ui/desktop/DetailMainInfoDesktop";
-import DetailPoster from "@/features/performance/ui/desktop/DetailPosterDesktop";
+import DetailMainInfo from "@/entities/performance/ui/desktop/DetailMainInfoDesktop";
+import DetailPoster from "@/entities/performance/ui/desktop/DetailPosterDesktop";
 
 const SummaryDesktop = () => {
   return (
