@@ -1,4 +1,4 @@
-import { Slider } from "@radix-ui/react-slider";
+import { Slider } from "@/shared/ui/shadcn/slider";
 import { useSearch } from "./Search";
 
 const $MAX_PRICE = 50;
@@ -38,6 +38,7 @@ const PriceRangeSlider = () => {
           </span>
         </div>
         <Slider
+          className="w-60 **:data-[slot='slider-range']:bg-main! **:data-[slot='slider-thumb']:border-main!"
           value={sliderValue}
           onValueChange={setPriceRange}
           min={0}
