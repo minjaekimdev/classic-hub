@@ -31,9 +31,6 @@ const HomeLayoutDesktopProvider = ({
   const { ref, isIntersecting: isScrollZero } = useIntersectionObserver();
 
   const [isActive, setIsActive] = useState(false);
-  // const handleFilterClick = () => {
-  //   setIsActive(true);
-  // };
 
   const expand = () => {
     setIsActive(true);
