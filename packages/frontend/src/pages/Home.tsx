@@ -2,21 +2,20 @@ import { Toaster } from "sonner";
 import WeekendPerformances from "@/widgets/home/ui/WeekendPerformances";
 import RankingPerformances from "@/widgets/home/ui/RankingPerformances";
 import useBreakpoint from "@/shared/hooks/useBreakpoint";
-import { BREAKPOINTS } from "@/shared/constants";
 import FeedbackModal from "@/features/feedback/FeedbackModal";
 import Modal from "@/shared/ui/modal/Modal";
-import Footer from "@/layout/shared/Footer";
 import HomeLayoutMobile from "@/layout/mobile/HomeLayoutMobile";
-import HomeLayoutDesktop from "@/layout/desktop/HomeLayoutDesktop";
+import HomeLayoutDesktop from "@/layout/desktop/LayoutDesktop";
+import LayoutDesktop from "@/layout/desktop/LayoutDesktop";
 
 const LayoutSwitcher = ({ children }: { children: React.ReactNode }) => {
-  const isMobile = useBreakpoint(BREAKPOINTS.TABLET);
+  const isMobile = useBreakpoint(740);
 
   if (!isMobile) {
     return (
-      <HomeLayoutDesktop>
+      <LayoutDesktop variant="home">
         <HomeLayoutDesktop.Wrapper>{children}</HomeLayoutDesktop.Wrapper>
-      </HomeLayoutDesktop>
+      </LayoutDesktop>
     );
   }
   return <HomeLayoutMobile>{children}</HomeLayoutMobile>;
@@ -31,7 +30,6 @@ const Home = () => {
         <RankingPerformances />
         <WeekendPerformances />
       </LayoutSwitcher>
-      <Footer />
     </Modal>
   );
 };

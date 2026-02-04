@@ -5,7 +5,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Search } from "@/features/search/ui/desktop/Search";
 import SearchDesktop from "@/features/search/ui/desktop/SearchDesktop";
 import SearchSmall from "@/features/search/ui/desktop/SearchSmall";
-import { useHomeLayoutDesktop } from "./HomeLayoutDesktop";
+import { useLayoutDesktop } from "@/layout/desktop/LayoutDesktop";
 
 interface MenuItemProps {
   icon: string;
@@ -103,9 +103,8 @@ const HeaderAuthButton = () => {
   );
 };
 
-
 const HeaderDesktop = () => {
-  const {isExpand, expand, shrink} = useHomeLayoutDesktop();
+  const { isExpand, expand, shrink } = useLayoutDesktop();
   const headerRef = useRef<HTMLDivElement>(null);
 
   // 헤더의 외부를 클릭하면 축소

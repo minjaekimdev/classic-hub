@@ -1,12 +1,10 @@
 import { useState } from "react";
-import Header from "../layout/desktop/HeaderDesktop";
-import Footer from "@/layout/shared/Footer";
+import Header from "../widgets/shared/HeaderDesktop";
+import Footer from "@/widgets/shared/ui/Footer";
 import Modal from "@/shared/ui/modal/Modal";
 import ResultFilterDesktop from "@/features/filter/ui/desktop/FilterDesktop";
 import useBreakpoint from "@/shared/hooks/useBreakpoint";
-import type {
-  PerformanceSummary,
-} from "@classic-hub/shared/types/client";
+import type { PerformanceSummary } from "@classic-hub/shared/types/client";
 import FilterMobile from "@/features/filter/ui/mobile/FilterMobile";
 import ResultPerformanceAlbumCard from "@/entities/performance/ui/desktop/ResultPerformanceAlbumCard";
 import PerformanceListCard from "@/entities/performance/ui/mobile/PerformanceListCard";
@@ -140,13 +138,12 @@ const ResultDesktop = ({ isOpen }: ResultDesktopProps) => {
 
 const DesktopLayout = () => {
   const [isHeaderExpand, setIsHeaderExpand] = useState(false);
-
-}
+};
 
 // const ResultContext = createContext<DetailPerformance[] | null>(null);
 
 const Result = () => {
-  const {is}
+  const { is };
 
   // 필터 버튼 클릭시 열고닫는 핸들러
   const toggleFilter = () => {
@@ -170,14 +167,13 @@ const Result = () => {
   //   location,
   //   minPrice,
   //   maxPrice,
-  //   startDate, 
+  //   startDate,
   //   endDate,
   // });
 
   return (
     // <ResultContext.Provider value={performances}>
     <Modal>
-
       <Header isExpand={isHeaderExpand} onFilterClick={headerToggle} />
       <ResultHeader count={24} isOpen={isFilterOpen} onClick={toggleFilter} />
       {isHeaderExpand && (

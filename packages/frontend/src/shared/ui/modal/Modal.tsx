@@ -67,7 +67,7 @@ export const useModal = () => {
 const ModalTrigger = ({ children }: { children: React.ReactNode }) => {
   const { open } = useModal();
 
-  return <div onClick={open}>{children}</div>;
+  return <div className="shrink-0" onClick={open}>{children}</div>;
 };
 
 interface ModalRootProps {

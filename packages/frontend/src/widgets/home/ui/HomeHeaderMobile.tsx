@@ -1,10 +1,8 @@
 import BottomSheet from "@/shared/ui/bottom-sheet/BottomSheet";
 import Logo from "@/shared/ui/logos/Logo";
 import searchIcon from "@shared/assets/icons/search-gray.svg";
-import useHomeLayoutMobile from "../hooks/useHomeLayoutMobile";
 
-const HomeHeaderMobile = () => {
-  const { isScrollZero } = useHomeLayoutMobile();
+const HomeHeaderMobile = ({ isScrollZero }: { isScrollZero: boolean }) => {
   return (
     <header className="fixed top-0 z-20 flex flex-col justify-center w-full px-[1.09rem] py-6 bg-[#f3f3f3]">
       <div className="flex flex-col gap-4 items-center">
