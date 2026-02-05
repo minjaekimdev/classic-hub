@@ -2,7 +2,7 @@ import type { SortType } from "@/features/filter/types/filter";
 import { useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 
-const useParams = () => {
+const useQueryParams = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const filters = useMemo(
@@ -27,4 +27,4 @@ const useParams = () => {
   };
 };
 
-export default useParams;
+export default useQueryParams;

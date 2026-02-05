@@ -3,8 +3,8 @@ import type {
   Period,
   RankingPerformance,
 } from "@classic-hub/shared/types/client";
-import { PERIOD_LABEL } from "@/entities/performance/constants/ranking-period-label";
-import RankingItem from "@/entities/performance/ui/shared/RankItem";
+import { PERIOD_LABEL } from "@/features/performance/constants/ranking-period-label";
+import RankingItem from "@/features/performance/ui/shared/RankItem";
 
 interface RankingListProps {
   period: Period;

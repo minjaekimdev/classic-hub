@@ -1,5 +1,5 @@
-import ResultPerformanceAlbumCard from "@/entities/performance/ui/desktop/ResultPerformanceAlbumCard";
-import PerformanceListCard from "@/entities/performance/ui/mobile/PerformanceListCard";
+import ResultPerformanceAlbumCard from "@/features/performance/ui/desktop/ResultPerformanceAlbumCard";
+import PerformanceListCard from "@/features/performance/ui/mobile/PerformanceListCard";
 import { useFilter, useResult } from "@/pages/Result";
 import { BREAKPOINTS } from "@/shared/constants";
 import useBreakpoint from "@/shared/hooks/useBreakpoint";

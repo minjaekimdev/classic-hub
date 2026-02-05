@@ -2,6 +2,7 @@ import App from "@/pages/App";
 import { loader as detailLoader, Detail } from "@/pages/Detail";
 import Home from "@/pages/Home";
 import Ranking from "@/pages/Ranking";
+import Result from "@/pages/Result";
 import { createBrowserRouter } from "react-router-dom";
 
 const router = createBrowserRouter([
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
         path: "detail/:performanceId",
         element: <Detail />,
       },
+      {
+        path: "result",
+        element: <Result />,
+      }
     ],
   },
 ]);

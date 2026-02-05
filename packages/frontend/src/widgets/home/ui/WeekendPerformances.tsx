@@ -4,8 +4,8 @@ import useBreakpoint from "@/shared/hooks/useBreakpoint";
 import HomeSectionLayout from "../shared/HomeSectionLayout";
 import BaseCarousel from "../shared/DesktopCarousel";
 import calendarIcon from "@shared/assets/icons/calendar-red.svg";
-import HomePerformanceAlbumCard from "@/entities/performance/ui/desktop/HomePerformanceAlbumCard";
-import useWeekendPerformance from "@/entities/performance/api/hooks/use-weekend-performance";
+import HomePerformanceAlbumCard from "@/features/performance/ui/desktop/HomePerformanceAlbumCard";
+import useWeekendPerformance from "@/features/performance/api/hooks/use-weekend-performance";
 import { BREAKPOINTS } from "@/shared/constants";
 
 const WeekendPerformances = () => {

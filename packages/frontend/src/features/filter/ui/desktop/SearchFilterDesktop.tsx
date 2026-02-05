@@ -11,27 +11,7 @@ import SearchField from "./SearchFilterFieldDesktop";
 import SearchDesktop, {
   useSearchFilterDesktop,
 } from "../../contexts/SearchFilterDesktop";
-
-const LOCATION_LIST = [
-  "전체",
-  "서울",
-  "경기",
-  "인천",
-  "부산",
-  "대구",
-  "광주",
-  "대전",
-  "울산",
-  "세종",
-  "강원",
-  "충북",
-  "충남",
-  "전북",
-  "전남",
-  "경북",
-  "경남",
-  "제주",
-];
+import { LOCATION_LIST } from "../../constants/category-list";
 
 const SearchFilterDesktop = () => {
   const { searchValue, changeValue } = useSearchFilterDesktop();

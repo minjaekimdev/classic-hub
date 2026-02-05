@@ -1,4 +1,4 @@
-import { SORT_MAP } from "../../constants/mock-region";
+import { SORT_MAP } from "../../constants/mockup-data";
 import { useFilterParams } from "../../hooks/useFilterParams";
 import type { SortType } from "../../types/filter";
 import CategoryHeader from "./FilterCategoryHeader";

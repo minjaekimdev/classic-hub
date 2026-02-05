@@ -1,11 +1,10 @@
 // import DetailImages from "@/features/performance/ui/shared/DetailImages";
 // import PriceInfoDesktop from "@/features/performance/ui/shared/DetailPriceInfo";
 // import DetailVenueInfo from "@/features/performance/ui/shared/DetailVenueInfo";
-import DetailImages from "@/entities/performance/ui/shared/DetailImages";
-import PriceInfoDesktop from "@/entities/performance/ui/shared/DetailPriceInfo";
-import DetailVenueInfo from "@/entities/performance/ui/shared/DetailVenueInfo";
+import DetailImages from "@/features/performance/ui/shared/DetailImages";
+import PriceInfoDesktop from "@/features/performance/ui/shared/DetailPriceInfo";
+import DetailVenueInfo from "@/features/performance/ui/shared/DetailVenueInfo";
 import { useState } from "react";
-
 
 interface TabProps {
   text: CategoryType;

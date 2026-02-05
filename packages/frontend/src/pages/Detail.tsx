@@ -6,7 +6,7 @@ import useBreakpoint from "@/shared/hooks/useBreakpoint";
 import DetailMobile from "@/widgets/detail/mobile";
 import DetailDesktop from "@/widgets/detail/desktop";
 import { Toaster } from "sonner";
-import getPerformanceDetail from "@/entities/performance/api/fetchers/get-performance-detail";
+import getPerformanceDetail from "@/features/performance/api/fetchers/get-performance-detail";
 import BookingModal from "@/features/booking/BookingModal";
 import { BREAKPOINTS } from "@/shared/constants";
 import LayoutDesktop from "@/layout/desktop/LayoutDesktop";

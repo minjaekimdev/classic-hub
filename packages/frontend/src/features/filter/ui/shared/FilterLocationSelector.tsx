@@ -2,7 +2,7 @@ import CategoryLayout from "./FilterCategoryLayout";
 import locationIcon from "@shared/assets/icons/location-black.svg";
 import CategoryHeader from "./FilterCategoryHeader";
 import RegionItem from "./FilterRegionItem";
-import { MOCK_REGIONS } from "../../constants/mock-region";
+import { MOCK_REGIONS } from "../../constants/mockup-data";
 import { useFilterParams } from "../../hooks/useFilterParams";
 import { useState } from "react";
 

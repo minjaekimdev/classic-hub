@@ -77,7 +77,7 @@ const SearchFilterDesktopProvider = ({ children }: SearchFilterDesktopProviderPr
     }
 
     const queryString = params.toString();
-    navigate(queryString ? `/results?${queryString}` : "/results");
+    navigate(queryString ? `/result?${queryString}` : "/result");
   };
 
   const openField = (field: FieldType) => {
