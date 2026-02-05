@@ -1,25 +1,18 @@
-import type { SearchCategory } from "../../types";
-import { useSearchMobile } from "../../hooks/SearchMobile";
+import { useSearchFilterMobile } from "../../contexts/SearchFilterMobile";
+import { LABEL_TO_KEY } from "../../types/search-filter";
 
-interface FilterFieldProps {
+interface SearchFilterFieldMobileProps {
   iconSrc: string;
   label: string;
   subtitle: string;
 }
 
-const LABEL_TO_KEY: Record<string, keyof SearchCategory> = {
-  검색어: "keyword",
-  지역: "location",
-  날짜: "date",
-  가격대: "price",
-};
-
-const SearchFieldMobile = ({
+const SearchFilterFieldMobile = ({
   iconSrc,
   label,
   subtitle,
-}: FilterFieldProps) => {
-  const {filters, changeActiveCategory} = useSearchMobile();
+}: SearchFilterFieldMobileProps) => {
+  const { filters, changeActiveCategory } = useSearchFilterMobile();
   const categoryKey = LABEL_TO_KEY[label];
   return (
     <div
@@ -46,4 +39,4 @@ const SearchFieldMobile = ({
   );
 };
 
-export default SearchFieldMobile;
+export default SearchFilterFieldMobile;

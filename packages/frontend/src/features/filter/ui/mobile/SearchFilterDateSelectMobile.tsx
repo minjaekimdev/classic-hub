@@ -1,9 +1,9 @@
 import { type DateRange } from "react-day-picker";
 import { Calendar } from "@/shared/ui/shadcn/calendar";
-import { useSearchMobile } from "../../hooks/SearchMobile";
+import { useSearchFilterMobile } from "../../contexts/SearchFilterMobile";
 
 export function Calendar05() {
-  const {filters, updateFilters} = useSearchMobile();
+  const { filters, updateFilters } = useSearchFilterMobile();
   let calendarDateRange: DateRange | undefined;
   const isValidDateRange = /^\d{4}\/\d{2}\/\d{2} - \d{4}\/\d{2}\/\d{2}$/.test(
     filters.date,

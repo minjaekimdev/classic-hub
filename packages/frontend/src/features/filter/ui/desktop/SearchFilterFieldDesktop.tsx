@@ -1,5 +1,5 @@
 import bottomArrow from "@shared/assets/icons/bottom-arrow-gray.svg";
-import { useSearch, type FieldType } from "./Search";
+import { useSearchFilterDesktop, type FieldType } from "../../contexts/SearchFilterDesktop";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,8 +11,8 @@ interface FilterFieldProps {
   title: FieldType;
   children: React.ReactNode;
 }
-const SearchField = ({ iconSrc, title, children }: FilterFieldProps) => {
-  const { searchValue, activeField, openField, closeField } = useSearch();
+const SearchFilterField = ({ iconSrc, title, children }: FilterFieldProps) => {
+  const { searchValue, activeField, openField, closeField } = useSearchFilterDesktop();
   const isOpen = title === activeField;
   const titleColor = searchValue[title] ? "000" : "text-[#867e7c]";
 
@@ -50,4 +50,4 @@ const SearchField = ({ iconSrc, title, children }: FilterFieldProps) => {
   );
 };
 
-export default SearchField;
+export default SearchFilterField;

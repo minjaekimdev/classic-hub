@@ -1,10 +1,10 @@
-interface FilterFieldHeaderMobileProps {
+interface SearchFilterFieldHeaderMobile {
   fieldName: string | null;
 }
 
-const FilterFieldHeaderMobile = ({
+const SearchFilterFieldHeaderMobile = ({
   fieldName,
-}: FilterFieldHeaderMobileProps) => {
+}: SearchFilterFieldHeaderMobile) => {
   return (
     <div className="flex justify-between items-center">
       <h3 className="text-[#101828] text-[0.88rem]/[1.31rem] font-medium">
@@ -15,4 +15,4 @@ const FilterFieldHeaderMobile = ({
   );
 };
 
-export default FilterFieldHeaderMobile;
+export default SearchFilterFieldHeaderMobile;

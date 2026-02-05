@@ -2,9 +2,9 @@ import Logo from "@/shared/ui/logos/Logo";
 import { useRef } from "react";
 import useClickOutside from "@/shared/hooks/useClickOutside";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Search } from "@/features/search/ui/desktop/Search";
-import SearchDesktop from "@/features/search/ui/desktop/SearchDesktop";
-import SearchSmall from "@/features/search/ui/desktop/SearchSmall";
+import { Search } from "@/features/search/contexts/SearchDesktop";
+import SearchDesktop from "@/features/search/ui/desktop/SearchFilterDesktop";
+import SearchSmall from "@/features/search/ui/desktop/SearchFilterSmall";
 import { useLayoutDesktop } from "@/layout/desktop/LayoutDesktop";
 
 interface MenuItemProps {

@@ -1,5 +1,4 @@
 import { useCallback, useState, type ReactNode } from "react";
-
 import { createContext, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -12,7 +11,7 @@ const INITIAL_Search_VALUE: SearchValue = {
   날짜: "",
 };
 
-export interface SearchContextType {
+export interface SearchFilterDesktopContextType {
   searchValue: SearchValue;
   activeField: FieldType | null;
   changeValue: (value: Partial<SearchValue>) => void;
@@ -23,13 +22,13 @@ export interface SearchContextType {
 }
 
 // eslint-disable-next-line react-refresh/only-export-components
-export const SearchContext = createContext<SearchContextType | null>(null);
+export const SearchFilterDesktopContext = createContext<SearchFilterDesktopContextType | null>(null);
 
-interface SearchProviderProps {
+interface SearchFilterDesktopProviderProps {
   children: ReactNode;
 }
 
-const SearchProvider = ({ children }: SearchProviderProps) => {
+const SearchFilterDesktopProvider = ({ children }: SearchFilterDesktopProviderProps) => {
   const [searchValue, setSearchValue] =
     useState<SearchValue>(INITIAL_Search_VALUE);
   const [activeField, setActiveField] = useState<FieldType | null>(null);
@@ -91,7 +90,7 @@ const SearchProvider = ({ children }: SearchProviderProps) => {
 
   // activeField가 null이 아니면 특정 field가 클릭(활성화)되었다는 의미
   return (
-    <SearchContext
+    <SearchFilterDesktopContext
       value={{
         searchValue,
         activeField,
@@ -103,37 +102,39 @@ const SearchProvider = ({ children }: SearchProviderProps) => {
       }}
     >
       {children}
-    </SearchContext>
+    </SearchFilterDesktopContext>
   );
 };
 
 // eslint-disable-next-line react-refresh/only-export-components
-export const useSearch = () => {
-  const context = useContext(SearchContext);
+export const useSearchFilterDesktop = () => {
+  const context = useContext(SearchFilterDesktopContext);
   if (!context) {
     throw new Error("useSearch must be used within SearchProvider");
   }
   return context;
 };
 
-const SearchReset = ({ children }: { children: ReactNode }) => {
-  const { reset } = useSearch();
+const SearchFilterReset = ({ children }: { children: ReactNode }) => {
+  const { reset } = useSearchFilterDesktop();
   return <button onClick={reset}>{children}</button>;
 };
 
-const SearchApply = ({ children }: { children: ReactNode }) => {
-  const { search } = useSearch();
+const SearchFilterApply = ({ children }: { children: ReactNode }) => {
+  const { search } = useSearchFilterDesktop();
   return <button onClick={search}>{children}</button>;
 };
 
-interface SearchRootProps {
+interface SearchFilterRootProps {
   children: ReactNode;
 }
-const SearchRoot = ({ children }: SearchRootProps) => {
-  return <SearchProvider>{children}</SearchProvider>;
+const SearchRoot = ({ children }: SearchFilterRootProps) => {
+  return <SearchFilterDesktopProvider>{children}</SearchFilterDesktopProvider>;
 };
 
-export const Search = Object.assign(SearchRoot, {
-  Reset: SearchReset,
-  Apply: SearchApply,
+const SearchDesktop = Object.assign(SearchRoot, {
+  Reset: SearchFilterReset,
+  Apply: SearchFilterApply,
 });
+
+export default SearchDesktop;

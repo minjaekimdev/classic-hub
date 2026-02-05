@@ -1,10 +1,10 @@
 import { SORT_MAP } from "../../constants/mock-region";
 import { useFilterParams } from "../../hooks/useFilterParams";
-import type { SortType } from "../../types";
-import CategoryHeader from "./CategoryHeader";
-import CategoryLayout from "./CategoryLayout";
+import type { SortType } from "../../types/filter";
+import CategoryHeader from "./FilterCategoryHeader";
+import CategoryLayout from "./FilterCategoryLayout";
 
-const SortSelector = () => {
+const FilterSortSelector = () => {
   const { filters, handleSortChange } = useFilterParams();
   return (
     <CategoryLayout>
@@ -29,4 +29,4 @@ const SortSelector = () => {
   );
 };
 
-export default SortSelector;
+export default FilterSortSelector;

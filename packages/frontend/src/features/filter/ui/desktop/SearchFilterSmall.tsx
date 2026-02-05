@@ -1,5 +1,5 @@
 import searchIcon from "@shared/assets/icons/search-white.svg";
-import { useSearch, type FieldType } from "./Search";
+import { useSearchFilterDesktop, type FieldType } from "../../contexts/SearchFilterDesktop";
 
 const field: FieldType[] = ["지역", "가격", "날짜"];
 
@@ -8,7 +8,7 @@ interface FieldProps {
   onFilterClick: (isFilterActive: boolean) => void;
 }
 const Field = ({ field, onFilterClick }: FieldProps) => {
-  const { searchValue, openField } = useSearch();
+  const { searchValue, openField } = useSearchFilterDesktop();
 
   return (
     <div
@@ -24,11 +24,11 @@ const Field = ({ field, onFilterClick }: FieldProps) => {
   );
 };
 
-interface FilterDesktopSmallProps {
+interface SearchFilterSmallProps {
   onFilterClick: (isFilterActive: boolean) => void;
 }
-const SearchSmall = ({ onFilterClick }: FilterDesktopSmallProps) => {
-  const { openField, searchValue } = useSearch();
+const SearchFilterSmall = ({ onFilterClick }: SearchFilterSmallProps) => {
+  const { openField, searchValue } = useSearchFilterDesktop();
 
   return (
     <div
@@ -60,4 +60,4 @@ const SearchSmall = ({ onFilterClick }: FilterDesktopSmallProps) => {
   );
 };
 
-export default SearchSmall;
+export default SearchFilterSmall;

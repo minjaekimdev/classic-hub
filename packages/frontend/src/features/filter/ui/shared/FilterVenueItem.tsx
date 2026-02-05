@@ -1,8 +1,8 @@
 import { Check } from "lucide-react";
-import type { Venue } from "../../types";
+import type { Venue } from "../../types/filter";
 import { useFilterParams } from "../../hooks/useFilterParams";
 
-const VenueItem = ({ venue }: { venue: Venue }) => {
+const FilterVenueItem = ({ venue }: { venue: Venue }) => {
   const { filters, handleVenueToggle } = useFilterParams();
   const isSelected = filters.selectedVenues.includes(venue.id);
   const checkStyle = isSelected
@@ -29,4 +29,4 @@ const VenueItem = ({ venue }: { venue: Venue }) => {
   );
 };
 
-export default VenueItem;
+export default FilterVenueItem;

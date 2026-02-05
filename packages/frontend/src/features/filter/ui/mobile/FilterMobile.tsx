@@ -1,26 +1,18 @@
 import { X } from "lucide-react";
-import LocationSelector from "../shared/LocationSelector";
-import SortSelector from "../shared/SortSelector";
+import LocationSelector from "../shared/FilterLocationSelector";
+import SortSelector from "../shared/FilterSortSelector";
 import { useFilterParams } from "../../hooks/useFilterParams";
+import { useFilterUI } from "../../contexts/FilterUIContext";
 
-interface FilterBottomSheetProps {
-  isOpen: boolean;
-  onClose: () => void;
-  totalResultCount: number; // 1. 검색된 공연 결과 개수
-}
-
-const FilterMobile = ({
-  isOpen,
-  onClose,
-  totalResultCount,
-}: FilterBottomSheetProps) => {
+const FilterMobile = () => {
   const { resetFilters } = useFilterParams();
+  const { isOpen, close } = useFilterUI();
 
   // 5. 결과보기 (적용 및 닫기)
   const handleApply = () => {
     // 여기에 실제 필터 적용 로직(API 호출 등) 추가
     // console.log({ selectedSort, selectedVenues });
-    onClose();
+    close();
   };
 
   return (
@@ -30,7 +22,7 @@ const FilterMobile = ({
           {/* Backdrop, 화면 전체를 덮는 반투명 검정 레이어를 만듦 */}
           <div
             className="fixed inset-0 bg-black/50 z-(--z-modal-overlay) transition-opacity"
-            onClick={onClose}
+            onClick={close}
           />
 
           {/* Bottom Sheet Container */}
@@ -43,7 +35,7 @@ const FilterMobile = ({
               </h2>
               {/* 닫기 버튼(X) */}
               <button
-                onClick={onClose}
+                onClick={close}
                 className="p-1 hover:bg-gray-100 rounded-full"
               >
                 <X className="w-6 h-6 text-gray-500" />

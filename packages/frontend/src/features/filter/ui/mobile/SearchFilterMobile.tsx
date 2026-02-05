@@ -3,14 +3,14 @@ import calendarIcon from "@shared/assets/icons/calendar-purple.svg";
 import moneyIcon from "@shared/assets/icons/dollar-orange.svg";
 import searchWhite from "@shared/assets/icons/search-white.svg";
 import closeIcon from "@shared/assets/icons/close-gray.svg";
-import FilterFieldMobile from "./SearchFieldMobile";
-import LocationSelectMobile from "./LocationSelectMobile";
-import FilterSearchInputMobile from "./FilterSearchInputMobile";
-import FilterFieldContentMobile from "./SearchFieldContentMobile";
-import { Calendar05 } from "./Calendar";
-import PriceRangeSlider from "./PriceRangeSlider";
+import FilterFieldMobile from "./SearchFilterFieldMobile";
+import LocationSelectMobile from "./SearchFilterLocationSelectMobile";
+import FilterSearchInputMobile from "./SearchFilterInputMobile";
+import FilterFieldContentMobile from "./SearchFilterFieldContentMobile";
+import { Calendar05 } from "./SearchFilterDateSelectMobile";
+import PriceRangeSlider from "./SearchFilterPriceRangeSliderMobile";
 import { useBottomSheet } from "@/shared/ui/bottom-sheet/BottomSheet";
-import { useSearchMobile } from "../../hooks/SearchMobile";
+import { useSearchFilterMobile } from "../../contexts/SearchFilterMobile";
 
 const Header = () => {
   const { close } = useBottomSheet();
@@ -53,24 +53,20 @@ const filterFieldTitleArray = [
 ];
 
 const SearchFilterMobile = () => {
-  const {activeCategory, reset} = useSearchMobile();
+  const { activeCategory, reset } = useSearchFilterMobile();
   const showFieldContent = () => {
     if (activeCategory === "location") {
-      return (
-        <LocationSelectMobile
-        />
-      );
+      return <LocationSelectMobile />;
     } else if (activeCategory === "date") {
       return (
         <div className="border rounded-main border-[rgba(0,0,0,0.1)] p-[0.72rem]">
-          <Calendar05/>
+          <Calendar05 />
         </div>
       );
     } else if (activeCategory === "price") {
       return (
         <div className="bg-[#F9FAFB] rounded-main">
-          <PriceRangeSlider
-          />
+          <PriceRangeSlider />
         </div>
       );
     }
@@ -84,8 +80,7 @@ const SearchFilterMobile = () => {
       <div className="flex-none">
         <Header />
         <div className="border-b border-b-[rgba(0,0,0,0.1)] px-[1.31rem] py-[0.88rem]">
-          <FilterSearchInputMobile
-          />
+          <FilterSearchInputMobile />
         </div>
       </div>
       <div className="flex-1 overflow-y-auto">

@@ -10,7 +10,7 @@ import LayoutDesktop from "@/layout/desktop/LayoutDesktop";
 import FeedbackModal from "@/features/feedback/FeedbackModal";
 import PerformanceSection from "@/widgets/result/PerformanceSection";
 import FilterDesktop from "@/features/filter/ui/desktop/FilterDesktop";
-import Filter from "@/features/filter/hooks/useFilterParams";
+import FilterMobile from "@/features/filter/ui/mobile/FilterMobile";
 
 // 헤더의 Search Filter로 1차 검색된 결과물
 const MOCKUP_DATA: PerformanceSummary[] = [
@@ -104,7 +104,7 @@ const LayoutSwitcher = ({ children }: { children: React.ReactNode }) => {
     );
   } else {
     return (
-      <MainLayoutMobile bottomSheetContent={<FilterDesktop />}>
+      <MainLayoutMobile bottomSheetContent={<FilterMobile />}>
         {children}
       </MainLayoutMobile>
     );
@@ -119,11 +119,10 @@ const Result = () => {
         <BookingModal />
         <FeedbackModal />
         <Toaster />
-        <Filter>
-          <LayoutSwitcher>
-            <PerformanceSection />
-          </LayoutSwitcher>
-        </Filter>
+        <LayoutSwitcher>
+          <PerformanceSection />
+          <FilterDesktop />
+        </LayoutSwitcher>
       </Modal>
     </ResultContext.Provider>
   );

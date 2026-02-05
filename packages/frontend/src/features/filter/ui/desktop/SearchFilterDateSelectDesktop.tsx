@@ -1,9 +1,9 @@
 import { type DateRange } from "react-day-picker";
 import { Calendar } from "@/shared/ui/shadcn/calendar";
-import { useSearch } from "./Search";
+import { useSearchFilterDesktop } from "../../contexts/SearchFilterDesktop";
 
-export function DateSelect() {
-  const { searchValue, changeValue } = useSearch();
+export function SearchFilterDateSelectDesktop() {
+  const { searchValue, changeValue } = useSearchFilterDesktop();
 
   // 오늘 날짜 (시간 제거)
   const today = new Date();

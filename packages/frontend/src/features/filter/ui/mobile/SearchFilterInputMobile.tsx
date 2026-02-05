@@ -1,8 +1,8 @@
 import searchIcon from "@shared/assets/icons/search-gray.svg";
-import { useSearchMobile } from "../../hooks/SearchMobile";
+import { useSearchFilterMobile } from "../../contexts/SearchFilterMobile";
 
-const FilterSearchInputMobile = () => {
-  const { filters, updateFilters } = useSearchMobile();
+const SearchFilterInputMobile = () => {
+  const { filters, updateFilters } = useSearchFilterMobile();
   return (
     <div className="flex items-center gap-2 rounded-full border border-[#d1d5dc] bg-[#f3f3f5] p-[0.22rem_0.66rem] h-10 cursor-pointer">
       <img src={searchIcon} alt="" className="w-3.5 h-3.5" />
@@ -17,4 +17,4 @@ const FilterSearchInputMobile = () => {
   );
 };
 
-export default FilterSearchInputMobile;
+export default SearchFilterInputMobile;

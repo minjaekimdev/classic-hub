@@ -1,8 +1,8 @@
 import noteIcon from "@shared/assets/icons/musical-note-red.svg";
 import filterIcon from "@shared/assets/icons/filter-black.svg";
-import Sort from "../shared/SortSelector";
-import CategoryHeader from "../shared/CategoryHeader";
-import LocationSelector from "../shared/LocationSelector";
+import Sort from "../shared/FilterSortSelector";
+import CategoryHeader from "../shared/FilterCategoryHeader";
+import LocationSelector from "../shared/FilterLocationSelector";
 import { useFilterParams } from "../../hooks/useFilterParams";
 import { useFilterUI } from "../../contexts/FilterUIContext";
 

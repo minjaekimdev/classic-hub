@@ -2,7 +2,7 @@ import React from "react";
 import useHomeLayoutMobile from "../hooks/useHomeLayoutMobile";
 import BottomSheet from "@/shared/ui/bottom-sheet/BottomSheet";
 import SearchFilterMobile from "@/features/search/ui/mobile/SearchFilterMobile";
-import SearchMobile from "@/features/search/hooks/SearchMobile";
+import SearchMobile from "@/features/search/contexts/SearchMobile";
 import HomeHeaderMobile from "@/widgets/home/ui/HomeHeaderMobile";
 import Footer from "@/widgets/shared/ui/Footer";
 
@@ -17,7 +17,7 @@ const HomeLayoutMobile = ({ children }: { children: React.ReactNode }) => {
             <SearchFilterMobile />
           </SearchMobile>
         </BottomSheet.Wrapper>
-        <HomeHeaderMobile isScrollZero={isScrollZero}/>
+        <HomeHeaderMobile isScrollZero={isScrollZero} />
         <div ref={ref} className="h-1 bg-transparent"></div>
         <main className={`pt-6 pb-[6.12rem] ${marginTop}`}>{children}</main>
         <Footer />

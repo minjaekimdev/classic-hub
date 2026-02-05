@@ -1,12 +1,12 @@
-import CategoryLayout from "./CategoryLayout";
+import CategoryLayout from "./FilterCategoryLayout";
 import locationIcon from "@shared/assets/icons/location-black.svg";
-import CategoryHeader from "./CategoryHeader";
-import RegionItem from "./RegionItem";
+import CategoryHeader from "./FilterCategoryHeader";
+import RegionItem from "./FilterRegionItem";
 import { MOCK_REGIONS } from "../../constants/mock-region";
 import { useFilterParams } from "../../hooks/useFilterParams";
 import { useState } from "react";
 
-const LocationSelector = () => {
+const FilterLocationSelector = () => {
   const { filters } = useFilterParams();
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
 
@@ -44,4 +44,4 @@ const LocationSelector = () => {
   );
 };
 
-export default LocationSelector;
+export default FilterLocationSelector;

@@ -1,25 +1,8 @@
-import { useMemo } from "react";
-import { useSearchParams } from "react-router-dom";
-import type { SortType } from "../types";
+import type { SortType } from "../types/filter";
+import useSearch from "@/shared/hooks/useParams";
 
 export const useFilterParams = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  // 1. URL에서 값을 읽어와 객체로 변환 (Read)
-  const filters = useMemo(
-    () => ({
-      keyword: searchParams.get("keyword"),
-      location: searchParams.get("location"),
-      minPrice: searchParams.get("min_price"),
-      maxPrice: searchParams.get("max_price"),
-      startDate: searchParams.get("start_date"),
-      endDate: searchParams.get("end_date"),
-      sortBy: (searchParams.get("sort_by") as SortType) || "imminent",
-      // venue는 여러 개일 수 있으므로 배열로 관리
-      selectedVenues: searchParams.getAll("venue"), 
-    }),
-    [searchParams],
-  );
+  const { filters, searchParams, setSearchParams } = useSearch();
 
   // 2. URL을 업데이트하는 헬퍼 함수 (Write)
   const updateParams = (newParams: URLSearchParams) => {
@@ -43,13 +26,15 @@ export const useFilterParams = () => {
     newParams.delete("venue");
 
     if (venues.includes(venueId)) {
-        // 이미 있으면 걔만 빼고 다시 추가
-        venues.filter(v => v !== venueId).forEach(v => newParams.append("venue", v));
+      // 이미 있으면 걔만 빼고 다시 추가
+      venues
+        .filter((v) => v !== venueId)
+        .forEach((v) => newParams.append("venue", v));
     } else {
-        // 없으면 기존꺼 + 새거 추가
-        [...venues, venueId].forEach(v => newParams.append("venue", v));
+      // 없으면 기존꺼 + 새거 추가
+      [...venues, venueId].forEach((v) => newParams.append("venue", v));
     }
-    
+
     updateParams(newParams);
   };
 

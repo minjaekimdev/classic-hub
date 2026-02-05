@@ -1,7 +1,7 @@
 import { createContext, useContext, useState } from "react";
-import type { SearchCategory } from "../types";
+import type { SearchCategory } from "../types/search-filter";
 
-interface SearchMobileContextType {
+interface SearchFilterMobileContextType {
   filters: SearchCategory;
   activeCategory: keyof SearchCategory | null;
   updateFilters: (value: SearchCategory) => void;
@@ -9,10 +9,9 @@ interface SearchMobileContextType {
   reset: () => void;
 }
 
-const SearchMobileContext = createContext<SearchMobileContextType | null>(null);
+const SearchFilterMobileContext = createContext<SearchFilterMobileContextType | null>(null);
 
-const SearchMobileProvider = ({ children }: { children: React.ReactNode }) => {
-  // 검색어는 별도의 상태로 관리
+const SearchFilterMobileProvider = ({ children }: { children: React.ReactNode }) => {
   const [filters, setFilters] = useState<SearchCategory>({
     keyword: "",
     location: "",
@@ -40,32 +39,36 @@ const SearchMobileProvider = ({ children }: { children: React.ReactNode }) => {
 
   const changeActiveCategory = (value: keyof SearchCategory) => {
     setActiveCategory(value);
-  }
+  };
 
   return (
-    <SearchMobileContext.Provider
-      value={{ filters, activeCategory, updateFilters, changeActiveCategory, reset }}
+    <SearchFilterMobileContext.Provider
+      value={{
+        filters,
+        activeCategory,
+        updateFilters,
+        changeActiveCategory,
+        reset,
+      }}
     >
       {children}
-    </SearchMobileContext.Provider>
+    </SearchFilterMobileContext.Provider>
   );
 };
 
 // eslint-disable-next-line react-refresh/only-export-components
-export const useSearchMobile = () => {
-  const context = useContext(SearchMobileContext);
+export const useSearchFilterMobile = () => {
+  const context = useContext(SearchFilterMobileContext);
   if (!context) {
-    throw new Error("useSearchMobile should be used within a SearchMobileProvider.")
+    throw new Error(
+      "useSearchFilterMobile should be used within a SearchFilterMobileProvider.",
+    );
   }
   return context;
-}
+};
 
-const SearchMobile = ({children}: {children: React.ReactNode}) => {
-  return (
-    <SearchMobileProvider>
-      {children}
-    </SearchMobileProvider>
-  )
-}
+const SearchMobile = ({ children }: { children: React.ReactNode }) => {
+  return <SearchFilterMobileProvider>{children}</SearchFilterMobileProvider>;
+};
 
 export default SearchMobile;

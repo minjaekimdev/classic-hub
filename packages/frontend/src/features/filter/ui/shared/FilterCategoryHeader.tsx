@@ -1,9 +1,9 @@
-interface CategoryHeaderProps {
+interface FilterCategoryHeaderProps {
   iconSrc?: string;
   text: string;
 }
 
-const CategoryHeader = ({ iconSrc, text }: CategoryHeaderProps) => {
+const FilterCategoryHeader = ({ iconSrc, text }: FilterCategoryHeaderProps) => {
   return (
     <div className="flex items-center gap-[0.44rem]">
       {iconSrc && <img src={iconSrc} alt="필터 카테고리 헤더 아이콘" />}
@@ -14,4 +14,4 @@ const CategoryHeader = ({ iconSrc, text }: CategoryHeaderProps) => {
   );
 };
 
-export default CategoryHeader;
+export default FilterCategoryHeader;

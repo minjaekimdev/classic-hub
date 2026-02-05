@@ -1,20 +1,20 @@
 import { ChevronDown, ChevronUp } from "lucide-react";
-import VenueItem from "./VenueItem";
-import type { Region } from "../../types";
+import VenueItem from "./FilterVenueItem";
+import type { Region } from "../../types/filter";
 
-interface RegionItemProps {
+interface FilterRegionItemProps {
   region: Region;
   selectedRegion: string | null;
   selectedVenuesCount: number;
   handleRegionToggle: (region: string) => void;
 }
 
-const RegionItem = ({
+const FilterRegionItem = ({
   region,
   selectedRegion,
   selectedVenuesCount,
   handleRegionToggle,
-}: RegionItemProps) => {
+}: FilterRegionItemProps) => {
   const isExpanded = selectedRegion === region.id;
   return (
     <div key={region.id} className="bg-white">
@@ -64,4 +64,4 @@ const RegionItem = ({
   );
 };
 
-export default RegionItem;
+export default FilterRegionItem;

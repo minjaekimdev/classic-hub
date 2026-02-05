@@ -1,4 +1,4 @@
-import type { Region, SortType } from "../types";
+import type { Region, SortType } from "../types/filter";
 
 export const SORT_MAP: Record<SortType, string> = {
   imminent: "공연임박순",

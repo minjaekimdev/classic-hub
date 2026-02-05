@@ -1,15 +1,12 @@
-import { useSearchMobile } from "../../hooks/SearchMobile";
+import { useSearchFilterMobile } from "../../contexts/SearchFilterMobile";
 
 interface LocationComponentProps {
   main: string;
   sub: string;
 }
 
-const LocationComponent = ({
-  main,
-  sub,
-}: LocationComponentProps) => {
-  const {filters, updateFilters} = useSearchMobile();
+const LocationComponent = ({ main, sub }: LocationComponentProps) => {
+  const { filters, updateFilters } = useSearchFilterMobile();
   const style = main === filters.location ? "border-main bg-[#fef2f2]" : "";
   return (
     <div
@@ -57,11 +54,7 @@ const LocationSelectMobile = () => {
   return (
     <div className="grid grid-cols-2 gap-[0.44rem]">
       {locationArray.map((item) => (
-        <LocationComponent
-          key={item.main}
-          main={item.main}
-          sub={item.sub}
-        />
+        <LocationComponent key={item.main} main={item.main} sub={item.sub} />
       ))}
     </div>
   );
