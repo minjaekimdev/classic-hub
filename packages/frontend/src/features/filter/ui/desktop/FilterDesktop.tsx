@@ -1,48 +1,19 @@
 import noteIcon from "@shared/assets/icons/musical-note-red.svg";
 import filterIcon from "@shared/assets/icons/filter-black.svg";
 import Sort from "../shared/SortSelector";
-import useResultFilter from "../../hooks/useFilter";
 import CategoryHeader from "../shared/CategoryHeader";
-import type { Region } from "../../types";
 import LocationSelector from "../shared/LocationSelector";
-
-const MOCK_REGIONS: Region[] = [
-  {
-    id: "seoul",
-    name: "서울",
-    totalCount: 120,
-    venues: [
-      { id: "sac", name: "예술의전당", count: 45 },
-      { id: "lotte", name: "롯데콘서트홀", count: 30 },
-      { id: "sejong", name: "세종문화회관", count: 25 },
-      { id: "kumho", name: "금호아트홀", count: 20 },
-    ],
-  },
-  {
-    id: "gyeonggi",
-    name: "경기/인천",
-    totalCount: 45,
-    venues: [
-      { id: "seongnam", name: "성남아트센터", count: 15 },
-      { id: "artgy", name: "경기아트센터", count: 30 },
-    ],
-  },
-  {
-    id: "busan",
-    name: "부산",
-    totalCount: 12,
-    venues: [{ id: "busan_culture", name: "부산문화회관", count: 12 }],
-  },
-];
+import { useFilterParams } from "../../hooks/useFilterParams";
+import { useFilterUI } from "../../contexts/FilterUIContext";
 
 const FilterHeader = () => {
-  const { reset } = useResultFilter();
+  const { resetFilters } = useFilterParams();
   return (
     <div className="flex justify-between">
       <CategoryHeader iconSrc={filterIcon} text="필터" />
       <button
         className="flex items-center h-7 px-[0.66rem] text-dark text-[0.77rem]/[1.09rem]"
-        onClick={reset}
+        onClick={resetFilters}
       >
         초기화
       </button>
@@ -62,15 +33,8 @@ const Summary = () => {
   );
 };
 
-const FilterDesktop = ({ isOpen }: { isOpen: boolean }) => {
-  const {
-    sortBy,
-    selectedArea,
-    selectedVenues,
-    changeSort,
-    toggleRegion,
-    toggleVenue,
-  } = useResultFilter();
+const FilterDesktop = () => {
+  const { isOpen } = useFilterUI();
   return (
     <>
       {isOpen && (
@@ -80,14 +44,8 @@ const FilterDesktop = ({ isOpen }: { isOpen: boolean }) => {
           <Summary />
           {/* 구분선 */}
           <div className="bg-[rgba(0,0,0,0.1)] h-[0.06rem]"></div>
-          <Sort selectedSort={sortBy} handleSortChange={changeSort} />
-          <LocationSelector
-            regionArray={MOCK_REGIONS}
-            expandedRegion={selectedArea}
-            selectedVenues={selectedVenues}
-            onToggleRegion={toggleRegion}
-            onToggleVenue={toggleVenue}
-          />
+          <Sort />
+          <LocationSelector />
         </div>
       )}
     </>

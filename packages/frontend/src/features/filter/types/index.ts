@@ -11,3 +11,5 @@ export type Region = {
   totalCount: number; // 해당 지역 공연장들의 합산 개수
   venues: Venue[];
 };
+
+export type SortType = "imminent" | "price-low" | "price-high" | "alphabetical";

@@ -1,13 +1,10 @@
 import { Check } from "lucide-react";
 import type { Venue } from "../../types";
+import { useFilterParams } from "../../hooks/useFilterParams";
 
-interface VenueItemProps {
-  isSelected: boolean;
-  onToggleVenue: (venueId: string) => void;
-  venue: Venue;
-}
-
-const VenueItem = ({ isSelected, onToggleVenue, venue }: VenueItemProps) => {
+const VenueItem = ({ venue }: { venue: Venue }) => {
+  const { filters, handleVenueToggle } = useFilterParams();
+  const isSelected = filters.selectedVenues.includes(venue.id);
   const checkStyle = isSelected
     ? "bg-[#cc0000] border-[#cc0000]"
     : "bg-white border-gray-300";
@@ -15,7 +12,7 @@ const VenueItem = ({ isSelected, onToggleVenue, venue }: VenueItemProps) => {
   return (
     <div
       key={venue.id}
-      onClick={() => onToggleVenue(venue.id)}
+      onClick={() => handleVenueToggle(venue.id)}
       className="flex items-center justify-between cursor-pointer group"
     >
       <div className="flex items-center gap-3">

@@ -4,7 +4,15 @@ import SearchFilterMobile from "@/features/search/ui/mobile/SearchFilterMobile";
 import SearchMobile from "@/features/search/hooks/SearchMobile";
 import MainHeaderMobile from "../../widgets/shared/ui/MainHeaderMobile";
 
-const MainLayoutMobile = ({ children }: { children: React.ReactNode }) => {
+interface MainLayoutMobileProps {
+  children: React.ReactNode;
+  bottomSheetContent: React.ReactNode;
+}
+
+const MainLayoutMobile = ({
+  children,
+  bottomSheetContent,
+}: MainLayoutMobileProps) => {
   return (
     <>
       <BottomSheet>
@@ -13,6 +21,7 @@ const MainLayoutMobile = ({ children }: { children: React.ReactNode }) => {
           <SearchMobile>
             <SearchFilterMobile />
           </SearchMobile>
+          {bottomSheetContent}
         </BottomSheet.Wrapper>
         <MainHeaderMobile />
         <main>{children}</main>

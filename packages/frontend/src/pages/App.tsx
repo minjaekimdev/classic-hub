@@ -1,5 +1,4 @@
-import { Outlet } from "react-router-dom";
-// import ResultLayout from "@/pages/Result";
+// import { Outlet } from "react-router-dom";
 // import { Detail } from "./Detail";
 // import Ranking from "./Ranking";
 
@@ -11,8 +10,7 @@ const App = () => {
       {/* <Home/> */}
       {/* <Ranking /> */}
       {/* <Detail /> */}
-      {/* <ResultLayout /> */}
-      <Outlet />
+      {/* <Outlet /> */}
     </>
   );
 };

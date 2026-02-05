@@ -1,39 +1,7 @@
-// import { useState } from "react";
 import { X } from "lucide-react";
-import type { Region } from "../../types";
 import LocationSelector from "../shared/LocationSelector";
 import SortSelector from "../shared/SortSelector";
-import useFilter from "../../hooks/useFilter";
-
-// Mock Data (실제 데이터로 교체 필요)
-const MOCK_REGIONS: Region[] = [
-  {
-    id: "seoul",
-    name: "서울",
-    totalCount: 120,
-    venues: [
-      { id: "sac", name: "예술의전당", count: 45 },
-      { id: "lotte", name: "롯데콘서트홀", count: 30 },
-      { id: "sejong", name: "세종문화회관", count: 25 },
-      { id: "kumho", name: "금호아트홀", count: 20 },
-    ],
-  },
-  {
-    id: "gyeonggi",
-    name: "경기/인천",
-    totalCount: 45,
-    venues: [
-      { id: "seongnam", name: "성남아트센터", count: 15 },
-      { id: "artgy", name: "경기아트센터", count: 30 },
-    ],
-  },
-  {
-    id: "busan",
-    name: "부산",
-    totalCount: 12,
-    venues: [{ id: "busan_culture", name: "부산문화회관", count: 12 }],
-  },
-];
+import { useFilterParams } from "../../hooks/useFilterParams";
 
 interface FilterBottomSheetProps {
   isOpen: boolean;
@@ -46,15 +14,7 @@ const FilterMobile = ({
   onClose,
   totalResultCount,
 }: FilterBottomSheetProps) => {
-  const {
-    sortBy,
-    selectedArea,
-    selectedVenues,
-    changeSort,
-    toggleRegion,
-    toggleVenue,
-    reset,
-  } = useFilter();
+  const { resetFilters } = useFilterParams();
 
   // 5. 결과보기 (적용 및 닫기)
   const handleApply = () => {
@@ -93,24 +53,15 @@ const FilterMobile = ({
             {/* Scrollable Content */}
             <div className="flex-1 overflow-y-auto p-5 space-y-8 pb-24">
               {/* 2. 정렬 카테고리 */}
-              <SortSelector
-                selectedSort={sortBy}
-                handleSortChange={changeSort}
-              />
+              <SortSelector />
               {/* 3. 지역 · 공연장 카테고리 */}
-              <LocationSelector
-                regionArray={MOCK_REGIONS}
-                expandedRegion={selectedArea}
-                selectedVenues={selectedVenues}
-                onToggleRegion={toggleRegion}
-                onToggleVenue={toggleVenue}
-              />
+              <LocationSelector />
             </div>
 
             {/* Footer (Sticky) */}
             <div className="flex items-center gap-3 px-5 py-4 border-t border-gray-100 bg-white safe-area-bottom">
               <button
-                onClick={reset}
+                onClick={resetFilters}
                 className="flex items-center justify-center px-4 py-3.5 text-sm font-medium text-gray-500 hover:text-gray-800 transition-colors"
               >
                 <span className="mr-1">↺</span> 초기화

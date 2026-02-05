@@ -49,7 +49,9 @@ export const Detail = () => {
           <DetailMobile />
         ) : (
           <LayoutDesktop variant="main">
-            <DetailDesktop />
+            <LayoutDesktop.Wrapper>
+              <DetailDesktop />
+            </LayoutDesktop.Wrapper>
           </LayoutDesktop>
         )}
       </Modal>

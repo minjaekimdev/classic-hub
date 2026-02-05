@@ -1,42 +1,41 @@
 import CategoryLayout from "./CategoryLayout";
 import locationIcon from "@shared/assets/icons/location-black.svg";
 import CategoryHeader from "./CategoryHeader";
-import type { Region } from "../../types";
 import RegionItem from "./RegionItem";
+import { MOCK_REGIONS } from "../../constants/mock-region";
+import { useFilterParams } from "../../hooks/useFilterParams";
+import { useState } from "react";
 
-interface LocationHallProps {
-  regionArray: Region[];
-  expandedRegion: string | null;
-  selectedVenues: string[];
-  onToggleRegion: (regionId: string) => void;
-  onToggleVenue: (venueId: string) => void;
-}
+const LocationSelector = () => {
+  const { filters } = useFilterParams();
+  const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
 
-const LocationSelector = ({
-  regionArray,
-  expandedRegion,
-  selectedVenues,
-  onToggleRegion,
-  onToggleVenue,
-}: LocationHallProps) => {
+  const handleRegionToggle = (region: string) => {
+    // 이미 region이 선택된 경우, selectedRegion을 null로(아코디언 축소)
+    if (selectedRegion === region) {
+      setSelectedRegion(null);
+    } else {
+      // region이 선택되지 않은 경우, 선택
+      setSelectedRegion(region);
+    }
+  };
+
   return (
     <CategoryLayout>
       <CategoryHeader iconSrc={locationIcon} text="지역 · 공연장" />
       <div className="border border-gray-200 rounded-xl divide-y divide-gray-100 overflow-hidden">
-        {regionArray.map((region) => {
+        {MOCK_REGIONS.map((region) => {
           // 해당 지역 내 선택된 공연장 개수 계산 (UI 표시용)
-          const selectedInRegion = region.venues.filter((v) =>
-            selectedVenues.includes(v.id),
+          const selectedVenuesCount = region.venues.filter((v) =>
+            filters.selectedVenues.includes(v.id),
           ).length;
 
           return (
             <RegionItem
               region={region}
-              isExpanded={expandedRegion === region.id}
-              selectedInRegion={selectedInRegion}
-              selectedVenues={selectedVenues}
-              onToggleRegion={onToggleRegion}
-              onToggleVenue={onToggleVenue}
+              selectedRegion={selectedRegion}
+              selectedVenuesCount={selectedVenuesCount}
+              handleRegionToggle={handleRegionToggle}
             />
           );
         })}
