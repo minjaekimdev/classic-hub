@@ -69,11 +69,11 @@ const Bookmark = () => {
       <div className="grid grid-cols-1 gap-[1.31rem] tablet:grid-cols-2 desktop:grid-cols-3 large-desktop:grid-cols-4 mt-[1.37rem]">
         {performanceArray.map((item) => (
           <BookmarkPerformance
-            posterUrl={item.posterUrl}
-            name={item.name}
+            poster={item.posterUrl}
+            title={item.name}
             artist={item.artist}
-            date={item.date}
-            hall={item.hall}
+            period={item.date}
+            venue={item.hall}
           />
         ))}
       </div>

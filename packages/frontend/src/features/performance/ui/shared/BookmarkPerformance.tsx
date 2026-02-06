@@ -18,13 +18,14 @@ const Meta = ({ iconSrc, text }: MetaProps) => {
   );
 };
 
+type BookmarkPerformanceType = Pick<PerformanceSummary, "poster" | "title" | "artist" | "period" | "venue">
 const BookmarkPerformance = ({
   poster,
   title,
   artist,
   period,
   venue,
-}: PerformanceSummary) => {
+}: BookmarkPerformanceType) => {
   return (
     <div className="flex flex-col border border-[rgba(0,0,0,0.1)] rounded-[0.8rem] overflow-hidden bg-white w-full">
       <div
