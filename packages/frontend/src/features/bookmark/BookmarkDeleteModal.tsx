@@ -1,7 +1,7 @@
 import React from "react";
-import Modal from "./Modal";
 import alertIcon from "@shared/assets/icons/alert.svg";
 import ButtonGroup from "@/shared/ui/buttons/CancelConfirmButtons";
+import Modal from "@/shared/ui/modal/Modal";
 
 interface BookmarkDeleteModalProps {
   title: string;
@@ -17,12 +17,12 @@ const BookmarkDeleteModal: React.FC<BookmarkDeleteModalProps> = ({ title }) => {
             src={alertIcon}
             alt=""
           />
-          <h3 className="text-[#0a0a0a] text-[1.09rem]/[1.53rem] font-semibold">
+          <h3 className="text-dark text-[1.09rem]/[1.53rem] font-semibold">
             찜 목록에서 삭제하시겠습니까?
           </h3>
         </div>
         <p className="mt-[1.32rem] min-h-[2.62rem]">
-          <span className="text-[#0a0a0a] text-[0.88rem]/[1.31rem] font-medium">
+          <span className="text-dark text-[0.88rem]/[1.31rem] font-medium">
             "{title}"
           </span>
           <span className="text-[#717182] text-[0.88rem]/[1.31rem]">

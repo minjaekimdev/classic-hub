@@ -39,6 +39,7 @@
   },
   "include": ["src"],
   "exclude": [
-    "src/**/*.stories.tsx"
+    "src/**/*.stories.tsx",
+    "src/stories"
   ]
 }

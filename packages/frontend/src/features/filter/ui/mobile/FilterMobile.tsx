@@ -31,7 +31,7 @@ const FilterMobile = () => {
             <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
               <h2 className="text-lg font-bold text-gray-900">
                 필터{" "}
-                <span className="text-[#cc0000] ml-1">{totalResultCount}</span>
+                {/* <span className="text-[#cc0000] ml-1">{totalResultCount}</span> */}
               </h2>
               {/* 닫기 버튼(X) */}
               <button
@@ -62,7 +62,7 @@ const FilterMobile = () => {
                 onClick={handleApply}
                 className="flex-1 bg-[#cc0000] hover:bg-[#a30000] text-white text-base font-bold py-3.5 rounded-xl shadow-sm active:scale-[0.98] transition-all"
               >
-                결과 보기 ({totalResultCount})
+                {/* 결과 보기 ({totalResultCount}) */}
               </button>
             </div>
           </div>
