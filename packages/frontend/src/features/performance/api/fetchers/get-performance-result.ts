@@ -6,9 +6,13 @@ import type { SortType } from "@/features/filter/types/filter";
 type PerformanceRow = Database["public"]["Tables"]["performances"]["Row"];
 
 type PerformanceQuery = PostgrestFilterBuilder<
+  Database["__InternalSupabase"],
   Database["public"],
   PerformanceRow,
-  PerformanceRow[]
+  PerformanceRow[],
+  string,
+  unknown,
+  unknown
 >;
 
 interface SearchFilters {
