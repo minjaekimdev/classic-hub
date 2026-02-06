@@ -37,5 +37,8 @@
       // 기본 경로의 값이 src이기 때문에 paths 속성 경로 수정
     }
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": [
+    "src/**/*.stories.tsx"
+  ]
 }

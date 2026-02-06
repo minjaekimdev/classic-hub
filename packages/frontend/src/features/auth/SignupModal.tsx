@@ -1,21 +1,20 @@
-import Modal from "@/features/modal/Modal/Modal";
-import ModalHeader from "@/features/modal/ModalHeader";
-import FormField from "@/features/modal/FormField";
-import AuthButton from "../AuthButton";
-import OAuthButton from "../OAuthButton";
-import styles from "./SignupModal.module.scss";
+import Modal from "@/shared/ui/modal/Modal";
+import AuthButton from "./AuthButton";
+import OAuthButton from "./OAuthButton";
 import googleLogo from "@shared/assets/logos/google.svg";
+import ModalHeader from "@/shared/ui/modal/ModalHeader";
+import FormField from "@/shared/ui/modal/FormField";
 
 const SignupModal = () => {
   return (
     <div>
       <Modal>
-        <div className={styles.signupModal}>
+        <div className="flex flex-col gap-7">
           <ModalHeader
             main="회원가입"
             sub="ClassicHub 회원이 되어 다양한 공연을 즐겨보세요"
           />
-          <form className={styles.signupModal__content}>
+          <form className="flex flex-col gap-[0.88rem]">
             <FormField
               isSingleLine={true}
               type="text"
@@ -47,9 +46,11 @@ const SignupModal = () => {
               required={true}
             />
             <AuthButton>회원가입</AuthButton>
-            <div className={styles.or}>
-              <div className={styles.or__line}></div>
-              <span className={styles.or__text}>또는</span>
+            <div className="relative h-[0.88rem]">
+              <div className="absolute inset-y-0 my-auto w-full h-px bg-black/10"></div>
+              <span className="absolute inset-0 m-auto w-fit h-fit bg-white pl-[0.44rem] pr-[0.32rem] z-10 text-[#717182] text-[0.66rem] leading-[0.88rem]">
+                또는
+              </span>
             </div>
             <OAuthButton iconSrc={googleLogo}>Google로 회원가입</OAuthButton>
           </form>

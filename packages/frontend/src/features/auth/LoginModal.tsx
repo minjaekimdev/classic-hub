@@ -1,20 +1,19 @@
-import styles from "./LoginModal.module.scss";
-import ModalHeader from "@/features/modal/ModalHeader";
-import FormField from "@/features/modal/FormField";
-import Modal from "@/features/modal/Modal/Modal";
 import googleLogo from "@shared/assets/logos/google.svg";
-import AuthButton from "../AuthButton";
-import OAuthButton from "../OAuthButton";
+import AuthButton from "./AuthButton";
+import OAuthButton from "./OAuthButton";
+import Modal from "@/shared/ui/modal/Modal";
+import ModalHeader from "@/shared/ui/modal/ModalHeader";
+import FormField from "@/shared/ui/modal/FormField";
 
 const LoginModal = () => {
   return (
     <Modal>
-      <div className={styles.loginModal}>
+      <div className="flex flex-col gap-7">
         <ModalHeader
           main="로그인"
           sub="ClassicHub에 로그인하여 더 많은 기능을 이용하세요"
         />
-        <form className={styles.loginModal__content}>
+        <form className="flex flex-col gap-[0.88rem]">
           <FormField
             isSingleLine={true}
             id="email"
@@ -33,13 +32,15 @@ const LoginModal = () => {
             inputAreaHeight="1.53rem"
             required={true}
           />
-          <a href="#" className={styles.loginModal__forgotPassword}>
+          <a href="#" className="text-main text-[0.77rem] leading-[1.09rem]">
             비밀번호를 잊으셨나요?
           </a>
           <AuthButton>로그인</AuthButton>
-          <div className={styles.or}>
-            <div className={styles.or__line}></div>
-            <span className={styles.or__text}>또는</span>
+          <div className="relative h-[0.88rem]">
+            <div className="absolute inset-y-0 my-auto w-full h-px bg-black/10"></div>
+            <span className="absolute inset-0 m-auto w-fit h-fit bg-white pl-[0.44rem] pr-[0.32rem] z-10 text-[#717182] text-[0.66rem] leading-[0.88rem]">
+              또는
+            </span>
           </div>
           <OAuthButton iconSrc={googleLogo}>Google로 로그인</OAuthButton>
         </form>
