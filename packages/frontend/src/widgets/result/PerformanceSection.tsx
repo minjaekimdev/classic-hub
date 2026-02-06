@@ -1,6 +1,7 @@
+import { useFilterUI } from "@/features/filter/contexts/FilterUIContext";
 import ResultPerformanceAlbumCard from "@/features/performance/ui/desktop/ResultPerformanceAlbumCard";
 import PerformanceListCard from "@/features/performance/ui/mobile/PerformanceListCard";
-import { useFilter, useResult } from "@/pages/Result";
+import { useResult } from "@/pages/Result";
 import { BREAKPOINTS } from "@/shared/constants";
 import useBreakpoint from "@/shared/hooks/useBreakpoint";
 
@@ -17,7 +18,7 @@ const ResultMobile = () => {
 
 const ResultDesktop = () => {
   const data = useResult();
-  const { isFilterOpened } = useFilter();
+  const { isOpen } = useFilterUI();
 
   const isDesktop = useBreakpoint(1280);
   const isMobile = useBreakpoint(960);
@@ -25,7 +26,7 @@ const ResultDesktop = () => {
   let gridStyle;
   // 뷰포트 너비와 필터 열림 여부를 확인하여 그리드 열 개수 설정
   if (!isMobile && isDesktop) {
-    gridStyle = isFilterOpened ? "grid-cols-2" : "grid-cols-3";
+    gridStyle = isOpen ? "grid-cols-2" : "grid-cols-3";
   } else {
     gridStyle = "grid-cols-4";
   }

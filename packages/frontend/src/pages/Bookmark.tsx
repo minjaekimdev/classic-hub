@@ -1,8 +1,8 @@
 import BookmarkHeader from "@/features/bookmark/BookmarkHeader";
 import BookmarkSearchBox from "@/features/bookmark/BookmarkSearchBox";
 import BookmarkFilter from "@/features/bookmark/BookmarkFilter";
-import MainLayout from "@/layout/shared/MainLayout";
 import BookmarkPerformance from "@/features/performance/ui/shared/BookmarkPerformance";
+import LayoutDesktop from "@/layout/desktop/LayoutDesktop";
 
 const Bookmark = () => {
   // 추후 api 호출
@@ -58,7 +58,7 @@ const Bookmark = () => {
   ];
   const pfNum = 3;
   return (
-    <MainLayout>
+    <LayoutDesktop variant="main">
       <BookmarkHeader pfNum={pfNum} />
       <div className="mt-7">
         <BookmarkSearchBox />
@@ -77,7 +77,7 @@ const Bookmark = () => {
           />
         ))}
       </div>
-    </MainLayout>
+    </LayoutDesktop>
   );
 };
 

@@ -1,4 +1,3 @@
-// contexts/FilterUIContext.tsx
 // 필터의 열고닫힘 상태만 전역적으로 관리
 import { createContext, useContext, useState } from "react";
 

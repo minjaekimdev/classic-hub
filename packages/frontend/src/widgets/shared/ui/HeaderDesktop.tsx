@@ -2,10 +2,10 @@ import Logo from "@/shared/ui/logos/Logo";
 import { useRef } from "react";
 import useClickOutside from "@/shared/hooks/useClickOutside";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Search } from "@/features/search/contexts/SearchDesktop";
-import SearchDesktop from "@/features/search/ui/desktop/SearchFilterDesktop";
-import SearchSmall from "@/features/search/ui/desktop/SearchFilterSmall";
 import { useLayoutDesktop } from "@/layout/desktop/LayoutDesktop";
+import SearchDesktop from "@/features/filter/contexts/SearchFilterDesktop";
+import SearchFilterDesktop from "@/features/filter/ui/desktop/SearchFilterDesktop";
+import SearchFilterSmall from "@/features/filter/ui/desktop/SearchFilterSmall";
 
 interface MenuItemProps {
   icon: string;
@@ -127,22 +127,22 @@ const HeaderDesktop = () => {
             </div>
           </Link>
         </div>
-        <Search>
+        <SearchDesktop>
           {isExpand ? (
             <>
               <div className="flex justify-center mt-[1.87rem] mb-6">
                 <Menu />
               </div>
               <div className="flex justify-center mb-8">
-                <SearchDesktop />
+                <SearchFilterDesktop />
               </div>
             </>
           ) : (
             <div className="flex justify-center mt-4">
-              <SearchSmall onFilterClick={expand} />
+              <SearchFilterSmall onFilterClick={expand} />
             </div>
           )}
-        </Search>
+        </SearchDesktop>
         <div className="absolute top-7 right-7">
           <HeaderAuthButton />
         </div>

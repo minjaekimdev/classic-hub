@@ -1,4 +1,4 @@
-import { SORT_MAP } from "../../constants/mockup-data";
+import { SORT_MAP } from "../../constants/name-mapper";
 import { useFilterParams } from "../../hooks/useFilterParams";
 import type { SortType } from "../../types/filter";
 import CategoryHeader from "./FilterCategoryHeader";

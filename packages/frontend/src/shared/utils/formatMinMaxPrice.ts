@@ -1,4 +1,4 @@
-import type { Price } from "@classic-hub/shared/types/database";
+import type { Price } from "@classic-hub/shared/types/common";
 
 const formatMinMaxPrice = (price: Price[]) => {
 

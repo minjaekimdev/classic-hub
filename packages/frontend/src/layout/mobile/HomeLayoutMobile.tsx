@@ -1,10 +1,10 @@
 import React from "react";
 import useHomeLayoutMobile from "../hooks/useHomeLayoutMobile";
 import BottomSheet from "@/shared/ui/bottom-sheet/BottomSheet";
-import SearchFilterMobile from "@/features/search/ui/mobile/SearchFilterMobile";
-import SearchMobile from "@/features/search/contexts/SearchMobile";
 import HomeHeaderMobile from "@/widgets/home/ui/HomeHeaderMobile";
 import Footer from "@/widgets/shared/ui/Footer";
+import SearchMobile from "@/features/filter/contexts/SearchFilterMobile";
+import SearchFilterMobile from "@/features/filter/ui/mobile/SearchFilterMobile";
 
 const HomeLayoutMobile = ({ children }: { children: React.ReactNode }) => {
   const { ref, isScrollZero, marginTop } = useHomeLayoutMobile();
