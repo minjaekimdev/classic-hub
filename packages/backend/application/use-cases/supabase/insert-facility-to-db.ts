@@ -1,14 +1,7 @@
-// 전체 공연시설을 DB에 import하는 파일
-
-import { API_URL, SERVICE_KEY } from "@/infrastructure/external-api/kopis";
-import convert, { ElementCompact } from "xml-js";
-import { removeTextProperty } from "../services/preprocessor";
-import { Facility, FacilitySummary } from "@/models/kopis";
 import { insertData } from "@/infrastructure/database";
+import { Facility } from "@/models/kopis";
+import { DBFacility } from "@classic-hub/shared/types/database";
 import { withErrorHandling } from "utils/error";
-import { DBFacility, DBHall } from "@classic-hub/shared/types/database";
-import RateLimiter from "utils/rateLimiter";
-import { kopisFetcher } from "../services/kopis-fetcher";
 import logger from "utils/logger";
 
 // 공연장은 facilities 테이블에, 세부 공연장은 halls 테이블에 저장
@@ -79,60 +72,4 @@ const insertFacilityToDB = async (facilityDetail: Facility) => {
   );
 };
 
-// 공연시설 상세 조회
-const getFacilityDetail = async (mt10id: string) => {
-  return withErrorHandling(
-    async () => {
-      const parsedData = await kopisFetcher(
-        `${API_URL}/prfplc/${mt10id}?service=${SERVICE_KEY}`,
-      );
-
-      const result = removeTextProperty(parsedData.dbs.db);
-      return result as unknown as Facility;
-    },
-    () => {
-      logger.warn(`[FETCH_FAIL] facility detail fetch failed: ${mt10id}`);
-    },
-    "kopis",
-  );
-};
-
-// 공연시설 목록 조회
-const getFacilityAndInsertToDB = async () => {
-  let page = 1;
-
-  while (true) {
-    console.log(`page: ${page}`);
-    const parsedData = await kopisFetcher(
-      `${API_URL}/prfplc?service=${SERVICE_KEY}&cpage=${page++}&rows=100`,
-    );
-
-    // 배열로 구성된 공연장 목록 데이터(전처리 이전)
-    const rawArray = parsedData.dbs.db;
-    if (!rawArray) break;
-
-    // 데이터가 1개일 때 객체로 오는 경우 방어 코드
-    const facilityList = Array.isArray(rawArray) ? rawArray : [rawArray];
-
-    await Promise.all(
-      facilityList.map(async (item: any) => {
-        // 목록에서는 아직 _text가 남아있으므로 ._text로 접근
-        const mt10id = item.mt10id._text;
-
-        const facility = await KOPISrateLimiter.execute(() =>
-          getFacilityDetail(mt10id),
-        );
-
-        // null 체크: facility가 null이 아닐 때만 저장
-        if (facility) {
-          await insertFacilityToDB(facility);
-        }
-      }),
-    );
-  }
-};
-
-const KOPISrateLimiter = new RateLimiter(100);
-(async () => {
-  await getFacilityAndInsertToDB();
-})();
+export default insertFacilityToDB;

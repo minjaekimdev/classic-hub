@@ -36,7 +36,7 @@ jobs:
 
       # 4. 데이터 업데이트 스크립트 실행
       - name: Run daily tasks runner script
-        run: "npx tsx ./application/use-cases/update-ranking.ts"
+        run: "npx tsx ./infrastructure/jobs/update-ranking.ts"
         working-directory: ./packages/backend
 
         # 환경 변수 주입 방식은 동일합니다.
