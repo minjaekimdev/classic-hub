@@ -1,0 +1,6 @@
+# lefthook.yml
+pre-push:
+  commands:
+    check-build:
+      # Push 하기 전, 모든 패키지의 빌드 성공 여부를 확인
+      run: npx turbo run build
