@@ -1,0 +1,16 @@
+
+> client@0.0.0 build
+> tsc -b && vite build
+
+src/app/api/supabase-client.ts(16,1): error TS2304: Cannot find name 'ㅈㄷㄹ'.
+src/features/performance/api/hooks/use-weekend-performance.ts(45,65): error TS2345: Argument of type '{ age: string | null; area: string | null; booking_links: Json; cast: string | null; created_at: string; detail_image: Json; max_price: number | null; min_price: number | null; ... 12 more ...; venue_name: string | null; }' is not assignable to parameter of type 'DBPerformance'.
+  Types of property 'venue_id' are incompatible.
+    Type 'string | null' is not assignable to type 'string'.
+      Type 'null' is not assignable to type 'string'.
+npm error Lifecycle script `build` failed with error:
+npm error code 2
+npm error path /Users/MJKIM/Desktop/dev/project/classichub/classic-hub/packages/frontend
+npm error workspace client@0.0.0
+npm error location /Users/MJKIM/Desktop/dev/project/classichub/classic-hub/packages/frontend
+npm error command failed
+npm error command sh -c tsc -b && vite build
