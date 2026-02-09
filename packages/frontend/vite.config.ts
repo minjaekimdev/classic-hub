@@ -83,5 +83,8 @@ export default defineConfig({
   },
   esbuild: {
     keepNames: true,
-  }
+  },
+  build: {
+    sourcemap: true, 
+  },
 });
