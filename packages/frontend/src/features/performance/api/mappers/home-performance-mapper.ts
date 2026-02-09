@@ -17,7 +17,7 @@ export const mapBasePerformance = (
   price: formatMinMaxPrice(raw.price),
 });
 
-export const mapToHomePerformance = (
+export const mapToPerformance = (
   raw: DBPerformance,
 ): PerformanceSummary => {
   return {

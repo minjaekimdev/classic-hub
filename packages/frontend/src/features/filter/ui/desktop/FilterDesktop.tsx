@@ -38,7 +38,7 @@ const FilterDesktop = () => {
   return (
     <>
       {isOpen && (
-        <div className="flex flex-col gap-[1.31rem] border-l border-[rgba(0,0,0,0.1)] bg-white p-[1.31rem] w-70 h-view-minus-header overflow-y-auto overscroll-contain">
+        <div className="shrink-0 flex flex-col gap-[1.31rem] border-l border-[rgba(0,0,0,0.1)] bg-white p-[1.31rem] w-70 h-view-minus-header overflow-y-auto">
           <FilterHeader />
           {/* 검색된 공연 개수가 보여지는 영역 */}
           <Summary />

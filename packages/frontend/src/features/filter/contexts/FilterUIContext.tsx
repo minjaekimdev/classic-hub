@@ -5,7 +5,6 @@ interface FilterUIContextType {
   isOpen: boolean;
   open: () => void;
   close: () => void;
-  toggle: () => void;
 }
 
 const FilterUIContext = createContext<FilterUIContextType | null>(null);
@@ -19,10 +18,9 @@ export const FilterUIProvider = ({
 
   const open = () => setIsOpen(true);
   const close = () => setIsOpen(false);
-  const toggle = () => setIsOpen((prev) => !prev);
 
   return (
-    <FilterUIContext.Provider value={{ isOpen, open, close, toggle }}>
+    <FilterUIContext.Provider value={{ isOpen, open, close }}>
       {children}
     </FilterUIContext.Provider>
   );
