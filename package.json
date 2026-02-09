@@ -20,5 +20,10 @@
   "bugs": {
     "url": "https://github.com/minjaekimdev/classic-hub/issues"
   },
-  "homepage": "https://github.com/minjaekimdev/classic-hub#readme"
+  "homepage": "https://github.com/minjaekimdev/classic-hub#readme",
+  "devDependencies": {
+    "lefthook": "^2.1.0",
+    "turbo": "^2.8.3"
+  },
+  "packageManager": "npm@11.4.1"
 }
