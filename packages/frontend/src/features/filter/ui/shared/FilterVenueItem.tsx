@@ -4,15 +4,16 @@ import { useFilterParams } from "../../hooks/useFilterParams";
 
 const FilterVenueItem = ({ venue }: { venue: Venue }) => {
   const { filters, handleVenueToggle } = useFilterParams();
-  const isSelected = filters.selectedVenues.includes(venue.id);
+  const isSelected = filters.selectedVenues.includes(venue.name);
   const checkStyle = isSelected
     ? "bg-[#cc0000] border-[#cc0000]"
     : "bg-white border-gray-300";
   const textStyle = isSelected ? "text-gray-900 font-medium" : "text-gray-600";
+
   return (
     <div
-      key={venue.id}
-      onClick={() => handleVenueToggle(venue.id)}
+      key={venue.name}
+      onClick={() => handleVenueToggle(venue.name)}
       className="flex items-center justify-between cursor-pointer group"
     >
       <div className="flex items-center gap-3">
