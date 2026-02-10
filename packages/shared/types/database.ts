@@ -1,4 +1,4 @@
-import type { BookingLink, Price } from "./common";
+import type { BookingLink, Location, Price } from "./common";
 
 // 공연장 데이터
 export interface DBFacility {
@@ -71,13 +71,15 @@ export interface DBPerformance {
   performance_id: string; // 공연 id
   venue_id: string; // 공연시설 id
   performance_name: string;
-  area: string;
+  area: Location;
   period_from: string;
   period_to: string;
   venue_name: string;
   cast: string;
   runtime: string;
   age: string;
+  min_price: number;
+  max_price: number;
   price: Price[];
   poster: string;
   state: string;

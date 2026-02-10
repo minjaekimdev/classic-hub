@@ -1,9 +1,9 @@
-import type { PerformanceSummary } from "@classic-hub/shared/types/client";
+import type { DetailPerformance } from "@classic-hub/shared/types/client";
 import MetaData from "../shared/PerformanceMeta";
 import ResultPriceDisplay from "./ResultPriceDisplay";
 import BookmarkButton from "@/shared/ui/buttons/BookmarkButtonMobile";
 
-const ResultPerformanceAlbumCard = ({ data }: { data: PerformanceSummary }) => {
+const ResultPerformanceAlbumCard = ({ data }: { data: DetailPerformance }) => {
   return (
     <div className="flex flex-col gap-[0.66rem] cursor-pointer">
       <div className="relative rounded-main border border-[rgba(0,0,0,0.1)] overflow-hidden aspect-10/14">
@@ -21,8 +21,8 @@ const ResultPerformanceAlbumCard = ({ data }: { data: PerformanceSummary }) => {
         />
         <div className="flex justify-between items-center mt-4">
           <ResultPriceDisplay
-            minPrice={data.price.min}
-            maxPrice={data.price.max}
+            minPrice={data.minPrice}
+            maxPrice={data.maxPrice}
           />
           <button className="flex justify-center items-center rounded-button bg-main w-[2.45rem] h-[1.53rem] text-white text-[0.66rem]/[0.88rem] font-medium transition-scale hover:scale-105 ease-in-out duration-200">
             예매

@@ -5,7 +5,7 @@ import PerformanceListCard from "@/features/performance/ui/mobile/PerformanceLis
 import { BREAKPOINTS } from "@/shared/constants";
 import useBreakpoint from "@/shared/hooks/useBreakpoint";
 
-const ResultMobile = () => {
+const PerformancesMobile = () => {
   const data = useResult();
   return (
     <div className="flex flex-col gap-[0.88rem] w-full">
@@ -16,7 +16,7 @@ const ResultMobile = () => {
   );
 };
 
-const ResultDesktop = () => {
+const PerformancesDesktop = () => {
   const data = useResult();
   const { isOpen } = useFilterUI();
 
@@ -35,7 +35,7 @@ const ResultDesktop = () => {
       className={`flex-1 grid ${gridStyle} gap-[1.31rem] p-[0.88rem] overflow-y-auto h-result-content`}
     >
       {data.map((item) => (
-        <ResultPerformanceAlbumCard data={item} />
+        <ResultPerformanceAlbumCard key={item.id} data={item} />
       ))}
     </div>
   );
@@ -43,7 +43,7 @@ const ResultDesktop = () => {
 
 const PerformanceSection = () => {
   const isMobile = useBreakpoint(BREAKPOINTS.TABLET);
-  return <>{isMobile ? <ResultMobile /> : <ResultDesktop />}</>;
+  return <>{isMobile ? <PerformancesMobile /> : <PerformancesDesktop />}</>;
 };
 
 export default PerformanceSection;
