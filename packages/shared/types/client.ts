@@ -6,7 +6,8 @@ export interface Performance {
   poster: string;
   title: string;
   artist: string;
-  period: string;
+  startDate: string;
+  endDate: string;
   venue: string;
 }
 

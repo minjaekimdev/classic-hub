@@ -3,17 +3,17 @@ import filterIcon from "@shared/assets/icons/filter-black.svg";
 import Sort from "../shared/FilterSortSelector";
 import CategoryHeader from "../shared/FilterCategoryHeader";
 import LocationSelector from "../shared/FilterLocationSelector";
-import { useFilterParams } from "../../hooks/useFilterParams";
-import { useFilterUI } from "../../contexts/FilterUIContext";
+import { useFilter } from "../../contexts/filter-context";
+import { useResult } from "@/features/performance/contexts/result-context";
 
 const FilterHeader = () => {
-  const { resetFilters } = useFilterParams();
+  const { reset } = useFilter();
   return (
     <div className="flex justify-between">
       <CategoryHeader iconSrc={filterIcon} text="필터" />
       <button
         className="flex items-center h-7 px-[0.66rem] text-dark text-[0.77rem]/[1.09rem]"
-        onClick={resetFilters}
+        onClick={reset}
       >
         초기화
       </button>
@@ -22,10 +22,13 @@ const FilterHeader = () => {
 };
 
 const Summary = () => {
+  const { sortedPerformances } = useResult();
   return (
     <div className="flex flex-col gap-[0.44rem] rounded-main bg-[#f9fafb] px-[0.88rem] pt-[0.87rem] pb-[0.37rem]">
       <CategoryHeader iconSrc={noteIcon} text="검색 결과" />
-      <span className="text-main text-[1.31rem]/[1.75rem] font-bold">13개</span>
+      <span className="text-main text-[1.31rem]/[1.75rem] font-bold">
+        {sortedPerformances.length}개
+      </span>
       <span className="text-[#6a7282] text-[0.77rem]/[1.09rem]">
         클래식 공연
       </span>
@@ -34,11 +37,11 @@ const Summary = () => {
 };
 
 const FilterDesktop = () => {
-  const { isOpen } = useFilterUI();
+  const { isOpen } = useFilter();
   return (
     <>
       {isOpen && (
-        <div className="shrink-0 flex flex-col gap-[1.31rem] border-l border-[rgba(0,0,0,0.1)] bg-white p-[1.31rem] w-70 h-view-minus-header overflow-y-auto">
+        <div className="sticky top-desktop-header-shrinked shrink-0 flex flex-col gap-[1.31rem] border-l border-[rgba(0,0,0,0.1)] bg-white p-[1.31rem] w-70 h-main-content overflow-y-auto">
           <FilterHeader />
           {/* 검색된 공연 개수가 보여지는 영역 */}
           <Summary />

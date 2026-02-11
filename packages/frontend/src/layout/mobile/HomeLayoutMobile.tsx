@@ -3,7 +3,7 @@ import useHomeLayoutMobile from "../hooks/useHomeLayoutMobile";
 import BottomSheet from "@/shared/ui/bottom-sheet/BottomSheet";
 import HomeHeaderMobile from "@/widgets/home/ui/HomeHeaderMobile";
 import Footer from "@/widgets/shared/ui/Footer";
-import SearchMobile from "@/features/filter/contexts/SearchFilterMobile";
+import SearchMobile from "@/features/filter/contexts/search-mobile-context";
 import SearchFilterMobile from "@/features/filter/ui/mobile/SearchFilterMobile";
 
 const HomeLayoutMobile = ({ children }: { children: React.ReactNode }) => {

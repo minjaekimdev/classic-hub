@@ -1,9 +1,11 @@
 import filterIcon from "@shared/assets/icons/filter-dark.svg";
 import closeIcon from "@shared/assets/icons/close-white.svg";
-import { useFilterUI } from "@/features/filter/contexts/FilterUIContext";
+import { useFilter } from "@/features/filter/contexts/filter-context";
+import { useResult } from "@/features/performance/contexts/result-context";
 
 const ResultHeader = () => {
-  const {isOpen, open, close} = useFilterUI();
+  const { isOpen, open, close } = useFilter();
+  const { sortedPerformances } = useResult();
 
   const handleClick = () => {
     if (isOpen) {
@@ -11,9 +13,8 @@ const ResultHeader = () => {
     } else {
       open();
     }
-  }
+  };
 
-  const count = 13;
   const buttonStyle =
     "flex justify-center items-center gap-[0.44rem] rounded-button w-[5.26rem] h-[1.75rem] text-[0.77rem]/[1.09rem]";
 
@@ -21,7 +22,7 @@ const ResultHeader = () => {
     <div className="sticky z-70 top-desktop-header-shrinked border-b border-black/10">
       <div className="bg-white flex justify-between items-center max-w-7xl mx-auto h-[3.56rem] px-7">
         <span className="text-dark text-[0.88rem]/[1.31rem] font-semibold">
-          {count}개의 클래식 공연
+          {sortedPerformances.length}개의 클래식 공연
         </span>
         {isOpen ? (
           <button

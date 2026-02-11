@@ -1,5 +1,5 @@
 import searchIcon from "@shared/assets/icons/search-gray.svg";
-import { useSearchFilterMobile } from "../../contexts/SearchFilterMobile";
+import { useSearchFilterMobile } from "../../contexts/search-mobile-context";
 
 const SearchFilterInputMobile = () => {
   const { filters, updateFilters } = useSearchFilterMobile();

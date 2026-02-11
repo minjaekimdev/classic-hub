@@ -1,6 +1,7 @@
-import { useDetail } from "@/pages/Detail";
 import BookmarkButton from "@/shared/ui/buttons/BookmarkButtonWithText";
 import ShareButton from "@/shared/ui/buttons/ShareButtonWithText";
+import { useDetail } from "../../contexts/detail-context";
+import formatDateRange from "@/shared/utils/formatDateRange";
 
 interface InfoRowProps {
   label: string;
@@ -16,7 +17,8 @@ const InfoRow = ({ label, description }: InfoRowProps) => {
 };
 
 const SummaryMobile = () => {
-  const { title, artist, venue, period, time, runningTime } = useDetail();
+  const { title, artist, venue, startDate, endDate, time, runningTime } =
+    useDetail();
   return (
     <div className="flex flex-col gap-[0.81rem] p-[1.09rem]">
       <div className="flex flex-col gap-[0.22rem]">
@@ -27,13 +29,16 @@ const SummaryMobile = () => {
       </div>
       <ul className="flex flex-col gap-[0.41rem]">
         <InfoRow label="장소" description={venue} />
-        <InfoRow label="기간" description={period} />
+        <InfoRow
+          label="기간"
+          description={formatDateRange(startDate, endDate)}
+        />
         <InfoRow label="공연시간" description={time} />
         <InfoRow label="관람시간" description={runningTime} />
       </ul>
       <div className="flex gap-[0.66rem] h-10">
         <BookmarkButton />
-        <ShareButton/>
+        <ShareButton />
       </div>
     </div>
   );

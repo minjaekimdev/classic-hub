@@ -1,6 +1,6 @@
-import { useDetail } from "@/pages/Detail";
 import BookmarkButtonWithText from "@/shared/ui/buttons/BookmarkButtonWithText";
 import ShareButtonWithText from "@/shared/ui/buttons/ShareButtonWithText";
+import { useDetail } from "../../contexts/detail-context";
 
 const DetailPoster = () => {
   const {title, artist, poster} = useDetail();

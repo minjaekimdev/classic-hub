@@ -1,5 +1,4 @@
 import React from "react";
-import type { PerformanceSummary } from "@classic-hub/shared/types/client";
 import calendarIcon from "@shared/assets/icons/calendar-gray.svg";
 import locationIcon from "@shared/assets/icons/location-gray.svg";
 
@@ -17,11 +16,14 @@ const MetaItem = ({ iconSrc, children }: MetaItemProps) => {
   );
 };
 
-type MetaDataProps = Omit<
-  PerformanceSummary,
-  "id" | "rank" | "poster" | "price"
->;
-const PerformanceMeta = ({ title, artist, period, venue }: MetaDataProps) => {
+
+interface PerformanceMetaProps {
+  title: string;
+  artist: string;
+  period: string;
+  venue: string;
+}
+const PerformanceMeta = ({ title, artist, period, venue }: PerformanceMetaProps) => {
   return (
     <div className="flex flex-col gap-[0.66rem]">
       <div className="flex flex-col gap-[0.22rem]">
