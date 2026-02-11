@@ -2,8 +2,9 @@ import locationIcon from "@shared/assets/icons/location-gray2.svg";
 import calendarIcon from "@shared/assets/icons/calendar-gray2.svg";
 import clockIcon from "@shared/assets/icons/clock-gray2.svg";
 import timerIcon from "@shared/assets/icons/timer-gray2.svg";
-import { useDetail } from "@/pages/Detail";
 import DetailVenueInfo from "../shared/DetailVenueInfo";
+import formatDateRange from "@/shared/utils/formatDateRange";
+import { useDetail } from "../../contexts/detail-context";
 
 interface CategoryItem {
   iconSrc?: string;
@@ -34,7 +35,7 @@ const Separator = ({ marginY = "0.66rem" }: { marginY?: string }) => {
 };
 
 const DetailMainInfo = () => {
-  const { venue, period, time, runningTime, age } = useDetail();
+  const { venue, startDate, endDate, time, runningTime, age } = useDetail();
   const categories: CategoryItem[] = [
     {
       iconSrc: locationIcon,
@@ -44,7 +45,7 @@ const DetailMainInfo = () => {
     {
       iconSrc: calendarIcon,
       title: "공연기간",
-      content: period,
+      content: formatDateRange(startDate, endDate),
     },
     {
       iconSrc: clockIcon,

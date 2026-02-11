@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import BookmarkButtonMobile from "@/shared/ui/buttons/BookmarkButtonMobile";
 import BookmarkButtonDesktop from "@/shared/ui/buttons/BookmarkButtonDesktop";
 import PerformanceMeta from "../shared/PerformanceMeta";
+import formatDateRange from "@/shared/utils/formatDateRange";
 
 interface CardBadgeProps {
   children: React.ReactNode;
@@ -49,7 +50,7 @@ const HomePerformanceAlbumCard = ({ data }: { data: PerformanceSummary }) => {
           <PerformanceMeta
             title={data.title}
             artist={data.artist}
-            period={data.period}
+            period={formatDateRange(data.startDate, data.endDate)}
             venue={data.venue}
           />
           <div className="mt-3">

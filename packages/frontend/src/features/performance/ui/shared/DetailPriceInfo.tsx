@@ -1,7 +1,7 @@
 import Modal, { useModal } from "@/shared/ui/modal/Modal";
 import ticketIcon from "@shared/assets/icons/ticket-white.svg";
-import { useDetail } from "@/pages/Detail";
 import type { Price } from "@classic-hub/shared/types/common";
+import { useDetail } from "../../contexts/detail-context";
 
 interface ItemProps {
   seat: string;

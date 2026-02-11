@@ -1,7 +1,12 @@
 import type { DetailPerformance } from "@classic-hub/shared/types/client";
 import { createContext, useContext } from "react";
 
-export const ResultContext = createContext<DetailPerformance[] | null>(null);
+interface ResultContextType {
+  allPerformances: DetailPerformance[];
+  sortedPerformances: DetailPerformance[];
+}
+
+export const ResultContext = createContext<ResultContextType | null>(null);
 
 export const useResult = () => {
   const context = useContext(ResultContext);

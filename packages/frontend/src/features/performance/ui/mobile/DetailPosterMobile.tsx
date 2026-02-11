@@ -1,4 +1,4 @@
-import { useDetail } from "@/pages/Detail";
+import { useDetail } from "../../contexts/detail-context";
 
 const PosterMobile = () => {
   const { poster } = useDetail();

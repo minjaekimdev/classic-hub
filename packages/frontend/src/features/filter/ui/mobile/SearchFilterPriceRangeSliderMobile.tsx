@@ -1,5 +1,5 @@
 import { Slider } from "@/shared/ui/shadcn/slider";
-import { useSearchFilterMobile } from "../../contexts/SearchFilterMobile";
+import { useSearchFilterMobile } from "../../contexts/search-mobile-context";
 
 const $MAX_PRICE = 50;
 const SearchFilterMobilePriceRangeSlider = () => {

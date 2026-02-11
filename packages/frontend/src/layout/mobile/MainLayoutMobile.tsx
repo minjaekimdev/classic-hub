@@ -1,7 +1,7 @@
 import React from "react";
 import BottomSheet from "@/shared/ui/bottom-sheet/BottomSheet";
 import MainHeaderMobile from "../../widgets/shared/ui/MainHeaderMobile";
-import SearchMobile from "@/features/filter/contexts/SearchFilterMobile";
+import SearchMobile from "@/features/filter/contexts/search-mobile-context";
 import SearchFilterMobile from "@/features/filter/ui/mobile/SearchFilterMobile";
 
 interface MainLayoutMobileProps {

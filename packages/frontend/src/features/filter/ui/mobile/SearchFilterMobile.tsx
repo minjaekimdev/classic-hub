@@ -10,7 +10,7 @@ import FilterFieldContentMobile from "./SearchFilterFieldContentMobile";
 import { Calendar05 } from "./SearchFilterDateSelectMobile";
 import PriceRangeSlider from "./SearchFilterPriceRangeSliderMobile";
 import { useBottomSheet } from "@/shared/ui/bottom-sheet/BottomSheet";
-import { useSearchFilterMobile } from "../../contexts/SearchFilterMobile";
+import { useSearchFilterMobile } from "../../contexts/search-mobile-context";
 
 const Header = () => {
   const { close } = useBottomSheet();

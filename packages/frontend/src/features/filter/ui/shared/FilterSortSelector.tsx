@@ -1,5 +1,5 @@
 import { SORT_MAP } from "../../constants/name-mapper";
-import { useFilterParams } from "../../hooks/useFilterParams";
+import { useFilterParams } from "../../hooks/use-filter-params";
 import type { SortType } from "../../types/filter";
 import CategoryHeader from "./FilterCategoryHeader";
 import CategoryLayout from "./FilterCategoryLayout";

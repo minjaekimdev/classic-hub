@@ -2,27 +2,14 @@ import CategoryLayout from "./FilterCategoryLayout";
 import locationIcon from "@shared/assets/icons/location-black.svg";
 import CategoryHeader from "./FilterCategoryHeader";
 import RegionItem from "./FilterRegionItem";
-import { useFilterParams } from "../../hooks/useFilterParams";
-import { useState } from "react";
 import { useResult } from "@/features/performance/contexts/result-context";
 import useResultVenue from "../../hooks/use-result-venue";
+import { useFilter } from "../../contexts/filter-context";
 
 const FilterLocationSelector = () => {
-  const { filters } = useFilterParams();
-  const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
-  
-  const performances = useResult();
-  const venues = useResultVenue(performances);
-
-  const handleRegionToggle = (region: string) => {
-    // 이미 region이 선택된 경우, selectedRegion을 null로(아코디언 축소)
-    if (selectedRegion === region) {
-      setSelectedRegion(null);
-    } else {
-      // region이 선택되지 않은 경우, 선택
-      setSelectedRegion(region);
-    }
-  };
+  const { filters, openedRegion, handleRegionOpen } = useFilter();
+  const { allPerformances } = useResult();
+  const venues = useResultVenue(allPerformances);
 
   return (
     <CategoryLayout>
@@ -38,9 +25,9 @@ const FilterLocationSelector = () => {
             <RegionItem
               key={region.name}
               region={region}
-              selectedRegion={selectedRegion}
+              selectedRegion={openedRegion}
               selectedVenuesCount={selectedVenuesCount}
-              handleRegionToggle={handleRegionToggle}
+              handleRegionToggle={handleRegionOpen}
             />
           );
         })}
