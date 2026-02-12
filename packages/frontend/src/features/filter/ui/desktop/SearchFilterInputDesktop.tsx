@@ -6,12 +6,12 @@ const SearchInput = () => {
   const { searchValue, activeField, changeValue, openField } =
     useSearchFilterDesktop();
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    changeValue({ ...searchValue, 검색어: e.target.value });
+    changeValue({ ...searchValue, keyword: e.target.value });
   };
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (activeField === "검색어") {
+    if (activeField === "keyword") {
       inputRef.current?.focus();
     }
   }, [activeField]);
@@ -24,8 +24,8 @@ const SearchInput = () => {
         className="w-full text-[0.77rem] placeholder:text-[0.77rem] focus-visible:outline-none"
         type="text"
         placeholder="공연명, 아티스트명 등으로 검색해보세요!"
-        value={searchValue.검색어}
-        onFocus={() => openField("검색어")}
+        value={searchValue.keyword}
+        onFocus={() => openField("keyword")}
         onChange={handleChange}
       />
     </div>

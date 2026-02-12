@@ -2,20 +2,27 @@ import { useLayoutDesktop } from "@/layout/desktop/LayoutDesktop";
 import { useCallback, useState, type ReactNode } from "react";
 import { createContext, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import useQueryParams from "@/shared/hooks/useParams";
 
-export type FieldType = "검색어" | "지역" | "가격" | "날짜";
-export type SearchValue = Record<FieldType, string>;
-const INITIAL_Search_VALUE: SearchValue = {
-  검색어: "",
-  지역: "",
-  가격: "",
-  날짜: "",
-};
+export type FieldType =
+  | "keyword"
+  | "location"
+  | "price"
+  | "period";
+
+interface SearchValue {
+  keyword: string;
+  location: string;
+  minPrice: string;
+  maxPrice: string;
+  startDate: string;
+  endDate: string;
+}
 
 export interface SearchFilterDesktopContextType {
   searchValue: SearchValue;
-  activeField: FieldType | null;
-  changeValue: (value: Partial<SearchValue>) => void;
+  activeField: FieldType | null; // 현재 활성화된 카테고리 드롭다운 상태 저장
+  changeValue: (value: SearchValue) => void;
   reset: () => void;
   search: () => void;
   openField: (field: FieldType) => void;
@@ -33,52 +40,59 @@ interface SearchFilterDesktopProviderProps {
 const SearchFilterDesktopProvider = ({
   children,
 }: SearchFilterDesktopProviderProps) => {
-  const [searchValue, setSearchValue] =
-    useState<SearchValue>(INITIAL_Search_VALUE);
+  // URL 파라미터 가져온 뒤 검색 필터의 초기값으로 사용
+  const { filters } = useQueryParams();
+  const { keyword, location, minPrice, maxPrice, startDate, endDate } = filters;
+
+  // 확장 필터의 상태를 관리(초기값만 URL 파라미터와 동일)
+  const [searchValue, setSearchValue] = useState<SearchValue>({
+    keyword: keyword ? keyword : "",
+    location: location ? location : "",
+    minPrice: minPrice ? minPrice : "",
+    maxPrice: maxPrice ? maxPrice : "",
+    startDate: startDate ? startDate : "",
+    endDate: endDate ? endDate : "",
+  });
+
   const [activeField, setActiveField] = useState<FieldType | null>(null);
   const { shrink } = useLayoutDesktop();
   const navigate = useNavigate();
 
-  const changeValue = useCallback((value: Partial<SearchValue>) => {
-    setSearchValue((prev) => ({ ...prev, ...value }));
-    // value의 프로퍼티 키가 검색어라면, setActiveField(지역) ...
+  const changeValue = useCallback((value: SearchValue) => {
+    setSearchValue(value);
   }, []);
 
   const reset = () => {
-    setSearchValue(INITIAL_Search_VALUE);
+    setSearchValue({
+      keyword: "",
+      location: "",
+      minPrice: "",
+      maxPrice: "",
+      startDate: "",
+      endDate: "",
+    });
   };
 
   const search = () => {
-    const getUrlDate = (raw: string) => {
-      return raw.replaceAll("/", "-");
-    };
-    const getUrlPrice = (raw: string) => {
-      return String(parseFloat(raw.replace("만", "")) * 10000);
-    };
     const params = new URLSearchParams();
 
-    if (searchValue.검색어) {
-      params.append("keyword", searchValue.검색어);
+    if (searchValue.keyword) {
+      params.append("keyword", searchValue.keyword);
     }
-    if (searchValue.지역) {
-      params.append("location", searchValue.지역);
+    if (searchValue.location) {
+      params.append("location", searchValue.location);
     }
-    if (searchValue.가격) {
-      const [minPrice, maxPrice] = searchValue.가격.split(" - ");
-
-      params.append("min_price", getUrlPrice(minPrice));
-
-      // 가격 상한을 선택하지 않아 maxPrice가 "50만+"인 경우
-      if (!maxPrice.includes("+")) {
-        params.append("max_price", getUrlPrice(maxPrice));
-      }
+    if (searchValue.minPrice) {
+      params.append("minPrice", String(searchValue.minPrice));
     }
-    if (searchValue.날짜) {
-      const [startDate, endDate] = searchValue.날짜
-        .split(" - ")
-        .map(getUrlDate);
-      params.append("start_date", startDate);
-      params.append("end_date", endDate);
+    if (searchValue.maxPrice) {
+      params.append("maxPrice", String(searchValue.maxPrice));
+    }
+    if (searchValue.startDate) {
+      params.append("startDate", searchValue.startDate);
+    }
+    if (searchValue.endDate) {
+      params.append("endDate", searchValue.endDate);
     }
 
     const queryString = params.toString();

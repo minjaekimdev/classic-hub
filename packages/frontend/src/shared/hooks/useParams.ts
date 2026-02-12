@@ -9,11 +9,11 @@ const useQueryParams = () => {
     () => ({
       keyword: searchParams.get("keyword"),
       location: searchParams.get("location"),
-      minPrice: searchParams.get("min_price"),
-      maxPrice: searchParams.get("max_price"),
-      startDate: searchParams.get("start_date"),
-      endDate: searchParams.get("end_date"),
-      sortBy: (searchParams.get("sort_by") as SortType) || "imminent",
+      minPrice: searchParams.get("minPrice"),
+      maxPrice: searchParams.get("maxPrice"),
+      startDate: searchParams.get("startDate"),
+      endDate: searchParams.get("endDate"),
+      sortBy: (searchParams.get("sortBy") as SortType) || "imminent",
       // venue는 여러 개일 수 있으므로 배열로 관리
       selectedVenues: searchParams.getAll("venue"),
     }),

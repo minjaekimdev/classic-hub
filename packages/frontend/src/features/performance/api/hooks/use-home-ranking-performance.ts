@@ -1,7 +1,7 @@
 import supabase from "@/app/api/supabase-client";
 import type { PerformanceSummary } from "@classic-hub/shared/types/client";
 import { useEffect, useState } from "react";
-import mapToHomeRanking from "../mappers/home-ranking-mapper";
+import mapToHomeRanking from "../mappers/home-ranking.mapper";
 import type { DBRankingWithDetails } from "@classic-hub/shared/types/database";
 
 const useHomeRankingPerformance = (limit: number) => {

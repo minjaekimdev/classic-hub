@@ -5,7 +5,6 @@ import useBreakpoint from "@/shared/hooks/useBreakpoint";
 import FeedbackModal from "@/features/feedback/FeedbackModal";
 import Modal from "@/shared/ui/modal/Modal";
 import HomeLayoutMobile from "@/layout/mobile/HomeLayoutMobile";
-import HomeLayoutDesktop from "@/layout/desktop/LayoutDesktop";
 import LayoutDesktop from "@/layout/desktop/LayoutDesktop";
 
 const LayoutSwitcher = ({ children }: { children: React.ReactNode }) => {
@@ -14,7 +13,9 @@ const LayoutSwitcher = ({ children }: { children: React.ReactNode }) => {
   if (!isMobile) {
     return (
       <LayoutDesktop variant="home">
-        <HomeLayoutDesktop.Wrapper>{children}</HomeLayoutDesktop.Wrapper>
+        <LayoutDesktop.Wrapper hasPaddingTop={true}>
+          {children}
+        </LayoutDesktop.Wrapper>
       </LayoutDesktop>
     );
   }
