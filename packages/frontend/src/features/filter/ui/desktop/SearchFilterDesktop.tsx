@@ -21,26 +21,26 @@ const SearchFilterDesktop = () => {
   return (
     <div className="grid grid-cols-[2fr_1fr_1fr_1fr_auto] gap-[0.66rem] rounded-[0.875rem] border border-gray-200 bg-white shadow-xl p-[0.94rem] w-230 h-18">
       <SearchInput />
-      <SearchField iconSrc={locationIcon} title="지역">
+      <SearchField iconSrc={locationIcon} field="location">
         <div onClick={(e) => e.stopPropagation()}>
-          {areas.map((item) => (
+          {areas.map((area) => (
             <DropdownMenuItem
               className="text-xs cursor-pointer flex justify-between items-center"
-              onSelect={() => changeValue({ 지역: item })}
-              key={item}
+              onSelect={() => changeValue({ ...searchValue, location: area })}
+              key={area}
             >
-              <span>{item}</span>
-              {searchValue.지역 === item && (
+              <span>{area}</span>
+              {searchValue.location === area && (
                 <Check className="w-4 h-4 text-main" />
               )}
             </DropdownMenuItem>
           ))}
         </div>
       </SearchField>
-      <SearchField iconSrc={moneyIcon} title="가격">
+      <SearchField iconSrc={moneyIcon} field="price">
         <PriceRangeSlider />
       </SearchField>
-      <SearchField iconSrc={calendarIcon} title="날짜">
+      <SearchField iconSrc={calendarIcon} field="period">
         <div onClick={(e) => e.stopPropagation()}>
           <SearchFilterDateSelectDesktop />
         </div>

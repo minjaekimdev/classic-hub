@@ -20,7 +20,8 @@
   --spacing-result-header: calc(
     var(--spacing-desktop-header-shrinked) + 3.56rem
   );
-  --height-main-content: calc(100vh - var(--spacing-desktop-header-shrinked));
+  --height-main-desktop: calc(100vh - var(--spacing-desktop-header-shrinked));
+  --height-main-mobile: calc(100vh - var(--spacing-mobile-header-shrinked));
   --z-modal: 99;
   --z-modal-overlay: 90;
   --z-header: 80;

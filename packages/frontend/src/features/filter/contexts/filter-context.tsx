@@ -1,4 +1,5 @@
-// 필터의 열고닫힘 상태만 전역적으로 관리
+// 필터의 열고닫힘 상태를 전역적으로 관리
+
 import useQueryParams from "@/shared/hooks/useParams";
 import { createContext, useContext, useState } from "react";
 import type { Filter, SortType } from "../types/filter";
@@ -32,7 +33,7 @@ export const FilterProvider = ({
   const close = () => setIsOpen(false);
   const reset = () => {
     setOpenedRegion(null);
-    setSearchParams({ sort_by: "imminent" }); // 기본값으로 초기화
+    setSearchParams({ sortBy: "imminent" }); // 기본값으로 초기화
   };
 
   // 2. URL을 업데이트하는 헬퍼 함수 (Write)
@@ -44,7 +45,7 @@ export const FilterProvider = ({
   // 정렬 변경
   const handleSortSelect = (sortBy: SortType) => {
     const newParams = new URLSearchParams(searchParams);
-    newParams.set("sort_by", sortBy);
+    newParams.set("sortBy", sortBy);
     updateParams(newParams);
   };
 

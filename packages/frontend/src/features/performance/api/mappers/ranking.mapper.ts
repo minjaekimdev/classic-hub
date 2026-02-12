@@ -1,7 +1,7 @@
 import type { RankingPerformance } from "@classic-hub/shared/types/client";
 import type { DBRankingWithDetails } from "@classic-hub/shared/types/database";
 
-const mapToRanking = (raw: DBRankingWithDetails): RankingPerformance => ({
+const toRanking = (raw: DBRankingWithDetails): RankingPerformance => ({
   current_rank: raw.current_rank,
   last_rank: raw.last_rank,
   bookingLinks: raw.booking_links,
@@ -13,4 +13,4 @@ const mapToRanking = (raw: DBRankingWithDetails): RankingPerformance => ({
   venue: raw.venue_name,
 })
 
-export default mapToRanking;
+export default toRanking;

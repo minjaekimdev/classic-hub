@@ -3,24 +3,22 @@ import type { BookingLink, Location, Price as SeatPrice } from "./common";
 // 공통으로 사용되는 프로퍼티 모음
 export interface Performance {
   id: string;
-  poster: string;
   title: string;
+  poster: string;
   artist: string;
-  startDate: string;
-  endDate: string;
   venue: string;
-}
-
-// 공연 카드에서 최소 가격, 최대 가격 표시
-interface Price {
-  min: number;
-  max: number;
 }
 
 // 검색 결과 페이지 공연
 export interface PerformanceSummary extends Performance {
-  rank?: number;
-  price: Price;
+  minPrice: number;
+  maxPrice: number;
+  startDate: string;
+  endDate: string;
+}
+
+export interface RankingPerformanceHome extends PerformanceSummary {
+  rank: number;
 }
 
 // 랭킹 페이지 공연
@@ -28,6 +26,7 @@ export type Period = "daily" | "weekly" | "monthly";
 
 export interface RankingPerformance extends Performance {
   current_rank: number;
+  period: string;
   last_rank: number | null;
   bookingLinks: BookingLink[];
 }
@@ -43,6 +42,8 @@ export interface DetailPerformance extends Performance {
   area: Location;
   minPrice: number;
   maxPrice: number;
+  startDate: string;
+  endDate: string;
   priceInfo: SeatPrice[];
   detailImages: string[];
   bookingLinks: BookingLink[];

@@ -24,15 +24,13 @@ const LayoutSwitcher = ({ children }: { children: React.ReactNode }) => {
     return (
       <LayoutDesktop variant="main">
         <LayoutDesktop.Wrapper hasPaddingTop={false}>
-          <FilterProvider>
-            <div className="flex items-start">
-              <div className="flex-1">
-                <ResultHeader />
-                {children}
-              </div>
-              <FilterDesktop />
+          <div className="flex items-start">
+            <div className="flex-1">
+              <ResultHeader />
+              {children}
             </div>
-          </FilterProvider>
+            <FilterDesktop />
+          </div>
         </LayoutDesktop.Wrapper>
       </LayoutDesktop>
     );
@@ -117,9 +115,11 @@ const Result = () => {
         <BookingModal />
         <FeedbackModal />
         <Toaster />
-        <LayoutSwitcher>
-          <PerformanceSection />
-        </LayoutSwitcher>
+        <FilterProvider>
+          <LayoutSwitcher>
+            <PerformanceSection />
+          </LayoutSwitcher>
+        </FilterProvider>
       </Modal>
     </ResultContext.Provider>
   );

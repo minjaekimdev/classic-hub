@@ -1,4 +1,4 @@
-import type { PerformanceSummary } from "@classic-hub/shared/types/client";
+import type { RankingPerformanceHome } from "@classic-hub/shared/types/client";
 import PriceDisplay from "../shared/PriceDisplay";
 import { Link } from "react-router-dom";
 import BookmarkButtonMobile from "@/shared/ui/buttons/BookmarkButtonMobile";
@@ -23,7 +23,7 @@ const RankBadge = ({ children, className }: CardBadgeProps) => {
   );
 };
 
-const HomePerformanceAlbumCard = ({ data }: { data: PerformanceSummary }) => {
+const HomePerformanceAlbumCard = ({ data }: { data: RankingPerformanceHome }) => {
   return (
     <Link to={`/detail/${data.id}`}>
       {/* // group 클래스를 지정하여 해당 요소 hover시 자식의 스타일이 바뀌도록(transform: scale(1.05)) */}
@@ -56,8 +56,8 @@ const HomePerformanceAlbumCard = ({ data }: { data: PerformanceSummary }) => {
           <div className="mt-3">
             <PriceDisplay
               isMobile={false}
-              minPrice={data.price.min}
-              maxPrice={data.price.max}
+              minPrice={data.minPrice}
+              maxPrice={data.maxPrice}
             />
           </div>
         </div>

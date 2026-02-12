@@ -1,9 +1,8 @@
 import type { Price } from "@classic-hub/shared/types/common";
 
 const formatMinMaxPrice = (price: Price[]) => {
-
   if (price.length === 0) {
-    return { min: 0, max: 0 };
+    return { minPrice: 0, maxPrice: 0 };
   }
 
   const [maxPrice, minPrice] = price.reduce(
@@ -16,8 +15,8 @@ const formatMinMaxPrice = (price: Price[]) => {
   );
 
   return {
-    min: minPrice,
-    max: maxPrice,
+    minPrice,
+    maxPrice,
   };
 };
 
