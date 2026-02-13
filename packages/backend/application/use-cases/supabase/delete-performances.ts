@@ -7,7 +7,7 @@ const deletePerformances = async (ids: string[]) => {
   await withErrorHandling(
     async () => {
       await deleteData("performances", "performance_id", ids);
-      logger.info(`[DELETE_SUCCESS] data delete succeeded`, {
+      logger.info(`[DELETE_SUCCESS] ${ids.length} data delete succeeded`, {
         service: "supabase",
       });
       await sendSlackNotification("✅ [DELETE_SUCCESS] data delete succeeded");
