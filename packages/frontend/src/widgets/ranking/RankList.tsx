@@ -26,12 +26,12 @@ const RankList = ({ period, data }: RankingListProps) => {
         {data.map((item) => (
           <RankingItem
             id={item.id}
-            currentRank={item.current_rank}
-            lastRank={item.last_rank}
+            currentRank={item.currentRank}
+            lastRank={item.lastRank}
             title={item.title}
             poster={item.poster}
             artist={item.artist}
-            period={item.period}
+            period={period}
             venue={item.venue}
             bookingLinks={item.bookingLinks}
           />

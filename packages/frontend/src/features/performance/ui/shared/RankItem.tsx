@@ -1,16 +1,8 @@
 import calendarIcon from "@shared/assets/icons/calendar-gray.svg";
-import type { Performance } from "@classic-hub/shared/types/client";
 import Modal, { useModal } from "@/shared/ui/modal/Modal";
-import type { BookingLink } from "@classic-hub/shared/types/common";
 import RankChange from "./RankChange";
 import { First, Other, Second, Third } from "./Rank";
-import formatDateRange from "@/shared/utils/formatDateRange";
-
-interface RankingItemProps extends Performance {
-  currentRank: number;
-  lastRank: number | null;
-  bookingLinks: BookingLink[];
-}
+import type { RankingPerformance } from "@classic-hub/shared/types/client";
 
 const showRanking = (rank: number) => {
   switch (rank) {
@@ -31,16 +23,14 @@ const RankingItem = ({
   poster,
   title,
   artist,
-  startDate,
-  endDate,
+  period,
   venue,
   bookingLinks,
-}: RankingItemProps) => {
+}: RankingPerformance) => {
   const { sendData } = useModal();
   return (
     <div className="flex gap-[0.88rem] items-center rounded-main tablet:px-[0.66rem] h-[6.34rem] cursor-pointer hover:bg-[rgba(236,236,240,0.5)]">
       {showRanking(currentRank)}
-      {/* <RankBadge rank={currentRank} /> */}
       <div className="shrink-0 w-14 h-[4.67rem] rounded-[0.22rem] overflow-hidden">
         <img className="w-full h-full" src={poster}></img>
       </div>
@@ -52,7 +42,7 @@ const RankingItem = ({
           <li className="mb-[0.44rem] ranking-info-text">{artist}</li>
           <li className="flex gap-[0.22rem] items-center mb-[0.56rem]">
             <img src={calendarIcon} />
-            <span className="ranking-info-text">{formatDateRange(startDate, endDate)}</span>
+            <span className="ranking-info-text">{period}</span>
           </li>
           <li className="ranking-info-text">{venue}</li>
         </ul>
