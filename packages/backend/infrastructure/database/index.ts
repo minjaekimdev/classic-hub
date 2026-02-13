@@ -13,7 +13,7 @@ export const getColumnData = async (
   if (error) {
     throw new APIError(`DB fetch failed: ${error.message}`);
   } else {
-    return data.map((element: Record<string, any>) => element.column);
+    return data.map((element: Record<string, any>) => element[column]);
   }
 };
 
