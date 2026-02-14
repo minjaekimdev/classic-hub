@@ -3,7 +3,7 @@ export interface SearchCategory {
   keyword: string;
   location: string;
   price: string;
-  date: string;
+  period: string;
 }
 
 // 2차 검색 필터 카테고리

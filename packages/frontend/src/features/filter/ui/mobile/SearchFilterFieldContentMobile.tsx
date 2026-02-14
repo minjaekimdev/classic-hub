@@ -1,8 +1,9 @@
 import React from "react";
 import FilterFieldHeaderMobile from "./SearchFilterFieldHeaderMobile";
+import type { SearchCategory } from "../../types/filter";
 
 interface FilterFieldContentMobileProps {
-  fieldName: string | null;
+  fieldName: keyof SearchCategory;
   children: React.ReactNode;
 }
 

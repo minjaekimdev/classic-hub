@@ -6,7 +6,7 @@ import {
 import formatPriceQueryToFilter from "../../utils/formatPriceQueryToFilter";
 import formatDateQueryToFilter from "../../utils/formatDateQueryToFilter";
 import useQueryParams from "@/shared/hooks/useParams";
-import { FIELD_MAP } from "../../constants/name-mapper";
+import { FIELD_EN_TO_KO } from "../../constants/name-mapper";
 
 interface FieldProps {
   field: FieldType;
@@ -28,7 +28,7 @@ const Field = ({ field, value, onFilterClick }: FieldProps) => {
       {value ? (
         value
       ) : (
-        <span className="text-gray-400">{FIELD_MAP[field]}</span>
+        <span className="text-gray-400">{FIELD_EN_TO_KO[field]}</span>
       )}
     </div>
   );
