@@ -1,4 +1,5 @@
 import useQueryParams from "@/shared/hooks/useParams";
+import DateTransformer from "@/shared/utils/dateTransformer";
 
 const useMainHeaderMobileText = () => {
   const { filters } = useQueryParams();
@@ -24,23 +25,16 @@ const useMainHeaderMobileText = () => {
 
   let periodText = "";
   if (startDate) {
-    const year = startDate.slice(0, 4);
-    const month = startDate.slice(4, 6);
-    const day = startDate.slice(6, 8);
-    if (endDate) {
-      if (startDate === endDate) {
-        periodText += `${year}년 ${month}월 ${day}일`;
-      } else {
-        const [year, month, day] = endDate.split("-");
-        periodText += ` ~ ${year}년 ${month}월 ${day}일`;
-      }
+    periodText = DateTransformer.format(startDate, "korean");
+    if (endDate && startDate !== endDate) {
+      periodText += ` ~ ${DateTransformer.format(endDate, "korean")}`;
     }
   }
 
   // 1. 순서대로 배열 정의 (우선순위: 검색어 -> 지역 -> 가격 -> 날짜)
   const allFilters = [keyword, location, priceText, periodText];
   const hasFilters = allFilters.filter((item) => item);
-  
+
   return hasFilters.join(", ");
 };
 
