@@ -1,3 +1,4 @@
+import { FIELD_KO_TO_EN } from "../../constants/name-mapper";
 import { useSearchFilterMobile } from "../../contexts/search-mobile-context";
 
 interface SearchFilterFieldMobileProps {
@@ -12,10 +13,12 @@ const SearchFilterFieldMobile = ({
   subtitle,
 }: SearchFilterFieldMobileProps) => {
   const { filters, changeActiveCategory } = useSearchFilterMobile();
+  console.log(`label: ${label}`);
+  console.log(`map: ${FIELD_KO_TO_EN[label]}`);
   return (
     <div
       className="flex gap-[0.66rem] rounded-[0.797rem] bg-[#f9fafb] p-[0.88rem] cursor-pointer"
-      onClick={() => changeActiveCategory(label)}
+      onClick={() => changeActiveCategory(FIELD_KO_TO_EN[label])}
     >
       <div className="flex justify-center items-center w-[1.97rem] h-[1.97rem]">
         <img src={iconSrc} alt="" />
@@ -27,9 +30,9 @@ const SearchFilterFieldMobile = ({
         <span className="text-[#4a5565] text-[0.77rem]/[1.09rem]">
           {subtitle}
         </span>
-        {filters[label] && (
+        {filters[FIELD_KO_TO_EN[label]] && (
           <span className="text-main text-[0.77rem]/[1.09rem]">
-            선택됨: {filters[label]}
+            선택됨: {filters[FIELD_KO_TO_EN[label]]}
           </span>
         )}
       </div>

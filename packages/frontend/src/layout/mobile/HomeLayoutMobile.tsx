@@ -3,20 +3,12 @@ import useHomeLayoutMobile from "../hooks/useHomeLayoutMobile";
 import BottomSheet from "@/shared/ui/bottom-sheet/BottomSheet";
 import HomeHeaderMobile from "@/widgets/home/ui/HomeHeaderMobile";
 import Footer from "@/widgets/shared/ui/Footer";
-import SearchMobile from "@/features/filter/contexts/search-mobile-context";
-import SearchFilterMobile from "@/features/filter/ui/mobile/SearchFilterMobile";
 
 const HomeLayoutMobile = ({ children }: { children: React.ReactNode }) => {
   const { ref, isScrollZero, marginTop } = useHomeLayoutMobile();
   return (
     <>
       <BottomSheet>
-        <BottomSheet.Wrapper>
-          {/* 모바일 검색 필터 내 값들 context로 관리 */}
-          <SearchMobile>
-            <SearchFilterMobile />
-          </SearchMobile>
-        </BottomSheet.Wrapper>
         <HomeHeaderMobile isScrollZero={isScrollZero} />
         <div ref={ref} className="h-1 bg-transparent"></div>
         <main className={`pt-6 pb-[6.12rem] ${marginTop}`}>{children}</main>
