@@ -34,11 +34,7 @@ const LayoutSwitcher = ({ children }: { children: React.ReactNode }) => {
       </LayoutDesktop>
     );
   } else {
-    return (
-      <MainLayoutMobile>
-        {children}
-      </MainLayoutMobile>
-    );
+    return <MainLayoutMobile>{children}</MainLayoutMobile>;
   }
 };
 
@@ -63,7 +59,7 @@ const Result = () => {
     maxPrice,
     startDate,
     endDate,
-});
+  });
 
   // 선택된 공연장들에 해당하는 공연 데이터 필터링하기
   const filteredPerformances = useFilteredPerformances(
@@ -76,6 +72,8 @@ const Result = () => {
     filteredPerformances,
     sortBy,
   );
+
+  console.log(`필터링된 공연 개수: ${sortedPerformances.length}`);
 
   return (
     <ResultContext.Provider value={{ allPerformances, sortedPerformances }}>

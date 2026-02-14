@@ -1,9 +1,12 @@
-import { FIELD_KO_TO_EN } from "../../constants/name-mapper";
-import { useSearchFilterMobile } from "../../contexts/search-mobile-context";
+import { useSearchMobile } from "../../contexts/search-context.mobile";
+import {
+  FILTER_STRATEGY,
+  type FieldTypeKo,
+} from "../../utils/search-filter-strategy.mobile";
 
 interface SearchFilterFieldMobileProps {
   iconSrc: string;
-  label: string;
+  label: FieldTypeKo;
   subtitle: string;
 }
 
@@ -12,13 +15,13 @@ const SearchFilterFieldMobile = ({
   label,
   subtitle,
 }: SearchFilterFieldMobileProps) => {
-  const { filters, changeActiveCategory } = useSearchFilterMobile();
-  console.log(`label: ${label}`);
-  console.log(`map: ${FIELD_KO_TO_EN[label]}`);
+  const { searchValue, openField } = useSearchMobile();
+  const strategy = FILTER_STRATEGY[label];
+
   return (
     <div
       className="flex gap-[0.66rem] rounded-[0.797rem] bg-[#f9fafb] p-[0.88rem] cursor-pointer"
-      onClick={() => changeActiveCategory(FIELD_KO_TO_EN[label])}
+      onClick={() => openField(FILTER_STRATEGY[label].key)}
     >
       <div className="flex justify-center items-center w-[1.97rem] h-[1.97rem]">
         <img src={iconSrc} alt="" />
@@ -30,9 +33,9 @@ const SearchFilterFieldMobile = ({
         <span className="text-[#4a5565] text-[0.77rem]/[1.09rem]">
           {subtitle}
         </span>
-        {filters[FIELD_KO_TO_EN[label]] && (
+        {strategy.isSelected(searchValue) && (
           <span className="text-main text-[0.77rem]/[1.09rem]">
-            선택됨: {filters[FIELD_KO_TO_EN[label]]}
+            선택됨: {strategy.format(searchValue)}
           </span>
         )}
       </div>

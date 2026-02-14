@@ -9,12 +9,12 @@ import { DropdownMenuItem } from "@/shared/ui/shadcn/dropdown-menu";
 import SearchInput from "./SearchFilterInputDesktop";
 import SearchField from "./SearchFilterFieldDesktop";
 import SearchDesktop, {
-  useSearchFilterDesktop,
-} from "../../contexts/search-desktop-context";
+  useSearch,
+} from "../../contexts/search-context.desktop";
 import REGION_LIST from "@classic-hub/shared/constants/region-list";
 
 const SearchFilterDesktop = () => {
-  const { searchValue, changeValue } = useSearchFilterDesktop();
+  const { searchValue, changeValue } = useSearch();
 
   const areas = ["전체", ...REGION_LIST];
 

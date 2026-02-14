@@ -1,4 +1,3 @@
-import SearchMobile from "@/features/filter/contexts/search-mobile-context";
 import SearchFilterMobile from "@/features/filter/ui/mobile/SearchFilterMobile";
 import { useBottomSheet } from "@/shared/ui/bottom-sheet/BottomSheet";
 import Logo from "@/shared/ui/logos/Logo";
@@ -13,13 +12,7 @@ const HomeHeaderMobile = ({ isScrollZero }: { isScrollZero: boolean }) => {
         <div className="w-full">
           <div
             className="flex justify-center items-center border border-[2px_solid_#e5e7eb] bg-white rounded-full w-full h-[2.88rem] cursor-pointer"
-            onClick={() =>
-              open(
-                <SearchMobile>
-                  <SearchFilterMobile />
-                </SearchMobile>,
-              )
-            }
+            onClick={() => open(<SearchFilterMobile />)}
           >
             <div className="flex gap-[0.28rem]">
               <img
