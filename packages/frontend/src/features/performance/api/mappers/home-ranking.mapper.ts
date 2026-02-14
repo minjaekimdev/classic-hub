@@ -1,8 +1,8 @@
-import type { RankingPerformanceHome } from "@classic-hub/shared/types/client";
+import type { PerformanceSummary } from "@classic-hub/shared/types/client";
 import type { DBRankingWithDetails } from "@classic-hub/shared/types/database";
 import formatMinMaxPrice from "@/shared/utils/formatMinMaxPrice";
 
-const mapToHomeRanking = (raw: DBRankingWithDetails): RankingPerformanceHome => {
+const mapToHomeRanking = (raw: DBRankingWithDetails): PerformanceSummary => {
   const [startDate, endDate] = raw.period.split("~");
   const {minPrice, maxPrice} = formatMinMaxPrice(raw.price);
 

@@ -1,23 +1,16 @@
 import { type DateRange } from "react-day-picker";
 import { Calendar } from "@/shared/ui/shadcn/calendar";
-import { useSearchFilterDesktop } from "../../contexts/search-desktop-context";
+import { useSearch } from "../../contexts/search-context.desktop";
+import DateTransformer from "@/shared/utils/dateTransformer";
 
 export function SearchFilterDateSelectDesktop() {
-  const { searchValue, changeValue } = useSearchFilterDesktop();
+  const { searchValue, changeValue } = useSearch();
 
   // 오늘 날짜 (시간 제거)
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
   let calendarDateRange: DateRange | undefined;
-
-  const parseDate = (dateStr: string) => {
-    const year = parseInt(dateStr.slice(0, 4), 10);
-    const month = parseInt(dateStr.slice(4, 6), 10) - 1; // 🚨 월은 0부터 시작하므로 -1 필수!
-    const day = parseInt(dateStr.slice(6, 8), 10);
-    
-    return new Date(year, month, day);
-  };
 
   if (!searchValue.startDate) {
     // 날짜가 선택되지 않으면 undefined로 표시 (아무것도 선택 안 함)
@@ -26,8 +19,8 @@ export function SearchFilterDateSelectDesktop() {
     const [startDate, endDate] = [searchValue.startDate, searchValue.endDate];
 
     calendarDateRange = {
-      from: new Date(parseDate(startDate)),
-      to: new Date(parseDate(endDate)),
+      from: new Date(DateTransformer.format(startDate, "dash")),
+      to: new Date(DateTransformer.format(endDate, "dash")),
     };
   }
 

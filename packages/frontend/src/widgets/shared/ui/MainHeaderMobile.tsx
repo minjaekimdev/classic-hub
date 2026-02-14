@@ -2,10 +2,10 @@ import logo from "@shared/assets/logos/classichub.svg";
 import filterIcon from "@shared/assets/icons/filter-dark.svg";
 import { Link } from "react-router-dom";
 import { useBottomSheet } from "@/shared/ui/bottom-sheet/BottomSheet";
-import SearchMobile from "@/features/filter/contexts/search-mobile-context";
 import SearchFilterMobile from "@/features/filter/ui/mobile/SearchFilterMobile";
 import FilterMobile from "@/features/filter/ui/mobile/FilterMobile";
 import useMainHeaderMobileText from "../../../layout/hooks/useMainHeaderMobileText";
+import searchIcon from "@shared/assets/icons/search-black.svg";
 
 const MainHeaderMobile = () => {
   const headerText = useMainHeaderMobileText();
@@ -19,18 +19,13 @@ const MainHeaderMobile = () => {
       <div className="w-[0.66rem]"></div>
       <div className="flex-1">
         <div
-          className="rounded-full px-[0.88rem] py-[0.66rem] bg-[#F3F4F6] cursor-pointer"
-          onClick={() =>
-            open(
-              <SearchMobile>
-                <SearchFilterMobile />
-              </SearchMobile>,
-            )
-          }
+          className="flex items-center justify-between rounded-full px-[0.88rem] h-10 bg-[#F3F4F6] cursor-pointer"
+          onClick={() => open(<SearchFilterMobile />)}
         >
           <div className="flex flex-col text-[#101828] text-[0.77rem]/[1.09rem] font-semibold">
             {headerText}
           </div>
+          <img src={searchIcon} alt="" />
         </div>
       </div>
       <div className="w-[0.66rem]"></div>

@@ -1,6 +1,6 @@
 const LOCATION_ARR = [
   {
-    main: "전체 지역",
+    main: "전체",
     sub: "모든 지역의 공연",
   },
   {

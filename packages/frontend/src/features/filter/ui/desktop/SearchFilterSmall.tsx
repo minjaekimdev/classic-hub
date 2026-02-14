@@ -1,12 +1,10 @@
 import searchIcon from "@shared/assets/icons/search-white.svg";
-import {
-  useSearchFilterDesktop,
-  type FieldType,
-} from "../../contexts/search-desktop-context";
-import formatPriceQueryToFilter from "../../utils/formatPriceQueryToFilter";
+import formatPriceToKo from "../../../../shared/utils/formatPriceToKo";
 import formatDateQueryToFilter from "../../utils/formatDateQueryToFilter";
 import useQueryParams from "@/shared/hooks/useParams";
 import { FIELD_EN_TO_KO } from "../../constants/name-mapper";
+import type { FieldType } from "../../types/filter";
+import { useSearch } from "../../contexts/search-context.desktop";
 
 interface FieldProps {
   field: FieldType;
@@ -14,7 +12,7 @@ interface FieldProps {
   onFilterClick: (isFilterActive: boolean) => void;
 }
 const Field = ({ field, value, onFilterClick }: FieldProps) => {
-  const { openField } = useSearchFilterDesktop();
+  const { openField } = useSearch();
 
   return (
     <div
@@ -38,13 +36,13 @@ interface SearchFilterSmallProps {
   onFilterClick: (isFilterActive: boolean) => void;
 }
 const SearchFilterSmall = ({ onFilterClick }: SearchFilterSmallProps) => {
-  const { openField } = useSearchFilterDesktop();
+  const { openField } = useSearch();
   const { filters } = useQueryParams();
   const { location, minPrice, maxPrice, startDate, endDate } = filters;
 
   const categoryArr: [FieldType, string | null][] = [
     ["location", location],
-    ["price", minPrice ? formatPriceQueryToFilter(minPrice, maxPrice) : null],
+    ["price", minPrice ? formatPriceToKo(minPrice, maxPrice) : null],
     [
       "period",
       startDate ? formatDateQueryToFilter(startDate, endDate as string) : null,

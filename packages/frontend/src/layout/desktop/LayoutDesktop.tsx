@@ -84,7 +84,7 @@ const LayoutDesktopProvider = ({
 export const useLayoutDesktop = () => {
   const context = useContext(LayoutDesktopContext);
   if (!context) {
-    throw new Error("useLayoutDesktop should be used within a ModalProvider.");
+    throw new Error("useLayoutDesktop should be used within a LayoutDesktopProvider.");
   }
   return context;
 };

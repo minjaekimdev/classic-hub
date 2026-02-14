@@ -9,16 +9,13 @@ export interface Performance {
   venue: string;
 }
 
-// 검색 결과 페이지 공연
+// 공연 카드 기본 정보
 export interface PerformanceSummary extends Performance {
+  rank?: number;
   minPrice: number;
   maxPrice: number;
   startDate: string;
   endDate: string;
-}
-
-export interface RankingPerformanceHome extends PerformanceSummary {
-  rank: number;
 }
 
 // 랭킹 페이지 공연
@@ -33,7 +30,6 @@ export interface RankingPerformance extends Performance {
 
 // 상세 정보에서 사용
 // 좌석 및 가격 정보
-
 export interface DetailPerformance extends Performance {
   venueId: string;
   time: string;
