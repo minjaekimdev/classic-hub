@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Modal from "@/shared/ui/modal/Modal";
 import useBreakpoint from "@/shared/hooks/useBreakpoint";
-import type { DetailPerformance } from "@classic-hub/shared/types/client";
+import type { PerformanceSummary } from "@classic-hub/shared/types/client";
 import { Toaster } from "sonner";
 import BookingModal from "@/features/booking/BookingModal";
 import { BREAKPOINTS } from "@/shared/constants";
@@ -46,7 +46,7 @@ const LayoutSwitcher = ({ children }: { children: React.ReactNode }) => {
 };
 
 const Result = () => {
-  const [performances, setPerformances] = useState<DetailPerformance[]>([]);
+  const [performances, setPerformances] = useState<PerformanceSummary[]>([]);
   const { filters } = useQueryParams();
 
   useEffect(() => {

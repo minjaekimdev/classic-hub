@@ -1,4 +1,5 @@
-const REGION_LIST = [
+export const LOCATION_LIST = [
+  "전체",
   "서울",
   "경기",
   "인천",
@@ -16,6 +17,4 @@ const REGION_LIST = [
   "경북",
   "경남",
   "제주",
-] as const;
-
-export default REGION_LIST;
+];

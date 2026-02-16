@@ -1,4 +1,4 @@
-import type { BookingLink, Location, Price as SeatPrice } from "./common";
+import type { BookingLink, Price as SeatPrice } from "./common";
 
 // 공통으로 사용되는 프로퍼티 모음
 export interface Performance {
@@ -33,15 +33,11 @@ export interface RankingPerformance extends Performance {
 
 // 상세 정보에서 사용
 // 좌석 및 가격 정보
-
 export interface DetailPerformance extends Performance {
   venueId: string;
   time: string;
   runningTime: string;
   age: string;
-  area: Location;
-  minPrice: number;
-  maxPrice: number;
   priceInfo: SeatPrice[];
   detailImages: string[];
   bookingLinks: BookingLink[];

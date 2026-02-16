@@ -2,9 +2,9 @@ import { PostgrestFilterBuilder } from "@supabase/postgrest-js";
 import type { Database } from "@classic-hub/shared/types/supabase";
 import supabase from "@/app/api/supabase-client";
 import type { SortType } from "@/features/filter/types/filter";
+import { mapToPerformance } from "../mappers/home-performance-mapper";
 import type { DBPerformance } from "@classic-hub/shared/types/database";
-import type { DetailPerformance } from "@classic-hub/shared/types/client";
-import mapToPerformanceDetail from "../mappers/detail-performance-mapper";
+import type { PerformanceSummary } from "@classic-hub/shared/types/client";
 
 type PerformanceRow = Database["public"]["Tables"]["performances"]["Row"];
 
@@ -56,7 +56,7 @@ const getLocationQuery = (query: PerformanceQuery, location: string) => {
 
 export const fetchSearchResults = async (
   filters: SearchFilters,
-): Promise<DetailPerformance[]> => {
+): Promise<PerformanceSummary[]> => {
   // 1. 기본 쿼리 시작
   let query = supabase.from("performances").select("*");
 
@@ -78,6 +78,7 @@ export const fetchSearchResults = async (
   if (filters.minPrice) {
     query = query.gte("max_price", filters.minPrice);
     if (filters.maxPrice) {
+      console.log(filters.maxPrice);
       query = query.lte("min_price", filters.maxPrice);
     }
   }
@@ -97,5 +98,5 @@ export const fetchSearchResults = async (
   }
 
   const result = data as unknown as DBPerformance[];
-  return result.map((item: DBPerformance) => mapToPerformanceDetail(item));
+  return result.map((item: DBPerformance) => mapToPerformance(item));
 };

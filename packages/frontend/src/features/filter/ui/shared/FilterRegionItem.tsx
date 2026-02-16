@@ -15,12 +15,12 @@ const FilterRegionItem = ({
   selectedVenuesCount,
   handleRegionToggle,
 }: FilterRegionItemProps) => {
-  const isExpanded = selectedRegion === region.name;
+  const isExpanded = selectedRegion === region.id;
   return (
-    <div className="bg-white">
+    <div key={region.id} className="bg-white">
       {/* Region Header (Click to Expand) */}
       <button
-        onClick={() => handleRegionToggle(region.name)}
+        onClick={() => handleRegionToggle(region.id)}
         className="w-full flex items-center justify-between px-4 py-3.5 hover:bg-gray-50 transition-colors"
       >
         <div className="flex items-center gap-2">
@@ -56,7 +56,7 @@ const FilterRegionItem = ({
       {isExpanded && (
         <div className="bg-gray-50 px-4 py-3 space-y-2">
           {region.venues.map((venue) => {
-            return <VenueItem key={venue.name} venue={venue} />;
+            return <VenueItem key={venue.id} venue={venue} />;
           })}
         </div>
       )}

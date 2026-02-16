@@ -14,7 +14,7 @@ export const FilterUIProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [isOpen, setIsOpen] = useState(true); // 기본값은 닫힘 추천
+  const [isOpen, setIsOpen] = useState(false); // 기본값은 닫힘 추천
 
   const open = () => setIsOpen(true);
   const close = () => setIsOpen(false);

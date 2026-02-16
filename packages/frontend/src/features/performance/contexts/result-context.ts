@@ -1,7 +1,7 @@
-import type { DetailPerformance } from "@classic-hub/shared/types/client";
+import type { PerformanceSummary } from "@classic-hub/shared/types/client";
 import { createContext, useContext } from "react";
 
-export const ResultContext = createContext<DetailPerformance[] | null>(null);
+export const ResultContext = createContext<PerformanceSummary[] | null>(null);
 
 export const useResult = () => {
   const context = useContext(ResultContext);

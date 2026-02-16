@@ -1,10 +1,12 @@
 // 예시 데이터 타입 정의
-export interface Venue {
+export type Venue = {
+  id: string;
   name: string;
   count: number;
 };
 
-export interface Region {
+export type Region = {
+  id: string;
   name: string;
   totalCount: number; // 해당 지역 공연장들의 합산 개수
   venues: Venue[];
