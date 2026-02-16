@@ -1,4 +1,4 @@
-import type { SearchCategory, SortType } from "../types/filter";
+import type { SortType } from "../types/filter";
 
 export const SORT_MAP: Record<SortType, string> = {
   imminent: "공연임박순",
@@ -7,16 +7,9 @@ export const SORT_MAP: Record<SortType, string> = {
   alphabetical: "가나다순",
 };
 
-export const FIELD_EN_TO_KO = {
+export const FIELD_MAP = {
   keyword: "검색어",
   location: "지역",
   price: "가격",
   period: "기간",
-};
-
-export const FIELD_KO_TO_EN: Record<string, keyof SearchCategory> = {
-  검색어: "keyword",
-  지역: "location",
-  가격: "price",
-  날짜: "period",
 };

@@ -1,19 +1,19 @@
 import { Slider } from "@/shared/ui/shadcn/slider";
 import { useSearchFilterMobile } from "../../contexts/search-mobile-context";
-import { MAX_PRICE } from "../../constants/max-value";
 
+const $MAX_PRICE = 50;
 const SearchFilterMobilePriceRangeSlider = () => {
   const { filters, updateFilters } = useSearchFilterMobile();
   const setPriceRange = (range: number[]) => {
     const startPrice = `${range[0]}만`;
-    const endPrice = range[1] >= MAX_PRICE ? `${range[1]}만+` : `${range[1]}만`;
+    const endPrice = range[1] >= 50 ? `${range[1]}만+` : `${range[1]}만`;
 
     updateFilters({ ...filters, price: `${startPrice} - ${endPrice}` });
   };
 
   const getCurrentSliderValue = () => {
     if (!filters.price) {
-      return [0, MAX_PRICE];
+      return [0, 50];
     }
 
     const [startPrice, endPrice] = filters.price
@@ -33,20 +33,19 @@ const SearchFilterMobilePriceRangeSlider = () => {
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-xs font-bold">가격 범위</h3>
           <span className="text-xs font-bold text-main">
-            {filters.price === "" ? `0 - ${MAX_PRICE}만+` : filters.price}
+            {filters.price === "가격" ? "10 - 20만" : filters.price}
           </span>
         </div>
         <Slider
-          className="w-full **:data-[slot='slider-range']:bg-main! **:data-[slot='slider-thumb']:border-main!"
           value={sliderValue}
           onValueChange={setPriceRange}
           min={0}
-          max={MAX_PRICE}
+          max={30}
           step={1}
         />
         <div className="flex justify-between text-xs mt-2 text-gray-500">
           <span>₩0</span>
-          <span>₩{MAX_PRICE}만+</span>
+          <span>₩{$MAX_PRICE}만+</span>
         </div>
       </div>
     </div>

@@ -47,7 +47,7 @@ const filterFieldTitleArray = [
   },
   {
     iconSrc: moneyIcon,
-    label: "가격",
+    label: "가격대",
     subtitle: "예산에 맞는 공연 찾기",
   },
 ];
@@ -57,7 +57,7 @@ const SearchFilterMobile = () => {
   const showFieldContent = () => {
     if (activeCategory === "location") {
       return <LocationSelectMobile />;
-    } else if (activeCategory === "period") {
+    } else if (activeCategory === "date") {
       return (
         <div className="border rounded-main border-[rgba(0,0,0,0.1)] p-[0.72rem]">
           <Calendar05 />

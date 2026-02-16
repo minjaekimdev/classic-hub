@@ -2,7 +2,7 @@ import React, { useState, createContext, useContext, useEffect } from "react";
 
 interface BottomSheetContextType {
   isOpen: boolean;
-  open: (node: React.ReactNode) => void;
+  open: () => void;
   close: () => void;
 }
 const BottomSheetContext = createContext<BottomSheetContextType | null>(null);
@@ -11,17 +11,12 @@ interface BottomSheetProviderProps {
   children: React.ReactNode;
 }
 const BottomSheetProvider = ({ children }: BottomSheetProviderProps) => {
-  const [content, setContent] = useState<React.ReactNode | null>(null);
   const [isOpen, setIsOpen] = useState(false);
-
-  const open = (node: React.ReactNode) => {
-    setContent(node);
+  const open = () => {
     setIsOpen(true);
   };
-
   const close = () => {
     setIsOpen(false);
-    setContent(null);
   };
 
   useEffect(() => {
@@ -35,19 +30,8 @@ const BottomSheetProvider = ({ children }: BottomSheetProviderProps) => {
       document.body.style.overflow = "unset";
     };
   }, [isOpen]);
-
   return (
     <BottomSheetContext.Provider value={{ isOpen, open, close }}>
-      {isOpen && (
-        <div
-          className="fixed inset-0 bg-black/50 z-(--z-modal-overlay) transition-opacity"
-          onClick={close}
-        >
-          <div className="fixed bottom-0 left-0 right-0 bg-white z-(--z-modal) rounded-t-2xl shadow-xl max-h-[90vh] flex flex-col transition-transform duration-300 transform translate-y-0">
-            {content}
-          </div>
-        </div>
-      )}
       {children}
     </BottomSheetContext.Provider>
   );
@@ -62,4 +46,39 @@ export const useBottomSheet = () => {
   return context;
 };
 
-export default BottomSheetProvider;
+interface WrapperProps {
+  children: React.ReactNode;
+}
+const BottomSheetWrapper = ({ children }: WrapperProps) => {
+  const { isOpen, close } = useBottomSheet();
+  return (
+    <>
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-(--z-modal-overlay) transition-opacity"
+          onClick={close}
+        >
+          <div className="fixed bottom-0 left-0 right-0 bg-white z-(--z-modal) rounded-t-2xl shadow-xl max-h-[90vh] flex flex-col transition-transform duration-300 transform translate-y-0">
+            {children}
+          </div>
+        </div>
+      )}
+    </>
+  );
+};
+
+const BottomSheetTrigger = ({ children }: { children: React.ReactNode }) => {
+  const { open } = useBottomSheet();
+  return <div onClick={open}>{children}</div>;
+};
+
+const BottomSheetRoot = ({ children }: { children: React.ReactNode }) => {
+  return <BottomSheetProvider>{children}</BottomSheetProvider>;
+};
+
+const BottomSheet = Object.assign(BottomSheetRoot, {
+  Trigger: BottomSheetTrigger,
+  Wrapper: BottomSheetWrapper,
+});
+
+export default BottomSheet;

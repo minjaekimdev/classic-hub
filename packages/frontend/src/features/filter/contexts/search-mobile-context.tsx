@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from "react";
-import type { SearchCategory } from "../types/filter";
+import type { SearchCategory } from "../types/search-filter";
 
 interface SearchFilterMobileContextType {
   filters: SearchCategory;
@@ -12,10 +12,10 @@ interface SearchFilterMobileContextType {
 const SearchFilterMobileContext = createContext<SearchFilterMobileContextType | null>(null);
 
 const SearchFilterMobileProvider = ({ children }: { children: React.ReactNode }) => {
-  const [filters, setFilters] = useState<Record<keyof SearchCategory, string>>({
+  const [filters, setFilters] = useState<SearchCategory>({
     keyword: "",
     location: "",
-    period: "",
+    date: "",
     price: "",
   });
   // 현재 어떤 카테고리가 선택되었는지
@@ -27,7 +27,7 @@ const SearchFilterMobileProvider = ({ children }: { children: React.ReactNode })
     setFilters({
       keyword: "",
       location: "",
-      period: "",
+      date: "",
       price: "",
     });
     setActiveCategory(null);

@@ -8,6 +8,7 @@ import LayoutDesktop from "@/layout/desktop/LayoutDesktop";
 import FeedbackModal from "@/features/feedback/FeedbackModal";
 import PerformanceSection from "@/widgets/result/PerformanceSection";
 import FilterDesktop from "@/features/filter/ui/desktop/FilterDesktop";
+import FilterMobile from "@/features/filter/ui/mobile/FilterMobile";
 import ResultHeader from "@/widgets/result/ResultHeader";
 import useQueryParams from "@/shared/hooks/useParams";
 import { ResultContext } from "@/features/performance/contexts/result-context";
@@ -35,7 +36,7 @@ const LayoutSwitcher = ({ children }: { children: React.ReactNode }) => {
     );
   } else {
     return (
-      <MainLayoutMobile>
+      <MainLayoutMobile bottomSheetContent={<FilterMobile />}>
         {children}
       </MainLayoutMobile>
     );

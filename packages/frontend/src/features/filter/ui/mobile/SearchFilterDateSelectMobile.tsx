@@ -6,7 +6,7 @@ export function Calendar05() {
   const { filters, updateFilters } = useSearchFilterMobile();
   let calendarDateRange: DateRange | undefined;
   const isValidDateRange = /^\d{4}\/\d{2}\/\d{2} - \d{4}\/\d{2}\/\d{2}$/.test(
-    filters.period,
+    filters.date,
   );
   if (!isValidDateRange) {
     calendarDateRange = {
@@ -14,7 +14,7 @@ export function Calendar05() {
       to: new Date(),
     };
   } else {
-    const [startDate, endDate] = filters.period
+    const [startDate, endDate] = filters.date
       .split(" - ")
       .map((item: string) => item.replaceAll("/", "-"));
     calendarDateRange = {
@@ -26,7 +26,7 @@ export function Calendar05() {
   const handleSelect = (range: DateRange | undefined) => {
     // 1. 선택 취소되거나 값이 없으면 초기화
     if (!range?.from) {
-      updateFilters({ ...filters, period: "" });
+      updateFilters({ ...filters, date: "날짜" });
       return;
     }
 
@@ -43,7 +43,7 @@ export function Calendar05() {
     const toStr = range.to ? formatDate(range.to) : fromStr;
 
     // 3. 부모에게 문자열로 전달
-    updateFilters({ ...filters, period: `${fromStr} - ${toStr}` });
+    updateFilters({ ...filters, date: `${fromStr} - ${toStr}` });
   };
 
   return (

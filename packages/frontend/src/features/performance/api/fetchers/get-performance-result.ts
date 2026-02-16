@@ -78,6 +78,8 @@ export const fetchSearchResults = async (
       .gte("period_to", formatQueryDate(filters.startDate));
   }
 
+  console.dir(query);
+
   // 4. 실행
   const { data, error } = await query;
 

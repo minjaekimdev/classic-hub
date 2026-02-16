@@ -1,4 +1,3 @@
-import LOCATION_ARR from "../../constants/search-filter-location.mobile";
 import { useSearchFilterMobile } from "../../contexts/search-mobile-context";
 
 interface LocationComponentProps {
@@ -24,11 +23,37 @@ const LocationComponent = ({ main, sub }: LocationComponentProps) => {
   );
 };
 
+const locationArray = [
+  {
+    main: "전체 지역",
+    sub: "모든 지역의 공연",
+  },
+  {
+    main: "서울",
+    sub: "서울특별시",
+  },
+  {
+    main: "경기",
+    sub: "경기도",
+  },
+  {
+    main: "인천",
+    sub: "인천광역시",
+  },
+  {
+    main: "부산",
+    sub: "부산광역시",
+  },
+  {
+    main: "대구",
+    sub: "대구광역시",
+  },
+];
+
 const LocationSelectMobile = () => {
-  console.log("location select mobile");
   return (
     <div className="grid grid-cols-2 gap-[0.44rem]">
-      {LOCATION_ARR.map((item) => (
+      {locationArray.map((item) => (
         <LocationComponent key={item.main} main={item.main} sub={item.sub} />
       ))}
     </div>
