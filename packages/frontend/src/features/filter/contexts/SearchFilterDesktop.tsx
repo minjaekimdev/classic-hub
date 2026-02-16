@@ -65,7 +65,7 @@ const SearchFilterDesktopProvider = ({ children }: SearchFilterDesktopProviderPr
       
       // 가격 상한을 선택하지 않아 maxPrice가 "50만+"인 경우
       if (!maxPrice.includes("+")) {
-        params.append("max_price", getUrlPrice(maxPrice));
+        params.append("max_price", maxPrice);
       }
     }
     if (searchValue.날짜) {

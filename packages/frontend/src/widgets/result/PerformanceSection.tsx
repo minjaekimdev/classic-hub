@@ -1,7 +1,7 @@
 import { useFilterUI } from "@/features/filter/contexts/FilterUIContext";
-import { useResult } from "@/features/performance/contexts/result-context";
 import ResultPerformanceAlbumCard from "@/features/performance/ui/desktop/ResultPerformanceAlbumCard";
 import PerformanceListCard from "@/features/performance/ui/mobile/PerformanceListCard";
+import { useResult } from "@/pages/Result";
 import { BREAKPOINTS } from "@/shared/constants";
 import useBreakpoint from "@/shared/hooks/useBreakpoint";
 
@@ -32,7 +32,7 @@ const ResultDesktop = () => {
   }
   return (
     <div
-      className={`flex-1 grid ${gridStyle} gap-[1.31rem] p-[0.88rem] overflow-y-auto h-result-content`}
+      className={`flex-1 grid ${gridStyle} gap-[1.31rem] p-[0.88rem] overflow-y-auto`}
     >
       {data.map((item) => (
         <ResultPerformanceAlbumCard data={item} />

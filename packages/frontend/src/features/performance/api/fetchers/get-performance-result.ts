@@ -2,9 +2,6 @@ import { PostgrestFilterBuilder } from "@supabase/postgrest-js";
 import type { Database } from "@classic-hub/shared/types/supabase";
 import supabase from "@/app/api/supabase-client";
 import type { SortType } from "@/features/filter/types/filter";
-import { mapToPerformance } from "../mappers/home-performance-mapper";
-import type { DBPerformance } from "@classic-hub/shared/types/database";
-import type { PerformanceSummary } from "@classic-hub/shared/types/client";
 
 type PerformanceRow = Database["public"]["Tables"]["performances"]["Row"];
 
@@ -54,9 +51,7 @@ const getLocationQuery = (query: PerformanceQuery, location: string) => {
   return query.ilike("area", `%${location}%`);
 };
 
-export const fetchSearchResults = async (
-  filters: SearchFilters,
-): Promise<PerformanceSummary[]> => {
+export const fetchSearchResults = async (filters: SearchFilters) => {
   // 1. 기본 쿼리 시작
   let query = supabase.from("performances").select("*");
 
@@ -76,10 +71,9 @@ export const fetchSearchResults = async (
 
   // 가격 범위
   if (filters.minPrice) {
-    query = query.gte("max_price", filters.minPrice);
+    query = query.lte("max_price", filters.minPrice);
     if (filters.maxPrice) {
-      console.log(filters.maxPrice);
-      query = query.lte("min_price", filters.maxPrice);
+      query = query.gte("min_price", filters.maxPrice);
     }
   }
 
@@ -97,6 +91,5 @@ export const fetchSearchResults = async (
     throw new Error(error.message);
   }
 
-  const result = data as unknown as DBPerformance[];
-  return result.map((item: DBPerformance) => mapToPerformance(item));
+  return data;
 };
