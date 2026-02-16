@@ -1,10 +1,10 @@
+import type { RankingPerformanceHome } from "@classic-hub/shared/types/client";
 import PriceDisplay from "../shared/PriceDisplay";
 import { Link } from "react-router-dom";
 import BookmarkButtonMobile from "@/shared/ui/buttons/BookmarkButtonMobile";
 import BookmarkButtonDesktop from "@/shared/ui/buttons/BookmarkButtonDesktop";
 import PerformanceMeta from "../shared/PerformanceMeta";
 import formatDateRange from "@/shared/utils/formatDateRange";
-import type { PerformanceSummary } from "@classic-hub/shared/types/client";
 
 interface CardBadgeProps {
   children: React.ReactNode;
@@ -23,7 +23,7 @@ const RankBadge = ({ children, className }: CardBadgeProps) => {
   );
 };
 
-const HomePerformanceAlbumCard = ({ data }: { data: PerformanceSummary }) => {
+const HomePerformanceAlbumCard = ({ data }: { data: RankingPerformanceHome }) => {
   return (
     <Link to={`/detail/${data.id}`}>
       {/* // group 클래스를 지정하여 해당 요소 hover시 자식의 스타일이 바뀌도록(transform: scale(1.05)) */}

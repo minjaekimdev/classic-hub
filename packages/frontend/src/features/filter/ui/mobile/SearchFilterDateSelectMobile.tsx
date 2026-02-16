@@ -1,37 +1,32 @@
 import { type DateRange } from "react-day-picker";
 import { Calendar } from "@/shared/ui/shadcn/calendar";
-import { useSearchMobile } from "../../contexts/search-context.mobile";
-import DateTransformer from "@/shared/utils/dateTransformer";
+import { useSearchFilterMobile } from "../../contexts/search-mobile-context";
 
 export function Calendar05() {
-  const { searchValue, changeValue } = useSearchMobile();
-
-  // 오늘 날짜 (시간 제거)
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  const { filters, updateFilters } = useSearchFilterMobile();
   let calendarDateRange: DateRange | undefined;
-
-  if (!searchValue.startDate) {
-    calendarDateRange = undefined;
-  } else {
-    const [startDate, endDate] = [searchValue.startDate, searchValue.endDate];
+  const isValidDateRange = /^\d{4}\/\d{2}\/\d{2} - \d{4}\/\d{2}\/\d{2}$/.test(
+    filters.period,
+  );
+  if (!isValidDateRange) {
     calendarDateRange = {
-      from: new Date(DateTransformer.format(startDate, "dash")),
-      to: new Date(DateTransformer.format(endDate, "dash")),
+      from: new Date(),
+      to: new Date(),
+    };
+  } else {
+    const [startDate, endDate] = filters.period
+      .split(" - ")
+      .map((item: string) => item.replaceAll("/", "-"));
+    calendarDateRange = {
+      from: new Date(startDate),
+      to: new Date(endDate),
     };
   }
-
-  // 오늘 이전 날짜 비활성화
-  const isDateDisabled = (date: Date) => {
-    const checkDate = new Date(date);
-    checkDate.setHours(0, 0, 0, 0);
-    return checkDate < today;
-  };
 
   const handleSelect = (range: DateRange | undefined) => {
     // 1. 선택 취소되거나 값이 없으면 초기화
     if (!range?.from) {
-      changeValue({ ...searchValue, startDate: "", endDate: "" });
+      updateFilters({ ...filters, period: "" });
       return;
     }
 
@@ -40,7 +35,7 @@ export function Calendar05() {
       const year = date.getFullYear();
       const month = String(date.getMonth() + 1).padStart(2, "0");
       const day = String(date.getDate()).padStart(2, "0");
-      return `${year}${month}${day}`;
+      return `${year}/${month}/${day}`;
     };
 
     const fromStr = formatDate(range.from);
@@ -48,16 +43,15 @@ export function Calendar05() {
     const toStr = range.to ? formatDate(range.to) : fromStr;
 
     // 3. 부모에게 문자열로 전달
-    changeValue({ ...searchValue, startDate: fromStr, endDate: toStr });
+    updateFilters({ ...filters, period: `${fromStr} - ${toStr}` });
   };
 
   return (
     <Calendar
       mode="range"
-      defaultMonth={today}
+      defaultMonth={calendarDateRange.from}
       selected={calendarDateRange}
       onSelect={handleSelect}
-      disabled={isDateDisabled}
       numberOfMonths={2}
       className="rounded-lg
       /* 1. 단일 선택 날짜 (Single Selected) */

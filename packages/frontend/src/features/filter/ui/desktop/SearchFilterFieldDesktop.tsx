@@ -1,14 +1,15 @@
 import bottomArrow from "@shared/assets/icons/bottom-arrow-gray.svg";
-
+import {
+  useSearchFilterDesktop,
+  type FieldType,
+} from "../../contexts/search-desktop-context";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/shared/ui/shadcn/dropdown-menu";
-import formatPriceToKo from "../../../../shared/utils/formatPriceToKo";
+import formatPriceQueryToFilter from "../../utils/formatPriceQueryToFilter";
 import formatDateQueryToFilter from "../../utils/formatDateQueryToFilter";
-import type { FieldType } from "../../types/filter";
-import { useSearch } from "../../contexts/search-context.desktop";
 
 const FIELD_MAP: Record<FieldType, string> = {
   keyword: "검색어",
@@ -23,13 +24,14 @@ interface FilterFieldProps {
   children: React.ReactNode;
 }
 const SearchFilterField = ({ iconSrc, field, children }: FilterFieldProps) => {
-  const { searchValue, activeField, openField, closeField } = useSearch();
+  const { searchValue, activeField, openField, closeField } =
+    useSearchFilterDesktop();
   const isOpen = field === activeField;
 
   const valueMap: Record<Exclude<FieldType, "keyword">, string | null> = {
     location: searchValue.location || null,
     price: searchValue.minPrice
-      ? formatPriceToKo(searchValue.minPrice, searchValue.maxPrice)
+      ? formatPriceQueryToFilter(searchValue.minPrice, searchValue.maxPrice)
       : null,
     period: searchValue.startDate
       ? formatDateQueryToFilter(searchValue.startDate, searchValue.endDate)
@@ -56,9 +58,7 @@ const SearchFilterField = ({ iconSrc, field, children }: FilterFieldProps) => {
             <div className="flex items-center gap-[0.44rem]">
               <img className="w-3.5 h-3.5" src={iconSrc} alt="" />
               <span className={`text-[0.77rem]/[1.09rem]`}>
-                {valueMap[field] || (
-                  <span className="text-gray-400">{FIELD_MAP[field]}</span>
-                )}
+                {valueMap[field] || <span className="text-gray-400">{FIELD_MAP[field]}</span>}
               </span>
             </div>
             <img className="w-3.5 h-3.5 mb-1" src={bottomArrow} alt="" />

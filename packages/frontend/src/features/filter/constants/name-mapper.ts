@@ -18,5 +18,5 @@ export const FIELD_KO_TO_EN: Record<string, keyof SearchCategory> = {
   검색어: "keyword",
   지역: "location",
   가격: "price",
-  기간: "period",
+  날짜: "period",
 };

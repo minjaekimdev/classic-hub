@@ -1,9 +1,10 @@
 import { useEffect, useRef } from "react";
 import searchIcon from "@shared/assets/icons/search-gray.svg";
-import { useSearch } from "../../contexts/search-context.desktop";
+import { useSearchFilterDesktop } from "../../contexts/search-desktop-context";
 
 const SearchInput = () => {
-  const { searchValue, activeField, changeValue, openField } = useSearch();
+  const { searchValue, activeField, changeValue, openField } =
+    useSearchFilterDesktop();
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     changeValue({ ...searchValue, keyword: e.target.value });
   };

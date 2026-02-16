@@ -1,5 +1,5 @@
 import PerformanceListCard from "@/features/performance/ui/mobile/PerformanceListCard";
-import type { PerformanceSummary} from "@classic-hub/shared/types/client";
+import type { PerformanceSummary } from "@classic-hub/shared/types/client";
 
 const MobileList = ({
   performanceArray,

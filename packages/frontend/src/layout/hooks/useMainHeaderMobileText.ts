@@ -34,9 +34,6 @@ const useMainHeaderMobileText = () => {
   // 1. 순서대로 배열 정의 (우선순위: 검색어 -> 지역 -> 가격 -> 날짜)
   const allFilters = [keyword, location, priceText, periodText];
   const hasFilters = allFilters.filter((item) => item);
-  if (!hasFilters.length) {
-    return "전체 공연";
-  }
 
   return hasFilters.join(", ");
 };

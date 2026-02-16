@@ -1,11 +1,11 @@
 import { Slider } from "@/shared/ui/shadcn/slider";
-import formatPriceToKo from "../../../../shared/utils/formatPriceToKo";
+import { useSearchFilterDesktop } from "../../contexts/search-desktop-context";
+import formatPriceQueryToFilter from "../../utils/formatPriceQueryToFilter";
 import { MAX_PRICE } from "../../constants/max-value";
-import { useSearch } from "../../contexts/search-context.desktop";
 
 const $MAX_PRICE = 50;
 const PriceRangeSlider = () => {
-  const { searchValue, changeValue } = useSearch();
+  const { searchValue, changeValue } = useSearchFilterDesktop();
 
   const handleSetPriceRange = (range: number[]) => {
     changeValue({
@@ -35,7 +35,10 @@ const PriceRangeSlider = () => {
           <h3 className="text-xs font-bold">가격 범위</h3>
           <span className="text-xs font-bold text-main">
             {searchValue.minPrice
-              ? formatPriceToKo(searchValue.minPrice, searchValue.maxPrice)
+              ? formatPriceQueryToFilter(
+                  searchValue.minPrice,
+                  searchValue.maxPrice,
+                )
               : `0 - ${MAX_PRICE}만+`}
           </span>
         </div>

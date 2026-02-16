@@ -3,7 +3,7 @@ import { useRef } from "react";
 import useClickOutside from "@/shared/hooks/useClickOutside";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useLayoutDesktop } from "@/layout/desktop/LayoutDesktop";
-import SearchDesktop from "@/features/filter/contexts/search-context.desktop";
+import SearchDesktop from "@/features/filter/contexts/search-desktop-context";
 import SearchFilterDesktop from "@/features/filter/ui/desktop/SearchFilterDesktop";
 import SearchFilterSmall from "@/features/filter/ui/desktop/SearchFilterSmall";
 
