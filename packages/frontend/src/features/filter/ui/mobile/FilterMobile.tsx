@@ -1,10 +1,12 @@
 import { X } from "lucide-react";
 import LocationSelector from "../shared/FilterLocationSelector";
 import SortSelector from "../shared/FilterSortSelector";
+import { useFilterParams } from "../../hooks/use-filter-params";
 import { useFilter } from "../../contexts/filter-context";
 
 const FilterMobile = () => {
-  const { isOpen, close, reset } = useFilter();
+  const { resetFilters } = useFilterParams();
+  const { isOpen, close } = useFilter();
 
   // 5. 결과보기 (적용 및 닫기)
   const handleApply = () => {
@@ -24,10 +26,7 @@ const FilterMobile = () => {
           />
 
           {/* Bottom Sheet Container */}
-          <div
-            className="fixed bottom-0 left-0 right-0 bg-white z-(--z-modal) rounded-t-2xl shadow-xl max-h-[90vh] flex flex-col transition-transform duration-300 transform translate-y-0"
-            onClick={(e: React.MouseEvent) => e.stopPropagation()}
-          >
+          <div className="fixed bottom-0 left-0 right-0 bg-white z-(--z-modal) rounded-t-2xl shadow-xl max-h-[90vh] flex flex-col transition-transform duration-300 transform translate-y-0">
             {/* Header */}
             <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
               <h2 className="text-lg font-bold text-gray-900">
@@ -54,7 +53,7 @@ const FilterMobile = () => {
             {/* Footer (Sticky) */}
             <div className="flex items-center gap-3 px-5 py-4 border-t border-gray-100 bg-white safe-area-bottom">
               <button
-                onClick={reset}
+                onClick={resetFilters}
                 className="flex items-center justify-center px-4 py-3.5 text-sm font-medium text-gray-500 hover:text-gray-800 transition-colors"
               >
                 <span className="mr-1">↺</span> 초기화

@@ -8,35 +8,17 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/shared/ui/shadcn/dropdown-menu";
-import formatPriceQueryToFilter from "../../utils/formatPriceQueryToFilter";
-import formatDateQueryToFilter from "../../utils/formatDateQueryToFilter";
-
-const FIELD_MAP: Record<FieldType, string> = {
-  keyword: "검색어",
-  location: "지역",
-  price: "가격",
-  period: "기간",
-};
 
 interface FilterFieldProps {
   iconSrc: string;
-  field: Exclude<FieldType, "keyword">;
+  title: FieldType;
   children: React.ReactNode;
 }
-const SearchFilterField = ({ iconSrc, field, children }: FilterFieldProps) => {
+const SearchFilterField = ({ iconSrc, title, children }: FilterFieldProps) => {
   const { searchValue, activeField, openField, closeField } =
     useSearchFilterDesktop();
-  const isOpen = field === activeField;
-
-  const valueMap: Record<Exclude<FieldType, "keyword">, string | null> = {
-    location: searchValue.location || null,
-    price: searchValue.minPrice
-      ? formatPriceQueryToFilter(searchValue.minPrice, searchValue.maxPrice)
-      : null,
-    period: searchValue.startDate
-      ? formatDateQueryToFilter(searchValue.startDate, searchValue.endDate)
-      : null,
-  };
+  const isOpen = title === activeField;
+  const titleColor = searchValue[title] ? "000" : "text-[#867e7c]";
 
   return (
     <DropdownMenu
@@ -46,7 +28,7 @@ const SearchFilterField = ({ iconSrc, field, children }: FilterFieldProps) => {
       // 클릭과 같은 토글 이벤트가 발생할 때마다 실행됨
       onOpenChange={(isOpenNow: boolean) => {
         if (isOpenNow) {
-          openField(field);
+          openField(title);
         } else {
           closeField();
         }
@@ -57,8 +39,8 @@ const SearchFilterField = ({ iconSrc, field, children }: FilterFieldProps) => {
           <div className="flex place-content-between items-center w-full h-[1.97rem] p-[0_0.66rem]">
             <div className="flex items-center gap-[0.44rem]">
               <img className="w-3.5 h-3.5" src={iconSrc} alt="" />
-              <span className={`text-[0.77rem]/[1.09rem]`}>
-                {valueMap[field] || <span className="text-gray-400">{FIELD_MAP[field]}</span>}
+              <span className={`text-[0.77rem]/[1.09rem] ${titleColor}`}>
+                {searchValue[title] ? searchValue[title] : title}
               </span>
             </div>
             <img className="w-3.5 h-3.5 mb-1" src={bottomArrow} alt="" />

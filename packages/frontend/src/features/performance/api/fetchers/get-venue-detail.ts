@@ -1,6 +1,6 @@
 import supabase from "@/app/api/supabase-client";
 import type { Hall } from "@classic-hub/shared/types/client";
-import { getMappedFacilityData, type RawType } from "../mappers/venue-detail.mapper";
+import { getMappedFacilityData, type RawType } from "../mappers/detail-venue-mapper";
 
 const getHallName = (venueName: string) => {
   const match = venueName.match(/\(([^)]+)\)/);

@@ -3,18 +3,15 @@ import {
   useSearchFilterDesktop,
   type FieldType,
 } from "../../contexts/search-desktop-context";
-import formatPriceQueryToFilter from "../../utils/formatPriceQueryToFilter";
-import formatDateQueryToFilter from "../../utils/formatDateQueryToFilter";
-import useQueryParams from "@/shared/hooks/useParams";
-import { FIELD_MAP } from "../../constants/name-mapper";
+
+const field: FieldType[] = ["지역", "가격", "날짜"];
 
 interface FieldProps {
   field: FieldType;
-  value: string | null;
   onFilterClick: (isFilterActive: boolean) => void;
 }
-const Field = ({ field, value, onFilterClick }: FieldProps) => {
-  const { openField } = useSearchFilterDesktop();
+const Field = ({ field, onFilterClick }: FieldProps) => {
+  const { searchValue, openField } = useSearchFilterDesktop();
 
   return (
     <div
@@ -25,11 +22,7 @@ const Field = ({ field, value, onFilterClick }: FieldProps) => {
         onFilterClick(true);
       }}
     >
-      {value ? (
-        value
-      ) : (
-        <span className="text-gray-400">{FIELD_MAP[field]}</span>
-      )}
+      {searchValue[field] ? searchValue[field] : field}
     </div>
   );
 };
@@ -38,18 +31,7 @@ interface SearchFilterSmallProps {
   onFilterClick: (isFilterActive: boolean) => void;
 }
 const SearchFilterSmall = ({ onFilterClick }: SearchFilterSmallProps) => {
-  const { openField } = useSearchFilterDesktop();
-  const { filters } = useQueryParams();
-  const { location, minPrice, maxPrice, startDate, endDate } = filters;
-
-  const categoryArr: [FieldType, string | null][] = [
-    ["location", location],
-    ["price", minPrice ? formatPriceQueryToFilter(minPrice, maxPrice) : null],
-    [
-      "period",
-      startDate ? formatDateQueryToFilter(startDate, endDate as string) : null,
-    ],
-  ];
+  const { openField, searchValue } = useSearchFilterDesktop();
 
   return (
     <div
@@ -60,20 +42,16 @@ const SearchFilterSmall = ({ onFilterClick }: SearchFilterSmallProps) => {
         className="grow-2 shrink-0 flex justify-center items-center ml-2 pl-2 pr-4 h-full text-xs cursor-pointer"
         onClick={(e) => {
           e.stopPropagation();
-          openField("keyword");
+          openField("검색어");
           onFilterClick(true);
         }}
       >
-        {filters.keyword ? (
-          filters.keyword
-        ) : (
-          <span className="text-gray-400">검색어</span>
-        )}
+        {searchValue.검색어 ? searchValue.검색어 : "검색어"}
       </div>
-      {categoryArr.map(([label, value]) => (
-        <div key={label} className="grow flex">
+      {field.map((item) => (
+        <div key={item} className="grow flex">
           <div className="flex-none w-px h-5 bg-[#E5E7EB]"></div>
-          <Field field={label} value={value} onFilterClick={onFilterClick} />
+          <Field field={item} onFilterClick={onFilterClick} />
         </div>
       ))}
       <button className="shrink-0 p-[0.69rem_0.56rem] rounded-main bg-main text-white text-[0.77rem] transition-transform duration-200 hover:scale-105">

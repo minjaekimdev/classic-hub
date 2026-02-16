@@ -3,7 +3,6 @@ import BottomSheet from "@/shared/ui/bottom-sheet/BottomSheet";
 import MainHeaderMobile from "../../widgets/shared/ui/MainHeaderMobile";
 import SearchMobile from "@/features/filter/contexts/search-mobile-context";
 import SearchFilterMobile from "@/features/filter/ui/mobile/SearchFilterMobile";
-import Footer from "@/widgets/shared/ui/Footer";
 
 interface MainLayoutMobileProps {
   children: React.ReactNode;
@@ -25,8 +24,7 @@ const MainLayoutMobile = ({
           {bottomSheetContent}
         </BottomSheet.Wrapper>
         <MainHeaderMobile />
-        <main className="bg-[#f3f4f6] p-3 min-h-main-mobile">{children}</main>
-        <Footer />
+        <main>{children}</main>
       </BottomSheet>
     </>
   );

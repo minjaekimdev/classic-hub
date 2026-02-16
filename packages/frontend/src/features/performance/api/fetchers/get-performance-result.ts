@@ -3,8 +3,7 @@ import type { Database } from "@classic-hub/shared/types/supabase";
 import supabase from "@/app/api/supabase-client";
 import type { DBPerformance } from "@classic-hub/shared/types/database";
 import type { DetailPerformance } from "@classic-hub/shared/types/client";
-import mapToPerformanceDetail from "../mappers/performance-detail.mapper";
-import formatQueryDate from "@/shared/utils/formatToQueryDate";
+import mapToPerformanceDetail from "../mappers/detail-performance-mapper";
 
 type PerformanceRow = Database["public"]["Tables"]["performances"]["Row"];
 
@@ -59,6 +58,7 @@ export const fetchSearchResults = async (
   let query = supabase.from("performances").select("*");
 
   // 2. 동적 필터링 (값이 존재할 때만 체이닝)
+
   if (filters.keyword) {
     // 제목(title) 혹은 장소명(venue) 등 원하는 컬럼 지정
     query = query.or(
@@ -79,14 +79,12 @@ export const fetchSearchResults = async (
     }
   }
 
-  // 날짜 범위 (공연 종료일이 검색 범위 사이에 있어야함)
+  // 날짜 범위 (교차 검증: 공연 시작 <= 검색 종료 && 공연 종료 >= 검색 시작)
   if (filters.startDate && filters.endDate) {
     query = query
-      .lte("period_to", formatQueryDate(filters.endDate))
-      .gte("period_to", formatQueryDate(filters.startDate));
+      .lte("period_from", filters.endDate)
+      .gte("period_to", filters.startDate);
   }
-
-  console.dir(query);
 
   // 4. 실행
   const { data, error } = await query;
@@ -96,6 +94,5 @@ export const fetchSearchResults = async (
   }
 
   const result = data as unknown as DBPerformance[];
-  return result.map((item: DBPerformance) => {
-    return mapToPerformanceDetail(item)});
+  return result.map((item: DBPerformance) => mapToPerformanceDetail(item));
 };

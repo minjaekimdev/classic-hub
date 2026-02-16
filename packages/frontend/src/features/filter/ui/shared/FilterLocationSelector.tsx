@@ -3,7 +3,7 @@ import locationIcon from "@shared/assets/icons/location-black.svg";
 import CategoryHeader from "./FilterCategoryHeader";
 import RegionItem from "./FilterRegionItem";
 import { useResult } from "@/features/performance/contexts/result-context";
-import useResultVenue from "../../hooks/useResultVenue";
+import useResultVenue from "../../hooks/use-result-venue";
 import { useFilter } from "../../contexts/filter-context";
 
 const FilterLocationSelector = () => {

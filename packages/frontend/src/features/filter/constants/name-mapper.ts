@@ -6,10 +6,3 @@ export const SORT_MAP: Record<SortType, string> = {
   "price-high": "높은가격순",
   alphabetical: "가나다순",
 };
-
-export const FIELD_MAP = {
-  keyword: "검색어",
-  location: "지역",
-  price: "가격",
-  period: "기간",
-};

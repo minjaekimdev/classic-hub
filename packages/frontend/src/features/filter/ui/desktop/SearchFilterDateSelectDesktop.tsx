@@ -10,24 +10,20 @@ export function SearchFilterDateSelectDesktop() {
   today.setHours(0, 0, 0, 0);
 
   let calendarDateRange: DateRange | undefined;
+  const isValidDateRange = /^\d{4}\/\d{2}\/\d{2} - \d{4}\/\d{2}\/\d{2}$/.test(
+    searchValue.날짜,
+  );
 
-  const parseDate = (dateStr: string) => {
-    const year = parseInt(dateStr.slice(0, 4), 10);
-    const month = parseInt(dateStr.slice(4, 6), 10) - 1; // 🚨 월은 0부터 시작하므로 -1 필수!
-    const day = parseInt(dateStr.slice(6, 8), 10);
-    
-    return new Date(year, month, day);
-  };
-
-  if (!searchValue.startDate) {
+  if (!isValidDateRange) {
     // 날짜가 선택되지 않으면 undefined로 표시 (아무것도 선택 안 함)
     calendarDateRange = undefined;
   } else {
-    const [startDate, endDate] = [searchValue.startDate, searchValue.endDate];
-
+    const [startDate, endDate] = searchValue.날짜
+      .split(" - ")
+      .map((item: string) => item.replaceAll("/", "-"));
     calendarDateRange = {
-      from: new Date(parseDate(startDate)),
-      to: new Date(parseDate(endDate)),
+      from: new Date(startDate),
+      to: new Date(endDate),
     };
   }
 
@@ -41,7 +37,6 @@ export function SearchFilterDateSelectDesktop() {
   const handleSelect = (range: DateRange | undefined) => {
     // 1. 선택 취소되거나 값이 없으면 초기화
     if (!range?.from) {
-      changeValue({ ...searchValue, startDate: "", endDate: "" });
       return;
     }
 
@@ -50,7 +45,7 @@ export function SearchFilterDateSelectDesktop() {
       const year = date.getFullYear();
       const month = String(date.getMonth() + 1).padStart(2, "0");
       const day = String(date.getDate()).padStart(2, "0");
-      return `${year}${month}${day}`;
+      return `${year}/${month}/${day}`;
     };
 
     const fromStr = formatDate(range.from);
@@ -58,7 +53,7 @@ export function SearchFilterDateSelectDesktop() {
     const toStr = range.to ? formatDate(range.to) : fromStr;
 
     // 3. 부모에게 문자열로 전달
-    changeValue({ ...searchValue, startDate: fromStr, endDate: toStr });
+    changeValue({ 날짜: `${fromStr} - ${toStr}` });
   };
 
   return (
