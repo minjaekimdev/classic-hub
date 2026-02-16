@@ -5,7 +5,6 @@ import type { DBPerformance } from "@classic-hub/shared/types/database";
 import type { DetailPerformance } from "@classic-hub/shared/types/client";
 import mapToPerformanceDetail from "../mappers/performance-detail.mapper";
 import formatQueryDate from "@/shared/utils/formatToQueryDate";
-import type { SearchFilters } from "../../types";
 
 type PerformanceRow = Database["public"]["Tables"]["performances"]["Row"];
 
@@ -18,6 +17,15 @@ type PerformanceQuery = PostgrestFilterBuilder<
   unknown,
   unknown
 >;
+
+interface SearchFilters {
+  keyword: string | null;
+  location: string | null;
+  minPrice: string | null;
+  maxPrice: string | null;
+  startDate: string | null;
+  endDate: string | null;
+}
 
 const getLocationQuery = (query: PerformanceQuery, location: string) => {
   if (location === "충북") {

@@ -25,9 +25,9 @@ export interface RankingPerformanceHome extends PerformanceSummary {
 export type Period = "daily" | "weekly" | "monthly";
 
 export interface RankingPerformance extends Performance {
-  currentRank: number;
+  current_rank: number;
   period: string;
-  lastRank: number | null;
+  last_rank: number | null;
   bookingLinks: BookingLink[];
 }
 

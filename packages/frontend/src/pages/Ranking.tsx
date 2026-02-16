@@ -24,7 +24,7 @@ const Ranking = () => {
     <LayoutDesktop variant="main">
       <Modal>
         <BookingModal />
-        <LayoutDesktop.Wrapper hasPaddingTop={true}>
+        <LayoutDesktop.Wrapper>
           <div className="flex flex-col gap-[2.19rem]">
             <RankingHeader period={period} onToggle={handlePeriod} />
             <RankList period={period} data={rankingDataObj[period]} />
