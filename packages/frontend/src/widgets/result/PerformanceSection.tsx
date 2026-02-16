@@ -1,13 +1,12 @@
-import { useFilter } from "@/features/filter/contexts/filter-context";
+import { useFilterUI } from "@/features/filter/contexts/FilterUIContext";
 import { useResult } from "@/features/performance/contexts/result-context";
 import ResultPerformanceAlbumCard from "@/features/performance/ui/desktop/ResultPerformanceAlbumCard";
 import PerformanceListCard from "@/features/performance/ui/mobile/PerformanceListCard";
 import { BREAKPOINTS } from "@/shared/constants";
 import useBreakpoint from "@/shared/hooks/useBreakpoint";
-import type { DetailPerformance } from "@classic-hub/shared/types/client";
 
 const PerformancesMobile = () => {
-  const { allPerformances: data } = useResult();
+  const data = useResult();
   return (
     <div className="flex flex-col gap-[0.88rem] w-full">
       {data.map((performance) => (
@@ -18,8 +17,8 @@ const PerformancesMobile = () => {
 };
 
 const PerformancesDesktop = () => {
-  const { sortedPerformances: data } = useResult();
-  const { isOpen } = useFilter();
+  const data = useResult();
+  const { isOpen } = useFilterUI();
 
   const isDesktop = useBreakpoint(1280);
   const isMobile = useBreakpoint(960);
@@ -33,9 +32,9 @@ const PerformancesDesktop = () => {
   }
   return (
     <div
-      className={`flex-1 grid ${gridStyle} gap-[1.31rem] p-[0.88rem] overflow-y-auto h-full`}
+      className={`flex-1 grid ${gridStyle} gap-[1.31rem] p-[0.88rem] overflow-y-auto h-result-content`}
     >
-      {data.map((item: DetailPerformance) => (
+      {data.map((item) => (
         <ResultPerformanceAlbumCard key={item.id} data={item} />
       ))}
     </div>

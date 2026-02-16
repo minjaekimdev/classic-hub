@@ -10,7 +10,7 @@ import SearchInput from "./SearchFilterInputDesktop";
 import SearchField from "./SearchFilterFieldDesktop";
 import SearchDesktop, {
   useSearchFilterDesktop,
-} from "../../contexts/search-desktop-context";
+} from "../../contexts/SearchFilterDesktop";
 import REGION_LIST from "@classic-hub/shared/constants/region-list";
 
 const SearchFilterDesktop = () => {

@@ -1,3 +1,4 @@
+import formatDateRange from "@/shared/utils/formatDateRange";
 import type { DetailPerformance } from "@classic-hub/shared/types/client";
 import type { DBPerformance } from "@classic-hub/shared/types/database";
 
@@ -8,8 +9,7 @@ const mapToPerformanceDetail = (raw: DBPerformance): DetailPerformance => {
     title: raw.performance_name,
     artist: raw.cast,
     bookingLinks: raw.booking_links,
-    startDate: raw.period_from,
-    endDate: raw.period_to,
+    period: formatDateRange(raw.period_from, raw.period_to),
     area: raw.area,
     minPrice: raw.min_price,
     maxPrice: raw.max_price,

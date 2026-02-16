@@ -8,30 +8,29 @@ type TempGroupMap = Record<
   string,
   {
     totalCount: number;
-    venues: Record<string, { name: string; count: number }>;
+    venues: Record<string, number>;
   }
 >;
 const useResultVenue = (result: DetailPerformance[]): Region[] => {
   const venueObj = result.reduce<TempGroupMap>((acc, perf) => {
-    const { area: rawArea, venue: rawVenue, venueId } = perf;
-    /* 중간 객체 예시
+    const { area: rawArea, venue: rawVenue } = perf;
+    /*
       {
         서울: {
           totalCount: 10,
           venues: {
-            PF1234: {
-              name: 예술의전당,
-              count: 2,
-            },
+            예술의전당: 2,
             ...
           }
         }
       }
-    */
 
+    */
     const area = formatArea(rawArea);
     const venue = formatVenue(rawVenue);
 
+    console.log(`result length: ${result.length}`);
+    console.log(`area: ${area}, venue: ${venue}`);
     if (!acc[area]) {
       acc[area] = {
         totalCount: 0,
@@ -39,26 +38,19 @@ const useResultVenue = (result: DetailPerformance[]): Region[] => {
       };
     }
 
-    if (!acc[area].venues[venueId]) {
-      acc[area].venues[venueId] = {
-        name: venue,
-        count: 0,
-      };
-    }
-
-    acc[area].totalCount++;
-    acc[area].venues[venueId].count++;
+    acc[area].totalCount += 1;
+    acc[area].venues[venue] = (acc[area].venues[venue] || 0) + 1;
 
     return acc;
   }, {});
 
-  /* 리턴 배열 예시
+  /*
     [
       {
         name: 서울
         totalCount: 12,
         venues: [
-          { id: PF1234, name: 예술의전당, count: 3 }
+          { name: 예술의전당, count: 3 }
            ...
         ]
       }
@@ -70,11 +62,10 @@ const useResultVenue = (result: DetailPerformance[]): Region[] => {
   return REGION_LIST.filter((area) => venueObj[area]).map((area) => ({
     name: area,
     totalCount: venueObj[area].totalCount,
-    venues: Object.entries(venueObj[area].venues).map(([key, value]) => ({
-      id: key,
-      name: value.name,
-      count: value.count,
-    })).sort((a, b) => b.count - a.count),
+    venues: Object.entries(venueObj[area].venues).map(([name, count]) => ({
+      name,
+      count,
+    })),
   }));
 };
 

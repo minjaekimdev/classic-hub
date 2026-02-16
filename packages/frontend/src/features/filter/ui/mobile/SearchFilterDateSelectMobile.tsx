@@ -1,6 +1,6 @@
 import { type DateRange } from "react-day-picker";
 import { Calendar } from "@/shared/ui/shadcn/calendar";
-import { useSearchFilterMobile } from "../../contexts/search-mobile-context";
+import { useSearchFilterMobile } from "../../contexts/SearchFilterMobile";
 
 export function Calendar05() {
   const { filters, updateFilters } = useSearchFilterMobile();

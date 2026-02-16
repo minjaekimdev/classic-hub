@@ -36,6 +36,7 @@ const LayoutDesktopProvider = ({
   // 화면에 아직 참조된 요소가 보이면 isScrollZero: true, 스크롤 발생 X
   // 보이지 않으면 false, 스크롤 발생 O
   const { ref, isIntersecting: isScrollZero } = useIntersectionObserver();
+
   const [isActive, setIsActive] = useState(false);
 
   const expand = () => {

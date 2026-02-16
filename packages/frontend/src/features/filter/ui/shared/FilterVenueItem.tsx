@@ -1,10 +1,10 @@
 import { Check } from "lucide-react";
 import type { Venue } from "../../types/filter";
-import { useFilter } from "../../contexts/filter-context";
+import { useFilterParams } from "../../hooks/useFilterParams";
 
 const FilterVenueItem = ({ venue }: { venue: Venue }) => {
-  const { filters, handleVenueSelect } = useFilter(); // url 상태를 필터와 동기화
-  const isSelected = filters.selectedVenues.includes(venue.id);
+  const { filters, handleVenueToggle } = useFilterParams();
+  const isSelected = filters.selectedVenues.includes(venue.name);
   const checkStyle = isSelected
     ? "bg-[#cc0000] border-[#cc0000]"
     : "bg-white border-gray-300";
@@ -13,7 +13,7 @@ const FilterVenueItem = ({ venue }: { venue: Venue }) => {
   return (
     <div
       key={venue.name}
-      onClick={() => handleVenueSelect(venue.id)}
+      onClick={() => handleVenueToggle(venue.name)}
       className="flex items-center justify-between cursor-pointer group"
     >
       <div className="flex items-center gap-3">

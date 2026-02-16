@@ -1,4 +1,3 @@
-import { useLayoutDesktop } from "@/layout/desktop/LayoutDesktop";
 import { useCallback, useState, type ReactNode } from "react";
 import { createContext, useContext } from "react";
 import { useNavigate } from "react-router-dom";
@@ -23,20 +22,16 @@ export interface SearchFilterDesktopContextType {
 }
 
 // eslint-disable-next-line react-refresh/only-export-components
-export const SearchFilterDesktopContext =
-  createContext<SearchFilterDesktopContextType | null>(null);
+export const SearchFilterDesktopContext = createContext<SearchFilterDesktopContextType | null>(null);
 
 interface SearchFilterDesktopProviderProps {
   children: ReactNode;
 }
 
-const SearchFilterDesktopProvider = ({
-  children,
-}: SearchFilterDesktopProviderProps) => {
+const SearchFilterDesktopProvider = ({ children }: SearchFilterDesktopProviderProps) => {
   const [searchValue, setSearchValue] =
     useState<SearchValue>(INITIAL_Search_VALUE);
   const [activeField, setActiveField] = useState<FieldType | null>(null);
-  const { shrink } = useLayoutDesktop();
   const navigate = useNavigate();
 
   const changeValue = useCallback((value: Partial<SearchValue>) => {
@@ -67,7 +62,7 @@ const SearchFilterDesktopProvider = ({
       const [minPrice, maxPrice] = searchValue.가격.split(" - ");
 
       params.append("min_price", getUrlPrice(minPrice));
-
+      
       // 가격 상한을 선택하지 않아 maxPrice가 "50만+"인 경우
       if (!maxPrice.includes("+")) {
         params.append("max_price", getUrlPrice(maxPrice));
@@ -82,7 +77,6 @@ const SearchFilterDesktopProvider = ({
     }
 
     const queryString = params.toString();
-    shrink();
     navigate(queryString ? `/result?${queryString}` : "/result");
   };
 

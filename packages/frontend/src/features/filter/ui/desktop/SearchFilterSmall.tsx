@@ -1,8 +1,5 @@
 import searchIcon from "@shared/assets/icons/search-white.svg";
-import {
-  useSearchFilterDesktop,
-  type FieldType,
-} from "../../contexts/search-desktop-context";
+import { useSearchFilterDesktop, type FieldType } from "../../contexts/SearchFilterDesktop";
 
 const field: FieldType[] = ["지역", "가격", "날짜"];
 

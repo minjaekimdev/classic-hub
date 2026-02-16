@@ -1,6 +1,7 @@
 import { PostgrestFilterBuilder } from "@supabase/postgrest-js";
 import type { Database } from "@classic-hub/shared/types/supabase";
 import supabase from "@/app/api/supabase-client";
+import type { SortType } from "@/features/filter/types/filter";
 import type { DBPerformance } from "@classic-hub/shared/types/database";
 import type { DetailPerformance } from "@classic-hub/shared/types/client";
 import mapToPerformanceDetail from "../mappers/detail-performance-mapper";
@@ -24,6 +25,8 @@ interface SearchFilters {
   maxPrice: string | null;
   startDate: string | null;
   endDate: string | null;
+  sortBy: SortType;
+  selectedVenues: string[];
 }
 
 const getLocationQuery = (query: PerformanceQuery, location: string) => {

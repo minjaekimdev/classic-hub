@@ -56,7 +56,7 @@ const FilterRegionItem = ({
       {isExpanded && (
         <div className="bg-gray-50 px-4 py-3 space-y-2">
           {region.venues.map((venue) => {
-            return <VenueItem key={venue.id} venue={venue} />;
+            return <VenueItem key={venue.name} venue={venue} />;
           })}
         </div>
       )}

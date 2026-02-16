@@ -1,4 +1,4 @@
-import { useDetail } from "../../contexts/detail-context";
+import { useDetail } from "@/pages/Detail";
 
 const DetailImages = () => {
   const { detailImages } = useDetail();

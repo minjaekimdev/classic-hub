@@ -4,10 +4,10 @@ import disabledIcon from "@shared/assets/icons/disabled-black.svg";
 import buildingIcon from "@shared/assets/icons/building-lightgray.svg";
 import linkIcon from "@shared/assets/icons/link-lightgray.svg";
 import Badge from "@/shared/ui/badges/Badge";
+import { useDetail } from "@/pages/Detail";
 import { useEffect, useState } from "react";
 import type { Hall } from "@classic-hub/shared/types/client";
 import getVenueInfo from "../../api/fetchers/get-venue-detail";
-import { useDetail } from "../../contexts/detail-context";
 
 interface CategoryProps {
   iconSrc: string;

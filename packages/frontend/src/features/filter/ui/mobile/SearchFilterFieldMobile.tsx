@@ -1,5 +1,5 @@
-import { useSearchFilterMobile } from "../../contexts/search-mobile-context";
-import { SEARCH_LABEL_TO_KEY } from "../../mappers/serach-label-to-english";
+import { useSearchFilterMobile } from "../../contexts/SearchFilterMobile";
+import { LABEL_TO_KEY } from "../../types/search-filter";
 
 interface SearchFilterFieldMobileProps {
   iconSrc: string;
@@ -13,7 +13,7 @@ const SearchFilterFieldMobile = ({
   subtitle,
 }: SearchFilterFieldMobileProps) => {
   const { filters, changeActiveCategory } = useSearchFilterMobile();
-  const categoryKey = SEARCH_LABEL_TO_KEY[label];
+  const categoryKey = LABEL_TO_KEY[label];
   return (
     <div
       className="flex gap-[0.66rem] rounded-[0.797rem] bg-[#f9fafb] p-[0.88rem] cursor-pointer"

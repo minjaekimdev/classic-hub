@@ -1,6 +1,6 @@
 import { type DateRange } from "react-day-picker";
 import { Calendar } from "@/shared/ui/shadcn/calendar";
-import { useSearchFilterDesktop } from "../../contexts/search-desktop-context";
+import { useSearchFilterDesktop } from "../../contexts/SearchFilterDesktop";
 
 export function SearchFilterDateSelectDesktop() {
   const { searchValue, changeValue } = useSearchFilterDesktop();

@@ -1,12 +1,12 @@
 import { X } from "lucide-react";
 import LocationSelector from "../shared/FilterLocationSelector";
 import SortSelector from "../shared/FilterSortSelector";
-import { useFilterParams } from "../../hooks/use-filter-params";
-import { useFilter } from "../../contexts/filter-context";
+import { useFilterParams } from "../../hooks/useFilterParams";
+import { useFilterUI } from "../../contexts/FilterUIContext";
 
 const FilterMobile = () => {
   const { resetFilters } = useFilterParams();
-  const { isOpen, close } = useFilter();
+  const { isOpen, close } = useFilterUI();
 
   // 5. 결과보기 (적용 및 닫기)
   const handleApply = () => {

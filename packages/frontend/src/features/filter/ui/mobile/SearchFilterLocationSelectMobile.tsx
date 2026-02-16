@@ -1,4 +1,4 @@
-import { useSearchFilterMobile } from "../../contexts/search-mobile-context";
+import { useSearchFilterMobile } from "../../contexts/SearchFilterMobile";
 
 interface LocationComponentProps {
   main: string;

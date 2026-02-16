@@ -4,7 +4,6 @@ import Modal, { useModal } from "@/shared/ui/modal/Modal";
 import type { BookingLink } from "@classic-hub/shared/types/common";
 import RankChange from "./RankChange";
 import { First, Other, Second, Third } from "./Rank";
-import formatDateRange from "@/shared/utils/formatDateRange";
 
 interface RankingItemProps extends Performance {
   currentRank: number;
@@ -31,8 +30,7 @@ const RankingItem = ({
   poster,
   title,
   artist,
-  startDate,
-  endDate,
+  period,
   venue,
   bookingLinks,
 }: RankingItemProps) => {
@@ -52,7 +50,7 @@ const RankingItem = ({
           <li className="mb-[0.44rem] ranking-info-text">{artist}</li>
           <li className="flex gap-[0.22rem] items-center mb-[0.56rem]">
             <img src={calendarIcon} />
-            <span className="ranking-info-text">{formatDateRange(startDate, endDate)}</span>
+            <span className="ranking-info-text">{period}</span>
           </li>
           <li className="ranking-info-text">{venue}</li>
         </ul>

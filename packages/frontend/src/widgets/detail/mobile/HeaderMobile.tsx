@@ -1,4 +1,4 @@
-import { useDetail } from "@/features/performance/contexts/detail-context";
+import { useDetail } from "@/pages/Detail";
 import arrowIcon from "@shared/assets/icons/left-arrowhead-black.svg";
 
 const HeaderMobile = () => {

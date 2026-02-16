@@ -3,7 +3,6 @@ import deleteIcon from "@shared/assets/icons/trashcan-black.svg";
 import calendarIcon from "@shared/assets/icons/calendar-gray.svg";
 import locationIcon from "@shared/assets/icons/location-gray.svg";
 import type { PerformanceSummary } from "@classic-hub/shared/types/client";
-import formatDateRange from "@/shared/utils/formatDateRange";
 
 interface MetaProps {
   iconSrc: string;
@@ -19,13 +18,12 @@ const Meta = ({ iconSrc, text }: MetaProps) => {
   );
 };
 
-type BookmarkPerformanceType = Pick<PerformanceSummary, "poster" | "title" | "artist" | "startDate" | "endDate" | "venue">
+type BookmarkPerformanceType = Pick<PerformanceSummary, "poster" | "title" | "artist" | "period" | "venue">
 const BookmarkPerformance = ({
   poster,
   title,
   artist,
-  startDate,
-  endDate,
+  period,
   venue,
 }: BookmarkPerformanceType) => {
   return (
@@ -44,7 +42,7 @@ const BookmarkPerformance = ({
         </ul>
         <div className="bg-[rgba(0,0,0,0.1)] my-[0.44rem] w-full h-[0.06rem] "></div>
         <ul className="flex flex-col gap-[0.16rem]">
-          <Meta iconSrc={calendarIcon} text={formatDateRange(startDate, endDate)} />
+          <Meta iconSrc={calendarIcon} text={period} />
           <Meta iconSrc={locationIcon} text={venue} />
         </ul>
         <div className="flex gap-[0.44rem] mt-[0.88rem]">

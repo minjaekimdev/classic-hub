@@ -1,9 +1,9 @@
 import HeaderMobile from "./HeaderMobile";
 import MainDetailMobile from "./MainDetailMobile";
 import Modal, { useModal } from "@/shared/ui/modal/Modal";
+import { useDetail } from "@/pages/Detail";
 import PosterMobile from "@/features/performance/ui/mobile/DetailPosterMobile";
 import SummaryMobile from "@/features/performance/ui/mobile/DetailSummaryMobile";
-import { useDetail } from "@/features/performance/contexts/detail-context";
 
 const DetailMobile = () => {
   const { bookingLinks } = useDetail();
