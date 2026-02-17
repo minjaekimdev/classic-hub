@@ -43,7 +43,7 @@ const PriceDisplayMobile = ({ minPrice, maxPrice }: PriceDisplayProps) => {
   return (
     <p className="text-dark text-[0.88rem]/[1.31rem] font-semibold">
       {formattedMin}원
-      <span className="text-[#6a7282] text-[0.77rem]/[1.1rem font-normal]">
+      <span className="text-[#6a7282] text-[0.77rem]/[1.1rem] font-normal">
         {" "}
         ~{" "}
       </span>

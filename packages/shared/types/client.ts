@@ -15,7 +15,7 @@ export interface PerformanceSummary extends Performance {
   maxPrice: number;
 }
 
-export interface HomePerformanceRanking extends PerformanceSummary {
+export interface HomeRankingPerformance extends PerformanceSummary {
   rank: number;
 }
 

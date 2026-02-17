@@ -5,23 +5,23 @@ import { Swiper as SwiperType } from "swiper";
 import type { SwiperOptions } from "swiper/types"; // 타입 지원을 위해
 import leftArrow from "@shared/assets/icons/left-slidearrow-black.svg";
 import rightArrow from "@shared/assets/icons/right-slidearrow-black.svg";
-import type { PerformanceSummary } from "@classic-hub/shared/types/client";
+import type { BaseItem } from "./AsyncCarousel";
 
-interface DesktopCarouselProps {
-  items: PerformanceSummary[];
-  renderItem: (item: PerformanceSummary) => React.ReactNode;
+interface DesktopCarouselProps<T> {
+  items: T[];
+  renderItem: (item: T) => React.ReactNode;
   breakpoints?: SwiperOptions["breakpoints"];
   slidesPerView?: number | "auto";
   spaceBetween?: number;
 }
 
-export const DesktopCarousel = ({
+export const DesktopCarousel = <T extends BaseItem>({
   items,
   renderItem,
   breakpoints,
   slidesPerView = 4, // 기본값
   spaceBetween = 21,
-}: DesktopCarouselProps) => {
+}: DesktopCarouselProps<T>) => {
   const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
   const uniqueId = useId().replace(/:/g, "");
   const prevClass = `prev-${uniqueId}`;

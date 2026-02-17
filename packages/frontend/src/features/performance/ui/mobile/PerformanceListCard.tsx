@@ -1,5 +1,4 @@
 import PerformanceAlbumMeta from "../shared/PerformanceMeta";
-import BookmarkButton from "@/shared/ui/buttons/BookmarkButtonMobile";
 import { PriceDisplay } from "../shared/PriceDisplayHome";
 import type { PerformanceSummary } from "@classic-hub/shared/types/client";
 
@@ -12,9 +11,6 @@ const PerformanceListCard = ({ data }: { data: PerformanceSummary }) => {
           src={data.poster}
           alt=""
         />
-        <div className="bookmark-position">
-          <BookmarkButton />
-        </div>
       </div>
       <div className="flex flex-col justify-between">
         <div className="flex flex-col gap-[0.6rem]">

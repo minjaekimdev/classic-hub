@@ -16,7 +16,6 @@ const MetaItem = ({ iconSrc, children }: MetaItemProps) => {
   );
 };
 
-
 interface PerformanceMetaProps {
   title: string;
   artist: string;
