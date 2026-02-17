@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import BookmarkButtonDesktop from "@/shared/ui/buttons/BookmarkButtonDesktop";
 import PerformanceMeta from "../shared/PerformanceMeta";
 import { PriceDisplay } from "../shared/PriceDisplayHome";
-import type { PerformanceSummary } from "@classic-hub/shared/types/client";
+import type { HomePerformanceRanking } from "@classic-hub/shared/types/client";
 
 interface CardBadgeProps {
   children: React.ReactNode;
@@ -21,12 +21,7 @@ export const RankBadge = ({ children, className }: CardBadgeProps) => {
   );
 };
 
-// 우선은 HomePerformance 타입을 따로 만들지 않고, 공통 PerformanceSummary 타입의 데이터를 받아옴
-export const HomePerformanceAlbumCard = ({
-  data,
-}: {
-  data: PerformanceSummary;
-}) => {
+export const HomePerformanceAlbumCard = ({ data }: { data: HomePerformanceRanking }) => {
   return (
     <Link to={`/detail/${data.id}`}>
       {/* // group 클래스를 지정하여 해당 요소 hover시 자식의 스타일이 바뀌도록(transform: scale(1.05)) */}
@@ -37,6 +32,11 @@ export const HomePerformanceAlbumCard = ({
             src={data.poster}
             alt=""
           />
+
+          <RankBadge className="top-[0.66rem] left-[0.66rem]">
+            {data.rank}위
+          </RankBadge>
+
           <div className="hidden desktop:block bookmark-position">
             <BookmarkButtonDesktop />
           </div>

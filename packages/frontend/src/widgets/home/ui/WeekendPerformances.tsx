@@ -2,19 +2,19 @@ import "swiper/css";
 import MobileList from "../shared/MobileList";
 import useBreakpoint from "@/shared/hooks/useBreakpoint";
 import HomeSectionLayout from "../shared/HomeSectionLayout";
-import BaseCarousel from "../shared/DesktopCarousel";
 import calendarIcon from "@shared/assets/icons/calendar-red.svg";
-import HomePerformanceAlbumCard from "@/features/performance/ui/desktop/HomePerformanceAlbumCard";
 import useWeekendPerformance from "@/features/performance/api/hooks/use-weekend-performance";
 import { BREAKPOINTS } from "@/shared/constants";
+import { DesktopCarousel } from "../shared/DesktopCarousel";
+import { HomePerformanceAlbumCard } from "@/features/performance/ui/desktop/HomePerformanceAlbumCard";
 
-const WeekendPerformances = () => {
+const WEEKEND_BREAKPOINTS = {
+  1280: { slidesPerView: 5 },
+};
+
+export const WeekendPerformances = () => {
   const performanceArray = useWeekendPerformance();
   const isMobile = useBreakpoint(BREAKPOINTS.TABLET);
-
-  const breakpoints = {
-    1280: { slidesPerView: 5 },
-  };
 
   return (
     <HomeSectionLayout
@@ -25,10 +25,10 @@ const WeekendPerformances = () => {
       {isMobile ? (
         <MobileList performanceArray={performanceArray} />
       ) : (
-        <BaseCarousel
+        <DesktopCarousel
           items={performanceArray}
           slidesPerView={4}
-          breakpoints={breakpoints}
+          breakpoints={WEEKEND_BREAKPOINTS}
           renderItem={(performance) => (
             <HomePerformanceAlbumCard data={performance} />
           )}
@@ -37,5 +37,3 @@ const WeekendPerformances = () => {
     </HomeSectionLayout>
   );
 };
-
-export default WeekendPerformances;

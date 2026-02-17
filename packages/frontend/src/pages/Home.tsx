@@ -1,6 +1,4 @@
 import { Toaster } from "sonner";
-import WeekendPerformances from "@/widgets/home/ui/WeekendPerformances";
-import RankingPerformances from "@/widgets/home/ui/RankingPerformances";
 import useBreakpoint from "@/shared/hooks/useBreakpoint";
 import FeedbackModal from "@/features/feedback/FeedbackModal";
 import Modal from "@/shared/ui/modal/Modal";
@@ -8,6 +6,8 @@ import HomeLayoutMobile from "@/layout/mobile/HomeLayoutMobile";
 import LayoutDesktop from "@/layout/desktop/LayoutDesktop";
 import SearchDesktop from "@/features/filter/contexts/search-context.desktop";
 import SearchMobile from "@/features/filter/contexts/search-context.mobile";
+import { RankingPerformances } from "@/widgets/home/ui/RankingPerformances";
+import { WeekendPerformances } from "@/widgets/home/ui/WeekendPerformances";
 
 const LayoutSwitcher = ({ children }: { children: React.ReactNode }) => {
   const isMobile = useBreakpoint(740);

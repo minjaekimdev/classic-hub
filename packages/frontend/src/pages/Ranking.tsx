@@ -3,9 +3,9 @@ import type { Period } from "@classic-hub/shared/types/client";
 import { useState } from "react";
 import RankingHeader from "@/widgets/ranking/RankingHeader";
 import RankList from "@/widgets/ranking/RankList";
-import useRankingPerformance from "@/features/performance/api/hooks/use-ranking-performance";
 import BookingModal from "@/features/booking/BookingModal";
 import LayoutDesktop from "@/layout/desktop/LayoutDesktop";
+import { useRankingPerformances } from "@/features/performance/api/hooks/useRankingPerformances";
 
 const Ranking = () => {
   const [period, setPeriod] = useState<Period>("daily");
@@ -15,9 +15,9 @@ const Ranking = () => {
   };
 
   const rankingDataObj = {
-    daily: useRankingPerformance("daily"),
-    weekly: useRankingPerformance("weekly"),
-    monthly: useRankingPerformance("monthly"),
+    daily: useRankingPerformances("daily"),
+    weekly: useRankingPerformances("weekly"),
+    monthly: useRankingPerformances("monthly"),
   };
 
   return (

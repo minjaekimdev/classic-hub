@@ -9,13 +9,14 @@ export interface Performance {
   venue: string;
 }
 
-// 공연 카드 기본 정보
 export interface PerformanceSummary extends Performance {
-  rank?: number;
+  period: string;
   minPrice: number;
   maxPrice: number;
-  startDate: string;
-  endDate: string;
+}
+
+export interface HomePerformanceRanking extends PerformanceSummary {
+  rank: number;
 }
 
 // 랭킹 페이지 공연

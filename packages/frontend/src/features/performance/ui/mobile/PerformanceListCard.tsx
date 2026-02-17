@@ -1,8 +1,7 @@
-import type { PerformanceSummary } from "@classic-hub/shared/types/client";
 import PerformanceAlbumMeta from "../shared/PerformanceMeta";
-import PriceDisplay from "../shared/PriceDisplay";
 import BookmarkButton from "@/shared/ui/buttons/BookmarkButtonMobile";
-import formatDateRange from "@/shared/utils/formatDateRange";
+import { PriceDisplay } from "../shared/PriceDisplayHome";
+import type { PerformanceSummary } from "@classic-hub/shared/types/client";
 
 const PerformanceListCard = ({ data }: { data: PerformanceSummary }) => {
   return (
@@ -22,12 +21,11 @@ const PerformanceListCard = ({ data }: { data: PerformanceSummary }) => {
           <PerformanceAlbumMeta
             title={data.title}
             artist={data.artist}
-            period={formatDateRange(data.startDate, data.endDate)}
+            period={data.period}
             venue={data.venue}
           />
         </div>
         <PriceDisplay
-          isMobile={true}
           minPrice={data.minPrice}
           maxPrice={data.maxPrice}
         />
