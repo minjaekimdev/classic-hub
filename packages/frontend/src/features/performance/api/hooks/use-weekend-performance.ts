@@ -1,8 +1,8 @@
 import supabase from "@/app/api/supabase-client";
 import type { PerformanceSummary } from "@classic-hub/shared/types/client";
 import { useEffect, useState } from "react";
-import type { DBPerformance } from "@classic-hub/shared/types/database";
-import toBasePerformance from "../mappers/base-performance.mapper";
+import mapToBasePerformance from "../mappers/base-performance.mapper";
+import type { DBPerformanceRow } from "@classic-hub/shared/types/database";
 
 // Date 형식의 날짜 데이터를 DB에 맞는 YYYY.MM.DD 형식으로 변환
 const getParsedDate = (date: Date) => {
@@ -39,13 +39,13 @@ const useWeekendPerformance = () => {
         .or(
           `and(period_from.gte."${parsedStartDate}",period_from.lte."${parsedEndDate}"),and(period_to.gte."${parsedStartDate}",period_to.lte."${parsedEndDate}"),and(period_from.lte."${parsedStartDate}",period_to.gte."${parsedEndDate}")`,
         )
-        .returns<DBPerformance[]>();
+        .returns<DBPerformanceRow[]>();
 
       if (error) {
         console.log("[FETCH_FAIL] WeekendPerformance fetch failed", error);
       } else {
         setPerformances(
-          data.map((item: DBPerformance) => toBasePerformance(item)),
+          data.map((item: DBPerformanceRow) => mapToBasePerformance(item)),
         );
       }
     };

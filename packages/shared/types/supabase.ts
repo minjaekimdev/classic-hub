@@ -23,7 +23,8 @@ export type Database = {
           performance_count: number | null
           performance_id: string
           performance_name: string | null
-          period: string | null
+          period_from: string | null
+          period_to: string | null
           poster: string | null
           seat_scale: number | null
           updated_at: string | null
@@ -37,7 +38,8 @@ export type Database = {
           performance_count?: number | null
           performance_id: string
           performance_name?: string | null
-          period?: string | null
+          period_from?: string | null
+          period_to?: string | null
           poster?: string | null
           seat_scale?: number | null
           updated_at?: string | null
@@ -51,7 +53,8 @@ export type Database = {
           performance_count?: number | null
           performance_id?: string
           performance_name?: string | null
-          period?: string | null
+          period_from?: string | null
+          period_to?: string | null
           poster?: string | null
           seat_scale?: number | null
           updated_at?: string | null
@@ -193,7 +196,8 @@ export type Database = {
           performance_count: number | null
           performance_id: string
           performance_name: string | null
-          period: string | null
+          period_from: string | null
+          period_to: string | null
           poster: string | null
           seat_scale: number | null
           updated_at: string | null
@@ -207,7 +211,8 @@ export type Database = {
           performance_count?: number | null
           performance_id: string
           performance_name?: string | null
-          period?: string | null
+          period_from?: string | null
+          period_to?: string | null
           poster?: string | null
           seat_scale?: number | null
           updated_at?: string | null
@@ -221,7 +226,8 @@ export type Database = {
           performance_count?: number | null
           performance_id?: string
           performance_name?: string | null
-          period?: string | null
+          period_from?: string | null
+          period_to?: string | null
           poster?: string | null
           seat_scale?: number | null
           updated_at?: string | null
@@ -337,7 +343,8 @@ export type Database = {
           performance_count: number | null
           performance_id: string
           performance_name: string | null
-          period: string | null
+          period_from: string | null
+          period_to: string | null
           poster: string | null
           seat_scale: number | null
           updated_at: string | null
@@ -351,7 +358,8 @@ export type Database = {
           performance_count?: number | null
           performance_id: string
           performance_name?: string | null
-          period?: string | null
+          period_from?: string | null
+          period_to?: string | null
           poster?: string | null
           seat_scale?: number | null
           updated_at?: string | null
@@ -365,7 +373,8 @@ export type Database = {
           performance_count?: number | null
           performance_id?: string
           performance_name?: string | null
-          period?: string | null
+          period_from?: string | null
+          period_to?: string | null
           poster?: string | null
           seat_scale?: number | null
           updated_at?: string | null
@@ -383,7 +392,8 @@ export type Database = {
           last_rank: number | null
           performance_id: string | null
           performance_name: string | null
-          period: string | null
+          period_from: string | null
+          period_to: string | null
           poster: string | null
           price: Json | null
           venue_name: string | null
@@ -398,7 +408,8 @@ export type Database = {
           last_rank: number | null
           performance_id: string | null
           performance_name: string | null
-          period: string | null
+          period_from: string | null
+          period_to: string | null
           poster: string | null
           price: Json | null
           venue_name: string | null
@@ -413,7 +424,8 @@ export type Database = {
           last_rank: number | null
           performance_id: string | null
           performance_name: string | null
-          period: string | null
+          period_from: string | null
+          period_to: string | null
           poster: string | null
           price: Json | null
           venue_name: string | null

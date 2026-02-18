@@ -1,11 +1,11 @@
 import { PostgrestFilterBuilder } from "@supabase/postgrest-js";
 import type { Database } from "@classic-hub/shared/types/supabase";
 import supabase from "@/app/api/supabase-client";
-import type { DBPerformance } from "@classic-hub/shared/types/database";
 import type { DetailPerformance } from "@classic-hub/shared/types/client";
 import mapToPerformanceDetail from "../mappers/performance-detail.mapper";
 import formatQueryDate from "@/shared/utils/formatToQueryDate";
 import type { SearchFilters } from "../../types";
+import type { DBPerformanceRow } from "@classic-hub/shared/types/database";
 
 type PerformanceRow = Database["public"]["Tables"]["performances"]["Row"];
 
@@ -85,7 +85,7 @@ export const fetchSearchResults = async (
     throw new Error(error.message);
   }
 
-  const result = data as unknown as DBPerformance[];
-  return result.map((item: DBPerformance) => {
+  const result = data as unknown as DBPerformanceRow[];
+  return result.map((item: DBPerformanceRow) => {
     return mapToPerformanceDetail(item)});
 };

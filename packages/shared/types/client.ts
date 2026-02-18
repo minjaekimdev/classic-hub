@@ -12,8 +12,8 @@ export interface Performance {
 // 공연 카드 기본 정보
 export interface PerformanceSummary extends Performance {
   rank?: number;
-  minPrice: number;
-  maxPrice: number;
+  minPrice: number | null;
+  maxPrice: number | null;
   startDate: string;
   endDate: string;
 }
