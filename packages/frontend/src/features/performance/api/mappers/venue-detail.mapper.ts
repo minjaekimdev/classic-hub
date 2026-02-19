@@ -1,8 +1,8 @@
 import type { Hall } from "@classic-hub/shared/types/client";
-import type { DBFacility, DBHall } from "@classic-hub/shared/types/database";
+import type { DBFacilityRead, DBHallRead } from "@classic-hub/shared/types/database";
 
 type PickedFacility = Pick<
-  DBFacility,
+  DBFacilityRead,
   | "name"
   | "tel"
   | "url"
@@ -18,7 +18,7 @@ type PickedFacility = Pick<
   | "has_disabled_ramp"
   | "has_disabled_elevator"
 >;
-export type RawType = Pick<DBHall, "seat_count"> & {
+export type RawType = Pick<DBHallRead, "seat_count"> & {
   facilities: PickedFacility | null;
 };
 export const getMappedFacilityData = (raw: RawType): Hall => {
@@ -50,15 +50,15 @@ export const getMappedFacilityData = (raw: RawType): Hall => {
     url: f.url,
     address: f.adress,
     seatCount: raw.seat_count,
-    restaurant: f.has_restaurant,
-    cafe: f.has_cafe,
-    store: f.has_store,
-    nolibang: f.has_nolibang,
-    suyu: f.has_suyu,
-    parking: f.has_parking,
-    disabledParking: f.has_disabled_parking,
-    disabledRestroom: f.has_disabled_restroom,
-    disabledRamp: f.has_disabled_ramp,
-    disabledElevator: f.has_disabled_elevator,
+    restaurant: f.has_restaurant ?? false,
+    cafe: f.has_cafe ?? false,
+    store: f.has_store ?? false,
+    nolibang: f.has_nolibang ?? false,
+    suyu: f.has_suyu ?? false,
+    parking: f.has_parking ?? false,
+    disabledParking: f.has_disabled_parking ?? false,
+    disabledRestroom: f.has_disabled_restroom ?? false,
+    disabledRamp: f.has_disabled_ramp ?? false,
+    disabledElevator: f.has_disabled_elevator ?? false,
   };
 };

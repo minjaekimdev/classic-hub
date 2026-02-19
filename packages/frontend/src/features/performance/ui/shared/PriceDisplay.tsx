@@ -1,10 +1,14 @@
 interface PriceDisplayProps {
   isMobile: boolean;
-  minPrice: number;
-  maxPrice: number;
+  minPrice: number | null;
+  maxPrice: number | null;
 }
 
 const PriceDisplay = ({ isMobile, minPrice, maxPrice }: PriceDisplayProps) => {
+  if (minPrice === null || maxPrice === null) {
+    return <span>-</span>;
+  }
+
   const formattedMin = minPrice.toLocaleString();
   const formattedMax = maxPrice.toLocaleString();
 

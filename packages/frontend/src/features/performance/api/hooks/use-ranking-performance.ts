@@ -5,7 +5,7 @@ import type {
 } from "@classic-hub/shared/types/client";
 import { useEffect, useState } from "react";
 import mapToRanking from "../mappers/ranking.mapper";
-import type { DBRankingWithDetails } from "@classic-hub/shared/types/database";
+import type { DBRanking } from "@classic-hub/shared/types/database";
 
 const useRankingPerformance = (period: Period) => {
   const [performance, setPerformance] = useState<RankingPerformance[]>([]);
@@ -14,14 +14,12 @@ const useRankingPerformance = (period: Period) => {
       const { error, data } = await supabase
         .from(`${period}_ranking_with_details`)
         .select("*")
-        .returns<DBRankingWithDetails[]>();
+        .returns<DBRanking[]>();
 
       if (error) {
         console.log("[FETCH_FAIL] Ranking fetch failed");
       } else {
-        setPerformance(
-          data.map((item: DBRankingWithDetails) => mapToRanking(item)),
-        );
+        setPerformance(data.map((item: DBRanking) => mapToRanking(item)));
       }
     };
 

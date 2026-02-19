@@ -1,13 +1,18 @@
 interface ResultPriceDisplay {
-  minPrice: number;
-  maxPrice: number;
+  minPrice: number | null;
+  maxPrice: number | null;
 }
 
 const ResultPriceDisplay = ({ minPrice, maxPrice }: ResultPriceDisplay) => {
+  const fontStyle = "text-[#155dfc] text-[0.77rem]/[1.09rem] font-semibold";
+
+  // 가격 정보가 제공되지 않는 경우
+  if (minPrice === null || maxPrice === null) {
+    return <span className={`${fontStyle}`}>-</span>;
+  }
+
   const formattedMin = minPrice.toLocaleString();
   const formattedMax = maxPrice.toLocaleString();
-
-  const fontStyle = "text-[#155dfc] text-[0.77rem]/[1.09rem] font-semibold";
 
   // 1. 단일 가격인 경우 (전석 무료 or 전석 x원)
   if (minPrice === maxPrice) {

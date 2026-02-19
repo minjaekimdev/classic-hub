@@ -2,7 +2,7 @@ import supabase from "@/app/api/supabase-client";
 import type { PerformanceSummary } from "@classic-hub/shared/types/client";
 import { useEffect, useState } from "react";
 import mapToHomeRanking from "../mappers/home-ranking.mapper";
-import type { DBRankingWithDetails } from "@classic-hub/shared/types/database";
+import type { DBRanking } from "@classic-hub/shared/types/database";
 
 const useHomeRankingPerformance = (limit: number) => {
   const [data, setData] = useState<PerformanceSummary[]>([]);
@@ -15,12 +15,12 @@ const useHomeRankingPerformance = (limit: number) => {
         .gte("current_rank", 1)
         .lte("current_rank", limit)
         .order("current_rank", { ascending: true })
-        .returns<DBRankingWithDetails[]>();
+        .returns<DBRanking[]>();
 
       if (error) {
         console.log("[FETCH_FAIL] HomePerformance data fetch failed");
       } else {
-        setData(data.map((item: DBRankingWithDetails) => mapToHomeRanking(item)));
+        setData(data.map((item: DBRanking) => mapToHomeRanking(item)));
       }
     };
     fetchPerformances();
