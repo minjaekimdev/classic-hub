@@ -1,7 +1,7 @@
 import type { PerformanceSummary } from "@classic-hub/shared/types/client";
-import type { DBPerformanceRow } from "@classic-hub/shared/types/database";
+import type { DBPerformanceRead } from "@classic-hub/shared/types/database";
 
-const mapToBasePerformance = (raw: DBPerformanceRow): PerformanceSummary => ({
+const mapToBasePerformance = (raw: DBPerformanceRead): PerformanceSummary => ({
   id: raw.performance_id,
   title: raw.performance_name ?? "",
   poster: raw.poster ?? "",

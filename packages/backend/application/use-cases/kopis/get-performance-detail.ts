@@ -8,13 +8,13 @@ import {
   getParsedBookingLinks,
 } from "@/application/services/kopis/parser";
 import RateLimiter from "utils/rateLimiter";
-import { DBPerformanceInsert } from "@classic-hub/shared/types/database";
 import { Json } from "@classic-hub/shared/types/supabase";
 import { getMinMaxPrice } from "./getMinMaxPrice";
+import { DBPerformanceWrite } from "@classic-hub/shared/types/database";
 
 const getMappedPerformanceDetail = (
   performanceDetail: PerformanceDetail,
-): DBPerformanceInsert => {
+): DBPerformanceWrite => {
   const {
     mt20id,
     mt10id,
@@ -35,7 +35,7 @@ const getMappedPerformanceDetail = (
     ...rest
   } = performanceDetail;
 
-  const priceArr = getParsedPrice(pcseguidance);
+  const priceArr = getParsedPrice(pcseguidance); // 빈 배열 혹은 가격 배열 리턴
   const { minPrice, maxPrice } = getMinMaxPrice(priceArr);
 
   return {
@@ -89,7 +89,7 @@ export const getPerformaceDetailArray = async (
   rateLimiter: RateLimiter,
 ) => {
   // 상세 데이터를 가져오는 데 성공한 공연, 실패한 공연 id를 따로 저장
-  const successes: DBPerformanceInsert[] = [];
+  const successes: DBPerformanceWrite[] = [];
   const failures: { id: string; error: any }[] = [];
 
   for (const id of idsToInsert) {

@@ -13,11 +13,10 @@ export const getMinMaxPrice = (price: Price[]): MinMaxObjType => {
     };
   }
 
-  return price.reduce(
-    (acc, item) => ({
-      minPrice: Math.min(acc.minPrice, item.price),
-      maxPrice: Math.max(acc.maxPrice, item.price),
-    }),
-    { minPrice: price[0].price, maxPrice: price[0].price },
-  );
+  const prices = price.map((item) => item.price);
+
+  return {
+    minPrice: Math.min(...prices),
+    maxPrice: Math.max(...prices),
+  }
 };

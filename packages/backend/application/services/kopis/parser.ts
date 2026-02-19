@@ -4,9 +4,11 @@ import { BookingLink, Price } from "@classic-hub/shared/types/common";
 // "전석 40,000원" 형태인 경우 [ { seatType: '전석', price: 40000 } ]
 // "전석무료" 혹은 가격 정보가 없을 경우 빈 배열 반환
 export const getParsedPrice = (raw: string | null): Price[] => {
-  if (!raw) {
+  if (raw === null) {
     return [];
   }
+  
+  raw = raw.trim();
   if (raw === "전석무료") {
     return [{seatType: "전석", price: 0}];
   }  
