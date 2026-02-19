@@ -34,7 +34,7 @@ export const HomePerformanceAlbumCard = ({
         <div className="relative overflow-hidden aspect-10/14">
           <img
             className="w-full h-full group-hover:scale-105 transition-scale duration-200 ease-in-out"
-            src={data.poster}
+            src={data.poster ?? ""}
             alt=""
           />
           <div className="hidden desktop:block bookmark-position">
@@ -43,10 +43,11 @@ export const HomePerformanceAlbumCard = ({
         </div>
         <div className="grow flex flex-col justify-between p-[0.88rem]">
           <PerformanceMeta
-            title={data.title}
-            artist={data.artist}
-            period={data.period}
-            venue={data.venue}
+            title={data.title ?? ""}
+            artist={data.artist ?? ""}
+            startDate={data.startDate}
+            endDate={data.endDate}
+            venue={data.venue ?? ""}
           />
           <div className="mt-3">
             <PriceDisplay minPrice={data.minPrice} maxPrice={data.maxPrice} />

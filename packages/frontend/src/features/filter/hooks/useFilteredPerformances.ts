@@ -9,7 +9,7 @@ const useFilteredPerformances = (
     return performances;
   }
 
-  return performances.filter((perf) => selectedVenueIdSet.has(perf.venueId));
+  return performances.filter((perf) => selectedVenueIdSet.has(perf.venueId!));
 };
 
 export default useFilteredPerformances;

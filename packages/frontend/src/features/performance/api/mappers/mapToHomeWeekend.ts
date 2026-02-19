@@ -1,8 +1,7 @@
-import formatDateRange from "@/shared/utils/formatDateRange";
 import type { PerformanceSummary } from "@classic-hub/shared/types/client";
-import type { DBPerformance } from "@classic-hub/shared/types/database";
+import type { DBPerformanceRead } from "@classic-hub/shared/types/database";
 
-export const mapToHomeWeekend = (raw: DBPerformance): PerformanceSummary => ({
+export const mapToHomeWeekend = (raw: DBPerformanceRead): PerformanceSummary => ({
   id: raw.performance_id,
   title: raw.performance_name,
   poster: raw.poster,
@@ -10,5 +9,6 @@ export const mapToHomeWeekend = (raw: DBPerformance): PerformanceSummary => ({
   venue: raw.venue_name,
   minPrice: raw.min_price,
   maxPrice: raw.max_price,
-  period: formatDateRange(raw.period_from, raw.period_to),
+  startDate: raw.period_from,
+  endDate: raw.period_to,
 });

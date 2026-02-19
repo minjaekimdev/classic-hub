@@ -1,4 +1,5 @@
-const formatDateRange = (startDate: string, endDate: string) => {
+const formatDateRange = (startDate: string | null, endDate: string | null) => {
+  if (startDate === null || endDate === null) return "";
   const days = ["일", "월", "화", "수", "목", "금", "토"];
   const startDayIdx = new Date(startDate.replaceAll(".", "-")).getDay();
   const endDayIdx = new Date(endDate.replaceAll(".", "-")).getDay();

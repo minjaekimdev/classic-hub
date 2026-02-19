@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import BookmarkButtonDesktop from "@/shared/ui/buttons/BookmarkButtonDesktop";
 import PerformanceMeta from "../shared/PerformanceMeta";
 import { PriceDisplay } from "../shared/PriceDisplayHome";
-import type { HomeRankingPerformance } from "@classic-hub/shared/types/client";
+import type { PerformanceSummary } from "@classic-hub/shared/types/client";
 
 interface CardBadgeProps {
   children: React.ReactNode;
@@ -21,7 +21,7 @@ export const RankBadge = ({ children, className }: CardBadgeProps) => {
   );
 };
 
-export const HomePerformanceRankingCard = ({ data }: { data: HomeRankingPerformance }) => {
+export const HomePerformanceRankingCard = ({ data }: { data: PerformanceSummary }) => {
   return (
     <Link to={`/detail/${data.id}`}>
       {/* // group 클래스를 지정하여 해당 요소 hover시 자식의 스타일이 바뀌도록(transform: scale(1.05)) */}
@@ -29,7 +29,7 @@ export const HomePerformanceRankingCard = ({ data }: { data: HomeRankingPerforma
         <div className="relative overflow-hidden aspect-10/14">
           <img
             className="w-full h-full group-hover:scale-105 transition-scale duration-200 ease-in-out"
-            src={data.poster}
+            src={data.poster ?? ""}
             alt=""
           />
           <RankBadge className="top-[0.66rem] left-[0.66rem]">
@@ -43,7 +43,8 @@ export const HomePerformanceRankingCard = ({ data }: { data: HomeRankingPerforma
           <PerformanceMeta
             title={data.title}
             artist={data.artist}
-            period={data.period}
+            startDate={data.startDate}
+            endDate={data.endDate}
             venue={data.venue}
           />
           <div className="mt-3">

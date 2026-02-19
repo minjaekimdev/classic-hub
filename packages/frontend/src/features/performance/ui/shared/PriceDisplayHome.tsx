@@ -2,8 +2,8 @@ import { BREAKPOINTS } from "@/shared/constants";
 import useBreakpoint from "@/shared/hooks/useBreakpoint";
 
 interface PriceDisplayProps {
-  minPrice: number;
-  maxPrice: number;
+  minPrice: number | null;
+  maxPrice: number | null;
 }
 
 const PriceFreeDisplay = () => {
@@ -23,7 +23,7 @@ const PriceSameDisplay = ({ minPrice }: { minPrice: number }) => {
   );
 };
 
-const PriceDisplayDesktop = ({ minPrice }: PriceDisplayProps) => {
+const PriceDisplayDesktop = ({ minPrice }: { minPrice: number }) => {
   const formattedMin = minPrice.toLocaleString();
 
   return (
@@ -36,7 +36,15 @@ const PriceDisplayDesktop = ({ minPrice }: PriceDisplayProps) => {
   );
 };
 
-const PriceDisplayMobile = ({ minPrice, maxPrice }: PriceDisplayProps) => {
+interface PriceDisplayMobileProps {
+  minPrice: number;
+  maxPrice: number;
+}
+
+const PriceDisplayMobile = ({
+  minPrice,
+  maxPrice,
+}: PriceDisplayMobileProps) => {
   const formattedMin = minPrice.toLocaleString();
   const formattedMax = maxPrice.toLocaleString();
 
@@ -52,9 +60,17 @@ const PriceDisplayMobile = ({ minPrice, maxPrice }: PriceDisplayProps) => {
   );
 };
 
+export const Fallback = () => {
+  return <span className="">가격 정보가 제공되지 않습니다.</span>;
+};
+
 export const PriceDisplay = ({ minPrice, maxPrice }: PriceDisplayProps) => {
   const isMobile = useBreakpoint(BREAKPOINTS.MOBILE);
   const isFree = minPrice === maxPrice && minPrice === 0;
+
+  if (minPrice === null || maxPrice === null) {
+    return <Fallback />;
+  }
 
   return (
     <>
@@ -65,7 +81,7 @@ export const PriceDisplay = ({ minPrice, maxPrice }: PriceDisplayProps) => {
       ) : isMobile ? (
         <PriceDisplayMobile minPrice={minPrice} maxPrice={maxPrice} />
       ) : (
-        <PriceDisplayDesktop minPrice={minPrice} maxPrice={maxPrice} />
+        <PriceDisplayDesktop minPrice={minPrice} />
       )}
     </>
   );

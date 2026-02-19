@@ -1,18 +1,16 @@
+import formatDateRange from "@/shared/utils/formatDateRange";
 import type { RankingPerformance } from "@classic-hub/shared/types/client";
-import type { DBRankingWithDetails } from "@classic-hub/shared/types/database";
+import type { BookingLink } from "@classic-hub/shared/types/common";
+import type { DBRanking } from "@classic-hub/shared/types/database";
 
-export const mapToRanking = (
-  performances: DBRankingWithDetails[],
-): RankingPerformance[] => {
-  return performances.map((item) => ({
-    currentRank: item.current_rank,
-    lastRank: item.last_rank,
-    bookingLinks: item.booking_links,
-    id: item.performance_id,
-    poster: item.poster,
-    title: item.performance_name,
-    artist: item.cast,
-    period: item.period,
-    venue: item.venue_name,
-  }));
-};
+export const mapToRanking = (raw: DBRanking): RankingPerformance => ({
+  currentRank: raw.current_rank!,
+  lastRank: raw.last_rank,
+  bookingLinks: raw.booking_links as unknown as BookingLink[] | null,
+  id: raw.performance_id!,
+  poster: raw.poster,
+  title: raw.performance_name,
+  artist: raw.cast,
+  period: formatDateRange(raw.period_from, raw.period_to),
+  venue: raw.venue_name,
+});

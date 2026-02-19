@@ -1,4 +1,4 @@
-import type REGION_LIST from "../constants/region-list";
+import type {REGION_LIST} from "../constants/region-list";
 
 // 좌석 및 가격 정보
 export interface Price {

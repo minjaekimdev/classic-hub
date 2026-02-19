@@ -1,6 +1,6 @@
 import supabase from "@/app/api/supabase-client";
-import type { DBRankingWithDetails } from "@classic-hub/shared/types/database";
 import type { Period } from "@classic-hub/shared/types/client";
+import type { DBRanking } from "@classic-hub/shared/types/database";
 
 export const getRankingPerformances = async (
   period: Period,
@@ -10,13 +10,13 @@ export const getRankingPerformances = async (
     .from(`${period}_ranking_with_details`)
     .select("*")
     .order("current_rank", { ascending: true })
-    .returns<DBRankingWithDetails[]>();
+    .returns<DBRanking[]>();
 
   if (limit) {
     query = query.limit(limit);
   }
 
-  const { error, data } = await query.returns<DBRankingWithDetails[]>();
+  const { error, data } = await query.returns<DBRanking[]>();
 
   if (error) {
     throw new Error(error.message || "[FETCH_FAIL] Ranking data fetch failed");

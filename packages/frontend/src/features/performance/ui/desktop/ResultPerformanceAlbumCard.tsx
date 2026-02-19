@@ -2,7 +2,6 @@ import type { DetailPerformance } from "@classic-hub/shared/types/client";
 import MetaData from "../shared/PerformanceMeta";
 import ResultPriceDisplay from "./ResultPriceDisplay";
 import BookmarkButton from "@/shared/ui/buttons/BookmarkButtonMobile";
-import formatDateRange from "@/shared/utils/formatDateRange";
 import { Link } from "react-router-dom";
 
 const ResultPerformanceAlbumCard = ({ data }: { data: DetailPerformance }) => {
@@ -10,7 +9,7 @@ const ResultPerformanceAlbumCard = ({ data }: { data: DetailPerformance }) => {
     <Link to={`/detail/${data.id}`}>
       <div className="flex flex-col gap-[0.66rem] cursor-pointer">
         <div className="relative rounded-main border border-[rgba(0,0,0,0.1)] overflow-hidden aspect-10/14">
-          <img className="w-full h-full" src={data.poster} alt="공연 포스터" />
+          <img className="w-full h-full" src={data.poster ?? ""} alt="공연 포스터" />
           <div className="bookmark-position">
             <BookmarkButton />
           </div>
@@ -19,7 +18,8 @@ const ResultPerformanceAlbumCard = ({ data }: { data: DetailPerformance }) => {
           <MetaData
             title={data.title}
             artist={data.artist}
-            period={formatDateRange(data.startDate, data.endDate)}
+            startDate={data.startDate}
+            endDate={data.endDate}
             venue={data.venue}
           />
           <div className="flex justify-between items-center mt-4">

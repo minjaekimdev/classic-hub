@@ -1,6 +1,9 @@
 import supabase from "@/app/api/supabase-client";
 import type { Hall } from "@classic-hub/shared/types/client";
-import { getMappedFacilityData, type RawType } from "../mappers/venue-detail.mapper";
+import {
+  getMappedFacilityData,
+  type RawType,
+} from "../mappers/venue-detail.mapper";
 
 const getHallName = (venueName: string) => {
   const match = venueName.match(/\(([^)]+)\)/);
@@ -8,6 +11,7 @@ const getHallName = (venueName: string) => {
   return result;
 };
 
+// venueId는 공연장 id, venueName은 세부 공연장이름
 const getVenueInfo = async (
   venueId: string,
   venueName: string,
@@ -39,12 +43,17 @@ const getVenueInfo = async (
     .eq("name", getHallName(venueName))
     .returns<RawType[]>();
 
-  if (error || !data || data.length === 0) {
-    console.log("[FETCH_FAIL] 공연장 정보 가져오기 실패", error);
-    return null;
-  } 
+  if (error) {
+    throw new Error(
+      error?.message || "[FETCH_FAIL] Venue data fetch failed",
+    );
+  }
 
-  return getMappedFacilityData(data[0]);  
+  if (!data || data.length === 0) {
+    return null;
+  }
+
+  return getMappedFacilityData(data[0]);
 };
 
 export default getVenueInfo;

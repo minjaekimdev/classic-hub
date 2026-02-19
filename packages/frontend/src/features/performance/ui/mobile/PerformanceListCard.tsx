@@ -8,7 +8,7 @@ const PerformanceListCard = ({ data }: { data: PerformanceSummary }) => {
       <div className="relative w-[9.63rem] h-full rounded-main shrink-0 overflow-hidden">
         <img
           className="group-hover:scale-105 w-full h-full transition-transform duration-200 ease-in-out"
-          src={data.poster}
+          src={data.poster ?? ""}
           alt=""
         />
       </div>
@@ -17,7 +17,8 @@ const PerformanceListCard = ({ data }: { data: PerformanceSummary }) => {
           <PerformanceAlbumMeta
             title={data.title}
             artist={data.artist}
-            period={data.period}
+            startDate={data.startDate}
+            endDate={data.endDate}
             venue={data.venue}
           />
         </div>

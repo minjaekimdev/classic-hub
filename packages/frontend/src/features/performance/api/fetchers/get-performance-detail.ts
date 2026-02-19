@@ -11,6 +11,8 @@ const getPerformanceDetail = async (id: string) => {
   if (error) {
     console.log("[FETCH_FAIL] 공연 상세 데이터 가져오기 실패");
   } else {
+    console.log(id);
+    console.log(data[0]);
     return mapToPerformanceDetail(data[0] as unknown as DBPerformanceRead);
   }
 };

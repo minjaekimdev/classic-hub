@@ -4,10 +4,11 @@ import disabledIcon from "@shared/assets/icons/disabled-black.svg";
 import buildingIcon from "@shared/assets/icons/building-lightgray.svg";
 import linkIcon from "@shared/assets/icons/link-lightgray.svg";
 import Badge from "@/shared/ui/badges/Badge";
-import { useEffect, useState } from "react";
 import type { Hall } from "@classic-hub/shared/types/client";
-import getVenueInfo from "../../api/fetchers/get-venue-detail";
 import { useDetail } from "../../contexts/detail-context";
+import useDetailVenueInfo from "../../api/hooks/useDetailVenueInfo";
+import DetailVenueInfoSkeleton from "./DetailVenueInfoSkeleton";
+import { ErrorMessageWithRefetch } from "@/shared/ui/fallback/ErrorMessage";
 
 interface CategoryProps {
   iconSrc: string;
@@ -45,18 +46,11 @@ const FACILITY_LABELS: Partial<Record<keyof Hall, string>> = {
 
 const DetailVenueInfo = () => {
   const { venue, venueId } = useDetail();
-  // 추후 api 호출
-  const [venueData, setVenueData] = useState<Hall | null>(null);
+  const {data: venueData, isLoading, isError, refetch} = useDetailVenueInfo(venueId, venue); 
 
-  useEffect(() => {
-    const handleVenueInfo = async () => {
-      const result = await getVenueInfo(venueId, venue);
-
-      setVenueData(result);
-    };
-    handleVenueInfo();
-  }, [venueId, venue]);
-
+  if (isLoading) return <DetailVenueInfoSkeleton />
+  if (isError) return <ErrorMessageWithRefetch refetch={refetch} />
+  
   return (
     <div className="flex flex-col gap-[0.88rem] px-[0.88rem] py-[1.09rem] desktop:p-0">
       <h3 className="text-dark text-[0.88rem]/[1.31rem] font-semibold">
