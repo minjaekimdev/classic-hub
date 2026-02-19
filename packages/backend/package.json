@@ -19,10 +19,10 @@
     "typescript": "^5.8.3"
   },
   "scripts": {
-    "test": "npx tsx ./tests/index.ts",
     "insert-facility": "npx tsx ./infrastructure/jobs/insert-facility.ts",
-    "get-program-test": "npx tsx ./test/get-program-test.ts",
     "update-performances": "npx tsx ./infrastructure/jobs/update-performances.ts",
-    "update-ranking": "npx tsx ./infrastructure/jobs/update-ranking.ts"
+    "update-ranking": "npx tsx ./infrastructure/jobs/update-ranking.ts",
+    "insert-failed-performances": "npx tsx ./tests/insertFailedPerformances.ts",
+    "get-performance": "npx tsx ./tests/getPerformance.ts"
   }
 }

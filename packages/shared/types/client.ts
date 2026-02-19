@@ -1,4 +1,4 @@
-import type { BookingLink, Location, Price as SeatPrice } from "./common";
+import type { BookingLink, Price as SeatPrice } from "./common";
 
 // 공통으로 사용되는 프로퍼티 모음
 export interface Performance {
@@ -9,14 +9,13 @@ export interface Performance {
   venue: string;
 }
 
+// 공연 카드 기본 정보
 export interface PerformanceSummary extends Performance {
-  period: string;
-  minPrice: number;
-  maxPrice: number;
-}
-
-export interface HomeRankingPerformance extends PerformanceSummary {
-  rank: number;
+  rank?: number;
+  minPrice: number | null;
+  maxPrice: number | null;
+  startDate: string;
+  endDate: string;
 }
 
 // 랭킹 페이지 공연
@@ -36,9 +35,9 @@ export interface DetailPerformance extends Performance {
   time: string;
   runningTime: string;
   age: string;
-  area: Location;
-  minPrice: number;
-  maxPrice: number;
+  area: string;
+  minPrice: number | null; // 가격 정보가 제공되지 않는 경우 null로 구분
+  maxPrice: number | null;
   startDate: string;
   endDate: string;
   priceInfo: SeatPrice[];
@@ -51,7 +50,7 @@ export interface Hall {
   tel: string | null;
   url: string | null;
   address: string | null;
-  seatCount: number
+  seatCount: number | null
   restaurant: boolean;
   cafe: boolean;
   store: boolean;
