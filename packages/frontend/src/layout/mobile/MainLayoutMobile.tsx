@@ -6,13 +6,13 @@ import SearchMobile from "@/features/filter/contexts/search-context.mobile";
 
 const MainLayoutMobile = ({ children }: { children: React.ReactNode }) => {
   return (
-    <BottomSheetProvider>
-      <SearchMobile>
+    <SearchMobile>
+      <BottomSheetProvider>
         <MainHeaderMobile />
         <main className="bg-[#f3f4f6] p-3 min-h-main-mobile">{children}</main>
         <Footer />
-      </SearchMobile>
-    </BottomSheetProvider>
+      </BottomSheetProvider>
+    </SearchMobile>
   );
 };
 
