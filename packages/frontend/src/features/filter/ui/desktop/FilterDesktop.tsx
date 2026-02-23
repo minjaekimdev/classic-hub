@@ -22,12 +22,12 @@ const FilterHeader = () => {
 };
 
 const Summary = () => {
-  const { sortedPerformances } = useResult();
+  const { filteredPerformances } = useResult();
   return (
     <div className="flex flex-col gap-[0.44rem] rounded-main bg-[#f9fafb] px-[0.88rem] pt-[0.87rem] pb-[0.37rem]">
       <CategoryHeader iconSrc={noteIcon} text="검색 결과" />
       <span className="text-main text-[1.31rem]/[1.75rem] font-bold">
-        {sortedPerformances.length}개
+        {filteredPerformances.length}개
       </span>
       <span className="text-[#6a7282] text-[0.77rem]/[1.09rem]">
         클래식 공연

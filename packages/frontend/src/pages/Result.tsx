@@ -9,12 +9,9 @@ import FeedbackModal from "@/features/feedback/FeedbackModal";
 import PerformanceSection from "@/widgets/result/PerformanceSection";
 import FilterDesktop from "@/features/filter/ui/desktop/FilterDesktop";
 import ResultHeader from "@/widgets/result/ResultHeader";
-import useQueryParams from "@/shared/hooks/useParams";
 import { ResultContext } from "@/features/performance/contexts/result-context";
 import { FilterProvider } from "@/features/filter/contexts/filter-context";
-import useResultPerformance from "@/features/performance/api/hooks/useResultPerformance";
-import useFilteredPerformances from "@/features/filter/hooks/useFilteredPerformances";
-import useSortedPerformances from "@/features/filter/hooks/useSortedPerformances";
+import useResultPerformances from "@/features/filter/hooks/useResultPerformances";
 
 const LayoutSwitcher = ({ children }: { children: React.ReactNode }) => {
   const isMobile = useBreakpoint(BREAKPOINTS.TABLET);
@@ -39,44 +36,10 @@ const LayoutSwitcher = ({ children }: { children: React.ReactNode }) => {
 };
 
 const Result = () => {
-  const { filters } = useQueryParams();
-  const {
-    keyword,
-    location,
-    minPrice,
-    maxPrice,
-    startDate,
-    endDate,
-    sortBy,
-    selectedVenues,
-  } = filters;
-
-  // 1차 필터에 필요한 정보, 2차 필터에 필요한 정보를 따로 나누어 가져온다는 정보만 남기고 추상화하기
-  const allPerformances = useResultPerformance({
-    keyword,
-    location,
-    minPrice,
-    maxPrice,
-    startDate,
-    endDate,
-  });
-
-  // 선택된 공연장들에 해당하는 공연 데이터 필터링하기
-  const filteredPerformances = useFilteredPerformances(
-    allPerformances,
-    selectedVenues,
-  );
-
-  // 선택된 정렬 방식에 따라 정렬하기
-  const sortedPerformances = useSortedPerformances(
-    filteredPerformances,
-    sortBy,
-  );
-
-  console.log(`필터링된 공연 개수: ${sortedPerformances.length}`);
+  const { allPerformances, filteredPerformances } = useResultPerformances();
 
   return (
-    <ResultContext.Provider value={{ allPerformances, sortedPerformances }}>
+    <ResultContext.Provider value={{ allPerformances, filteredPerformances }}>
       <Toaster />
       <Modal>
         <BookingModal />

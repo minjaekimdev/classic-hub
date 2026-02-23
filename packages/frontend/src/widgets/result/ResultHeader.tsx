@@ -5,7 +5,7 @@ import { useResult } from "@/features/performance/contexts/result-context";
 
 const ResultHeader = () => {
   const { isOpen, open, close } = useFilter();
-  const { sortedPerformances } = useResult();
+  const { filteredPerformances } = useResult();
 
   const handleClick = () => {
     if (isOpen) {
@@ -22,7 +22,7 @@ const ResultHeader = () => {
     <div className="sticky z-70 top-desktop-header-shrinked border-b border-black/10">
       <div className="bg-white flex justify-between items-center max-w-7xl mx-auto h-[3.56rem] px-7">
         <span className="text-dark text-[0.88rem]/[1.31rem] font-semibold">
-          {sortedPerformances.length}개의 클래식 공연
+          {filteredPerformances.length}개의 클래식 공연
         </span>
         {isOpen ? (
           <button

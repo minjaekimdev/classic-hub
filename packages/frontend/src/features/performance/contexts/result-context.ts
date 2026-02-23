@@ -3,7 +3,7 @@ import { createContext, useContext } from "react";
 
 interface ResultContextType {
   allPerformances: DetailPerformance[];
-  sortedPerformances: DetailPerformance[];
+  filteredPerformances: DetailPerformance[];
 }
 
 export const ResultContext = createContext<ResultContextType | null>(null);

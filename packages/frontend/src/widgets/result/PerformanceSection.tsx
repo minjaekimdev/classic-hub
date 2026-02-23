@@ -7,7 +7,7 @@ import useBreakpoint from "@/shared/hooks/useBreakpoint";
 import type { DetailPerformance } from "@classic-hub/shared/types/client";
 
 const PerformancesMobile = () => {
-  const { sortedPerformances: data } = useResult();
+  const { filteredPerformances: data } = useResult();
   return (
     <div className="flex flex-col gap-[0.88rem] w-full">
       {data.map((performance) => (
@@ -18,7 +18,7 @@ const PerformancesMobile = () => {
 };
 
 const PerformancesDesktop = () => {
-  const { sortedPerformances: data } = useResult();
+  const { filteredPerformances: data } = useResult();
   const { isOpen } = useFilter();
 
   const isDesktop = useBreakpoint(1280);
