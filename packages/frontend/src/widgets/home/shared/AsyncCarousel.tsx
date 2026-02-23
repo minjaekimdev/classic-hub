@@ -1,6 +1,7 @@
 import { HomePerformanceAlbumCardSkeleton } from "@/features/performance/ui/desktop/HomePerformanceAlbumCardSkeleton";
-import { ErrorMessage } from "@/shared/ui/fallback/ErrorMessage";
 import { DesktopCarousel } from "./DesktopCarousel";
+import { ErrorMessageWithRefetch } from "@/shared/ui/fallback/ErrorMessage";
+import type { QueryObserverResult } from "@tanstack/react-query";
 
 export interface BaseItem {
   id: string;
@@ -10,6 +11,7 @@ interface AsyncCarousel<T> {
   performances: T[] | undefined;
   isLoading: boolean;
   isError: boolean;
+  refetch: () => Promise<QueryObserverResult>;
   breakPoints: Record<number, { slidesPerView: number }>;
   renderItem: (item: T) => React.ReactNode;
 }
@@ -17,6 +19,7 @@ export const AsyncCarousel = <T extends BaseItem>({
   performances,
   isLoading,
   isError,
+  refetch,
   breakPoints,
   renderItem,
 }: AsyncCarousel<T>) => {
@@ -34,7 +37,7 @@ export const AsyncCarousel = <T extends BaseItem>({
       />
     );
   }
-  if (isError) return <ErrorMessage title="랭킹" />;
+  if (isError) return <ErrorMessageWithRefetch refetch={refetch} />;
 
   return (
     <DesktopCarousel

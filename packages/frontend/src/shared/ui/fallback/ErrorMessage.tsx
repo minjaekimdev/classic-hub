@@ -1,13 +1,5 @@
 import type { QueryObserverResult } from "@tanstack/react-query";
 
-export const ErrorMessage = ({ title }: { title: string }) => {
-  return (
-    <div className="w-full h-40 flex items-center justify-center text-gray-500 bg-gray-50 rounded-lg">
-      {title} 정보를 불러오지 못했습니다.
-    </div>
-  );
-};
-
 interface ErrorMessageWithRefetchProps {
   // void 대신 Promise를 반환하는 함수 타입으로 정의합니다.
   refetch: () => Promise<QueryObserverResult>;

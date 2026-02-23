@@ -16,12 +16,21 @@ interface VenueGroup {
 }
 
 // 누적 계산을 위한 임시 맵 타입 (Key를 Region으로 제한)
-type TempGroupMap = Partial<Record<Location, {
-  totalCount: number;
-  venues: Record<string, { name: string; count: number }>;
-}>>;
+type TempGroupMap = Partial<
+  Record<
+    Location,
+    {
+      totalCount: number;
+      venues: Record<string, { name: string; count: number }>;
+    }
+  >
+>;
 
-const useResultVenue = (result: DetailPerformance[]): VenueGroup[] => {
+const useResultVenue = (
+  result: DetailPerformance[] | undefined,
+): VenueGroup[] => {
+  if (result === undefined) return [];
+
   const venueObj = result.reduce<TempGroupMap>((acc, perf) => {
     const { area: rawArea, venue: rawVenue, venueId } = perf;
 
@@ -62,7 +71,7 @@ const useResultVenue = (result: DetailPerformance[]): VenueGroup[] => {
   // REGION_LIST 순서대로 정렬하여 결과 배열 생성
   return REGION_LIST.reduce<VenueGroup[]>((acc, area) => {
     const data = venueObj[area];
-    
+
     if (data) {
       acc.push({
         name: area,

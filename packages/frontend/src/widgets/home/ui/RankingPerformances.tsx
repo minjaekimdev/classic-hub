@@ -12,7 +12,7 @@ const RANKING_BREAKPOINTS = {
 };
 
 export const RankingPerformances = () => {
-  const { data, isLoading, isError } = useHomeRankingPerformances(10);
+  const { data, isLoading, isError, refetch } = useHomeRankingPerformances(10);
 
   return (
     <HomeSectionLayout
@@ -24,6 +24,7 @@ export const RankingPerformances = () => {
         performances={data}
         isLoading={isLoading}
         isError={isError}
+        refetch={refetch}
         breakPoints={RANKING_BREAKPOINTS}
         renderItem={(item) => <HomePerformanceRankingCard data={item} />}
       />

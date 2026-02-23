@@ -13,7 +13,7 @@ const WEEKEND_BREAKPOINTS = {
 };
 
 export const WeekendPerformances = () => {
-  const { data, isLoading, isError } = useWeekendPerformances();
+  const { data, isLoading, isError, refetch } = useWeekendPerformances();
   const isMobile = useBreakpoint(BREAKPOINTS.TABLET);
 
   return (
@@ -27,12 +27,14 @@ export const WeekendPerformances = () => {
           performances={data}
           isLoading={isLoading}
           isError={isError}
+          refetch={refetch}
         />
       ) : (
         <AsyncCarousel
           performances={data}
           isLoading={isLoading}
           isError={isError}
+          refetch={refetch}
           breakPoints={WEEKEND_BREAKPOINTS}
           renderItem={(performance) => (
             <HomePerformanceAlbumCard data={performance} />

@@ -17,11 +17,11 @@ const getSortReturn = <T>(
 };
 
 const useSortedPerformances = (
-  performances: DetailPerformance[],
+  performances: DetailPerformance[] | undefined,
   sortBy: SortType | null,
 ) => {
   const sortedPerformances = useMemo(() => {
-    const list = [...performances];
+    const list = performances ? [...performances] : [];
 
     return list.sort((a, b) => {
       switch (sortBy) {
@@ -48,7 +48,7 @@ const useSortedPerformances = (
 };
 
 const useVenuedPerformances = (
-  performances: DetailPerformance[],
+  performances: DetailPerformance[] | undefined,
   selectedVenues: string[],
 ) => {
   const result = useMemo(() => {
@@ -57,13 +57,18 @@ const useVenuedPerformances = (
       return performances;
     }
 
-    return performances.filter((perf) => selectedVenueIdSet.has(perf.venueId!));
+    return performances?.filter((perf) =>
+      selectedVenueIdSet.has(perf.venueId!),
+    );
   }, [performances, selectedVenues]);
 
   return result;
 };
 
-const useFilteredPerformances = (allPerformances: DetailPerformance[], filters: Filter) => {
+const useFilteredPerformances = (
+  allPerformances: DetailPerformance[] | undefined,
+  filters: Filter,
+) => {
   // 선택된 공연장들에 해당하는 공연 데이터 필터링하기
   const venuedPerformances = useVenuedPerformances(
     allPerformances,
@@ -71,7 +76,10 @@ const useFilteredPerformances = (allPerformances: DetailPerformance[], filters: 
   );
 
   // 선택된 정렬 방식에 따라 정렬하기
-  const filteredPerformances = useSortedPerformances(venuedPerformances, filters.sortBy);
+  const filteredPerformances = useSortedPerformances(
+    venuedPerformances,
+    filters.sortBy,
+  );
 
   return filteredPerformances;
 };
