@@ -1,18 +1,18 @@
 import "swiper/css";
 import HomeSectionLayout from "../shared/HomeSectionLayout";
-import BaseCarousel from "../shared/DesktopCarousel";
 import rankingIcon from "@shared/assets/icons/ranking-red.svg";
-import HomePerformanceAlbumCard from "@/features/performance/ui/desktop/HomePerformanceAlbumCard";
-import useHomeRankingPerformance from "@/features/performance/api/hooks/use-home-ranking-performance";
+import { useHomeRankingPerformances } from "@/features/performance/api/hooks/useHomeRankingPerformances";
+import { AsyncCarousel } from "../shared/AsyncCarousel";
+import { HomePerformanceRankingCard } from "@/features/performance/ui/desktop/HomePerformanceRankingCard";
 
-const RankingPerformances = () => {
-  const performanceArray = useHomeRankingPerformance(10);
+const RANKING_BREAKPOINTS = {
+  600: { slidesPerView: 3.2 },
+  960: { slidesPerView: 4 },
+  1280: { slidesPerView: 5 },
+};
 
-  const rankingBreakpoints = {
-    600: { slidesPerView: 3.2 },
-    960: { slidesPerView: 4 },
-    1280: { slidesPerView: 5 },
-  };
+export const RankingPerformances = () => {
+  const { data, isLoading, isError, refetch } = useHomeRankingPerformances(10);
 
   return (
     <HomeSectionLayout
@@ -20,16 +20,14 @@ const RankingPerformances = () => {
       subTitle="티켓판매액 기준 인기 공연"
       headerIcon={rankingIcon}
     >
-      <BaseCarousel
-        items={performanceArray}
-        slidesPerView={2.2} // 랭킹은 모바일에서 2.2개
-        breakpoints={rankingBreakpoints}
-        renderItem={(performance) => (
-          <HomePerformanceAlbumCard data={performance} />
-        )}
+      <AsyncCarousel
+        performances={data}
+        isLoading={isLoading}
+        isError={isError}
+        refetch={refetch}
+        breakPoints={RANKING_BREAKPOINTS}
+        renderItem={(item) => <HomePerformanceRankingCard data={item} />}
       />
     </HomeSectionLayout>
   );
 };
-
-export default RankingPerformances;

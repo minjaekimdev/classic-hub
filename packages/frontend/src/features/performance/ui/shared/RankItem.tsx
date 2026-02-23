@@ -32,7 +32,7 @@ const RankingItem = ({
     <div className="flex gap-[0.88rem] items-center rounded-main tablet:px-[0.66rem] h-[6.34rem] cursor-pointer hover:bg-[rgba(236,236,240,0.5)]">
       {showRanking(currentRank)}
       <div className="shrink-0 w-14 h-[4.67rem] rounded-[0.22rem] overflow-hidden">
-        <img className="w-full h-full" src={poster}></img>
+        <img className="w-full h-full" src={poster ?? ""}></img>
       </div>
       <div className="grow flex justify-between items-center">
         <ul className="flex flex-col">

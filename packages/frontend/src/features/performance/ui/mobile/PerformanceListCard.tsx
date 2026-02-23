@@ -1,8 +1,6 @@
-import type { PerformanceSummary } from "@classic-hub/shared/types/client";
 import PerformanceAlbumMeta from "../shared/PerformanceMeta";
-import PriceDisplay from "../shared/PriceDisplay";
-import BookmarkButton from "@/shared/ui/buttons/BookmarkButtonMobile";
-import formatDateRange from "@/shared/utils/formatDateRange";
+import { PriceDisplay } from "../shared/PriceDisplayHome";
+import type { PerformanceSummary } from "@classic-hub/shared/types/client";
 
 const PerformanceListCard = ({ data }: { data: PerformanceSummary }) => {
   return (
@@ -10,24 +8,21 @@ const PerformanceListCard = ({ data }: { data: PerformanceSummary }) => {
       <div className="relative w-[9.63rem] h-full rounded-main shrink-0 overflow-hidden">
         <img
           className="group-hover:scale-105 w-full h-full transition-transform duration-200 ease-in-out"
-          src={data.poster}
+          src={data.poster ?? ""}
           alt=""
         />
-        <div className="bookmark-position">
-          <BookmarkButton />
-        </div>
       </div>
       <div className="flex flex-col justify-between">
         <div className="flex flex-col gap-[0.6rem]">
           <PerformanceAlbumMeta
             title={data.title}
             artist={data.artist}
-            period={formatDateRange(data.startDate, data.endDate)}
+            startDate={data.startDate}
+            endDate={data.endDate}
             venue={data.venue}
           />
         </div>
         <PriceDisplay
-          isMobile={true}
           minPrice={data.minPrice}
           maxPrice={data.maxPrice}
         />

@@ -1,20 +1,20 @@
 import "swiper/css";
-import MobileList from "../shared/MobileList";
 import useBreakpoint from "@/shared/hooks/useBreakpoint";
 import HomeSectionLayout from "../shared/HomeSectionLayout";
-import BaseCarousel from "../shared/DesktopCarousel";
 import calendarIcon from "@shared/assets/icons/calendar-red.svg";
-import HomePerformanceAlbumCard from "@/features/performance/ui/desktop/HomePerformanceAlbumCard";
-import useWeekendPerformance from "@/features/performance/api/hooks/use-weekend-performance";
 import { BREAKPOINTS } from "@/shared/constants";
+import { HomePerformanceAlbumCard } from "@/features/performance/ui/desktop/HomePerformanceAlbumCard";
+import { useWeekendPerformances } from "@/features/performance/api/hooks/useWeekendPerformances";
+import { AsyncCarousel } from "../shared/AsyncCarousel";
+import { MobileList } from "../shared/MobileList";
 
-const WeekendPerformances = () => {
-  const performanceArray = useWeekendPerformance();
+const WEEKEND_BREAKPOINTS = {
+  1280: { slidesPerView: 5 },
+};
+
+export const WeekendPerformances = () => {
+  const { data, isLoading, isError, refetch } = useWeekendPerformances();
   const isMobile = useBreakpoint(BREAKPOINTS.TABLET);
-
-  const breakpoints = {
-    1280: { slidesPerView: 5 },
-  };
 
   return (
     <HomeSectionLayout
@@ -23,12 +23,19 @@ const WeekendPerformances = () => {
       headerIcon={calendarIcon}
     >
       {isMobile ? (
-        <MobileList performanceArray={performanceArray} />
+        <MobileList
+          performances={data}
+          isLoading={isLoading}
+          isError={isError}
+          refetch={refetch}
+        />
       ) : (
-        <BaseCarousel
-          items={performanceArray}
-          slidesPerView={4}
-          breakpoints={breakpoints}
+        <AsyncCarousel
+          performances={data}
+          isLoading={isLoading}
+          isError={isError}
+          refetch={refetch}
+          breakPoints={WEEKEND_BREAKPOINTS}
           renderItem={(performance) => (
             <HomePerformanceAlbumCard data={performance} />
           )}
@@ -37,5 +44,3 @@ const WeekendPerformances = () => {
     </HomeSectionLayout>
   );
 };
-
-export default WeekendPerformances;

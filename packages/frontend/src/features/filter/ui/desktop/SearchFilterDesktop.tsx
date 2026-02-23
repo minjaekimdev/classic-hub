@@ -11,7 +11,7 @@ import SearchField from "./SearchFilterFieldDesktop";
 import SearchDesktop, {
   useSearch,
 } from "../../contexts/search-context.desktop";
-import REGION_LIST from "@classic-hub/shared/constants/region-list";
+import {REGION_LIST} from "@classic-hub/shared/constants/region-list";
 
 const SearchFilterDesktop = () => {
   const { searchValue, changeValue } = useSearch();

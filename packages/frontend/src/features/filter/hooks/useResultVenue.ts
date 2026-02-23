@@ -1,37 +1,50 @@
 import formatArea from "@/shared/utils/formatArea";
 import formatVenue from "@/shared/utils/formatVenue";
 import type { DetailPerformance } from "@classic-hub/shared/types/client";
-import REGION_LIST from "@classic-hub/shared/constants/region-list";
-import type { Region } from "../types/filter";
+import { REGION_LIST } from "@classic-hub/shared/constants/region-list";
+import type { Location } from "@classic-hub/shared/types/common";
 
-type TempGroupMap = Record<
-  string,
-  {
-    totalCount: number;
-    venues: Record<string, { name: string; count: number }>;
-  }
+// 결과값의 개별 아이템 타입 정의
+interface VenueGroup {
+  name: Location;
+  totalCount: number;
+  venues: {
+    id: string;
+    name: string;
+    count: number;
+  }[];
+}
+
+// 누적 계산을 위한 임시 맵 타입 (Key를 Region으로 제한)
+type TempGroupMap = Partial<
+  Record<
+    Location,
+    {
+      totalCount: number;
+      venues: Record<string, { name: string; count: number }>;
+    }
+  >
 >;
-const useResultVenue = (result: DetailPerformance[]): Region[] => {
+
+const useResultVenue = (
+  result: DetailPerformance[] | undefined,
+): VenueGroup[] => {
+  if (result === undefined) return [];
+
   const venueObj = result.reduce<TempGroupMap>((acc, perf) => {
     const { area: rawArea, venue: rawVenue, venueId } = perf;
-    /* 중간 객체 예시
-      {
-        서울: {
-          totalCount: 10,
-          venues: {
-            PF1234: {
-              name: 예술의전당,
-              count: 2,
-            },
-            ...
-          }
-        }
-      }
-    */
+
+    // 데이터가 없거나 변환에 실패하면 해당 데이터는 건너뜀 (acc를 그대로 반환해야 함)
+    if (!rawArea || !rawVenue || !venueId) {
+      return acc;
+    }
 
     const area = formatArea(rawArea);
-    const venue = formatVenue(rawVenue);
+    if (!area) return acc; // 매핑되지 않는 지역인 경우
 
+    const venueName = formatVenue(rawVenue);
+
+    // 1. 해당 지역 초기화
     if (!acc[area]) {
       acc[area] = {
         totalCount: 0,
@@ -39,43 +52,41 @@ const useResultVenue = (result: DetailPerformance[]): Region[] => {
       };
     }
 
-    if (!acc[area].venues[venueId]) {
-      acc[area].venues[venueId] = {
-        name: venue,
+    // 2. 해당 공연장 초기화
+    const targetArea = acc[area]!;
+    if (!targetArea.venues[venueId]) {
+      targetArea.venues[venueId] = {
+        name: venueName,
         count: 0,
       };
     }
 
-    acc[area].totalCount++;
-    acc[area].venues[venueId].count++;
+    // 3. 카운팅
+    targetArea.totalCount++;
+    targetArea.venues[venueId].count++;
 
     return acc;
   }, {});
 
-  /* 리턴 배열 예시
-    [
-      {
-        name: 서울
-        totalCount: 12,
-        venues: [
-          { id: PF1234, name: 예술의전당, count: 3 }
-           ...
-        ]
-      }
-      ...
-    ]
-  */
+  // REGION_LIST 순서대로 정렬하여 결과 배열 생성
+  return REGION_LIST.reduce<VenueGroup[]>((acc, area) => {
+    const data = venueObj[area];
 
-  // 배열 형태로 가공하기
-  return REGION_LIST.filter((area) => venueObj[area]).map((area) => ({
-    name: area,
-    totalCount: venueObj[area].totalCount,
-    venues: Object.entries(venueObj[area].venues).map(([key, value]) => ({
-      id: key,
-      name: value.name,
-      count: value.count,
-    })).sort((a, b) => b.count - a.count),
-  }));
+    if (data) {
+      acc.push({
+        name: area,
+        totalCount: data.totalCount,
+        venues: Object.entries(data.venues)
+          .map(([id, info]) => ({
+            id,
+            name: info.name,
+            count: info.count,
+          }))
+          .sort((a, b) => b.count - a.count),
+      });
+    }
+    return acc;
+  }, []);
 };
 
 export default useResultVenue;

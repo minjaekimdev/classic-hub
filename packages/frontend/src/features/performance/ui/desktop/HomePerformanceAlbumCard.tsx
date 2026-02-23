@@ -1,9 +1,7 @@
-import PriceDisplay from "../shared/PriceDisplay";
 import { Link } from "react-router-dom";
-import BookmarkButtonMobile from "@/shared/ui/buttons/BookmarkButtonMobile";
 import BookmarkButtonDesktop from "@/shared/ui/buttons/BookmarkButtonDesktop";
 import PerformanceMeta from "../shared/PerformanceMeta";
-import formatDateRange from "@/shared/utils/formatDateRange";
+import { PriceDisplay } from "../shared/PriceDisplayHome";
 import type { PerformanceSummary } from "@classic-hub/shared/types/client";
 
 interface CardBadgeProps {
@@ -11,7 +9,7 @@ interface CardBadgeProps {
   className?: string;
 }
 
-const RankBadge = ({ children, className }: CardBadgeProps) => {
+export const RankBadge = ({ children, className }: CardBadgeProps) => {
   return (
     <div
       className={`absolute z-10 shrink-0 flex justify-center items-center rounded-full p-[0.47rem_0.65rem_0.38rem] bg-linear-to-b from-[#cc0000] to-[#990000] text-white text-[0.77rem]/[1.09rem] font-bold ${
@@ -23,7 +21,12 @@ const RankBadge = ({ children, className }: CardBadgeProps) => {
   );
 };
 
-const HomePerformanceAlbumCard = ({ data }: { data: PerformanceSummary }) => {
+// 우선은 HomePerformance 타입을 따로 만들지 않고, 공통 PerformanceSummary 타입의 데이터를 받아옴
+export const HomePerformanceAlbumCard = ({
+  data,
+}: {
+  data: PerformanceSummary;
+}) => {
   return (
     <Link to={`/detail/${data.id}`}>
       {/* // group 클래스를 지정하여 해당 요소 hover시 자식의 스타일이 바뀌도록(transform: scale(1.05)) */}
@@ -31,39 +34,26 @@ const HomePerformanceAlbumCard = ({ data }: { data: PerformanceSummary }) => {
         <div className="relative overflow-hidden aspect-10/14">
           <img
             className="w-full h-full group-hover:scale-105 transition-scale duration-200 ease-in-out"
-            src={data.poster}
+            src={data.poster ?? ""}
             alt=""
           />
-          {data.rank && (
-            <RankBadge className="top-[0.66rem] left-[0.66rem]">
-              {data.rank}위
-            </RankBadge>
-          )}
-          <div className="desktop:hidden bookmark-position">
-            <BookmarkButtonMobile />
-          </div>
           <div className="hidden desktop:block bookmark-position">
             <BookmarkButtonDesktop />
           </div>
         </div>
         <div className="grow flex flex-col justify-between p-[0.88rem]">
           <PerformanceMeta
-            title={data.title}
-            artist={data.artist}
-            period={formatDateRange(data.startDate, data.endDate)}
-            venue={data.venue}
+            title={data.title ?? ""}
+            artist={data.artist ?? ""}
+            startDate={data.startDate}
+            endDate={data.endDate}
+            venue={data.venue ?? ""}
           />
           <div className="mt-3">
-            <PriceDisplay
-              isMobile={false}
-              minPrice={data.minPrice}
-              maxPrice={data.maxPrice}
-            />
+            <PriceDisplay minPrice={data.minPrice} maxPrice={data.maxPrice} />
           </div>
         </div>
       </div>
     </Link>
   );
 };
-
-export default HomePerformanceAlbumCard;

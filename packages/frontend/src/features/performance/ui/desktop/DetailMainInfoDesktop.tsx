@@ -9,7 +9,7 @@ import { useDetail } from "../../contexts/detail-context";
 interface CategoryItem {
   iconSrc?: string;
   title: string;
-  content: string;
+  content: string | null;
 }
 const Category = ({ iconSrc, title, content }: CategoryItem) => {
   return (
@@ -20,7 +20,9 @@ const Category = ({ iconSrc, title, content }: CategoryItem) => {
           {title}
         </p>
       </div>
-      <span className="text-dark text-[0.88rem]/[1.31rem]">{content}</span>
+      <span className="text-dark text-[0.88rem]/[1.31rem]">
+        {content ?? "-"}
+      </span>
     </div>
   );
 };

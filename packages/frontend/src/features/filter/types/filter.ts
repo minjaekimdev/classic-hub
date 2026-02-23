@@ -50,6 +50,6 @@ export interface Filter {
   maxPrice: string | null;
   startDate: string | null;
   endDate: string | null;
-  sortBy: string | null;
+  sortBy: SortType | null;
   selectedVenues: Array<string>;
 }

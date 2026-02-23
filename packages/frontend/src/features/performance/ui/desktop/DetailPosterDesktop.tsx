@@ -13,7 +13,7 @@ const DetailPoster = () => {
         <p className="text-[#717182] text-[0.98rem]/[1.53rem]">{artist}</p>
       </div>
       <div className="rounded-main aspect-10/14 overflow-hidden">
-        <img src={poster} alt="" className="w-full h-full" />
+        <img src={poster ?? ""} alt="" className="w-full h-full" />
       </div>
       <div className="flex gap-[0.44rem] h-7">
         <BookmarkButtonWithText />

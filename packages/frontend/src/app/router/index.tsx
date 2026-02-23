@@ -1,14 +1,22 @@
-import App from "@/pages/App";
 import { loader as detailLoader, Detail } from "@/pages/Detail";
 import Home from "@/pages/Home";
 import Ranking from "@/pages/Ranking";
 import Result from "@/pages/Result";
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Outlet } from "react-router-dom";
+
+// eslint-disable-next-line react-refresh/only-export-components
+const RootLayout = () => {
+  return (
+    <>
+      <Outlet />
+    </>
+  )
+}
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: <RootLayout />,
     children: [
       {
         index: true,

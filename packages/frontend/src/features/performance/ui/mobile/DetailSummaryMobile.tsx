@@ -5,13 +5,13 @@ import formatDateRange from "@/shared/utils/formatDateRange";
 
 interface InfoRowProps {
   label: string;
-  description: string;
+  description: string | null;
 }
 const InfoRow = ({ label, description }: InfoRowProps) => {
   return (
     <li className="flex items-center gap-[1.19rem]">
       <span className="text-[#4a5565] text-[0.77rem]/[1.09rem]">{label}</span>
-      <span className="text-dark text-[0.77rem]/[1.09rem]">{description}</span>
+      <span className="text-dark text-[0.77rem]/[1.09rem]">{description ?? ""}</span>
     </li>
   );
 };

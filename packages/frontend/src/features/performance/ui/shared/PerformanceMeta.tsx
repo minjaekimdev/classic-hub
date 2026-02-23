@@ -1,6 +1,8 @@
 import React from "react";
 import calendarIcon from "@shared/assets/icons/calendar-gray.svg";
 import locationIcon from "@shared/assets/icons/location-gray.svg";
+import formatDateRange from "@/shared/utils/formatDateRange";
+import type { PerformanceSummary } from "@classic-hub/shared/types/client";
 
 interface MetaItemProps {
   iconSrc: string;
@@ -16,14 +18,17 @@ const MetaItem = ({ iconSrc, children }: MetaItemProps) => {
   );
 };
 
-
-interface PerformanceMetaProps {
-  title: string;
-  artist: string;
-  period: string;
-  venue: string;
-}
-const PerformanceMeta = ({ title, artist, period, venue }: PerformanceMetaProps) => {
+type PerformanceMetaProps = Pick<
+  PerformanceSummary,
+  "title" | "artist" | "startDate" | "endDate" | "venue"
+>;
+const PerformanceMeta = ({
+  title,
+  artist,
+  startDate,
+  endDate,
+  venue,
+}: PerformanceMetaProps) => {
   return (
     <div className="flex flex-col gap-[0.66rem]">
       <div className="flex flex-col gap-[0.22rem]">
@@ -34,7 +39,9 @@ const PerformanceMeta = ({ title, artist, period, venue }: PerformanceMetaProps)
       </div>
       <div className="flex flex-col">
         <ul className="flex flex-col gap-[0.33rem]">
-          <MetaItem iconSrc={calendarIcon}>{period}</MetaItem>
+          <MetaItem iconSrc={calendarIcon}>
+            {formatDateRange(startDate, endDate)}
+          </MetaItem>
           <MetaItem iconSrc={locationIcon}>{venue}</MetaItem>
         </ul>
       </div>

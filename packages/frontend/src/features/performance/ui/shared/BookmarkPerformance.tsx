@@ -7,14 +7,14 @@ import formatDateRange from "@/shared/utils/formatDateRange";
 
 interface MetaProps {
   iconSrc: string;
-  text: string;
+  text: string | null;
 }
 
 const Meta = ({ iconSrc, text }: MetaProps) => {
   return (
     <li className="flex items-center gap-[0.44rem]">
       <img src={iconSrc} alt="달력 아이콘" className="" />
-      <span className="text-dark text-[0.77rem]/[1.09rem]">{text}</span>
+      <span className="text-dark text-[0.77rem]/[1.09rem]">{text ?? "-"}</span>
     </li>
   );
 };
@@ -33,7 +33,7 @@ const BookmarkPerformance = ({
       <div
         className="w-full border aspect-10/14 overflow-hidden"
       >
-        <img src={poster} alt="" className="w-full h-full object-cover" />
+        <img src={poster ?? ""} alt="" className="w-full h-full object-cover" />
       </div>
       <div className="flex flex-col pt-[0.55rem] pb-[1.31rem] px-[0.66rem]">
         <ul className="flex flex-col gap-1">

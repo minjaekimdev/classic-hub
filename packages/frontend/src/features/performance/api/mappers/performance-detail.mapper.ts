@@ -3,6 +3,7 @@ import type { BookingLink, Price } from "@classic-hub/shared/types/common";
 import type { DBPerformanceRead } from "@classic-hub/shared/types/database";
 
 const mapToPerformanceDetail = (raw: DBPerformanceRead): DetailPerformance => {
+  console.log(raw);
   return {
     id: raw.performance_id,
     poster: raw.poster ?? "",

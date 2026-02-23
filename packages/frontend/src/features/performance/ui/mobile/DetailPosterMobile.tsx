@@ -14,7 +14,7 @@ const PosterMobile = () => {
       {/* 2. 그라데이션 오버레이 레이어 (추가된 부분) */}
       <div className="absolute inset-0 bg-linear-to-b from-black/20 to-black/60" />
       <img
-        src={poster}
+        src={poster ?? ""}
         alt=""
         className="relative z-10 m-auto w-[7.88rem] h-[11.13rem] rounded-main"
       />

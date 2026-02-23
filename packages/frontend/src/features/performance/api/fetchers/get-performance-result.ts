@@ -1,8 +1,6 @@
 import { PostgrestFilterBuilder } from "@supabase/postgrest-js";
 import type { Database } from "@classic-hub/shared/types/supabase";
 import supabase from "@/app/api/supabase-client";
-import type { DetailPerformance } from "@classic-hub/shared/types/client";
-import mapToPerformanceDetail from "../mappers/performance-detail.mapper";
 import formatQueryDate from "@/shared/utils/formatToQueryDate";
 import type { SearchFilters } from "../../types";
 import type { DBPerformanceRead } from "@classic-hub/shared/types/database";
@@ -44,9 +42,9 @@ const getLocationQuery = (query: PerformanceQuery, location: string) => {
   return query.ilike("area", `%${location}%`);
 };
 
-export const fetchSearchResults = async (
+export const getResultPerformances = async (
   filters: SearchFilters,
-): Promise<DetailPerformance[]> => {
+): Promise<DBPerformanceRead[]> => {
   // 1. 기본 쿼리 시작
   let query = supabase.from("performances").select("*");
 
@@ -86,7 +84,5 @@ export const fetchSearchResults = async (
   }
 
   const result = data as unknown as DBPerformanceRead[];
-  return result.map((item: DBPerformanceRead) => {
-    return mapToPerformanceDetail(item);
-  });
+  return result;
 };

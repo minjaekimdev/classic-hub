@@ -1,17 +1,14 @@
 import trophyIcon from "@shared/assets/icons/trophy-gold.svg";
-import type {
-  Period,
-  RankingPerformance,
-} from "@classic-hub/shared/types/client";
+import type { Period } from "@classic-hub/shared/types/client";
 import { PERIOD_LABEL } from "@/features/performance/constants/ranking-period-label";
 import RankingItem from "@/features/performance/ui/shared/RankItem";
+import { useRankingPerformances } from "@/features/performance/api/hooks/useRankingPerformances";
+import RankingItemSkeleton from "@/features/performance/ui/shared/RankItemSkeleton";
+import { ErrorMessageWithRefetch } from "@/shared/ui/fallback/ErrorMessage";
 
-interface RankingListProps {
-  period: Period;
-  data: RankingPerformance[];
-}
+const RankList = ({ period }: { period: Period }) => {
+  const { data, isLoading, isError, refetch } = useRankingPerformances(period);
 
-const RankList = ({ period, data }: RankingListProps) => {
   return (
     <div className="flex flex-col rounded-[0.8rem] border border-[rgba(0,0,0,0.1)]">
       <div className="p-[1.38rem]">
@@ -23,19 +20,27 @@ const RankList = ({ period, data }: RankingListProps) => {
         </div>
       </div>
       <div className="flex flex-col gap-[0.88rem] px-[1.31rem] pb-[1.38rem]">
-        {data.map((item) => (
-          <RankingItem
-            id={item.id}
-            currentRank={item.currentRank}
-            lastRank={item.lastRank}
-            title={item.title}
-            poster={item.poster}
-            artist={item.artist}
-            period={period}
-            venue={item.venue}
-            bookingLinks={item.bookingLinks}
-          />
-        ))}
+        {isLoading ? (
+          Array.from({ length: 50 }).map((_, index) => (
+            <RankingItemSkeleton key={`skeleton-${index}`} />
+          ))
+        ) : isError ? (
+          <ErrorMessageWithRefetch refetch={refetch} />
+        ) : (
+          data?.map((item) => (
+            <RankingItem
+              id={item.id}
+              currentRank={item.currentRank}
+              lastRank={item.lastRank}
+              title={item.title}
+              poster={item.poster}
+              artist={item.artist}
+              period={period}
+              venue={item.venue}
+              bookingLinks={item.bookingLinks}
+            />
+          ))
+        )}
       </div>
     </div>
   );
