@@ -10,6 +10,7 @@ import { MobileList } from "../shared/MobileList";
 
 const WEEKEND_BREAKPOINTS = {
   1280: { slidesPerView: 5 },
+  960: {slidesPerView: 4},
 };
 
 export const WeekendPerformances = () => {
