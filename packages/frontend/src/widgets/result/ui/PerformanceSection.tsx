@@ -21,7 +21,7 @@ const PerformancesMobile = () => {
   if (isLoading) {
     return (
       <div className="flex flex-col gap-[0.88rem] w-full">
-        {Array({ length: 10 }).map((_, idx) => (
+        {Array.from({ length: 10 }).map((_, idx) => (
           <PerformanceListCardSkeleton key={idx} />
         ))}
       </div>
@@ -59,7 +59,7 @@ const PerformancesDesktop = () => {
       <div
         className={`flex-1 grid ${gridStyle} gap-[1.31rem] p-[0.88rem] overflow-y-auto h-full`}
       >
-        {Array({ length: 30 }).map((_, idx) => (
+        {Array.from({ length: 10 }).map((_, idx) => (
           <ResultPerformanceAlbumCardSkeleton key={idx} />
         ))}
       </div>
