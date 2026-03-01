@@ -1,5 +1,5 @@
 import vision from "@google-cloud/vision";
 
-const client = new vision.ImageAnnotatorClient();
+const ocr = new vision.ImageAnnotatorClient();
 
-export default client;
+export default ocr;
