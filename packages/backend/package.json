@@ -26,6 +26,7 @@
     "insert-failed-performances": "npx tsx ./tests/insertFailedPerformances.ts",
     "get-performance": "npx tsx ./tests/getPerformance.ts",
     "get-program": "npx tsx ./tests/getProgram.ts",
+    "test-ocr": "npx tsx ./tests/testOcr.ts",
     "get-compressed-img": "npx tsx ./tests/getCompressedImg.ts"
   }
 }

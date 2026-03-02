@@ -1,24 +1,30 @@
 import ocr from "@/infrastructure/external-api/vision";
 import { APIError, withErrorHandling } from "utils/error";
 
-const getProgramText = async (images: string | string[]) => {
-  const imageArr = Array.isArray(images) ? images : [images];
+const getProgramText = async (images: Array<ArrayBuffer>) => {
+  return withErrorHandling(async () => {
+    // 상세 이미지들에서 텍스트 추출
+    const requests = images.map((buffer) => ({
+      image: { content: Buffer.from(buffer) },
+      features: [{ type: "TEXT_DETECTION" as const }],
+    }));
 
-  const useOcr = async (image: Buffer) => {
-    const [result] = await ocr.textDetection(image);
-    return result.fullTextAnnotation?.text || "";
-  }
+    const [response] = await ocr.batchAnnotateImages({ requests });
 
-  const images = await Promise.all(imageArr.map((img, ) => ));
+    const extractedTexts =
+      response.responses?.map((res) => {
+        // 개별 이미지 분석 중 에러가 있었는지 체크하는 것이 안전하다.
+        if (res.error) {
+          throw new APIError("[OCR_FAIL] Text Extract failed");
+        }
 
-  // imageArr의 url을 Promise.all로 동시에 호출한 뒤 결과 받아오기
-  const textArr = await Promise.all(imageArr.map((img,) => useOcr(img)))
+        // 전체 텍스트 데이터만 반환
+        return res.fullTextAnnotation?.text || "";
+      }) || [];
 
-  // 텍스트 합쳐서 반환하기
-
-  
-
-
+    // 뽑아낸 텍스트 배열을 줄바꿈으로 합치기
+    return extractedTexts.join("\n\n---\n\n");
+  }, null, "vision");
 };
 
 export default getProgramText;

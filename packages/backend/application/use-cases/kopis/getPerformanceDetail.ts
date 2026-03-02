@@ -11,9 +11,10 @@ import RateLimiter from "utils/rateLimiter";
 import { Json } from "@classic-hub/shared/types/supabase";
 import { getMinMaxPrice } from "./getMinMaxPrice";
 import { DBPerformanceWrite } from "@classic-hub/shared/types/database";
-import getProgramText from "../vision/getProgramText";
 import getDetailImage from "./getDetailImage";
 import logger from "utils/logger";
+import ocr from "@/infrastructure/external-api/vision";
+import getProgramText from "../vision/getProgramText";
 
 const toMappedPerformanceDetail = async (
   performanceDetail: PerformanceDetail,
@@ -40,8 +41,6 @@ const toMappedPerformanceDetail = async (
 
   const priceArr = getParsedPrice(pcseguidance); // 빈 배열 혹은 가격 배열 리턴
   const { minPrice, maxPrice } = getMinMaxPrice(priceArr);
-
-  const programText = getProgramText(styurls.styurl);
 
   return {
     performance_id: mt20id,
@@ -112,11 +111,24 @@ export const getPerformaceDetailArray = async (
     const raw = performanceDetail.styurls.styurl;
     const imgUrlArray = Array.isArray(raw) ? raw : [raw];
 
-    const images = withErrorHandling(() => Promise.all(imgUrlArray.map((url) => getDetailImage(url))), null, "kopis");
+    const images = await withErrorHandling(
+      () => Promise.all(imgUrlArray.map((url) => getDetailImage(url))),
+      null,
+      "kopis",
+    );
 
     // 상세 이미지를 하나라도 받아오는 데 실패한 경우 다음 공연 데이터 진행
     if (!images) {
       logger.error(`[FETCH_FAIL] Detail Image fetch failed (ID: ${id}`);
+      continue;
+    }
+
+    // sty 필드가 존재한다면 해당 텍스트를 Gemini에게 인식
+    // 존재하지 않는다면 OCR 활용 후 Gemini에게 인식
+    const programText = performanceDetail.sty || await getProgramText(images);
+
+    if (!programText) {
+      failures.push({ id, error: "OCRError" })
       continue;
     }
 
