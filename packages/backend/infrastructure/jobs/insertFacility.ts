@@ -1,9 +1,9 @@
 // 전체 공연시설을 DB에 import하는 파일
 import { API_URL, SERVICE_KEY } from "@/infrastructure/external-api/kopis";
 import RateLimiter from "utils/rateLimiter";
-import { kopisFetcher } from "../../application/services/kopis/kopis-fetcher";
-import getFacilityDetail from "../../application/use-cases/kopis/get-facility-detail";
-import insertFacilityToDB from "../../application/use-cases/supabase/insert-facility-to-db";
+import { kopisFetcher } from "../../application/services/kopis/kopisFetcher";
+import getFacilityDetail from "../../application/use-cases/kopis/getFacilityDetail";
+import insertFacilityToDB from "../../application/use-cases/supabase/insertFacilityToDB";
 
 // 공연시설 목록 조회
 const getFacilityAndInsertToDB = async () => {

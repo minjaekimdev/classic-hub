@@ -2,12 +2,19 @@ import { insertData } from "@/infrastructure/database";
 import { withErrorHandling } from "utils/error";
 import logger from "utils/logger";
 import { sendSlackNotification } from "utils/monitor";
-import { getPerformaceDetailArray } from "../kopis/get-performance-detail";
+import { getPerformaceDetailArray } from "../kopis/getPerformanceDetail";
 import RateLimiter from "utils/rateLimiter";
 
-const fetchAndInsertPerformances = async (ids: string[], rateLimiter: RateLimiter, log?: string) => {
+const fetchAndInsertPerformances = async (
+  ids: string[],
+  rateLimiter: RateLimiter,
+  log?: string,
+) => {
   // 데이터 삽입
-  const { successes, failures } = await getPerformaceDetailArray(ids, rateLimiter);
+  const { successes, failures } = await getPerformaceDetailArray(
+    ids,
+    rateLimiter,
+  );
   if (successes.length > 0) {
     await withErrorHandling(
       async () => {

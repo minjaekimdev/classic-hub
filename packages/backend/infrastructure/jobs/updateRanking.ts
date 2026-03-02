@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import RateLimiter from "utils/rateLimiter";
-import updateRanking from "@/application/use-cases/supabase/update-ranking";
+import updateRanking from "@/application/use-cases/supabase/updateRanking";
 
 (async () => {
   const END_DATE = dayjs().subtract(1, "day");

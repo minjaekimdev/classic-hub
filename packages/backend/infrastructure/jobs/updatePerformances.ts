@@ -3,10 +3,10 @@ import { APIError, withErrorHandling } from "utils/error";
 import { getColumnData } from "@/infrastructure/database";
 import logger from "utils/logger";
 import { sendSlackNotification } from "utils/monitor";
-import { getPerformanceIds } from "../../application/use-cases/kopis/get-performance-ids";
-import getUpdatedPerformaces from "../../application/use-cases/kopis/get-updated-performances";
-import deletePerformances from "../../application/use-cases/supabase/delete-performances";
-import fetchAndInsertPerformances from "@/application/use-cases/supabase/fetch-insert-performances";
+import { getPerformanceIds } from "../../application/use-cases/kopis/getPerformanceIds";
+import getUpdatedPerformaces from "../../application/use-cases/kopis/getUpdatedPerformances";
+import deletePerformances from "../../application/use-cases/supabase/deletePerformances";
+import fetchAndInsertPerformances from "@/application/use-cases/supabase/fetchAndInsertPerformances";
 import RateLimiter from "utils/rateLimiter";
 
 (async () => {
@@ -73,7 +73,7 @@ import RateLimiter from "utils/rateLimiter";
     afterDate,
     startDate,
     updateEndDate,
-    kopisRateLimiter
+    kopisRateLimiter,
   );
 
   await fetchAndInsertPerformances(

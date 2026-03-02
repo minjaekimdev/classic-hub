@@ -1,12 +1,16 @@
-import { API_URL, SERVICE_KEY, CLASSIC } from "@/infrastructure/external-api/kopis";
-import { getPerformanceIdsInPage } from "./get-performance-ids";
+import {
+  API_URL,
+  SERVICE_KEY,
+  CLASSIC,
+} from "@/infrastructure/external-api/kopis";
+import { getPerformanceIdsInPage } from "./getPerformanceIds";
 import RateLimiter from "utils/rateLimiter";
 
 const getUpdatedPerformaces = async (
   afterDate: string,
   startDate: string,
   endDate: string,
-  rateLimiter: RateLimiter
+  rateLimiter: RateLimiter,
 ) => {
   const result = [];
 

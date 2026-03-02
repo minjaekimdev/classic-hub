@@ -1,6 +1,10 @@
-import { kopisFetcher } from "@/application/services/kopis/kopis-fetcher";
-import { removeTextProperty } from "@/application/services/kopis/kopis-preprocessor";
-import { API_URL, SERVICE_KEY, CLASSIC } from "@/infrastructure/external-api/kopis";
+import { kopisFetcher } from "@/application/services/kopis/kopisFetcher";
+import { removeTextProperty } from "@/application/services/kopis/kopisPreprocessor";
+import {
+  API_URL,
+  SERVICE_KEY,
+  CLASSIC,
+} from "@/infrastructure/external-api/kopis";
 import { PerformanceSummary } from "@/models/kopis";
 import { withErrorHandling } from "utils/error";
 import logger from "utils/logger";
@@ -32,7 +36,11 @@ export const getPerformanceIdsInPage = async (api: string) => {
 };
 
 // 오늘 ~ 대상 기간동안의 새 공연 데이터 id 배열 리턴하기
-export const getPerformanceIds = async (startDate: string, endDate: string, rateLimiter: RateLimiter) => {
+export const getPerformanceIds = async (
+  startDate: string,
+  endDate: string,
+  rateLimiter: RateLimiter,
+) => {
   const result = [];
 
   let page = 1;

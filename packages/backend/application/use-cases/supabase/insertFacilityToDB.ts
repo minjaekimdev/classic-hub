@@ -1,6 +1,6 @@
 import { insertData } from "@/infrastructure/database";
 import { Facility } from "@/models/kopis";
-import { DBFacility } from "@classic-hub/shared/types/database";
+import { DBFaciltyWrite } from "@classic-hub/shared/types/database";
 import { withErrorHandling } from "utils/error";
 import logger from "utils/logger";
 
@@ -9,7 +9,7 @@ const insertFacilityToDB = async (facilityDetail: Facility) => {
   const { mt13s, ...facility } = facilityDetail;
 
   // 1. API 데이터 -> DB 데이터 매핑
-  const DBfaciltyData: DBFacility = {
+  const DBfaciltyData: DBFaciltyWrite = {
     // 기본 정보 매핑
     id: facility.mt10id,
     name: facility.fcltynm,
