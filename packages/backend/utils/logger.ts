@@ -3,10 +3,11 @@ import winston from "winston";
 // 1. 서비스별 색상 정의 (ANSI Escape Codes)
 const colors: Record<string, string> = {
   reset: "\x1b[0m",
-  gemini: "\x1b[36m", // Cyan (AI 느낌)
+  gemini: "\x1b[36m",   // Cyan (AI 느낌)
   supabase: "\x1b[32m", // Green (성공/DB 느낌)
-  kopis: "\x1b[35m", // Magenta (예술/공연 느낌)
-  default: "\x1b[33m", // Yellow (기본값)
+  kopis: "\x1b[35m",    // Magenta (예술/공연 느낌)
+  vision: "\x1b[34m",   // Blue (Google/Vision 느낌 - 추가됨)
+  default: "\x1b[33m",  // Yellow (기본값)
 };
 
 // 2. 서비스별로 색상을 입혀주는 포맷 함수

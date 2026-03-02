@@ -33,6 +33,10 @@ export interface Ranking {
   mt20id: string; // 공연 ID (예: PF178134)
 }
 
+// 상세 이미지 url 인터페이스
+export interface Styurls {
+  styurl: string | string[];
+}
 // 공연 상세 조회 인터페이스
 export interface PerformanceDetail {
   mt20id: string; // 공연 ID (예: PF178134)
@@ -66,9 +70,7 @@ export interface PerformanceDetail {
   relates: { // 예매처 목록
     relate: BookingLink | BookingLink[];
   }
-  styurls: {
-    styurl: string | string[]; // 소개이미지 목록 (1~4개)
-  };
+  styurls: Styurls;
   dtguidance: string; // 공연시간 (예: 화요일 ~ 금요일(20:00) 등) [cite: 23]
 }
 

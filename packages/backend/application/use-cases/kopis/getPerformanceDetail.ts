@@ -1,5 +1,5 @@
 import { PerformanceDetail } from "@/models/kopis";
-import { withErrorHandling } from "utils/error";
+import { APIError, withErrorHandling } from "utils/error";
 import { API_URL, SERVICE_KEY } from "@/infrastructure/external-api/kopis";
 import { kopisFetcher } from "@/application/services/kopis/kopisFetcher";
 import { removeTextProperty } from "@/application/services/kopis/kopisPreprocessor";
@@ -11,10 +11,13 @@ import RateLimiter from "utils/rateLimiter";
 import { Json } from "@classic-hub/shared/types/supabase";
 import { getMinMaxPrice } from "./getMinMaxPrice";
 import { DBPerformanceWrite } from "@classic-hub/shared/types/database";
+import getProgramText from "../vision/getProgramText";
+import getDetailImage from "./getDetailImage";
+import logger from "utils/logger";
 
-const getMappedPerformanceDetail = (
+const toMappedPerformanceDetail = async (
   performanceDetail: PerformanceDetail,
-): DBPerformanceWrite => {
+): Promise<DBPerformanceWrite> => {
   const {
     mt20id,
     mt10id,
@@ -37,6 +40,8 @@ const getMappedPerformanceDetail = (
 
   const priceArr = getParsedPrice(pcseguidance); // 빈 배열 혹은 가격 배열 리턴
   const { minPrice, maxPrice } = getMinMaxPrice(priceArr);
+
+  const programText = getProgramText(styurls.styurl);
 
   return {
     performance_id: mt20id,
@@ -103,11 +108,22 @@ export const getPerformaceDetailArray = async (
       continue;
     }
 
-    // 공연 데이터의 상세 이미지를 인식해서 프로그램 추출
-    
+    // 이미지를 여기서 페칭후 활용하기 (받아온 이미지를 OCR과 WebP 압축에 모두 사용해야 함)
+    const raw = performanceDetail.styurls.styurl;
+    const imgUrlArray = Array.isArray(raw) ? raw : [raw];
+
+    const images = withErrorHandling(() => Promise.all(imgUrlArray.map((url) => getDetailImage(url))), null, "kopis");
+
+    // 상세 이미지를 하나라도 받아오는 데 실패한 경우 다음 공연 데이터 진행
+    if (!images) {
+      logger.error(`[FETCH_FAIL] Detail Image fetch failed (ID: ${id}`);
+      continue;
+    }
 
     // 공연 데이터의 포스터와 상세 이미지들을 WebP로 압축 후 supabase storage에 저장
-    successes.push(getMappedPerformanceDetail(performanceDetail));
+
+    const result = await toMappedPerformanceDetail(performanceDetail);
+    // successes.push(toMappedPerformanceDetail(performanceDetail));
   }
 
   return { successes, failures };
