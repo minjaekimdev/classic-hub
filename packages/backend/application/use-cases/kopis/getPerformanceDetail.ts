@@ -88,7 +88,8 @@ export const getPerformaceDetailArray = async (
   idsToInsert: string[],
   rateLimiter: RateLimiter,
 ) => {
-  // 상세 데이터를 가져오는 데 성공한 공연, 실패한 공연 id를 따로 저장
+  // successes에는 가져오는 데 성공한 공연 데이터를 저장
+  // failures에는 가져오는 데 실패한 공연 데이터의 id와 error를 저장
   const successes: DBPerformanceWrite[] = [];
   const failures: { id: string; error: any }[] = [];
 
@@ -101,6 +102,11 @@ export const getPerformaceDetailArray = async (
       failures.push({ id, error: "APIError" });
       continue;
     }
+
+    // 공연 데이터의 상세 이미지를 인식해서 프로그램 추출
+    
+
+    // 공연 데이터의 포스터와 상세 이미지들을 WebP로 압축 후 supabase storage에 저장
     successes.push(getMappedPerformanceDetail(performanceDetail));
   }
 
