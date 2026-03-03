@@ -8,6 +8,7 @@
     "dayjs": "^1.11.13",
     "dotenv": "^17.2.0",
     "express": "^5.1.0",
+    "sharp": "^0.34.5",
     "tsconfig-paths": "^4.2.0",
     "winston": "^3.19.0",
     "winston-daily-rotate-file": "^5.0.0",
@@ -23,10 +24,12 @@
     "insert-facility": "npx tsx ./infrastructure/jobs/insert-facility.ts",
     "update-performances": "npx tsx ./infrastructure/jobs/update-performances.ts",
     "update-ranking": "npx tsx ./infrastructure/jobs/update-ranking.ts",
-    "insert-failed-performances": "npx tsx ./tests/insertFailedPerformances.ts",
-    "get-performance": "npx tsx ./tests/getPerformance.ts",
-    "test-gemini": "npx tsx ./tests/getProgramJSONTest.ts",
-    "test-ocr": "npx tsx ./tests/getProgramTextTest.ts",
-    "get-compressed-img": "npx tsx ./tests/getCompressedImg.ts"
+    "insert-failed-performances": "npx tsx ./scripts/recovery/insertFailedPerformances.ts",
+    "get-performance": "npx tsx ./scripts/tests/getPerformanceDetailTest.ts",
+    "test-gemini": "npx tsx ./scripts/tests/getProgramJSONTest.ts",
+    "test-ocr": "npx tsx ./scripts/tests/getProgramTextTest.ts",
+    "test-storage": "npx tsx ./scripts/tests/uploadToStorageTest.ts",
+    "test-performance-detail-array": "npx tsx ./scripts/tests/getPerformanceDetailArrayTest.ts",
+    "test-sharp": "npx tsx ./scripts/tests/getCompressedImgTest.ts"
   }
 }

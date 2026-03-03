@@ -7,7 +7,7 @@ import { ProgramExtractionResponse } from "@/models/gemini";
 // KOPIS 응답에 존재하는 프로그램 텍스트 혹은 OCR로 부터 추출한 프로그램 텍스트를 구조화된 JSON으로 변환하는 함수
 const getProgramJSON = async (
   programText: string,
-): Promise<ProgramExtractionResponse | []> => {
+): Promise<ProgramExtractionResponse> => {
   const instruction =
     "You are a music program expert. Your goal is to extract composer and work information from the text.\n" +
     "GROUP BY COMPOSER: Each object in the resulting array must represent exactly one unique composer. " +

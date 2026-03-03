@@ -1,5 +1,5 @@
 import { PerformanceDetail } from "@/models/kopis";
-import { APIError, withErrorHandling } from "utils/error";
+import { withErrorHandling } from "utils/error";
 import { API_URL, SERVICE_KEY } from "@/infrastructure/external-api/kopis";
 import { kopisFetcher } from "@/application/services/kopis/kopisFetcher";
 import { removeTextProperty } from "@/application/services/kopis/kopisPreprocessor";
@@ -13,13 +13,18 @@ import { getMinMaxPrice } from "./getMinMaxPrice";
 import { DBPerformanceWrite } from "@classic-hub/shared/types/database";
 import getDetailImage from "./getDetailImage";
 import logger from "utils/logger";
-import ocr from "@/infrastructure/external-api/vision";
 import getProgramText from "../vision/getProgramText";
 import getProgramJSON from "../gemini/getProgramJSON";
+import { ProgramExtractionResponse } from "@/models/gemini";
+import sharp from "sharp";
+import { uploadToStorage } from "@/infrastructure/database";
 
-const toMappedPerformanceDetail = async (
+const toMappedPerformanceDetail = (
   performanceDetail: PerformanceDetail,
-): Promise<DBPerformanceWrite> => {
+  programJSON: ProgramExtractionResponse,
+  storagePosterUrl: string,
+  storageDetailUrls: string[],
+): DBPerformanceWrite => {
   const {
     mt20id,
     mt10id,
@@ -57,14 +62,13 @@ const toMappedPerformanceDetail = async (
     price: priceArr as unknown as Json,
     min_price: minPrice,
     max_price: maxPrice,
-    poster: poster,
+    poster: storagePosterUrl,
     state: prfstate,
     booking_links: getParsedBookingLinks(relates.relate) as unknown as Json,
-    detail_image: Array.isArray(styurls.styurl)
-      ? styurls.styurl
-      : [styurls.styurl], // 배열로 통일
+    detail_image: storageDetailUrls,
     time: dtguidance,
     raw_data: rest, // 나머지 15개 내외의 데이터가 JSON 형태로 들어감
+    program: programJSON as unknown as Json,
   };
 };
 
@@ -108,25 +112,34 @@ export const getPerformaceDetailArray = async (
       continue;
     }
 
-    // 이미지를 여기서 페칭후 활용하기 (받아온 이미지를 OCR과 WebP 압축에 모두 사용해야 함)
-    const raw = performanceDetail.styurls.styurl;
-    const imgUrlArray = Array.isArray(raw) ? raw : [raw];
-
-    const images = await withErrorHandling(
-      () => Promise.all(imgUrlArray.map((url) => getDetailImage(url))),
-      null,
+    // 2. 이미지 페칭 (포스터 + 상세이미지)
+    const posterUrl = performanceDetail.poster;
+    const rawDetailUrls = performanceDetail.styurls.styurl;
+    const detailUrlArray = Array.isArray(rawDetailUrls)
+      ? rawDetailUrls
+      : [rawDetailUrls];
+    
+    // 포스터 이미지 원본과 상세이미지 원본(버퍼)를 요청
+    const [posterBuffer, detailBuffers] = await withErrorHandling(
+      () =>
+        Promise.all([
+          getDetailImage(posterUrl),
+          Promise.all(detailUrlArray.map((url) => getDetailImage(url))),
+        ]),
+      [null, null],
       "kopis",
     );
 
-    // 상세 이미지를 하나라도 받아오는 데 실패한 경우 다음 공연 데이터 진행
-    if (!images) {
-      logger.error(`[FETCH_FAIL] Detail Image fetch failed (ID: ${id}`);
+    if (!posterBuffer || !detailBuffers) {
+      logger.error(`[FETCH_FAIL] Images fetch failed (ID: ${id})`);
+      failures.push({ id, error: "ImageFetchError" });
       continue;
     }
 
-    // sty 필드가 존재한다면 해당 텍스트 활용
-    // 존재하지 않는다면 OCR에 이미지 넣어 텍스트 추출
-    const programText = performanceDetail.sty || (await getProgramText(images));
+    // 프로그램 추출 
+    // sty 필드가 존재한다면 해당 텍스트 활용, 존재하지 않는다면 OCR에 이미지 넣어 텍스트 추출
+    const programText =
+      performanceDetail.sty || (await getProgramText(detailBuffers));
 
     if (!programText) {
       failures.push({ id, error: "OCRError" });
@@ -134,12 +147,49 @@ export const getPerformaceDetailArray = async (
     }
 
     // Gemini API로 변환
-    const programJSON = getProgramJSON(programText);
+    const programJSON = await getProgramJSON(programText);
 
     // 공연 데이터의 포스터와 상세 이미지들을 WebP로 압축 후 supabase storage에 저장
+    // 포스터: naturalWidth 보통 750px, 서비스에서 보여지는 최대크기 300px이므로 리사이징 필요
+    // 상세 이미지: naturalWidth 보통 750px, 서비스에서 보여지는 최대크기가 700px이므로 굳이 리사이징 필요 x
+    try {
+      const compressedPoster = await sharp(posterBuffer)
+        .resize(300)
+        .webp({ quality: 80 })
+        .toBuffer();
+      const storagePosterUrl = await uploadToStorage(
+        "performances",
+        // 파일 중복 및 브라우저 캐시 갱신을 위해 Date.now() 사용
+        `${id}/poster_${Date.now()}.webp`,
+        compressedPoster,
+      );
 
-    const result = await toMappedPerformanceDetail(performanceDetail);
-    // successes.push(toMappedPerformanceDetail(performanceDetail));
+      // 상세 이미지들 압축 및 업로드 (병렬 처리)
+      const storageDetailUrls = await Promise.all(
+        detailBuffers.map(async (buf, idx) => {
+          const compressed = await sharp(buf).webp({ quality: 80 }).toBuffer();
+          return await uploadToStorage(
+            "performances",
+            `${id}/detail_${idx}_${Date.now()}.webp`,
+            compressed,
+          );
+        }),
+      );
+
+      const result = toMappedPerformanceDetail(
+        performanceDetail,
+        programJSON,
+        storagePosterUrl,
+        storageDetailUrls,
+      );
+
+      successes.push(result);
+    } catch (uploadError) {
+      logger.error(
+        `[UPLOAD_FAIL] Image processing/upload failed (ID: ${id}): ${uploadError}`,
+      );
+      failures.push({ id, error: "ImageProcessError" });
+    }
   }
 
   return { successes, failures };

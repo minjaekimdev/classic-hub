@@ -1,40 +1,27 @@
 /**
- * 작곡가 정보
+ * 작곡가별로 그룹화된 프로그램 추출 결과 인터페이스
  */
-interface Composer {
-  firstName: string | null;
-  lastName: string | null;
+export interface ProgramItem {
+  /** 작곡가(또는 편곡자)의 한글 이름 (First Name) */
+  firstNameKo: string;
+  
+  /** 작곡가(또는 편곡자)의 영문 이름 (First Name) */
+  firstNameEn: string;
+  
+  /** 작곡가(또는 편곡자)의 한글 성 (Last Name) */
+  lastNameKo: string;
+  
+  /** 작곡가(또는 편곡자)의 영문 성 (Last Name) */
+  lastNameEn: string;
+  
+  /** 해당 작곡가의 메인 작품명 리스트 (한글, 악장 제외) */
+  workTitleKr: string[];
+  
+  /** 해당 작곡가의 메인 작품명 리스트 (영문, 악장 제외) */
+  workTitleEn: string[];
 }
 
 /**
- * 개별 작품 정보
+ * 최종 응답 형식: 작곡가 객체들의 배열
  */
-interface Work {
-  title: string | null;
-  catalogNumber: string | null;
-}
-
-/**
- * 작곡가별 프로그램 그룹화 단위
- * (동일 작곡가의 연속된 작품들을 포함)
- */
-interface ProgramGroup {
-  composer: Composer;
-  works: Work[];
-}
-
-/**
- * 특정 공연일의 데이터 구조
- */
-interface PerformanceDay {
-  date: string | null; // 공연 회차 또는 일자 (예: "1", "2")
-  programs: ProgramGroup[];
-}
-
-/**
- * Gemini API 최상위 응답 구조
- */
-export interface ProgramExtractionResponse {
-  en: PerformanceDay[];
-  kr: PerformanceDay[];
-}
+export type ProgramExtractionResponse = ProgramItem[];

@@ -2,7 +2,7 @@ import { insertData } from "@/infrastructure/database";
 import { withErrorHandling } from "utils/error";
 import logger from "utils/logger";
 import { sendSlackNotification } from "utils/monitor";
-import { getPerformaceDetailArray } from "../kopis/getPerformanceDetail";
+import { getPerformaceDetailArray } from "../kopis/getPerformanceDetailArray";
 import RateLimiter from "utils/rateLimiter";
 
 const fetchAndInsertPerformances = async (

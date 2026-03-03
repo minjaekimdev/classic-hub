@@ -61,3 +61,32 @@ export const callDatabaseFunction = async <T>(fnName: string, args?: T) => {
     });
   }
 };
+
+// storage에 저장
+export const uploadToStorage = async (
+  bucket: string,
+  path: string,
+  file: Buffer | Blob,
+  options = { contentType: "image/webp", upsert: true }
+): Promise<string> => {
+  const { data, error } = await supabase.storage
+    .from(bucket)
+    .upload(path, file, options);
+
+  if (error) {
+    throw new APIError(`Storage Upload Failed: ${error.message}`);
+  }
+
+  logger.info("Storage upload succeeded", {
+    service: "supabase",
+    bucket,
+    path,
+  });
+
+  // 업로드 성공 후 즉시 Public URL 반환
+  const { data: { publicUrl } } = supabase.storage
+    .from(bucket)
+    .getPublicUrl(data.path);
+
+  return publicUrl;
+};
