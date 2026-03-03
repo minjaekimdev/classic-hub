@@ -25,8 +25,8 @@
     "update-ranking": "npx tsx ./infrastructure/jobs/update-ranking.ts",
     "insert-failed-performances": "npx tsx ./tests/insertFailedPerformances.ts",
     "get-performance": "npx tsx ./tests/getPerformance.ts",
-    "get-program": "npx tsx ./tests/getProgram.ts",
-    "test-ocr": "npx tsx ./tests/testOcr.ts",
+    "test-gemini": "npx tsx ./tests/getProgramJSONTest.ts",
+    "test-ocr": "npx tsx ./tests/getProgramTextTest.ts",
     "get-compressed-img": "npx tsx ./tests/getCompressedImg.ts"
   }
 }

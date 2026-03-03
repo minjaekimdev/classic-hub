@@ -15,6 +15,7 @@ import getDetailImage from "./getDetailImage";
 import logger from "utils/logger";
 import ocr from "@/infrastructure/external-api/vision";
 import getProgramText from "../vision/getProgramText";
+import getProgramJSON from "../gemini/getProgramJSON";
 
 const toMappedPerformanceDetail = async (
   performanceDetail: PerformanceDetail,
@@ -123,14 +124,17 @@ export const getPerformaceDetailArray = async (
       continue;
     }
 
-    // sty 필드가 존재한다면 해당 텍스트를 Gemini에게 인식
-    // 존재하지 않는다면 OCR 활용 후 Gemini에게 인식
-    const programText = performanceDetail.sty || await getProgramText(images);
+    // sty 필드가 존재한다면 해당 텍스트 활용
+    // 존재하지 않는다면 OCR에 이미지 넣어 텍스트 추출
+    const programText = performanceDetail.sty || (await getProgramText(images));
 
     if (!programText) {
-      failures.push({ id, error: "OCRError" })
+      failures.push({ id, error: "OCRError" });
       continue;
     }
+
+    // Gemini API로 변환
+    const programJSON = getProgramJSON(programText);
 
     // 공연 데이터의 포스터와 상세 이미지들을 WebP로 압축 후 supabase storage에 저장
 
