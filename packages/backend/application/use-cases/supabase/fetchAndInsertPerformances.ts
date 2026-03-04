@@ -15,6 +15,7 @@ const fetchAndInsertPerformances = async (
     ids,
     rateLimiter,
   );
+  
   if (successes.length > 0) {
     await withErrorHandling(
       async () => {
@@ -41,12 +42,13 @@ const fetchAndInsertPerformances = async (
     logger.error(
       `[FETCH_FAIL] ${
         failures.length
-      } performance detail fetch failed.(${log}) IDs: ${failures.map((f) => f.id).join(", ")}`,
+      } performance process failed.(${log}) Failure: ${failures}`,
       { service: "kopis" },
     );
     await sendSlackNotification(
-      `❌ [FETCH_FAIL] ${failures.length} performance detail fetch failed.(${log})`,
+      `❌ [FETCH_FAIL] ${failures.length} performance process failed.(${log})`,
     );
+    return failures;
   }
 };
 

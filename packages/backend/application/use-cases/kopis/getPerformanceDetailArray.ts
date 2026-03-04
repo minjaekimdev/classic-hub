@@ -156,6 +156,7 @@ export const getPerformaceDetailArray = async (
 
     if (!programJSON) {
       logger.error("[GEMINI_FAIL] Converting Program text to JSON failed");
+      failures.push({ id, error: "GeminiError" });
     }
 
     // 공연 데이터의 포스터와 상세 이미지들을 WebP로 압축 후 supabase storage에 저장

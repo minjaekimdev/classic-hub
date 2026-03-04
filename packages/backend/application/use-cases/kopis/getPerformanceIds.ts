@@ -6,7 +6,7 @@ import {
   CLASSIC,
 } from "@/infrastructure/external-api/kopis";
 import { PerformanceSummary } from "@/models/kopis";
-import { withErrorHandling } from "utils/error";
+import { APIError, withErrorHandling } from "utils/error";
 import logger from "utils/logger";
 import RateLimiter from "utils/rateLimiter";
 
@@ -40,12 +40,13 @@ export const getPerformanceIds = async (
   startDate: string,
   endDate: string,
   rateLimiter: RateLimiter,
-) => {
+  afterDate?: string,
+): Promise<Array<string>> => {
   const result = [];
 
   let page = 1;
   while (true) {
-    const api = `${API_URL}/pblprfr?service=${SERVICE_KEY}&stdate=${startDate}&eddate=${endDate}&cpage=${page}&rows=${100}&shcate=${CLASSIC}`;
+    const api = `${API_URL}/pblprfr?service=${SERVICE_KEY}&stdate=${startDate}&eddate=${endDate}&cpage=${page}&rows=${100}&shcate=${CLASSIC}${afterDate ? `&afterdate=${afterDate}` : ""}`;
     const performanceIdArray = await rateLimiter.execute(async () => {
       return await getPerformanceIdsInPage(api);
     });
@@ -64,7 +65,7 @@ export const getPerformanceIds = async (
 
     // 페이지별 새 공연 id 배열을 받아올 때 에러가 발생한 경우 빈 배열 리턴
     if (performanceIdArray.length === 0) {
-      return [];
+      throw new APIError(`[FETCH_FAIL] performance id fetch failed`)
     }
     result.push(...performanceIdArray);
   }
