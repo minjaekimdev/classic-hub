@@ -7,3 +7,4 @@ tests
 .turbo
 dist
 packages/backend/images.d.ts
+packages/backend/scripts

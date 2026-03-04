@@ -18,6 +18,7 @@ import RateLimiter from "utils/rateLimiter";
 
   const kopisRateLimiter = new RateLimiter(300);
 
+  logger.info("Fetching new performance datas...");
   const newPerformances = await withErrorHandling(async () => {
     const result = await getPerformanceIds(
       startDate,
@@ -36,49 +37,50 @@ import RateLimiter from "utils/rateLimiter";
     return result;
   }); // 추후 업데이트에도 영향을 미치므로 fallback을 지정하지 않음
 
-  const dbPerformances = await withErrorHandling(
-    async () => {
-      return await getColumnData("performances", "performance_id");
-    },
-    async () => {
-      logger.error("[FETCH_FAIL] old DB data fetch failed", {
-        service: "supabase",
-      });
-      await sendSlackNotification("❌ [FETCH_FAIL] old DB data fetch failed");
-      throw new Error("[FETCH_FAIL] old DB data fetch failed");
-    },
-  );
+  // const dbPerformances = await withErrorHandling(
+  //   async () => {
+  //     return await getColumnData("performances", "performance_id");
+  //   },
+  //   async () => {
+  //     logger.error("[FETCH_FAIL] old DB data fetch failed", {
+  //       service: "supabase",
+  //     });
+  //     await sendSlackNotification("❌ [FETCH_FAIL] old DB data fetch failed");
+  //     throw new Error("[FETCH_FAIL] old DB data fetch failed");
+  //   },
+  // );
 
   const newPerformancesSet = new Set(newPerformances);
-  const dbPerformancesSet = new Set(dbPerformances);
+  // const dbPerformancesSet = new Set(dbPerformances);
 
   // DB에는 있지만 새 공연 데이터에는 없는 id -> 삭제 대상
-  const idsToDelete = [...dbPerformances].filter(
-    (id) => !newPerformancesSet.has(id),
-  );
+  // const idsToDelete = [...dbPerformances].filter(
+  //   (id) => !newPerformancesSet.has(id),
+  // );
 
   // 새 공연 데이터에는 있지만 DB에는 없는 id -> 삽입 대상
-  const idsToInsert = [...newPerformances].filter(
-    (id) => !dbPerformancesSet.has(id),
-  );
+  // const idsToInsert = [...newPerformances].filter(
+  //   (id) => !dbPerformancesSet.has(id),
+  // );
 
-  console.log(`idsToDelete: ${idsToDelete}`);
-  console.log(`idsToInsert: ${idsToInsert}`);
+  // console.log(`idsToDelete: ${idsToDelete}`);
+  // console.log(`idsToInsert: ${idsToInsert}`);
 
-  await deletePerformances(idsToDelete);
-  await fetchAndInsertPerformances(idsToInsert, kopisRateLimiter, "new datas");
+  // await deletePerformances(idsToDelete);
+  await fetchAndInsertPerformances(newPerformances.slice(20, 25), kopisRateLimiter, "new datas");
 
-  // update 관련 로직은 상대적으로 중요도가 낮으므로 새 공연 데이터 삽입이 완료된 이후에 실행
-  const idsToUpdate = await getUpdatedPerformaces(
-    afterDate,
-    startDate,
-    updateEndDate,
-    kopisRateLimiter,
-  );
+  // logger.info("Fetching updated performance datas...");
+  // // update 관련 로직은 상대적으로 중요도가 낮으므로 새 공연 데이터 삽입이 완료된 이후에 실행
+  // const idsToUpdate = await getUpdatedPerformaces(
+  //   afterDate,
+  //   startDate,
+  //   updateEndDate,
+  //   kopisRateLimiter,
+  // );
 
-  await fetchAndInsertPerformances(
-    idsToUpdate,
-    kopisRateLimiter,
-    "updated datas",
-  );
+  // await fetchAndInsertPerformances(
+  //   idsToUpdate,
+  //   kopisRateLimiter,
+  //   "updated datas",
+  // );
 })();

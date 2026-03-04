@@ -21,9 +21,9 @@
     "typescript": "^5.8.3"
   },
   "scripts": {
-    "insert-facility": "npx tsx ./infrastructure/jobs/insert-facility.ts",
-    "update-performances": "npx tsx ./infrastructure/jobs/update-performances.ts",
-    "update-ranking": "npx tsx ./infrastructure/jobs/update-ranking.ts",
+    "insert-facility": "npx tsx ./infrastructure/jobs/insertFacility.ts",
+    "update-performances": "npx tsx ./infrastructure/jobs/updatePerformances.ts",
+    "update-ranking": "npx tsx ./infrastructure/jobs/updateRanking.ts",
     "insert-failed-performances": "npx tsx ./scripts/recovery/insertFailedPerformances.ts",
     "get-performance": "npx tsx ./scripts/tests/getPerformanceDetailTest.ts",
     "test-gemini": "npx tsx ./scripts/tests/getProgramJSONTest.ts",
