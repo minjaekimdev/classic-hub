@@ -4,8 +4,8 @@ import { getColumnData } from "@/infrastructure/database";
 import logger from "utils/logger";
 import { sendSlackNotification } from "utils/monitor";
 import { getPerformanceIds } from "../../application/use-cases/kopis/getPerformanceIds";
-import deletePerformances from "../../application/use-cases/supabase/deletePerformances";
-import fetchAndInsertPerformances from "@/application/use-cases/supabase/fetchAndInsertPerformances";
+import deletePerformances from "../../application/use-cases/database/deletePerformances";
+import fetchAndInsertPerformances from "@/application/use-cases/database/fetchAndInsertPerformances";
 import RateLimiter from "utils/rateLimiter";
 
 (async () => {

@@ -1,4 +1,4 @@
-import fetchAndInsertPerformances from "@/application/use-cases/supabase/fetchAndInsertPerformances";
+import fetchAndInsertPerformances from "@/application/use-cases/database/fetchAndInsertPerformances";
 import RateLimiter from "utils/rateLimiter";
 
 const kopisRateLimiter = new RateLimiter(300);
