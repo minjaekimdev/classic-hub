@@ -1,4 +1,4 @@
-import { supabaseAdmin } from "../_shared/supabaseAdmin.ts";
+import { storageDelete } from "../_shared/service.ts";
 import { getResponse, getStoragePath } from "../_shared/utils.ts";
 
 Deno.serve(async (req) => {
@@ -8,7 +8,7 @@ Deno.serve(async (req) => {
     if (type !== "DELETE" || !old_record) {
       return getResponse({ message: "Not a Delete event. skipping..." });
     }
-    
+
     const storagePaths = [
       old_record.poster,
       ...(Array.isArray(old_record.detail_image)
@@ -19,11 +19,12 @@ Deno.serve(async (req) => {
       .filter((path): path is string => Boolean(path));
 
     if (storagePaths.length > 0) {
-      const { error } = await supabaseAdmin.storage
-        .from("performances")
-        .remove(storagePaths);
-      if (error) {
-        throw new Error("[DELETE_FAIL] Storage File Delete failed", error);
+      try {
+        await storageDelete("performances", storagePaths);
+      } catch (err) {
+        throw new Error("[DELETE_FAIL] Storage File Delete failed", {
+          cause: err,
+        });
       }
     }
 
