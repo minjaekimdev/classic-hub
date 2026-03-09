@@ -1,4 +1,4 @@
-import { storageDelete } from "../_shared/service.ts";
+import { deleteFromStorage } from "../_shared/service.ts";
 import { getResponse, getStoragePath } from "../_shared/utils.ts";
 
 Deno.serve(async (req) => {
@@ -20,7 +20,7 @@ Deno.serve(async (req) => {
 
     if (storagePaths.length > 0) {
       try {
-        await storageDelete("performances", storagePaths);
+        await deleteFromStorage("performances", storagePaths);
       } catch (err) {
         throw new Error("[DELETE_FAIL] Storage File Delete failed", {
           cause: err,
