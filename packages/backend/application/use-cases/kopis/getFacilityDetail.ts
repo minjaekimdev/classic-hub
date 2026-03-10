@@ -1,9 +1,9 @@
 import { kopisFetcher } from "@/application/services/kopis/kopisFetcher";
 import { removeTextProperty } from "@/application/services/kopis/kopisPreprocessor";
 import { API_URL, SERVICE_KEY } from "@/infrastructure/external-api/kopis";
-import { Facility } from "@/models/kopis";
-import { withErrorHandling } from "utils/error";
-import logger from "utils/logger";
+import { Facility } from "shared/types/kopis";
+import { withErrorHandling } from "shared/utils/error";
+import logger from "shared/utils/logger";
 
 // 공연시설 상세 조회
 const getFacilityDetail = async (mt10id: string) => {

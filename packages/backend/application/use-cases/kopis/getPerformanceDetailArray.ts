@@ -1,5 +1,5 @@
-import { PerformanceDetail } from "@/models/kopis";
-import { withErrorHandling } from "utils/error";
+import { PerformanceDetail } from "shared/types/kopis";
+import { withErrorHandling } from "shared/utils/error";
 import { API_URL, SERVICE_KEY } from "@/infrastructure/external-api/kopis";
 import { kopisFetcher } from "@/application/services/kopis/kopisFetcher";
 import { removeTextProperty } from "@/application/services/kopis/kopisPreprocessor";
@@ -7,18 +7,18 @@ import {
   getParsedPrice,
   getParsedBookingLinks,
 } from "@/application/services/kopis/parser";
-import RateLimiter from "utils/rateLimiter";
+import RateLimiter from "shared/utils/rateLimiter";
 import { Json } from "@classic-hub/shared/types/supabase";
 import { getMinMaxPrice } from "./getMinMaxPrice";
 import { DBPerformanceWrite } from "@classic-hub/shared/types/database";
-import logger from "utils/logger";
+import logger from "shared/utils/logger";
 import getProgramText from "../vision/getProgramText";
 import getProgramJSON from "../gemini/getProgramJSON";
-import { ProgramExtractionResponse } from "@/models/gemini";
+import { ProgramExtractionResponse } from "shared/types/gemini";
 import optimizeAndUpload from "../images/optimzeAndUpload";
 import getImageBuffer from "./getImageBuffer";
 
-const toMappedPerformanceDetail = (
+export const toMappedPerformanceDetail = (
   performanceDetail: PerformanceDetail,
   programJSON: ProgramExtractionResponse,
   storagePosterUrl: string,

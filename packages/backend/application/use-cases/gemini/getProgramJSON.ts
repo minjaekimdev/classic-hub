@@ -1,13 +1,13 @@
 import "dotenv/config";
 import ai from "@/infrastructure/external-api/gemini";
-import { APIError, withErrorHandling } from "utils/error";
-import logger from "utils/logger";
-import { ProgramExtractionResponse } from "@/models/gemini";
+import { APIError, withErrorHandling } from "shared/utils/error";
+import logger from "shared/utils/logger";
+import { ProgramExtractionResponse } from "shared/types/gemini";
 
 // KOPIS 응답에 존재하는 프로그램 텍스트 혹은 OCR로 부터 추출한 프로그램 텍스트를 구조화된 JSON으로 변환하는 함수
 const getProgramJSON = async (
   programText: string,
-): Promise<ProgramExtractionResponse> => {
+): Promise<ProgramExtractionResponse | null> => {
   const instruction =
     "You are a music program expert. Your goal is to extract composer and work information from the text.\n" +
     "GROUP BY COMPOSER: Each object in the resulting array must represent exactly one unique composer. " +

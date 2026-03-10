@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import RateLimiter from "utils/rateLimiter";
+import RateLimiter from "shared/utils/rateLimiter";
 import updateRanking from "@/application/use-cases/database/updateRanking";
 
 (async () => {

@@ -1,8 +1,8 @@
 import { insertData } from "@/infrastructure/database";
-import { Facility } from "@/models/kopis";
+import { Facility } from "shared/types/kopis";
 import { DBFaciltyWrite } from "@classic-hub/shared/types/database";
-import { withErrorHandling } from "utils/error";
-import logger from "utils/logger";
+import { withErrorHandling } from "shared/utils/error";
+import logger from "shared/utils/logger";
 
 // 공연장은 facilities 테이블에, 세부 공연장은 halls 테이블에 저장
 const insertFacilityToDB = async (facilityDetail: Facility) => {

@@ -1,6 +1,6 @@
-import { APIError } from "utils/error";
+import { APIError } from "shared/utils/error";
 import supabase from "../external-api/supabase";
-import logger from "utils/logger";
+import logger from "shared/utils/logger";
 
 // DB 테이블에 존재하는 데이터의 값만을 배열로 반환
 // ex) [ {mt20id: PF1234}, ... ] -> [ PF1234, ... ]

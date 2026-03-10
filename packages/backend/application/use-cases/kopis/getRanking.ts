@@ -5,8 +5,8 @@ import {
   SERVICE_KEY,
   CLASSIC,
 } from "@/infrastructure/external-api/kopis";
-import { Ranking } from "@/models/kopis";
-import { withErrorHandling } from "utils/error";
+import { Ranking } from "shared/types/kopis";
+import { withErrorHandling } from "shared/utils/error";
 
 const getRanking = async (startDate: string, endDate: string) => {
   return withErrorHandling(

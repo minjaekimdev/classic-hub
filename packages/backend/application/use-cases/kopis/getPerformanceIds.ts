@@ -5,10 +5,10 @@ import {
   SERVICE_KEY,
   CLASSIC,
 } from "@/infrastructure/external-api/kopis";
-import { PerformanceSummary } from "@/models/kopis";
-import { APIError, withErrorHandling } from "utils/error";
-import logger from "utils/logger";
-import RateLimiter from "utils/rateLimiter";
+import { PerformanceSummary } from "shared/types/kopis";
+import { APIError, withErrorHandling } from "shared/utils/error";
+import logger from "shared/utils/logger";
+import RateLimiter from "shared/utils/rateLimiter";
 
 export const getPerformanceIdsInPage = async (api: string) => {
   return withErrorHandling(
@@ -65,7 +65,7 @@ export const getPerformanceIds = async (
 
     // 페이지별 새 공연 id 배열을 받아올 때 에러가 발생한 경우 빈 배열 리턴
     if (performanceIdArray.length === 0) {
-      throw new APIError(`[FETCH_FAIL] performance id fetch failed`)
+      throw new APIError(`[FETCH_FAIL] performance id fetch failed`);
     }
     result.push(...performanceIdArray);
   }

@@ -1,6 +1,6 @@
 // 전체 공연시설을 DB에 import하는 파일
 import { API_URL, SERVICE_KEY } from "@/infrastructure/external-api/kopis";
-import RateLimiter from "utils/rateLimiter";
+import RateLimiter from "shared/utils/rateLimiter";
 import { kopisFetcher } from "../../application/services/kopis/kopisFetcher";
 import getFacilityDetail from "../../application/use-cases/kopis/getFacilityDetail";
 import insertFacilityToDB from "../../application/use-cases/database/insertFacilityToDB";

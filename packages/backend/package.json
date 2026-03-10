@@ -30,6 +30,7 @@
     "test-ocr": "npx tsx ./scripts/tests/getProgramTextTest.ts",
     "test-storage": "npx tsx ./scripts/tests/uploadToStorageTest.ts",
     "test-performance-detail-array": "npx tsx ./scripts/tests/getPerformanceDetailArrayTest.ts",
-    "test-sharp": "npx tsx ./scripts/tests/getCompressedImgTest.ts"
+    "test-sharp": "npx tsx ./scripts/tests/getCompressedImgTest.ts",
+    "test-process-performance": "vitest run ./application/orchestrator/processPerformance.test.ts"
   }
 }

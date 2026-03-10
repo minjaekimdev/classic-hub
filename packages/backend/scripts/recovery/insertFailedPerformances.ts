@@ -1,5 +1,5 @@
 import fetchAndInsertPerformances from "@/application/use-cases/database/fetchAndInsertPerformances";
-import RateLimiter from "utils/rateLimiter";
+import RateLimiter from "shared/utils/rateLimiter";
 
 const kopisRateLimiter = new RateLimiter(300);
 

@@ -1,7 +1,7 @@
 import { deleteData } from "@/infrastructure/database";
-import { withErrorHandling } from "utils/error";
-import logger from "utils/logger";
-import { sendSlackNotification } from "utils/monitor";
+import { withErrorHandling } from "shared/utils/error";
+import logger from "shared/utils/logger";
+import { sendSlackNotification } from "shared/utils/monitor";
 
 const deletePerformances = async (ids: string[]) => {
   await withErrorHandling(
