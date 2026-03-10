@@ -8,48 +8,45 @@ import RateLimiter from "utils/rateLimiter";
 const fetchAndInsertPerformances = async (
   ids: string[],
   rateLimiter: RateLimiter,
-  log?: string,
 ) => {
-  // 데이터 삽입
-  const { successes, failures } = await getPerformaceDetailArray(
-    ids,
-    rateLimiter,
-  );
-  
-  if (successes.length > 0) {
-    await withErrorHandling(
-      async () => {
-        await insertData("performances", successes, "performance_id");
-        logger.info(
-          `[INSERT_SUCCESS] ${successes.length} items succeeded(${log})`,
-          { service: "supabase" },
-        );
-        await sendSlackNotification(
-          `✅ [INSERT_SUCCESS] ${successes.length} items succeeded(${log})`,
-        );
-      },
-      async () => {
-        logger.error(`[INSERT_FAIL] ${successes.length} items failed(${log})`, {
-          service: "supabase",
-        });
-        await sendSlackNotification(
-          `[INSERT_FAIL] ${successes.length} items failed(${log})`,
-        );
-      },
-    );
+  // successes: 데이터 처리에 성공한 공연 데이터들의 DB 스키마
+  // failures: 데이터 처리에 실패한 공연 데이터들의 id, 에러 내용
+  const { successes: processSuccesses, failures: processFailures } =
+    await getPerformaceDetailArray(ids, rateLimiter);
+
+  const finalFailures = [];
+
+  if (processSuccesses.length > 0) {
+    try {
+      await insertData("performances", processSuccesses, "performance_id");
+      logger.info(
+        `[INSERT_SUCCESS] ${processSuccesses.length} items insert succeeded`,
+        { service: "supabase" },
+      );
+    } catch (error) {
+      // DB에 삽입하는 데 실패했다면 그대로 삽입
+      finalFailures.push({
+        id: null,
+        error: "DBInsertError",
+        datas: processSuccesses,
+      });
+      logger.error(`[INSERT_FAIL] ${processSuccesses.length} items failed`, {
+        service: "supabase",
+      });
+    }
   }
-  if (failures.length > 0) {
+  if (processFailures.length > 0) {
     logger.error(
-      `[FETCH_FAIL] ${
-        failures.length
-      } performance process failed.(${log}) Failure: ${failures}`,
+      `[PROCESS_FAIL] ${processFailures.length} performance process failed.`,
       { service: "kopis" },
     );
     await sendSlackNotification(
-      `❌ [FETCH_FAIL] ${failures.length} performance process failed.(${log})`,
+      `❌ [FETCH_FAIL] ${processFailures.length} performance process failed.`,
     );
-    return failures;
+    finalFailures.push(...processFailures);
   }
+
+  return finalFailures;
 };
 
 export default fetchAndInsertPerformances;

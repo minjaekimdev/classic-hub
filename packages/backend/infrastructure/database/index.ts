@@ -6,7 +6,7 @@ import logger from "utils/logger";
 // ex) [ {mt20id: PF1234}, ... ] -> [ PF1234, ... ]
 export const getColumnData = async (
   table: string,
-  column: string
+  column: string,
 ): Promise<string[]> => {
   const { data, error } = await supabase.from(table).select(column);
 
@@ -17,11 +17,28 @@ export const getColumnData = async (
   }
 };
 
+export const getRowsByCondition = async <T>(
+  table: string,
+  column: string,
+  value: T,
+) => {
+  const { data, error } = await supabase
+    .from(table)
+    .select("*")
+    .is(column, value);
+
+  if (error) {
+    throw new APIError(`DB fetch failed: ${error.message}`);
+  } else {
+    return data;
+  }
+};
+
 // 데이터 삭제
 export const deleteData = async <T>(
   table: string,
   column: string,
-  data: Array<T>
+  data: Array<T>,
 ) => {
   const { error } = await supabase.from(table).delete().in(column, data);
 
@@ -39,7 +56,7 @@ export const deleteData = async <T>(
 export const insertData = async <T>(
   table: string,
   data: T,
-  onConflict: string
+  onConflict: string,
 ) => {
   const { error } = await supabase.from(table).upsert(data, { onConflict });
 
@@ -63,11 +80,11 @@ export const callDatabaseFunction = async <T>(fnName: string, args?: T) => {
 };
 
 // storage에 저장
-export const uploadToStorage = async (
+export const upload = async (
   bucket: string,
   path: string,
   file: Buffer | Blob,
-  options = { contentType: "image/webp", upsert: true }
+  options = { contentType: "image/webp", upsert: true },
 ): Promise<string> => {
   const { data, error } = await supabase.storage
     .from(bucket)
@@ -84,9 +101,10 @@ export const uploadToStorage = async (
   });
 
   // 업로드 성공 후 즉시 Public URL 반환
-  const { data: { publicUrl } } = supabase.storage
-    .from(bucket)
-    .getPublicUrl(data.path);
+  // 입력한 path와 실제 저장된 path가 달라질 수도 있는 엣지 케이스가 생길 수 있으므로(예: 파일명 중복 처리 등)
+  const {
+    data: { publicUrl },
+  } = supabase.storage.from(bucket).getPublicUrl(data.path);
 
   return publicUrl;
 };

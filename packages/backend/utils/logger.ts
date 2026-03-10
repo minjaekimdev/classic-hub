@@ -7,6 +7,7 @@ const colors: Record<string, string> = {
   supabase: "\x1b[32m", // Green (성공/DB 느낌)
   kopis: "\x1b[35m",    // Magenta (예술/공연 느낌)
   vision: "\x1b[34m",   // Blue (Google/Vision 느낌 - 추가됨)
+  sharp: "\x1b[90m",
   default: "\x1b[33m",  // Yellow (기본값)
 };
 
