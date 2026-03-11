@@ -1,0 +1,12 @@
+{
+  "batchInsertFailures": [
+    {
+      "id": 101
+    }
+  ],
+  "processFailures": [
+    {
+      "msg": "Parsing Error"
+    }
+  ]
+}

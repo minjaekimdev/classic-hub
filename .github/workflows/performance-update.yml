@@ -46,3 +46,17 @@ jobs:
           KOPIS_SERVICE_KEY: ${{ secrets.KOPIS_SERVICE_KEY }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      - name: Upload Failed Data as Artifact
+      # upload-artifact: 파일을 자동으로 artifact로 옮겨줌
+      # 아티팩트는 워크플로우별로 별개의 파일이 생성된다.
+        uses: actions/upload-artifact@v4
+        # always(): 에러가 나도 업로드(실패한 데이터 보관) 단계는 무조건 실행한다.
+        if: always()
+        with:
+          # github.run_id: 실행의 고유 일련번호, 자동으로 부여된다.
+          name: failed-performances-${{ github.run_id }}
+          path: packages/backend/failed_records.json
+          retention-days: 5 
+          # 에러가 발생하지 않아서 failed_records.json 파일이 없는 경우에도 경고가 뜨지 않는다.
+          if-no-files-found: ignore

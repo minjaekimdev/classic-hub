@@ -17,7 +17,7 @@ export const getPerformanceIdsInPage = async (api: string) => {
 
       // API 요청에는 성공했으나 더이상 데이터가 없는 경우
       if (!parsedData.dbs.db) {
-        return null;
+        return [];
       }
 
       // _text 프로퍼티를 제거하여 순수 공연 id만으로 이루어진 배열 반환
@@ -30,7 +30,7 @@ export const getPerformanceIdsInPage = async (api: string) => {
         (item: PerformanceSummary) => item.mt20id,
       );
     },
-    [],
+    null,
     "kopis",
   );
 };
@@ -54,7 +54,7 @@ export const getPerformanceIds = async (
     let currentPage = page++;
 
     // 더 이상 데이터가 없는 경우 반복문 빠져나오기
-    if (!performanceIdArray) {
+    if (performanceIdArray.length === 0) {
       break;
     }
 
@@ -64,7 +64,7 @@ export const getPerformanceIds = async (
     );
 
     // 페이지별 새 공연 id 배열을 받아올 때 에러가 발생한 경우 빈 배열 리턴
-    if (performanceIdArray.length === 0) {
+    if (!performanceIdArray.length) {
       throw new APIError(`[FETCH_FAIL] performance id fetch failed`);
     }
     result.push(...performanceIdArray);
