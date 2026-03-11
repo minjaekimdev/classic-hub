@@ -1,4 +1,5 @@
 {
+  "name": "backend",
   "dependencies": {
     "@google-cloud/vision": "^5.3.4",
     "@google/genai": "^1.15.0",
@@ -27,11 +28,11 @@
     "update-ranking": "npx tsx ./infrastructure/jobs/updateRanking.ts",
     "insert-failed-performances": "npx tsx ./scripts/recovery/insertFailedPerformances.ts",
     "get-performance": "npx tsx ./scripts/tests/getPerformanceDetailTest.ts",
+    "test": "vitest",
     "test-gemini": "npx tsx ./scripts/tests/getProgramJSONTest.ts",
     "test-ocr": "npx tsx ./scripts/tests/getProgramTextTest.ts",
     "test-storage": "npx tsx ./scripts/tests/uploadToStorageTest.ts",
     "test-performance-detail-array": "npx tsx ./scripts/tests/getPerformanceDetailArrayTest.ts",
-    "test-sharp": "npx tsx ./scripts/tests/getCompressedImgTest.ts",
-    "test": "vitest"
+    "test-sharp": "npx tsx ./scripts/tests/getCompressedImgTest.ts"
   }
 }
