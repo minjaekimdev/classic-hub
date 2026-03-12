@@ -1,8 +1,13 @@
 node_modules
 .env
+.env.*
 .vscode
 *storybook.log
 storybook-static
 tests
 .turbo
 dist
+packages/backend/images.d.ts
+packages/backend/scripts
+.test.ts
+failed_records.json
