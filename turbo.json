@@ -4,6 +4,9 @@
     "build": {
       "dependsOn": ["^build"],
       "outputs": ["dist/**", ".next/**", "out/**"]
+    },
+    "test": {
+      "cache": false
     }
   }
 }

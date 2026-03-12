@@ -23,16 +23,7 @@
     "typescript": "^5.8.3"
   },
   "scripts": {
-    "insert-facility": "npx tsx ./infrastructure/jobs/insertFacility.ts",
-    "update-performances": "npx tsx ./infrastructure/jobs/updatePerformances.ts",
-    "update-ranking": "npx tsx ./infrastructure/jobs/updateRanking.ts",
     "insert-failed-performances": "npx tsx ./scripts/recovery/insertFailedPerformances.ts",
-    "get-performance": "npx tsx ./scripts/tests/getPerformanceDetailTest.ts",
-    "test": "vitest",
-    "test-gemini": "npx tsx ./scripts/tests/getProgramJSONTest.ts",
-    "test-ocr": "npx tsx ./scripts/tests/getProgramTextTest.ts",
-    "test-storage": "npx tsx ./scripts/tests/uploadToStorageTest.ts",
-    "test-performance-detail-array": "npx tsx ./scripts/tests/getPerformanceDetailArrayTest.ts",
-    "test-sharp": "npx tsx ./scripts/tests/getCompressedImgTest.ts"
+    "test": "vitest"
   }
 }
