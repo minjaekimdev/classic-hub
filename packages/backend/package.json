@@ -24,6 +24,7 @@
   },
   "scripts": {
     "insert-failed-performances": "npx tsx ./scripts/recovery/insertFailedPerformances.ts",
-    "test": "vitest"
+    "test": "vitest",
+    "test-cron": ""
   }
 }

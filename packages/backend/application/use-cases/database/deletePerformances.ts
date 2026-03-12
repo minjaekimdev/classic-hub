@@ -3,15 +3,12 @@ import { withErrorHandling } from "shared/utils/error";
 import logger from "shared/utils/logger";
 import { sendSlackNotification } from "shared/utils/monitor";
 
-const deletePerformances = async (ids: string[]) => {
+export const deletePerformances = async (ids: string[]) => {
   await withErrorHandling(
     async () => {
       await deleteData("performances", "performance_id", ids);
-      logger.info(`[DELETE_SUCCESS] ${ids.length} data delete succeeded`, {
-        service: "supabase",
-      });
-      await sendSlackNotification("✅ [DELETE_SUCCESS] data delete succeeded");
     },
+    // 삭제에 실패한 경우만 슬랙 알림 전송
     async () => {
       logger.error("[DELETE_FAIL] data delete Failed", {
         service: "supabase",
@@ -20,5 +17,3 @@ const deletePerformances = async (ids: string[]) => {
     },
   );
 };
-
-export default deletePerformances;
