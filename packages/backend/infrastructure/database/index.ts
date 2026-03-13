@@ -16,7 +16,8 @@ export const getColumnData = async (
   }
 };
 
-export const getRowsByCondition = async <T>(
+// 컬럼의 값이 null/true/false인지
+export const getRowsByIs = async <T>(
   table: string,
   column: string,
   value: T,
@@ -25,6 +26,24 @@ export const getRowsByCondition = async <T>(
     .from(table)
     .select("*")
     .is(column, value);
+
+  if (error) {
+    throw new APIError(`DB Fetch Failed: ${error.message}`);
+  } else {
+    return data;
+  }
+};
+
+// 컬럼의 값이 특정 값과 같은지
+export const getRowsByEq = async <T>(
+  table: string,
+  column: string,
+  value: T,
+) => {
+  const { data, error } = await supabase
+    .from(table)
+    .select("*")
+    .eq(column, value);
 
   if (error) {
     throw new APIError(`DB Fetch Failed: ${error.message}`);
@@ -118,37 +137,56 @@ export const uploadToStorage = async (
 };
 
 export const clearStorage = async (bucket: string) => {
-  // 1. 버킷 안의 모든 파일 목록 가져오기
-  const { data: files, error: listError } = await supabase.storage
-    .from(bucket)
-    .list();
+  // 1. 모든 파일(하위 폴더 포함)의 전체 경로를 가져오는 헬퍼 함수
+  const getAllFiles = async (path: string = ""): Promise<string[]> => {
+    const { data, error } = await supabase.storage.from(bucket).list(path);
+    if (error) throw error;
+    if (!data) return [];
 
-  if (listError) {
-    throw new APIError(
-      `[DELETE_FAIL] Storage DELETE Failed: ${listError.message}`,
-    );
+    let files: string[] = [];
+
+    for (const item of data) {
+      const fullPath = path ? `${path}/${item.name}` : item.name;
+
+      // id가 있으면 파일, 없으면 폴더로 간주 (Supabase 특성)
+      if (item.id) {
+        files.push(fullPath);
+      } else {
+        // 폴더인 경우 재귀적으로 내부 파일 탐색
+        const subFiles = await getAllFiles(fullPath);
+        files = [...files, ...subFiles];
+      }
+    }
+    return files;
+  };
+
+  try {
+    const allFilePaths = await getAllFiles();
+
+    if (allFilePaths.length === 0) {
+      console.log("삭제할 파일이 없습니다.");
+      return;
+    }
+
+    // console.log(`삭제 시도 경로: ${allFilePaths}`);
+    console.log(allFilePaths);
+
+    // 2. 찾아낸 모든 '파일' 경로로 삭제 실행
+    const { data, error: removeError } = await supabase.storage
+      .from(bucket)
+      .remove(allFilePaths);
+
+    if (removeError) throw removeError;
+
+    console.log(`data: ${data}`);
+    console.log(`error: ${removeError}`)
+    logger.info("Storage bucket cleared successfully", {
+      bucket,
+      count: allFilePaths.length,
+    });
+  } catch (error: any) {
+    throw new APIError(`[CLEAR_STORAGE_FAIL] ${error.message}`);
   }
-  if (!files || files.length === 0) return;
-
-  // 2. 파일 이름만 추출해서 배열로 만들기
-  const filesToRemove = files.map((file) => file.name);
-
-  // 3. 일괄 삭제 (삭제할 파일이 많으면 나눠서 처리해야 할 수도 있음)
-  const { error: removeError } = await supabase.storage
-    .from(bucket)
-    .remove(filesToRemove);
-
-  if (removeError) {
-    throw new APIError(
-      `[DELETE_FAIL] Storage DELETE Failed: ${removeError.message}`,
-    );
-  }
-
-  if (removeError) throw removeError;
-  logger.info("Storage delete succeeded", {
-    service: "supabase",
-    bucket,
-  });
 };
 
 export const getStorageFiles = async (
