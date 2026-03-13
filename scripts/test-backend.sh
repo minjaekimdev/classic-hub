@@ -26,7 +26,11 @@ if ! docker info > /dev/null 2>&1; then
   echo -e "${GREEN}✅ Docker 준비 완료!${NC}"
 fi
 
-echo -e "${YELLOW}🚀 [3/5] Supabase 로컬 인프라 가동...${NC}"
+echo -e "${YELLOW}🚀 [3/5] Supabase 인프라 초기화 및 재가동...${NC}"
+# # 1. 이미 실행 중인 경우를 대비해 중지 (데이터 백업 없이 완전 삭제)
+# # || true는 아직 실행 중이 아닐 때 에러가 발생해도 스크립트가 멈추지 않게 합니다.
+# npx supabase stop --no-backup || true
+
 npx supabase start
 
 echo -e "${YELLOW}🔄 [4/5] 로컬 환경 변수 동기화...${NC}"
@@ -34,6 +38,6 @@ echo -e "${YELLOW}🔄 [4/5] 로컬 환경 변수 동기화...${NC}"
 node ./scripts/sync-env.js
 
 echo -e "${YELLOW}🧪 [5/5] 백엔드 로직 통합 테스트 실행...${NC}"
-npx turbo run test-cron --filter=backend
+npx turbo run test-update-performances --filter=backend
 
 echo -e "${GREEN}🎉 모든 검증을 통과했습니다! 안전하게 푸시를 진행합니다.${NC}"

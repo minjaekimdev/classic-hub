@@ -5,8 +5,8 @@
       "dependsOn": ["^build"],
       "outputs": ["dist/**", ".next/**", "out/**"]
     },
-    "test": {
-      "cache": false
+    "test-update-performances": {
+      "cache": false,
     }
   }
 }

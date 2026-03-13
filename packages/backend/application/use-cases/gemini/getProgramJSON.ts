@@ -83,7 +83,6 @@ const getProgramJSON = async (
 
       logger.info("gemini usage & result", {
         service: "gemini",
-        program: response.text,
         usage: response.usageMetadata,
       });
 

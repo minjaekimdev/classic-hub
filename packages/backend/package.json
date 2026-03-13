@@ -20,11 +20,14 @@
     "@types/cors": "^2.8.19",
     "supabase": "^2.39.2",
     "tsx": "^4.21.0",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "vite-tsconfig-paths": "^6.1.1",
+    "vitest": "^4.0.18"
   },
   "scripts": {
     "insert-failed-performances": "npx tsx ./scripts/recovery/insertFailedPerformances.ts",
     "test": "vitest",
-    "test-cron": ""
+    "test-update-performances": "vitest syncPerformanceData",
+    "test-dotenv": "npx tsx ./scripts/test.ts"
   }
 }

@@ -1,3 +1,4 @@
+// backend/.env.local에 일시 생성된 supabase 환경변수들을 저장한다.
 const fs = require("fs");
 const path = require("path");
 const { execSync } = require("child_process"); // 명령어를 실행해주는 도구
@@ -12,6 +13,7 @@ try {
   // 2. 받아온 실시간 정보에서 필요한 값만 쏙쏙 뽑아냅니다.
   const supabaseUrl = status.API_URL;
   const anonKey = status.ANON_KEY;
+  const serviceKey = status.SERVICE_ROLE_KEY;
   const dbUrl = status.DB_URL; // postgresql://... 형식의 전체 주소
 
   // 3. 동적으로 생성된 내용을 템플릿에 넣습니다.
@@ -20,7 +22,7 @@ try {
 # 생성 일시: ${new Date().toLocaleString()}
 
 SUPABASE_URL=${supabaseUrl}
-SUPABASE_ANON_KEY=${anonKey}
+SUPABASE_SERVICE_ROLE_KEY=${serviceKey}
 DATABASE_URL=${dbUrl}
 
 # 스크립트 작동 모드

@@ -1,4 +1,4 @@
-import { upload } from "@/infrastructure/database";
+import { uploadToStorage } from "@/infrastructure/database";
 import sharp from "sharp";
 import { withErrorHandling } from "shared/utils/error";
 
@@ -17,7 +17,7 @@ const optimizeAndUpload = async (
         .resize(300)
         .webp({ quality: 80 })
         .toBuffer();
-      const storagePosterUrl = await upload(
+      const storagePosterUrl = await uploadToStorage(
         "performances",
         // 파일 중복 및 브라우저 캐시 갱신을 위해 Date.now() 사용
         `${id}/poster_${Date.now()}.webp`,
@@ -28,7 +28,7 @@ const optimizeAndUpload = async (
       const storageDetailUrls = await Promise.all(
         detailBuffers.map(async (buf, idx) => {
           const compressed = await sharp(buf).webp({ quality: 80 }).toBuffer();
-          return await upload(
+          return await uploadToStorage(
             "performances",
             `${id}/detail_${idx}_${Date.now()}.webp`,
             compressed,

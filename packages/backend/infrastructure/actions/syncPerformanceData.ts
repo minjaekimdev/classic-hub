@@ -1,15 +1,15 @@
-import processPerformance from "@/application/orchestrator/processPerformance";
-import { getPerformanceIds } from "@/application/use-cases/kopis/getPerformanceIds";
-import logger from "shared/utils/logger";
-import promiseLimiter from "shared/utils/promiseLimiter";
-import { insertData } from "../database";
-import { saveFailuresToArtifact } from "./saveFailuresToArtifact";
-import RateLimiter from "shared/utils/rateLimiter";
-import { Dayjs } from "dayjs";
-import { ProcessResult } from "shared/types/sync";
-import { compareNewOld } from "../database/compareNewOld";
 import { deletePerformances } from "@/application/use-cases/database/deletePerformances";
-import { sendSlackNotification } from "shared/utils/monitor";
+import { getPerformanceIds } from "@/application/use-cases/kopis/getPerformanceIds";
+import { ProcessResult } from "@/shared/types/sync";
+import logger from "@/shared/utils/logger";
+import { sendSlackNotification } from "@/shared/utils/monitor";
+import promiseLimiter from "@/shared/utils/promiseLimiter";
+import RateLimiter from "@/shared/utils/rateLimiter";
+import { Dayjs } from "dayjs";
+import { insertData } from "../database";
+import { compareNewOld } from "../database/compareNewOld";
+import { saveFailuresToArtifact } from "./saveFailuresToArtifact";
+import { processPerformance } from "@/application/orchestrator/processPerformance";
 
 const retry = async (
   initialFailures: Array<ProcessResult>,
@@ -115,7 +115,9 @@ export const syncPerformanceData = async (
 
   // 재시도 이후에도 처리에 실패한 데이터가 존재한다면 알림 전송 & Artifact에 저장
   if (retryFailures.length > 0) {
-    await sendSlackNotification(`❌ [PROCESS_FAIL] ${retryFailures.length} Item Process Failed`);
+    await sendSlackNotification(
+      `❌ [PROCESS_FAIL] ${retryFailures.length} Item Process Failed`,
+    );
     saveFailuresToArtifact(retryFailures, "ProcessError");
   }
 

@@ -9,7 +9,7 @@ import getProgramText from "@/application/use-cases/vision/getProgramText";
 import { ProcessResult } from "shared/types/sync";
 import logger from "../../shared/utils/logger";
 
-const processPerformance = async (id: string): Promise<ProcessResult> => {
+export const processPerformance = async (id: string): Promise<ProcessResult> => {
   logger.info("Fetching Performance...");
   const performanceDetail = await getPerformanceDetail(id);
 
@@ -101,5 +101,3 @@ const processPerformance = async (id: string): Promise<ProcessResult> => {
     data: processedPerformance,
   };
 };
-
-export default processPerformance;
