@@ -19,6 +19,7 @@ const kopisRateLimiter = new RateLimiter(300);
     afterDate,
     updateEndDate,
     kopisRateLimiter,
+    "performances",
     MAX_REPEAT,
   );
 })();

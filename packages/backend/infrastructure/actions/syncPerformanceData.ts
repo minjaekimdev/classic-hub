@@ -59,6 +59,7 @@ export const syncPerformanceData = async (
   afterDate: string,
   updateEndDate: string,
   kopisRateLimiter: RateLimiter,
+  table: string,
   maxRepeat: number,
 ) => {
   logger.info(
@@ -123,7 +124,7 @@ export const syncPerformanceData = async (
 
   // DB에 bulk insert
   try {
-    await insertData("performances", successes, "performance_id");
+    await insertData(table, successes, "performance_id");
   } catch (error) {
     logger.error("[INSERT_FAIL] DB Batch Insert failed");
     await sendSlackNotification("❌ [INSERT_FAIL] Data Bulk Insert Failed");

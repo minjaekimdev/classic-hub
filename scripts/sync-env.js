@@ -30,8 +30,8 @@ DEBUG=true
 SCRIPT_MODE=standalone
 `.trim();
 
-  // 4. 파일 저장 경로 (packages/backend/.env.local)
-  const targetPath = path.join(__dirname, "..", "packages", "backend", ".env.local");
+  // 4. 파일 저장 경로 (packages/backend/.env.test)
+  const targetPath = path.join(__dirname, "..", "packages", "backend", ".env.test");
 
   // 5. 파일 쓰기
   fs.writeFileSync(targetPath, localContent);

@@ -1,10 +1,11 @@
 import { createClient } from "@supabase/supabase-js";
 import dotenv from "dotenv";
-import path from "path";
 
-dotenv.config({ path: path.join(process.cwd(), ".env") });
-// 2. 로컬용 .env.local 로드 (override: true를 주어 .env보다 우선순위를 높임)
-dotenv.config({ path: path.join(process.cwd(), ".env.local"), override: true });
+if (process.env.NODE_ENV === "test") {
+  dotenv.config({ path: ".env.test" });
+} else {
+  dotenv.config({ path: ".env" });
+}
 
 if (!process.env.SUPABASE_URL) {
   console.dir(process.env);

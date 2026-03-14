@@ -80,6 +80,7 @@ describe("syncPerformanceData 테스트", () => {
       AFTER_DATE,
       UPDATE_END_DATE,
       kopisRateLimiter,
+      "performances", // 테스트용 로컬 DB 테이블
       0,
     );
 

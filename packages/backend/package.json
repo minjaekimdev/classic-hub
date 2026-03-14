@@ -25,9 +25,9 @@
     "vitest": "^4.0.18"
   },
   "scripts": {
-    "insert-failed-performances": "npx tsx ./scripts/recovery/insertFailedPerformances.ts",
-    "test": "vitest",
-    "test-update-performances": "vitest syncPerformanceData",
-    "test-dotenv": "npx tsx ./scripts/test.ts"
+    "insert-failed-performances": "npx tsx --env-file=.env ./scripts/insertFailedPerformances.ts",
+    "reset-performances": "npx tsx --env-file=.env ./scripts/resetPerformances.ts",
+    "test": "NODE_ENV=test vitest",
+    "test-update-performances": "NODE_ENV=test vitest syncPerformanceData"
   }
 }
