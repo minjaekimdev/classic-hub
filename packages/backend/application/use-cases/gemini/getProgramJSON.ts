@@ -17,6 +17,7 @@ const getProgramJSON = async (
 1. 연주자 제외 (STRICT EXCLUSION): 
    - 피아니스트, 바이올리니스트, 지휘자, 협연자, 오케스트라, 성악가 성함은 절대로 포함하지 마.
    - 예: "Vn. 김철수", "Piano 홍길동", "지휘: 이영희", "소프라노 박지민", "Pianist 이정은" 등은 무시하고 건너뛰어.
+   - 작곡가를 찾을 수 없는 경우 composerKo, composerEn 필드를 모두 null로 저장해.
 2. 작곡가 성명 통합: 
    - 성(Last Name)과 이름(First Name)을 분리하지 말고, "루드비히 반 베토벤"과 같이 전체 성명을 하나의 문자열로 작성해.
 3. 작곡가 기준 그룹화: 
@@ -47,11 +48,11 @@ const getProgramJSON = async (
               type: "object",
               properties: {
                 composerKo: {
-                  type: "string",
+                  type: ["string", "null"],
                   description: "작곡가 또는 편곡자의 한국어 전체 성명",
                 },
                 composerEn: {
-                  type: "string",
+                  type: ["string", "null"],
                   description: "Full name of the composer in English",
                 },
                 workTitleKr: {

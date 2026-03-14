@@ -1,6 +1,7 @@
 import { uploadToStorage } from "@/infrastructure/database";
 import sharp from "sharp";
 import { withErrorHandling } from "shared/utils/error";
+import { fileTypeFromBuffer } from "file-type";
 
 interface OptimizeAndUploadResult {
   storagePosterUrl: string;
@@ -22,16 +23,24 @@ const optimizeAndUpload = async (
         // 파일 중복 및 브라우저 캐시 갱신을 위해 Date.now() 사용
         `${id}/poster_${Date.now()}.webp`,
         compressedPoster,
+        { contentType: "image/webp", upsert: true },
       );
 
       // 상세 이미지들 압축 및 업로드 (병렬 처리)
       const storageDetailUrls = await Promise.all(
         detailBuffers.map(async (buf, idx) => {
-          const compressed = await sharp(buf).webp({ quality: 80 }).toBuffer();
+          const type = await fileTypeFromBuffer(buf);
+          const extension = type?.ext ?? "jpg";
+          const contentType = type?.mime ?? "image/jpg";
+
           return await uploadToStorage(
             "performances",
-            `${id}/detail_${idx}_${Date.now()}.webp`,
-            compressed,
+            `${id}/detail_${idx}_${Date.now()}.${extension}`,
+            buf,
+            {
+              contentType,
+              upsert: true,
+            },
           );
         }),
       );

@@ -110,8 +110,8 @@ export const callDatabaseFunction = async <T>(fnName: string, args?: T) => {
 export const uploadToStorage = async (
   bucket: string,
   path: string,
-  file: Buffer | Blob,
-  options = { contentType: "image/webp", upsert: true },
+  file: Buffer | ArrayBuffer,
+  options: object,
 ): Promise<string> => {
   const { data, error } = await supabase.storage
     .from(bucket)
@@ -167,9 +167,6 @@ export const clearStorage = async (bucket: string) => {
       console.log("삭제할 파일이 없습니다.");
       return;
     }
-
-    // console.log(`삭제 시도 경로: ${allFilePaths}`);
-    console.log(`filesToDelete: ${allFilePaths}`);
 
     // 2. 찾아낸 모든 '파일' 경로로 삭제 실행
     const { data, error: removeError } = await supabase.storage

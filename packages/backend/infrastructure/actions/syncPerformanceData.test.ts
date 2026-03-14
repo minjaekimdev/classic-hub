@@ -13,40 +13,52 @@ import {
 
 // 데이터 삭제를 위해 오래된 데이터 샘플 삽입
 const sampleOldData = {
-  performance_id: "PF279748",
-  performance_name: "영유아 클래식 콘서트: 김현아 X 오감클래식",
-  period_from: "2025-05-24",
-  period_to: "2025-08-27",
-  venue_id: "FC004377",
-  venue_name: "현대프리미엄아울렛 [김포] (WEST존 고객랑운지 (2층) )",
-  area: "경기도",
-  age: "전체 관람가",
+  performance_id: "PF214468",
+  performance_name: "김호중 클래식 콘서트: TVAROTTI",
+  period_from: "2023-03-15", // XML의 2023.03.15를 DB 규격에 맞춰 변환
+  period_to: "2023-03-16",
+  venue_id: "FC000020",
+  venue_name: "세종문화회관 (세종대극장)",
+  cast: "김호중",
+  runtime: "2시간",
+  age: "만 7세 이상",
+  area: "서울특별시",
   state: "공연완료",
+  time: "수요일 ~ 목요일(20:00)",
   poster:
-    "http://www.kopis.or.kr/upload/pfmPoster/PF_PF279748_251120_165117.jpg",
-  runtime: null,
-  cast: null,
-  time: "토요일(11:00,12:30,14:00)",
-  min_price: null,
-  max_price: null,
-  price: null,
+    "http://www.kopis.or.kr/upload/pfmPoster/PF_PF214468_230306_160458.jpg",
+
+  // 금액 파싱 결과 (문자열에서 숫자만 추출)
+  min_price: 146000,
+  max_price: 170000,
+
+  // Json 타입 필드들
+  price: [
+    { grade: "VIP석", price: 170000 },
+    { grade: "R석", price: 158000 },
+    { grade: "S석", price: 146000 },
+  ],
   booking_links: [
     {
-      name: "네이버N예약",
-      url: "https://booking.naver.com/booking/12/bizes/1124515",
+      name: "멜론티켓",
+      url: "https://ticket.melon.com/performance/index.htm?prodId=207897",
+    },
+    {
+      name: "세종문화회관",
+      url: "https://www.sejongpac.or.kr/portal/performance/performance/view.do?performIdx=33947&menuNo=200004",
     },
   ],
   detail_image: [
-    "http://www.kopis.or.kr/upload/pfmIntroImage/PF_PF279748_202511200451179940.jpg",
+    "http://www.kopis.or.kr/upload/pfmIntroImage/PF_PF214468_230306_0404580.jpg",
   ],
-  program: null,
+
+  // 기타 필드
+  program: null, // XML에 해당 정보 없음
   raw_data: {
-    sty: "[공연소개] 바이올린 · 비올라 · 첼로 · 플룻 · 피아노 · 성악",
-    entrpsnmH: "오감클래식",
-    child: "Y",
+    /* XML 전체 데이터를 JSON으로 변환한 객체 */
   },
-  updated_at: "2026-02-27T14:14:38Z",
-  created_at: "2026-03-13T20:59:08Z",
+  updated_at: "2023-03-06 17:00:55",
+  created_at: new Date().toISOString(), // DB 삽입 시점
 };
 
 // 테스트를 위해 기간을 짧게 지정
@@ -69,7 +81,7 @@ describe("syncPerformanceData 테스트", () => {
     const beforeData = await getRowsByEq(
       "performances",
       "performance_id",
-      "PF279748",
+      "PF214468",
     );
     expect(beforeData.length).toBe(1);
 
@@ -80,13 +92,19 @@ describe("syncPerformanceData 테스트", () => {
       AFTER_DATE,
       UPDATE_END_DATE,
       kopisRateLimiter,
-      "performances", // 테스트용 로컬 DB 테이블
-      0,
+      "performances", // 테스트용 로컬 DB 테이블x
+      0, // 재시도 횟수 0
     );
 
-    // 에러가 발생하면 데이터가 정상 삭제된 것(데이터가 없으므로)
-    const oldData = await getRowsByEq("performances", "performance_id", "PF279748");
+    // 데이터가 정상 삭제되었는지 확인
+    const oldData = await getRowsByEq(
+      "performances",
+      "performance_id",
+      "PF214468",
+    );
     expect(oldData.length).toEqual(0);
+    
+    console.log("process.env: ", process.env);
 
     // DB와 스토리지에 데이터가 존재하면 성공
     const dbData = await getColumnData("performances", "performance_id");
