@@ -44,7 +44,7 @@ const retry = async (
     // 만약 에러 없이 모두 성공했다면 (undefined 반환 시) 빈 배열로 치환해서 종료
     // 실패한 데이터 기록 시 날짜도 같이 저장해야 할듯?
     const nowFailures = results.filter((result) => result.error);
-    logger.info(`Failed Performances (Retry #${repeat}): ${nowFailures}`);
+    logger.info(`Failed Performances (Retry #${repeat}): ${JSON.stringify(nowFailures)}`);
     retryFailures = nowFailures;
     repeat++;
   }

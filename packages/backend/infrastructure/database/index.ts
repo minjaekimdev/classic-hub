@@ -169,13 +169,13 @@ export const clearStorage = async (bucket: string) => {
     }
 
     // console.log(`삭제 시도 경로: ${allFilePaths}`);
-    console.log(allFilePaths);
+    console.log(`filesToDelete: ${allFilePaths}`);
 
     // 2. 찾아낸 모든 '파일' 경로로 삭제 실행
     const { data, error: removeError } = await supabase.storage
       .from(bucket)
       .remove(allFilePaths);
-
+ 
     if (removeError) throw removeError;
 
     console.log(`data: ${data}`);
@@ -193,7 +193,7 @@ export const getStorageFiles = async (
   bucketName: string,
   path: string = "",
 ) => {
-  const { data, error } = await supabase.storage.from(bucketName).list(path); // path가 빈 문자열이면 루트 목록을 가져옵니다.
+  const { data, error } = await supabase.storage.from(bucketName).list(path); // path가 빈 문자열이면 루트(폴더) 목록을 가져옵니다.
 
   if (error) {
     throw new APIError(
