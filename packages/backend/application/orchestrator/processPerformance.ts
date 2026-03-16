@@ -1,6 +1,5 @@
 import getProgramJSON from "@/application/use-cases/gemini/getProgramJSON";
 import optimizeAndUpload from "@/application/use-cases/images/optimzeAndUpload";
-import getImageBuffer from "@/application/use-cases/kopis/getImageBuffer";
 import {
   getPerformanceDetail,
   toMappedPerformanceDetail,
@@ -8,8 +7,12 @@ import {
 import getProgramText from "@/application/use-cases/vision/getProgramText";
 import { ProcessResult } from "shared/types/sync";
 import logger from "../../shared/utils/logger";
+import { imageFetcher } from "@/shared/utils/imageFetcher";
+import { splitLongImage } from "../use-cases/vision/splitLongImage";
 
-export const processPerformance = async (id: string): Promise<ProcessResult> => {
+export const processPerformance = async (
+  id: string,
+): Promise<ProcessResult> => {
   logger.info("Fetching Performance...");
   const performanceDetail = await getPerformanceDetail(id);
 
@@ -31,9 +34,18 @@ export const processPerformance = async (id: string): Promise<ProcessResult> => 
 
   // 포스터 이미지 원본과 상세이미지 원본(버퍼)를 요청
   logger.info("Fetching images...");
-  const result = await getImageBuffer(posterUrl, detailUrlArray);
+  const posterBuffer = await imageFetcher(
+    posterUrl,
+    `[FETCH_FAIL] Poster Image Fetch Failed (ID: ${id})`,
+  );
+  const detailImageBuffers = await Promise.all(
+    detailUrlArray.map(async (url) =>
+      imageFetcher(url, `[FETCH_FAIL] Detail Image Fetch Failed (ID: ${id}))`),
+    ),
+  );
 
-  if (!result) {
+  // posterBuffer 페칭에 실패했거나 detailImageBuffers 배열에서 null인 요소가 하나라도 있다면 에러 객체를 리턴
+  if (!posterBuffer || detailImageBuffers.some((item) => !item)) {
     logger.error("[FETCH_FAIL] Images fetch failed");
     return {
       id,
@@ -42,22 +54,41 @@ export const processPerformance = async (id: string): Promise<ProcessResult> => 
     };
   }
 
-  const { posterBuffer, detailBuffers } = result;
+  // Vision API 입력 픽셀 한도를 만족하기 위해 분할
+  const splitedDetailImageBuffers = await Promise.all(
+    detailImageBuffers.map(splitLongImage),
+  );
+  if (splitedDetailImageBuffers.some((item) => !item)) {
+    return {
+      id,
+      error: "ImageSplitError",
+      data: null,
+    };
+  }
 
   // 프로그램 추출
-  // sty 필드가 존재한다면 해당 텍스트 활용, 존재하지 않는다면 OCR에 이미지 넣어 텍스트 추출
   logger.info("Extracting Program text...");
-  const programText =
-    performanceDetail.sty || (await getProgramText(detailBuffers));
 
-  if (!programText) {
-    logger.error("[OCR_FAIL] Extracting Program text failed");
+  const textFromStyField = performanceDetail.sty;
+  const textFromDetailImage =
+    (await getProgramText(splitedDetailImageBuffers.flat())) ?? "";
+
+  if (!textFromDetailImage) {
+    logger.error(`[OCR_FAIL] Extracting Program text failed (ID: ${id})`);
     return {
       id,
       error: "OCRError",
       data: null,
     };
   }
+
+  // performanceDetail.sty 필드에 데이터가 존재한다면 두 개 모두 고려
+  // 존재하지 않는다면 상세 이미지만 고려하기
+  const programText = textFromStyField
+    ? `${textFromStyField}
+    ${textFromDetailImage} 
+    `
+    : textFromDetailImage;
 
   // Gemini API로 변환
   logger.info("Converting Program text to JSON...");
@@ -79,7 +110,7 @@ export const processPerformance = async (id: string): Promise<ProcessResult> => 
   const storageResult = await optimizeAndUpload(
     id,
     posterBuffer,
-    detailBuffers,
+    detailImageBuffers,
   );
   if (!storageResult) {
     logger.error("[UPLOAD_FAIL] Image processing/upload failed");

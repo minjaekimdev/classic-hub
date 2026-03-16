@@ -10,8 +10,6 @@ import { insertData } from "../database";
 import { compareNewOld } from "../database/compareNewOld";
 import { saveFailuresToArtifact } from "./saveFailuresToArtifact";
 import { processPerformance } from "@/application/orchestrator/processPerformance";
-import path from "path";
-import fs from "fs";
 
 const retry = async (
   initialFailures: Array<ProcessResult>,
@@ -46,9 +44,7 @@ const retry = async (
     // 만약 에러 없이 모두 성공했다면 (undefined 반환 시) 빈 배열로 치환해서 종료
     // 실패한 데이터 기록 시 날짜도 같이 저장해야 할듯?
     const nowFailures = results.filter((result) => result.error);
-    logger.info(
-      `Failed Performances (Retry #${repeat}): ${JSON.stringify(nowFailures, null, 2)}`,
-    );
+    console.log(`Failed Performances (Retry #${repeat}):`, nowFailures);
     retryFailures = nowFailures;
     repeat++;
   }
@@ -124,25 +120,24 @@ export const syncPerformanceData = async (
     await sendSlackNotification(
       `❌ [PROCESS_FAIL] ${retryFailures.length} Item Process Failed`,
     );
-    saveFailuresToArtifact(retryFailures, "ProcessError");
+    saveFailuresToArtifact(
+      "failed_actions.json",
+      retryFailures,
+      "ProcessError",
+    );
   }
 
   // DB에 bulk insert
   try {
-    const SUCCESS_FILE = path.join(process.cwd(), "succeeded_records.json");
-    fs.writeFileSync(
-      SUCCESS_FILE,
-      JSON.stringify(
-        successes.map((item) => item?.performance_id),
-        null,
-        2,
-      ),
-    );
     await insertData(table, successes, "performance_id");
   } catch (error) {
     logger.error("[INSERT_FAIL] DB Batch Insert failed", error);
     await sendSlackNotification("❌ [INSERT_FAIL] Data Bulk Insert Failed");
     // DB insert에 실패한 데이터도 알림 전송 & Artifact에 저장
-    saveFailuresToArtifact(successes, "BatchInsertError");
+    saveFailuresToArtifact(
+      "failed_actions.json",
+      successes,
+      "BatchInsertError",
+    );
   }
 };

@@ -9,8 +9,8 @@ interface OptimizeAndUploadResult {
 }
 const optimizeAndUpload = async (
   id: string,
-  posterBuffer: ArrayBuffer,
-  detailBuffers: Array<ArrayBuffer>,
+  posterBuffer: Buffer,
+  detailBuffers: Array<Buffer>,
 ): Promise<OptimizeAndUploadResult | null> => {
   return withErrorHandling(
     async () => {
