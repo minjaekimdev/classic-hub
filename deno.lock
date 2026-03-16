@@ -55,6 +55,7 @@
             "npm:dayjs@^1.11.13",
             "npm:dotenv@^17.2.0",
             "npm:express@^5.1.0",
+            "npm:file-type@^21.3.2",
             "npm:p-limit@^3.1.0",
             "npm:sharp@~0.34.5",
             "npm:supabase@^2.39.2",

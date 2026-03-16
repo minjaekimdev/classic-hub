@@ -29,7 +29,7 @@ fi
 echo -e "${YELLOW}🚀 [3/5] Supabase 인프라 초기화 및 재가동...${NC}"
 # # 1. 이미 실행 중인 경우를 대비해 중지 (데이터 백업 없이 완전 삭제)
 # # || true는 아직 실행 중이 아닐 때 에러가 발생해도 스크립트가 멈추지 않게 합니다.
-# npx supabase stop --no-backup || true
+npx supabase stop --no-backup || true
 
 npx supabase start
 
