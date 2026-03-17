@@ -42,6 +42,7 @@ jobs:
 
         # 환경 변수 주입 방식은 동일합니다.
         env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           KOPIS_SERVICE_KEY: ${{ secrets.KOPIS_SERVICE_KEY }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
