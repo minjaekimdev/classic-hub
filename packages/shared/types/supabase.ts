@@ -251,6 +251,7 @@ export type Database = {
           period_to: string | null
           poster: string | null
           price: Json | null
+          program: Json | null
           raw_data: Json | null
           runtime: string | null
           state: string | null
@@ -274,6 +275,7 @@ export type Database = {
           period_to?: string | null
           poster?: string | null
           price?: Json | null
+          program?: Json | null
           raw_data?: Json | null
           runtime?: string | null
           state?: string | null
@@ -297,6 +299,7 @@ export type Database = {
           period_to?: string | null
           poster?: string | null
           price?: Json | null
+          program?: Json | null
           raw_data?: Json | null
           runtime?: string | null
           state?: string | null

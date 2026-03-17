@@ -1,5 +1,7 @@
 {
+  "name": "backend",
   "dependencies": {
+    "@google-cloud/vision": "^5.3.4",
     "@google/genai": "^1.15.0",
     "@supabase/supabase-js": "^2.51.0",
     "@types/express": "^5.0.3",
@@ -7,6 +9,9 @@
     "dayjs": "^1.11.13",
     "dotenv": "^17.2.0",
     "express": "^5.1.0",
+    "file-type": "^21.3.2",
+    "p-limit": "^3.1.0",
+    "sharp": "^0.34.5",
     "tsconfig-paths": "^4.2.0",
     "winston": "^3.19.0",
     "winston-daily-rotate-file": "^5.0.0",
@@ -16,13 +21,14 @@
     "@types/cors": "^2.8.19",
     "supabase": "^2.39.2",
     "tsx": "^4.21.0",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "vite-tsconfig-paths": "^6.1.1",
+    "vitest": "^4.0.18"
   },
   "scripts": {
-    "insert-facility": "npx tsx ./infrastructure/jobs/insert-facility.ts",
-    "update-performances": "npx tsx ./infrastructure/jobs/update-performances.ts",
-    "update-ranking": "npx tsx ./infrastructure/jobs/update-ranking.ts",
-    "insert-failed-performances": "npx tsx ./tests/insertFailedPerformances.ts",
-    "get-performance": "npx tsx ./tests/getPerformance.ts"
+    "insert-failed-performances": "npx tsx --env-file=.env ./scripts/insertFailedPerformances.ts",
+    "reset-performances": "npx tsx --env-file=.env ./scripts/resetPerformances.ts",
+    "test": "NODE_ENV=test vitest",
+    "test-update-performances": "NODE_ENV=test vitest syncPerformanceData"
   }
 }

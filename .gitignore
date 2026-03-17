@@ -10,4 +10,5 @@ dist
 packages/backend/images.d.ts
 packages/backend/scripts
 .test.ts
-failed_records.json
+failed_scripts.json
+failed_actions.json

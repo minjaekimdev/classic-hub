@@ -1,4 +1,4 @@
-import { BookingLink as KopisBookingLink } from "@/models/kopis";
+import { BookingLink as KopisBookingLink } from "shared/types/kopis";
 import { BookingLink, Price } from "@classic-hub/shared/types/common";
 
 // "전석 40,000원" 형태인 경우 [ { seatType: '전석', price: 40000 } ]
@@ -7,11 +7,11 @@ export const getParsedPrice = (raw: string | null): Price[] => {
   if (raw === null) {
     return [];
   }
-  
+
   raw = raw.trim();
   if (raw === "전석무료") {
-    return [{seatType: "전석", price: 0}];
-  }  
+    return [{ seatType: "전석", price: 0 }];
+  }
   // "R석 12,345원" 형태의 그룹을 캡쳐하기 위한 정규표현식
   const regex = /([가-힣A-Z]+)\s+([\d,]+)원/g;
   const matches = raw.matchAll(regex);
