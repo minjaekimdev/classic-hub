@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
 import { getStorageFiles, uploadToStorage } from ".";
-import { APIError } from "@/shared/utils/error";
 import getDetailImage from "@/application/use-cases/kopis/getDetailImage";
 import { fileTypeFromBuffer } from "file-type";
 

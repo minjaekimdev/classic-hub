@@ -5,6 +5,7 @@ import {
   SERVICE_KEY,
   CLASSIC,
 } from "@/infrastructure/external-api/kopis";
+import { sendSlackNotification } from "@/shared/utils/monitor";
 import { PerformanceSummary } from "shared/types/kopis";
 import { APIError, withErrorHandling } from "shared/utils/error";
 import logger from "shared/utils/logger";
@@ -51,6 +52,14 @@ export const getPerformanceIds = async (
       return await getPerformanceIdsInPage(api);
     });
 
+    // 페이지별 새 공연 id 배열을 받아올 때 에러가 발생한 경우 빈 배열 리턴
+    if (!performanceIdArray) {
+      await sendSlackNotification(
+        "❌ [FETCH_FAIL] performance id fetch failed",
+      );
+      throw new APIError("[FETCH_FAIL] performance id fetch failed");
+    }
+
     let currentPage = page++;
 
     // 더 이상 데이터가 없는 경우 반복문 빠져나오기
@@ -63,10 +72,6 @@ export const getPerformanceIds = async (
       `[FETCH_PAGE] Page ${currentPage}: Found ${performanceIdArray.length} items`,
     );
 
-    // 페이지별 새 공연 id 배열을 받아올 때 에러가 발생한 경우 빈 배열 리턴
-    if (!performanceIdArray.length) {
-      throw new APIError(`[FETCH_FAIL] performance id fetch failed`);
-    }
     result.push(...performanceIdArray);
   }
 

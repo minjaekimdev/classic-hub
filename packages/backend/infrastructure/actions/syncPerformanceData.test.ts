@@ -104,8 +104,6 @@ describe("syncPerformanceData 테스트", () => {
     );
     expect(oldData.length).toEqual(0);
     
-    console.log("process.env: ", process.env);
-
     // DB와 스토리지에 데이터가 존재하면 성공
     const dbData = await getColumnData("performances", "performance_id");
     const storageData = await getStorageFiles("performances");
