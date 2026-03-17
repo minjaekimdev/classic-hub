@@ -16,6 +16,10 @@ jobs:
     # 작업이 실행될 환경
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
     # 작업의 단계(steps) 정의
     steps:
       # 1. 리포지토리 코드를 가상 머신으로 가져오기
@@ -27,6 +31,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20" # 안정적인 최신 LTS 버전 사용
+
+      - uses: 'google-github-actions/auth@v3'
+        with:
+          project_id: 'project-a9ba8193-3b4b-4ac6-8ef'
+          workload_identity_provider: 'projects/395932571942/locations/global/workloadIdentityPools/my-pool/providers/my-provider'
 
       # 3. 필요한 라이브러리 설치 (npm 사용)
       # package.json 파일에 명시된 모든 의존성을 설치합니다.
