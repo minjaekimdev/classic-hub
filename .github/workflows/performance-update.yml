@@ -35,7 +35,7 @@ jobs:
       - uses: 'google-github-actions/auth@v3'
         with:
           project_id: 'project-a9ba8193-3b4b-4ac6-8ef'
-          workload_identity_provider: 'projects/395932571942/locations/global/workloadIdentityPools/my-pool/providers/my-provider'
+          workload_identity_provider: 'projects/395932571942/locations/global/workloadIdentityPools/my-pool/attribute.repository/minjaekimdev/classic-hub'
 
       # 3. 필요한 라이브러리 설치 (npm 사용)
       # package.json 파일에 명시된 모든 의존성을 설치합니다.
