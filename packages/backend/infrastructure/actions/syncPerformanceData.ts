@@ -74,15 +74,25 @@ export const syncPerformanceData = async (
   const { idsToDelete, idsToInsert } = await compareNewOld(newPerformances);
 
   // 공연 데이터 삭제
-  console.log(`IDs to Delete: ${idsToDelete}`);
-  logger.info("Deleting old performance datas...");
+  if (idsToDelete.length > 0) {
+    console.log(`🚀 IDs to Delete: ${idsToDelete.length}`);
+    logger.info("Deleting old performance datas...");
 
-  // 내부에서 fallback 로직 실행
-  await deletePerformances(idsToDelete);
+    // 내부에서 fallback 로직 실행
+    await deletePerformances(idsToDelete);
+  } else {
+    logger.info("Nothing to Delete.");
+  }
 
-  logger.info("Processing New & Updated Performance datas...");
+  if (idsToInsert.length > 0) {
+    console.log(`🚀 IDs to Insert: ${idsToInsert.length}`);
+  } else {
+    logger.info("Noting to Insert.");
+  }
 
   // 수정된 공연 데이터 가져오기
+  logger.info("Processing New & Updated Performance datas...");
+
   const idsToUpdate = await getPerformanceIds(
     startDate,
     updateEndDate,
@@ -106,7 +116,9 @@ export const syncPerformanceData = async (
 
   // 첫 시도에서 실패한 데이터 추출 & 로깅
   const initialFailures = results.filter((result) => result.error);
-  console.log("Failed Performances: ", initialFailures);
+  if (initialFailures.length > 0) {
+    console.log("Failed Performances: ", initialFailures);
+  }
 
   // 재시도
   const { retrySuccesses, retryFailures } = await retry(

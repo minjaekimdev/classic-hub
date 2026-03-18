@@ -1,5 +1,4 @@
 import getProgramJSON from "@/application/use-cases/gemini/getProgramJSON";
-import optimizeAndUpload from "@/application/use-cases/images/optimzeAndUpload";
 import {
   getPerformanceDetail,
   toMappedPerformanceDetail,
@@ -9,6 +8,10 @@ import { ProcessResult } from "shared/types/sync";
 import logger from "../../shared/utils/logger";
 import { imageFetcher } from "@/shared/utils/imageFetcher";
 import { splitLongImage } from "../use-cases/vision/splitLongImage";
+import { uploadDetailImagesToStorage } from "../use-cases/database/uploadDetailImagesToStorage";
+import sharp from "sharp";
+import { uploadPosterToStorage } from "../use-cases/database/uploadPosterToStorage";
+import { sanitizeImageBuffer } from "../use-cases/sharp/sanitizeImageBuffer";
 
 export const processPerformance = async (
   id: string,
@@ -54,9 +57,25 @@ export const processPerformance = async (
     };
   }
 
+  // 상세 이미지 버퍼에 있는 더미 데이터 삭제
+  const processedDetailImageBuffers = await Promise.all(
+    detailImageBuffers.map(sanitizeImageBuffer),
+  );
+
+  if (processedDetailImageBuffers.some((item) => item === null)) {
+    logger.error("[OPTIMIZE_FAIL] Detail Images Optimization Failed");
+    return {
+      id,
+      error: "ImageFetchError",
+      data: null,
+    };
+  }
+
   // Vision API 입력 픽셀 한도를 만족하기 위해 분할
+  logger.info("Splitting images...");
+
   const splitedDetailImageBuffers = await Promise.all(
-    detailImageBuffers.map(splitLongImage),
+    processedDetailImageBuffers.map(splitLongImage),
   );
   if (splitedDetailImageBuffers.some((item) => !item)) {
     return {
@@ -86,7 +105,7 @@ export const processPerformance = async (
   // 존재하지 않는다면 상세 이미지만 고려하기
   const programText = textFromStyField
     ? `${textFromStyField}
-    ${textFromDetailImage} 
+    ${textFromDetailImage}
     `
     : textFromDetailImage;
 
@@ -107,17 +126,46 @@ export const processPerformance = async (
   // 포스터: naturalWidth 보통 750px, 서비스에서 보여지는 최대크기 300px이므로 리사이징 필요
   // 상세 이미지: naturalWidth 보통 750px, 서비스에서 보여지는 최대크기가 700px이므로 굳이 리사이징 필요 x
   logger.info("Optimizing Images to WebP...");
-  const storageResult = await optimizeAndUpload(
-    id,
-    posterBuffer,
-    detailImageBuffers,
-  );
-  if (!storageResult) {
-    logger.error("[UPLOAD_FAIL] Image processing/upload failed");
-    return { id, error: "ImageProcessError", data: null };
+
+  let compressedPoster;
+  try {
+    compressedPoster = await sharp(posterBuffer)
+      .resize(300)
+      .webp({ quality: 80 })
+      .toBuffer();
+  } catch (error) {
+    logger.error("[OPTIMIZE_FAIL] Poster Optimize Failed");
+    return {
+      id,
+      error: "SharpError",
+      data: null,
+    };
   }
 
-  const { storagePosterUrl, storageDetailUrls } = storageResult;
+  const storagePosterUrl = await uploadPosterToStorage(id, compressedPoster);
+
+  if (!storagePosterUrl) {
+    logger.error("[INSERT_FAIL] Storage Insert Failed");
+    return {
+      id,
+      error: "StorageError",
+      data: null,
+    };
+  }
+
+  const storageDetailUrls = await uploadDetailImagesToStorage(
+    id,
+    processedDetailImageBuffers,
+  );
+
+  if (!storageDetailUrls) {
+    logger.error("[INSERT_FAIL] Storage Insert Failed");
+    return {
+      id,
+      error: "StorageError",
+      data: null,
+    };
+  }
 
   const processedPerformance = toMappedPerformanceDetail(
     performanceDetail,
