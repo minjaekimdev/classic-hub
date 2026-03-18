@@ -1,7 +1,7 @@
 import RateLimiter from "@/shared/utils/rateLimiter";
 import { describe, it } from "vitest";
 import { getPerformanceIds } from "./getPerformanceIds";
-import { KOPIS_RATE_LIMIT } from "@/application/constants/rateLimits";
+import { KOPIS_RATE_LIMIT } from "@/application/constants";
 
 describe("getPerformanceIds 테스트", () => {
   it("여러 페이지의 공연 데이터를 정상적으로 가져와야 한다", async () => {

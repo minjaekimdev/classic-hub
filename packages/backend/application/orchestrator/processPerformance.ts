@@ -1,5 +1,4 @@
 import getProgramJSON from "@/application/use-cases/gemini/getProgramJSON";
-import optimizeAndUpload from "@/application/use-cases/images/optimzeAndUpload";
 import {
   getPerformanceDetail,
   toMappedPerformanceDetail,
@@ -9,6 +8,11 @@ import { ProcessResult } from "shared/types/sync";
 import logger from "../../shared/utils/logger";
 import { imageFetcher } from "@/shared/utils/imageFetcher";
 import { splitLongImage } from "../use-cases/vision/splitLongImage";
+import {
+  uploadDetailImagesToStorage,
+} from "../use-cases/database/uploadDetailImagesToStorage";
+import sharp from "sharp";
+import { uploadPosterToStorage } from "../use-cases/database/uploadPosterToStorage";
 
 export const processPerformance = async (
   id: string,
@@ -109,17 +113,49 @@ export const processPerformance = async (
   // 포스터: naturalWidth 보통 750px, 서비스에서 보여지는 최대크기 300px이므로 리사이징 필요
   // 상세 이미지: naturalWidth 보통 750px, 서비스에서 보여지는 최대크기가 700px이므로 굳이 리사이징 필요 x
   logger.info("Optimizing Images to WebP...");
-  const storageResult = await optimizeAndUpload(
-    id,
-    posterBuffer,
-    detailImageBuffers,
-  );
-  if (!storageResult) {
-    logger.error("[UPLOAD_FAIL] Image processing/upload failed");
-    return { id, error: "ImageProcessError", data: null };
+
+  let compressedPoster;
+  try {
+    compressedPoster = await sharp(posterBuffer)
+      .resize(300)
+      .webp({ quality: 80 })
+      .toBuffer();
+  } catch (error) {
+    logger.error("[OPTIMIZE_FAIL] Image Optimize Failed");
+    return {
+      id,
+      error: "SharpError",
+      data: null,
+    };
   }
 
-  const { storagePosterUrl, storageDetailUrls } = storageResult;
+  const storagePosterUrl = await uploadPosterToStorage(
+    id,
+    compressedPoster,
+  );
+
+  if (!storagePosterUrl) {
+    logger.error("[INSERT_FAIL] Storage Insert Failed");
+    return {
+      id,
+      error: "StorageError",
+      data: null,
+    };
+  }
+
+  const storageDetailUrls = await uploadDetailImagesToStorage(
+    id,
+    detailImageBuffers,
+  );
+
+  if (!storageDetailUrls) {
+    logger.error("[INSERT_FAIL] Storage Insert Failed");
+    return {
+      id,
+      error: "StorageError",
+      data: null,
+    };
+  }
 
   const processedPerformance = toMappedPerformanceDetail(
     performanceDetail,
