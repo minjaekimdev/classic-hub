@@ -14,6 +14,8 @@ export const splitLongImage = async (buffer: Buffer): Promise<Buffer[]> => {
       const totalPixels = width * height;
 
       if (totalPixels <= MAX_PIXELS) {
+        console.log("buffer length: ", buffer.length);
+
         return [buffer];
       }
 
@@ -40,7 +42,7 @@ export const splitLongImage = async (buffer: Buffer): Promise<Buffer[]> => {
             height: chunkHeight,
           })
           .toBuffer();
-
+        
         chunks.push(chunkBuffer);
 
         currentTop += chunkHeight;

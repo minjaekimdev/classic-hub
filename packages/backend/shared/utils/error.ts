@@ -6,7 +6,7 @@ export class APIError extends Error {
     message: string,
     public statusCode: number = 500,
     // API 응답 원본이나 다른 하위 에러를 통째로 보관
-    public originalError?: unknown
+    public originalError?: unknown,
   ) {
     super(message);
     this.name = "APIError";
@@ -17,7 +17,7 @@ export class APIError extends Error {
 export async function withErrorHandling<T>(
   operation: () => Promise<T>,
   fallback?: any,
-  service: string = "default"
+  service: string = "default",
 ): Promise<T> {
   try {
     return await operation();
@@ -25,9 +25,7 @@ export async function withErrorHandling<T>(
     logger.error("Operation failed", { error, stack: error.stack, service });
 
     if (fallback !== undefined) {
-      return typeof fallback === "function"
-        ? await fallback()
-        : fallback;
+      return typeof fallback === "function" ? await fallback() : fallback;
     }
     throw error;
   }

@@ -55,6 +55,8 @@ export const processPerformance = async (
   }
 
   // Vision API 입력 픽셀 한도를 만족하기 위해 분할
+  logger.info("Splitting images...");
+
   const splitedDetailImageBuffers = await Promise.all(
     detailImageBuffers.map(splitLongImage),
   );
@@ -86,7 +88,7 @@ export const processPerformance = async (
   // 존재하지 않는다면 상세 이미지만 고려하기
   const programText = textFromStyField
     ? `${textFromStyField}
-    ${textFromDetailImage} 
+    ${textFromDetailImage}
     `
     : textFromDetailImage;
 
