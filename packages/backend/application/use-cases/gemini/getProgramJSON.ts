@@ -41,7 +41,7 @@ const getProgramJSON = async (
     async () => {
       const response = await ai.models.generateContent({
         // 최신 고성능/저비용 모델 사용 (필요 시 버전 조정)
-        model: "gemini-2.5-flash-lite", 
+        model: "gemini-2.5-flash", 
         contents: instruction + programText,
         config: {
           temperature: 0, // 결과의 일관성을 위해 0으로 고정
@@ -82,7 +82,7 @@ const getProgramJSON = async (
           },
         },
       });
-
+      
       if (!response?.text) {
         throw new APIError("Gemini API가 빈 응답을 반환했습니다.");
       }
@@ -91,6 +91,8 @@ const getProgramJSON = async (
         service: "gemini",
         usage: response.usageMetadata,
       });
+
+      console.log(response.text);
 
       // Gemini가 반환한 JSON 문자열을 파싱하여 반환
       return JSON.parse(response.text);
