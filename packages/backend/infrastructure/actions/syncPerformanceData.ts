@@ -116,7 +116,9 @@ export const syncPerformanceData = async (
 
   // 첫 시도에서 실패한 데이터 추출 & 로깅
   const initialFailures = results.filter((result) => result.error);
-  console.log("Failed Performances: ", initialFailures);
+  if (initialFailures.length > 0) {
+    console.log("Failed Performances: ", initialFailures);
+  }
 
   // 재시도
   const { retrySuccesses, retryFailures } = await retry(

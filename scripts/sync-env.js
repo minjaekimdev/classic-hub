@@ -12,7 +12,6 @@ try {
 
   // 2. 받아온 실시간 정보에서 필요한 값만 쏙쏙 뽑아냅니다.
   const supabaseUrl = status.API_URL;
-  const anonKey = status.ANON_KEY;
   const serviceKey = status.SERVICE_ROLE_KEY;
   const dbUrl = status.DB_URL; // postgresql://... 형식의 전체 주소
 

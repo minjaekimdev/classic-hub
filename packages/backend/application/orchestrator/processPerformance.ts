@@ -8,11 +8,10 @@ import { ProcessResult } from "shared/types/sync";
 import logger from "../../shared/utils/logger";
 import { imageFetcher } from "@/shared/utils/imageFetcher";
 import { splitLongImage } from "../use-cases/vision/splitLongImage";
-import {
-  uploadDetailImagesToStorage,
-} from "../use-cases/database/uploadDetailImagesToStorage";
+import { uploadDetailImagesToStorage } from "../use-cases/database/uploadDetailImagesToStorage";
 import sharp from "sharp";
 import { uploadPosterToStorage } from "../use-cases/database/uploadPosterToStorage";
+import { sanitizeImageBuffer } from "../use-cases/sharp/sanitizeImageBuffer";
 
 export const processPerformance = async (
   id: string,
@@ -58,11 +57,25 @@ export const processPerformance = async (
     };
   }
 
+  // 상세 이미지 버퍼에 있는 더미 데이터 삭제
+  const processedDetailImageBuffers = await Promise.all(
+    detailImageBuffers.map(sanitizeImageBuffer),
+  );
+
+  if (processedDetailImageBuffers.some((item) => item === null)) {
+    logger.error("[OPTIMIZE_FAIL] Detail Images Optimization Failed");
+    return {
+      id,
+      error: "ImageFetchError",
+      data: null,
+    };
+  }
+
   // Vision API 입력 픽셀 한도를 만족하기 위해 분할
   logger.info("Splitting images...");
 
   const splitedDetailImageBuffers = await Promise.all(
-    detailImageBuffers.map(splitLongImage),
+    processedDetailImageBuffers.map(splitLongImage),
   );
   if (splitedDetailImageBuffers.some((item) => !item)) {
     return {
@@ -121,7 +134,7 @@ export const processPerformance = async (
       .webp({ quality: 80 })
       .toBuffer();
   } catch (error) {
-    logger.error("[OPTIMIZE_FAIL] Image Optimize Failed");
+    logger.error("[OPTIMIZE_FAIL] Poster Optimize Failed");
     return {
       id,
       error: "SharpError",
@@ -129,10 +142,7 @@ export const processPerformance = async (
     };
   }
 
-  const storagePosterUrl = await uploadPosterToStorage(
-    id,
-    compressedPoster,
-  );
+  const storagePosterUrl = await uploadPosterToStorage(id, compressedPoster);
 
   if (!storagePosterUrl) {
     logger.error("[INSERT_FAIL] Storage Insert Failed");
@@ -145,7 +155,7 @@ export const processPerformance = async (
 
   const storageDetailUrls = await uploadDetailImagesToStorage(
     id,
-    detailImageBuffers,
+    processedDetailImageBuffers,
   );
 
   if (!storageDetailUrls) {

@@ -33,6 +33,7 @@ const getProgramJSON = async (
    - 데이터 전체 부재: 분석할 프로그램(곡 정보)이 전혀 없을 경우, 최종 결과값으로 빈 배열([])만 반환해.
    - 작곡가 미상: 곡명은 확인되나 작곡가를 식별할 수 없는 경우, composerKo와 composerEn 필드 값을 모두 null로 할당해.
    - 곡명 미상: 작곡가는 확인되나 구체적인 곡명을 알 수 없는 경우, workTitleKr, workTitleEn 배열을 빈 배열([])로 처리해.
+   - 하나의 객체 요소에서 composerKo, composerEn이 모두 null이고 workTitleKr, workTitleEn이 모두 빈 배열인 경우는 없어야 해.
 8. 중복 제외
    - 결과물에 중복되는 내용이 들어가지 않도록 검토해서, 각 데이터가 한 번씩만 나타나게끔 정리해줘.
 분석할 프로그램 텍스트:
