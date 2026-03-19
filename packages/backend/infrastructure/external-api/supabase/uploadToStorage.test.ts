@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { getStorageFiles, uploadToStorage } from ".";
-import getDetailImage from "@/application/use-cases/kopis/getDetailImage";
+import getDetailImage from "@/application/use-cases/fetchers/getDetailImage";
 import { fileTypeFromBuffer } from "file-type";
+import { uploadToStorage, getStorageFiles } from "./storage";
 
 describe("uploadToStorage 테스트", () => {
   it("Storage에 데이터가 정상 삽입되어야 한다", async () => {

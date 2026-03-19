@@ -1,4 +1,4 @@
-import { deleteData } from "@/infrastructure/database";
+import { deleteData } from "@/infrastructure/external-api/supabase/database";
 import logger from "shared/utils/logger";
 import { sendSlackNotification } from "shared/utils/monitor";
 

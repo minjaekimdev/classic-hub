@@ -1,5 +1,5 @@
 import "dotenv/config";
-import ai from "@/infrastructure/external-api/gemini";
+import ai from "@/infrastructure/external-api/gemini/gemini";
 import { APIError, withErrorHandling } from "shared/utils/error";
 import logger from "shared/utils/logger";
 import { ProgramExtractionResponse } from "shared/types/gemini";

@@ -1,15 +1,15 @@
 import { deletePerformances } from "@/application/use-cases/database/deletePerformances";
-import { getPerformanceIds } from "@/application/use-cases/kopis/getPerformanceIds";
+import { getPerformanceIds } from "@/application/use-cases/fetchers/getPerformanceIds";
 import { ProcessResult } from "@/shared/types/sync";
 import logger from "@/shared/utils/logger";
 import { sendSlackNotification } from "@/shared/utils/monitor";
 import promiseLimiter from "@/shared/utils/promiseLimiter";
 import RateLimiter from "@/shared/utils/rateLimiter";
 import { Dayjs } from "dayjs";
-import { insertData } from "../database";
+import { insertData } from "../../../infrastructure/external-api/supabase/database";
 import { compareNewOld } from "../database/compareNewOld";
-import { saveFailuresToArtifact } from "./saveFailuresToArtifact";
-import { processPerformance } from "@/application/orchestrator/processPerformance";
+import { saveFailuresToArtifact } from "../../../infrastructure/external-api/github/saveFailuresToArtifact";
+import { processPerformance } from "./processPerformance";
 
 const retry = async (
   initialFailures: Array<ProcessResult>,

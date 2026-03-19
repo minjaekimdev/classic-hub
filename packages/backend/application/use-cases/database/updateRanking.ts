@@ -1,8 +1,8 @@
-import { callDatabaseFunction } from "@/infrastructure/database";
+import { callDatabaseFunction } from "@/infrastructure/external-api/supabase/database";
 import { withErrorHandling } from "shared/utils/error";
 import logger from "shared/utils/logger";
 import { sendSlackNotification } from "shared/utils/monitor";
-import getRanking from "../kopis/getRanking";
+import getRanking from "../fetchers/getRanking";
 
 const updateRanking = async (
   period: string,

@@ -1,5 +1,5 @@
 import { APIError } from "@/shared/utils/error";
-import { getColumnData } from ".";
+import { getColumnData } from "../../../infrastructure/external-api/supabase/database";
 import { sendSlackNotification } from "@/shared/utils/monitor";
 
 export const compareNewOld = async (newPerformances: string[]) => {
@@ -23,7 +23,7 @@ export const compareNewOld = async (newPerformances: string[]) => {
 
     return { idsToDelete, idsToInsert };
   } catch (error) {
-    await sendSlackNotification("❌ [FETCH_FAIL] Old DB Data Fetch Failed")
+    await sendSlackNotification("❌ [FETCH_FAIL] Old DB Data Fetch Failed");
     throw new APIError("[FETCH_FAIL] Old DB Data Fetch Failed");
   }
 };
