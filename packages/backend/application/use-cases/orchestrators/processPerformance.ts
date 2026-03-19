@@ -1,17 +1,17 @@
-import getProgramJSON from "@/application/use-cases/gemini/getProgramJSON";
+import getProgramJSON from "@/application/use-cases/program/getProgramJSON";
 import {
   getPerformanceDetail,
   toMappedPerformanceDetail,
-} from "@/application/use-cases/kopis/getPerformanceDetailArray";
-import getProgramText from "@/application/use-cases/vision/getProgramText";
+} from "@/application/use-cases/fetchers/getPerformanceDetailArray";
+import getProgramText from "@/application/use-cases/program/getProgramText";
 import { ProcessResult } from "shared/types/sync";
-import logger from "../../shared/utils/logger";
 import { imageFetcher } from "@/shared/utils/imageFetcher";
-import { splitLongImage } from "../use-cases/vision/splitLongImage";
-import { uploadDetailImagesToStorage } from "../use-cases/database/uploadDetailImagesToStorage";
 import sharp from "sharp";
-import { uploadPosterToStorage } from "../use-cases/database/uploadPosterToStorage";
-import { sanitizeImageBuffer } from "../use-cases/sharp/sanitizeImageBuffer";
+import logger from "@/shared/utils/logger";
+import { uploadDetailImagesToStorage } from "../database/uploadDetailImagesToStorage";
+import { uploadPosterToStorage } from "../database/uploadPosterToStorage";
+import { sanitizeImageBuffer } from "../program/sanitizeImageBuffer";
+import { splitLongImage } from "../program/splitLongImage";
 
 export const processPerformance = async (
   id: string,

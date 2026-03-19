@@ -1,5 +1,5 @@
 import { STORAGE_NAME } from "@/application/constants";
-import { uploadToStorage } from "@/infrastructure/database";
+import { uploadToStorage } from "@/infrastructure/external-api/supabase/storage";
 import { withErrorHandling } from "@/shared/utils/error";
 import { fileTypeFromBuffer } from "file-type";
 

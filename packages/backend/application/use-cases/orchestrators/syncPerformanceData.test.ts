@@ -1,15 +1,17 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { syncPerformanceData } from "./syncPerformanceData";
 import dayjs from "dayjs";
 import RateLimiter from "shared/utils/rateLimiter";
 import {
-  clearStorage,
-  getColumnData,
-  getRowsByEq,
-  getStorageFiles,
-  insertData,
   resetData,
-} from "../database";
+  insertData,
+  getRowsByEq,
+  getColumnData,
+} from "@/infrastructure/external-api/supabase/database";
+import {
+  clearStorage,
+  getStorageFiles,
+} from "@/infrastructure/external-api/supabase/storage";
+import { syncPerformanceData } from "./syncPerformanceData";
 
 // 데이터 삭제를 위해 오래된 데이터 샘플 삽입
 const sampleOldData = {
@@ -103,7 +105,7 @@ describe("syncPerformanceData 테스트", () => {
       "PF214468",
     );
     expect(oldData.length).toEqual(0);
-    
+
     // DB와 스토리지에 데이터가 존재하면 성공
     const dbData = await getColumnData("performances", "performance_id");
     const storageData = await getStorageFiles("performances");

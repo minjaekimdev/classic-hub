@@ -1,21 +1,16 @@
 import { PerformanceDetail } from "shared/types/kopis";
 import { withErrorHandling } from "shared/utils/error";
 import { API_URL, SERVICE_KEY } from "@/infrastructure/external-api/kopis";
-import { kopisFetcher } from "@/application/services/kopis/kopisFetcher";
-import { removeTextProperty } from "@/application/services/kopis/kopisPreprocessor";
+import { kopisFetcher } from "@/application/services/kopisFetcher";
+import { removeTextProperty } from "@/application/services/kopisPreprocessor";
 import {
   getParsedPrice,
   getParsedBookingLinks,
-} from "@/application/services/kopis/parser";
-import RateLimiter from "shared/utils/rateLimiter";
+} from "@/application/services/parser";
 import { Json } from "@classic-hub/shared/types/supabase";
-import { getMinMaxPrice } from "./getMinMaxPrice";
+import { getMinMaxPrice } from "../../services/getMinMaxPrice";
 import { DBPerformanceWrite } from "@classic-hub/shared/types/database";
-import logger from "shared/utils/logger";
-import getProgramText from "../vision/getProgramText";
-import getProgramJSON from "../gemini/getProgramJSON";
 import { ProgramExtractionResponse } from "shared/types/gemini";
-import optimizeAndUpload from "../images/optimzeAndUpload";
 
 export const toMappedPerformanceDetail = (
   performanceDetail: PerformanceDetail,

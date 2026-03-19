@@ -1,4 +1,4 @@
-import ocr from "@/infrastructure/external-api/vision";
+import ocr from "@/infrastructure/external-api/vision/vision";
 import logger from "@/shared/utils/logger";
 
 const googleHttpMapping: Record<number, number> = {

@@ -1,4 +1,4 @@
-import { insertData } from "@/infrastructure/database";
+import { insertData } from "@/infrastructure/external-api/supabase/database";
 import { Facility } from "shared/types/kopis";
 import { DBFaciltyWrite } from "@classic-hub/shared/types/database";
 import { withErrorHandling } from "shared/utils/error";
