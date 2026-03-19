@@ -12,7 +12,7 @@ interface MetaItemProps {
 
 const MetaItem = ({ iconSrc, children }: MetaItemProps) => {
   return (
-    <li className="flex items-center gap-[0.22rem] text-[0.66rem]/[0.88rem] text-[#6a7282]">
+    <li className="flex items-center gap-022 text-[0.66rem]/[0.88rem] text-[#6a7282]">
       <img src={iconSrc} alt="" />
       {children}
     </li>
@@ -44,7 +44,7 @@ const PerformanceMeta = ({
     );
   };
   return (
-    <div className="flex flex-col gap-[0.66rem]">
+    <div className="flex flex-col gap-066">
       <div className="flex flex-col gap-3">
         <p className="line-clamp-2 text-[0.88rem]/[1.1rem] font-semibold text-[#101828]">
           {title}

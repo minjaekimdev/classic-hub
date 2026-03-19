@@ -10,11 +10,11 @@
   --color-light: #F9FAFB;
   --color-gray-150: #ECEEF2;
 
-  --spacing-11: 0.11rem;
-  --spacing-22: 0.22rem;
-  --spacing-44: 0.44rem;
-  --spacing-66: 0.66rem;
-  --spacing-88: 0.88rem;
+  --spacing-011: 0.11rem;
+  --spacing-022: 0.22rem;
+  --spacing-044: 0.44rem;
+  --spacing-066: 0.66rem;
+  --spacing-088: 0.88rem;
 
   --font-logo: "Josefin Sans", sans-serif;
   --breakpoint-tablet: 600px;
@@ -22,7 +22,7 @@
   --breakpoint-large-desktop: 1280px;
   --radius-main: 0.55rem;
   --radius-button: 0.42rem;
-  --radius-22: 0.22rem;
+  --radius-022: 0.22rem;
 
   --spacing-desktop-header-expanded: 13.19rem;
   --spacing-desktop-header-shrinked: 5.25rem;

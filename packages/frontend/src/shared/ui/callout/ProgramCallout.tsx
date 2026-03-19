@@ -7,7 +7,7 @@ interface ProgramCalloutProps {
 }
 const ProgramCallout = ({ composer, piece, other }: ProgramCalloutProps) => {
   return (
-    <div className="rounded-22 bg-gray-150 px-callout-x pt-callout-t pb-callout-b flex gap-22 border border-gray-300">
+    <div className="rounded-022 bg-gray-150 px-callout-x pt-callout-t pb-callout-b flex gap-022 border border-gray-300">
       <img src={icon} alt="" />
       <span className="text-badge">
         <span className="font-medium">{composer}: </span>

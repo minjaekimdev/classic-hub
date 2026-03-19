@@ -37,7 +37,7 @@ export const HomePerformanceAlbumCard = ({
             alt=""
           />
         </div>
-        <div className="grow flex flex-col justify-between p-[0.88rem]">
+        <div className="grow flex flex-col justify-between p-088">
           <PerformanceMeta
             title={data.title ?? ""}
             startDate={data.startDate}
