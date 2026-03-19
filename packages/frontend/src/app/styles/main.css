@@ -7,6 +7,8 @@
 @theme {
   --color-main: #c00;
   --color-dark: #0a0a0a;
+  --color-light: #F9FAFB;
+
   --font-logo: "Josefin Sans", sans-serif;
   --breakpoint-tablet: 600px;
   --breakpoint-desktop: 960px;
@@ -26,6 +28,16 @@
   --z-modal-overlay: 90;
   --z-header: 80;
   --z-header-dropdown: 85; 
+
+  --color-composer-dark: #364153;
+
+  /* 편의시설 뱃지, 작곡가 뱃지 등에 사용되는 스타일 */
+  --spacing-badge-y: 0.11rem;
+  --spacing-badge-x: 0.44rem;
+  --text-badge: 0.65625rem;
+  --text-badge--line-height: 0.875rem;
+  --text-badge--font-weight: 500;
+  --text-badge--letter-spacing: 0.00575rem;
 }
 
 @utility bookmark-position {

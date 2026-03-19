@@ -3,7 +3,7 @@ import telIcon from "@shared/assets/icons/tel-lightgray.svg";
 import disabledIcon from "@shared/assets/icons/disabled-black.svg";
 import buildingIcon from "@shared/assets/icons/building-lightgray.svg";
 import linkIcon from "@shared/assets/icons/link-lightgray.svg";
-import Badge from "@/shared/ui/badges/Badge";
+import Badge from "@/shared/ui/badges/FaciltiyBadge";
 import type { Hall } from "@classic-hub/shared/types/client";
 import { useDetail } from "../../contexts/detail-context";
 import useDetailVenueInfo from "../../api/hooks/useDetailVenueInfo";
@@ -46,11 +46,16 @@ const FACILITY_LABELS: Partial<Record<keyof Hall, string>> = {
 
 const DetailVenueInfo = () => {
   const { venue, venueId } = useDetail();
-  const {data: venueData, isLoading, isError, refetch} = useDetailVenueInfo(venueId, venue); 
+  const {
+    data: venueData,
+    isLoading,
+    isError,
+    refetch,
+  } = useDetailVenueInfo(venueId, venue);
 
-  if (isLoading) return <DetailVenueInfoSkeleton />
-  if (isError) return <ErrorMessageWithRefetch refetch={refetch} />
-  
+  if (isLoading) return <DetailVenueInfoSkeleton />;
+  if (isError) return <ErrorMessageWithRefetch refetch={refetch} />;
+
   return (
     <div className="flex flex-col gap-[0.88rem] px-[0.88rem] py-[1.09rem] desktop:p-0">
       <h3 className="text-dark text-[0.88rem]/[1.31rem] font-semibold">
