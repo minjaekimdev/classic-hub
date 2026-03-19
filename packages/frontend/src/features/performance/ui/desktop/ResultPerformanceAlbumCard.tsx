@@ -13,10 +13,10 @@ const ResultPerformanceAlbumCard = ({ data }: { data: DetailPerformance }) => {
         <div className="grow flex flex-col justify-between rounded-[0.8rem] border border-[rgba(0,0,0,0.1)] bg-white p-[0.88rem]">
           <MetaData
             title={data.title}
-            artist={data.artist}
             startDate={data.startDate}
             endDate={data.endDate}
             venue={data.venue}
+            program={data.program}
           />
           <div className="flex justify-between items-center mt-4">
             <ResultPriceDisplay

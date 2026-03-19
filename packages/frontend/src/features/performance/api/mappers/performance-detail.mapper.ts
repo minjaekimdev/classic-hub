@@ -1,9 +1,8 @@
 import type { DetailPerformance } from "@classic-hub/shared/types/client";
-import type { BookingLink, Price } from "@classic-hub/shared/types/common";
+import type { BookingLink, Price, Program } from "@classic-hub/shared/types/common";
 import type { DBPerformanceRead } from "@classic-hub/shared/types/database";
 
 const mapToPerformanceDetail = (raw: DBPerformanceRead): DetailPerformance => {
-  console.log(raw);
   return {
     id: raw.performance_id,
     poster: raw.poster ?? "",
@@ -26,6 +25,7 @@ const mapToPerformanceDetail = (raw: DBPerformanceRead): DetailPerformance => {
     detailImages: raw.detail_image
       ? (raw.detail_image as unknown as string[])
       : [],
+    program: raw.program as unknown as Program[]
   };
 };
 

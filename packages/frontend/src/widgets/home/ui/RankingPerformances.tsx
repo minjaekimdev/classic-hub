@@ -14,6 +14,8 @@ const RANKING_BREAKPOINTS = {
 export const RankingPerformances = () => {
   const { data, isLoading, isError, refetch } = useHomeRankingPerformances(10);
 
+  console.log("RankingPerformances data: ", data);
+
   return (
     <HomeSectionLayout
       mainTitle="오늘의 공연 랭킹"

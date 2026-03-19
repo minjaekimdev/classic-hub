@@ -1,7 +1,7 @@
 import formatMinMaxPrice from "@/shared/utils/formatMinMaxPrice";
 import type { PerformanceSummary } from "@classic-hub/shared/types/client";
 import type { DBRanking } from "@classic-hub/shared/types/database";
-import type { Price } from "@classic-hub/shared/types/common";
+import type { Price, Program } from "@classic-hub/shared/types/common";
 
 export const mapToHomeRanking = (data: DBRanking): PerformanceSummary => {
   const { minPrice, maxPrice } = formatMinMaxPrice(
@@ -18,5 +18,6 @@ export const mapToHomeRanking = (data: DBRanking): PerformanceSummary => {
     startDate: data.period_from ?? "",
     endDate: data.period_to ?? "",
     rank: data.current_rank!,
+    program: data.program as unknown as Program[]
   };
 };

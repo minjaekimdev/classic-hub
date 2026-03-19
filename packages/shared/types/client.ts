@@ -1,4 +1,4 @@
-import type { BookingLink, Price as SeatPrice } from "./common";
+import type { BookingLink, Program, Price as SeatPrice } from "./common";
 
 // 공통으로 사용되는 프로퍼티 모음
 export interface Performance {
@@ -16,6 +16,7 @@ export interface PerformanceSummary extends Performance {
   maxPrice: number | null;
   startDate: string | null;
   endDate: string | null;
+  program: Program[];
 }
 
 // 랭킹 페이지 공연
@@ -43,6 +44,7 @@ export interface DetailPerformance extends Performance {
   priceInfo: SeatPrice[];
   detailImages: string[];
   bookingLinks: BookingLink[];
+  program: Program[]
 }
 
 export interface Hall {

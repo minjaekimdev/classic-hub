@@ -42,10 +42,10 @@ export const HomePerformanceRankingCard = ({ data }: { data: PerformanceSummary 
         <div className="grow flex flex-col justify-between p-[0.88rem]">
           <PerformanceMeta
             title={data.title}
-            artist={data.artist}
             startDate={data.startDate}
             endDate={data.endDate}
             venue={data.venue}
+            program={data.program}
           />
           <div className="mt-3">
             <PriceDisplay minPrice={data.minPrice} maxPrice={data.maxPrice} />
