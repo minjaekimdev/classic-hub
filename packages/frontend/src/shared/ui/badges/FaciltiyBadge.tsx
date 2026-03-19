@@ -5,7 +5,7 @@ interface FaciltiyBadgeProps {
 }
 const FaciltiyBadge = ({ children }: FaciltiyBadgeProps) => {
   return (
-    <div className="rounded-button px-badge-x text-badge bg-[#eceef2] text-[#030213]">
+    <div className="rounded-button px-badge-x text-badge font-medium bg-[#eceef2] text-[#030213]">
       {children}
     </div>
   );
