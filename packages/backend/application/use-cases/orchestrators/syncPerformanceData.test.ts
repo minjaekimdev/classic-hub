@@ -55,7 +55,7 @@ const sampleOldData = {
   ],
 
   // 기타 필드
-  program: null, // XML에 해당 정보 없음
+  program: [], 
   raw_data: {
     /* XML 전체 데이터를 JSON으로 변환한 객체 */
   },
@@ -94,7 +94,7 @@ describe("syncPerformanceData 테스트", () => {
       AFTER_DATE,
       UPDATE_END_DATE,
       kopisRateLimiter,
-      "performances", // 테스트용 로컬 DB 테이블x
+      "performances",
       0, // 재시도 횟수 0
     );
 
