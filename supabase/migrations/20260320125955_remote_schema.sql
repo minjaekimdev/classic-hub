@@ -69,13 +69,29 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA "extensions";
 
 
 
+-- 파일 맨 위 설정값들(SET ...) 바로 다음에 붙여넣으세요
+
+-- 1. 'performances' 버킷 생성 (데이터이므로 pull로 안 오기 때문에 직접 추가)
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('performances', 'performances', true) 
+ON CONFLICT (id) DO NOTHING;
+
+-- 2. 스토리지 보안 정책 (이미 파일 하단에 storage.objects 정책이 있다면 생략 가능)
+-- 만약 pull 받은 파일에 정책이 없다면 아래 두 줄만 추가하세요.
+DO $$ 
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE policyname = '공연 이미지 공개 읽기') THEN
+        CREATE POLICY "공연 이미지 공개 읽기" ON storage.objects FOR SELECT USING (bucket_id = 'performances');
+    END IF;
+END;
+$$;
 
 
 
 CREATE OR REPLACE FUNCTION "public"."bulk_update_concert_ranks"("payload" "jsonb") RETURNS "void"
     LANGUAGE "plpgsql"
     AS $$
-begin
+BEGIN
     -- 1. INSERT 대상 테이블명을 daily_ranking으로 수정
     insert into daily_ranking (performance_id, current_rank, last_rank, updated_at)
     select 
