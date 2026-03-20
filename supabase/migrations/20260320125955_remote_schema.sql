@@ -471,21 +471,21 @@ CREATE OR REPLACE FUNCTION "public"."upsert_performances_bulk"("payload" "jsonb"
     LANGUAGE "plpgsql"
     AS $$
 DECLARE
-    item jsonb; -- 배열 안의 각 공연 객체를 담을 임시 변수
+    item jsonb; -- 배열 안의 각 공연 객체
     perf_id text;
     processed_count int := 0;
 BEGIN
-    -- 1. payload가 배열인지 확인하고 루프를 돌림
     FOR item IN SELECT jsonb_array_elements(payload)
     LOOP
         perf_id := item->>'performance_id';
 
-        -- 2. performances 테이블 Upsert
+        -- 1. performances 테이블 Upsert
         INSERT INTO performances (
             performance_id, performance_name, age, area, booking_links, 
             "cast", detail_image, max_price, min_price, period_from, 
             period_to, poster, price, raw_data, 
-            runtime, state, time, venue_id, venue_name, updated_at
+            runtime, state, time, venue_id, venue_name, updated_at,
+            program -- 원본 JSON 데이터 보관용
         )
         VALUES (
             perf_id,
@@ -497,8 +497,8 @@ BEGIN
             item->'detail_image',
             (item->>'max_price')::numeric,
             (item->>'min_price')::numeric,
-            (item->>'period_from')::date,
-            (item->>'period_to')::date,
+            item->>'period_from', 
+            item->>'period_to',
             item->>'poster',
             item->'price',
             item->'raw_data',
@@ -507,7 +507,8 @@ BEGIN
             item->>'time',
             item->>'venue_id',
             item->>'venue_name',
-            now()
+            now(),
+            item->'program'
         ) 
         ON CONFLICT (performance_id) 
         DO UPDATE SET 
@@ -529,9 +530,10 @@ BEGIN
             time = EXCLUDED.time,
             venue_id = EXCLUDED.venue_id,
             venue_name = EXCLUDED.venue_name,
-            updated_at = now();
+            updated_at = now(),
+            program = EXCLUDED.program;
 
-        -- 3. 해당 공연의 programs 테이블 동기화
+        -- 2. programs 테이블 동기화 (배열 펼치기 로직 적용)
         DELETE FROM programs WHERE performance_id = perf_id;
 
         INSERT INTO programs (
@@ -543,11 +545,17 @@ BEGIN
         )
         SELECT 
             perf_id,
+            -- 작곡가 정보 추출 (만약 작곡가도 배열이라면 첫 번째 요소를 가져오거나 그대로 추출)
             p->>'composerKo',
             p->>'composerEn',
-            p->>'workTitleKr',
-            p->>'workTitleEn'
-        FROM jsonb_array_elements(item->'program') AS p;
+            -- 곡 제목 배열을 낱개로 펼침
+            kr.title,
+            en.title
+        FROM jsonb_array_elements(item->'program') AS p
+        -- 한글 제목 배열과 영어 제목 배열의 인덱스(idx)를 맞춰서 1:1 매칭
+        CROSS JOIN LATERAL jsonb_array_elements_text(p->'workTitleKr') WITH ORDINALITY AS kr(title, idx)
+        INNER JOIN LATERAL jsonb_array_elements_text(p->'workTitleEn') WITH ORDINALITY AS en(title, idx) 
+            ON kr.idx = en.idx;
 
         processed_count := processed_count + 1;
     END LOOP;
