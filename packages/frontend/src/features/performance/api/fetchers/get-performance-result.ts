@@ -72,8 +72,8 @@ export const getResultPerformances = async (
   // 날짜 범위 (공연 종료일이 검색 범위 사이에 있어야함)
   if (filters.startDate && filters.endDate) {
     query = query
-      .lte("period_to", formatQueryDate(filters.endDate))
-      .gte("period_to", formatQueryDate(filters.startDate));
+      .gte("period_to", formatQueryDate(filters.startDate))
+      .lte("period_from", formatQueryDate(filters.endDate))
   }
 
   // 4. 실행

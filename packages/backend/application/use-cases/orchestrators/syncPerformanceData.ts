@@ -6,7 +6,7 @@ import { sendSlackNotification } from "@/shared/utils/monitor";
 import promiseLimiter from "@/shared/utils/promiseLimiter";
 import RateLimiter from "@/shared/utils/rateLimiter";
 import { Dayjs } from "dayjs";
-import { insertData } from "../../../infrastructure/external-api/supabase/database";
+import { callDatabaseFunction, insertData } from "../../../infrastructure/external-api/supabase/database";
 import { compareNewOld } from "../database/compareNewOld";
 import { saveFailuresToArtifact } from "../../../infrastructure/external-api/github/saveFailuresToArtifact";
 import { processPerformance } from "./processPerformance";
@@ -141,7 +141,7 @@ export const syncPerformanceData = async (
 
   // DB에 bulk insert
   try {
-    await insertData(table, successes, "performance_id");
+    await callDatabaseFunction("upsert_performances_bulk", {payload: successes});
   } catch (error) {
     logger.error("[INSERT_FAIL] DB Batch Insert failed", error);
     await sendSlackNotification("❌ [INSERT_FAIL] Data Bulk Insert Failed");
