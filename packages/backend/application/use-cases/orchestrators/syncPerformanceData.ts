@@ -141,7 +141,7 @@ export const syncPerformanceData = async (
 
   // DB에 bulk insert
   try {
-    await callDatabaseFunction("upsert_full_performance", {payload: successes});
+    await callDatabaseFunction("upsert_performances_bulk", {payload: successes});
   } catch (error) {
     logger.error("[INSERT_FAIL] DB Batch Insert failed", error);
     await sendSlackNotification("❌ [INSERT_FAIL] Data Bulk Insert Failed");
