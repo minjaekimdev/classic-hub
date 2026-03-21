@@ -17,7 +17,7 @@ export const uploadDetailImagesToStorage = (
 
           return await uploadToStorage(
             STORAGE_NAME,
-            `${id}/detail_${idx}_${Date.now()}.${extension}`,
+            `${id}/detail_${idx}.${extension}`,
             buf,
             {
               contentType,

@@ -11,7 +11,7 @@ export const uploadPosterToStorage = async (
       const storagePosterUrl = await uploadToStorage(
         STORAGE_NAME,
         // 파일 중복 및 브라우저 캐시 갱신을 위해 Date.now() 사용
-        `${id}/poster_${Date.now()}.webp`,
+        `${id}/poster.webp`,
         compressedPoster,
         { contentType: "image/webp", upsert: true },
       );

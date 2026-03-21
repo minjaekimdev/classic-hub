@@ -29,7 +29,7 @@ export const uploadToStorage = async (
     data: { publicUrl },
   } = supabase.storage.from(bucket).getPublicUrl(data.path);
 
-  return publicUrl;
+  return `${publicUrl}?t=${Date.now()}`;
 };
 
 export const clearStorage = async (bucket: string) => {
