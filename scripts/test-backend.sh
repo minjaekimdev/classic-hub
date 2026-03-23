@@ -41,6 +41,6 @@ node ./scripts/sync-env.js
 
 # [5/5] 백엔드 로직 통합 테스트 실행... (동일)
 echo -e "${YELLOW}🧪 [5/5] 백엔드 로직 통합 테스트 실행...${NC}"
-npx turbo run test-update-performances --filter=backend
+npx turbo run test-update-performances test-ranking-performances --filter=backend
 
 echo -e "${GREEN}🎉 모든 검증을 통과했습니다! 안전하게 푸시를 진행합니다.${NC}"
