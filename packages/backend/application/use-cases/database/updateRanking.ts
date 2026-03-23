@@ -28,9 +28,6 @@ const updateRanking = async (
         period,
         payload: ranking,
       });
-      await sendSlackNotification(
-        `✅ [UPDATE_SUCCESS] ${period} ranking data update succeeded: ${dateRange}`,
-      );
     },
     async () => {
       logger.error(

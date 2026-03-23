@@ -29,6 +29,6 @@
     "insert-failed-performances": "npx tsx --env-file=.env ./scripts/insertFailedPerformances.ts",
     "reset-performances": "npx tsx --env-file=.env ./scripts/resetPerformances.ts",
     "test": "NODE_ENV=test vitest",
-    "test-update-performances": "NODE_ENV=test vitest syncPerformanceData"
+    "test-update-performances": "NODE_ENV=test vitest updatePerformances"
   }
 }
