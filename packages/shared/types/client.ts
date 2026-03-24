@@ -16,7 +16,7 @@ export interface PerformanceSummary extends Performance {
   maxPrice: number | null;
   startDate: string | null;
   endDate: string | null;
-  program: Program[];
+  composers: string[];
 }
 
 // 랭킹 페이지 공연

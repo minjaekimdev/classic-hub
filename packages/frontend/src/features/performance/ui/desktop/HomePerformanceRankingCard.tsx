@@ -45,7 +45,7 @@ export const HomePerformanceRankingCard = ({ data }: { data: PerformanceSummary 
             startDate={data.startDate}
             endDate={data.endDate}
             venue={data.venue}
-            program={data.program}
+            composers={data.composers}
           />
           <div className="mt-3">
             <PriceDisplay minPrice={data.minPrice} maxPrice={data.maxPrice} />

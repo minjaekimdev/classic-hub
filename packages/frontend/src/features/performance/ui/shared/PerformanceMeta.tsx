@@ -12,7 +12,7 @@ interface MetaItemProps {
 
 const MetaItem = ({ iconSrc, children }: MetaItemProps) => {
   return (
-    <li className="flex items-center gap-022 text-[0.66rem]/[0.88rem] text-[#6a7282]">
+    <li className="gap-022 flex items-center text-[0.66rem]/[0.88rem] text-[#6a7282]">
       <img src={iconSrc} alt="" />
       {children}
     </li>
@@ -21,30 +21,29 @@ const MetaItem = ({ iconSrc, children }: MetaItemProps) => {
 
 type PerformanceMetaProps = Pick<
   PerformanceSummary,
-  "title" | "startDate" | "endDate" | "venue" | "program"
+  "title" | "startDate" | "endDate" | "venue" | "composers"
 >;
 const PerformanceMeta = ({
   title,
   startDate,
   endDate,
   venue,
-  program = [],
+  composers = [],
 }: PerformanceMetaProps) => {
+  console.log(composers);
   const renderComposers = () => {
-    const composers = program.filter((item) => item.composerKo).slice(0, 3);
-    if (composers.length === 0) return null;
+    if (!composers || composers.length === 0) return null;
+    const composersKo = composers.slice(0, 5);
     return (
       <div className="flex max-h-11 w-full flex-wrap items-center gap-1 overflow-hidden">
-        {composers
-          .filter((item) => item.composerKo)
-          .map((item, idx) => (
-            <ComposerBadge key={idx} composer={item.composerKo!} />
-          ))}
+        {composersKo.map((composer, idx) => (
+          <ComposerBadge key={idx} composer={composer} />
+        ))}
       </div>
     );
   };
   return (
-    <div className="flex flex-col gap-066">
+    <div className="gap-066 flex flex-col">
       <div className="flex flex-col gap-3">
         <p className="line-clamp-2 text-[0.88rem]/[1.1rem] font-semibold text-[#101828]">
           {title}

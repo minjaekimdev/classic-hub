@@ -1,9 +1,10 @@
 import type { PerformanceSummary } from "@classic-hub/shared/types/client";
-import type { Program } from "@classic-hub/shared/types/common";
-import type { DBPerformanceRead } from "@classic-hub/shared/types/database";
+import type { DBWeekendPerformances } from "@classic-hub/shared/types/database";
 
-export const mapToHomeWeekend = (raw: DBPerformanceRead): PerformanceSummary => ({
-  id: raw.performance_id,
+export const mapToHomeWeekend = (
+  raw: DBWeekendPerformances,
+): PerformanceSummary => ({
+  id: raw.performance_id ?? "",
   title: raw.performance_name,
   poster: raw.poster,
   artist: raw.cast,
@@ -12,5 +13,5 @@ export const mapToHomeWeekend = (raw: DBPerformanceRead): PerformanceSummary => 
   maxPrice: raw.max_price,
   startDate: raw.period_from,
   endDate: raw.period_to,
-  program: raw.program as unknown as Program[],
+  composers: raw.composers_ko as unknown as string[],
 });

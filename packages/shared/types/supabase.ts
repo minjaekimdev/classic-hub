@@ -412,7 +412,21 @@ export type Database = {
             foreignKeyName: "performance_programs_performance_id_fkey"
             columns: ["performance_id"]
             isOneToOne: false
+            referencedRelation: "daily_ranking_with_details"
+            referencedColumns: ["performance_id"]
+          },
+          {
+            foreignKeyName: "performance_programs_performance_id_fkey"
+            columns: ["performance_id"]
+            isOneToOne: false
             referencedRelation: "performances"
+            referencedColumns: ["performance_id"]
+          },
+          {
+            foreignKeyName: "performance_programs_performance_id_fkey"
+            columns: ["performance_id"]
+            isOneToOne: false
+            referencedRelation: "weekend_performances_with_program"
             referencedColumns: ["performance_id"]
           },
         ]
@@ -505,17 +519,16 @@ export type Database = {
     Views: {
       daily_ranking_with_details: {
         Row: {
-          booking_links: Json | null
           cast: string | null
+          composers_ko: Json | null
           current_rank: number | null
-          last_rank: number | null
+          max_price: number | null
+          min_price: number | null
           performance_id: string | null
           performance_name: string | null
           period_from: string | null
           period_to: string | null
           poster: string | null
-          price: Json | null
-          program: Json | null
           venue_name: string | null
         }
         Relationships: []
@@ -532,6 +545,21 @@ export type Database = {
           period_to: string | null
           poster: string | null
           price: Json | null
+          venue_name: string | null
+        }
+        Relationships: []
+      }
+      weekend_performances_with_program: {
+        Row: {
+          cast: string | null
+          composers_ko: Json | null
+          max_price: number | null
+          min_price: number | null
+          performance_id: string | null
+          performance_name: string | null
+          period_from: string | null
+          period_to: string | null
+          poster: string | null
           venue_name: string | null
         }
         Relationships: []
