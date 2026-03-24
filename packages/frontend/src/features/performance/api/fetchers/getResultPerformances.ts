@@ -56,6 +56,14 @@ export const getResultPerformances = async (
     );
   }
 
+  // 키워드에 해당하는 공연들에 대한 정보 모두 가져오기
+  
+  // 각 공연마다
+  // 키워드가 작곡가에 포함되는 경우 -> 첫 번째 곡명 같이 가져오기
+  // 키워드가 특정 곡에 포함되는 경우 -> 해당 곡의 작곡가명 같이 가져오기
+  // 키워드가 영어인 경우 영문 작곡가명 + 영문 곡명
+  // 이 모든 경우에 해당 공연에서 연주되는 곡의 개수 가져오기
+
   // 지역
   if (filters.location) {
     query = getLocationQuery(query, filters.location);

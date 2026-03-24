@@ -1,6 +1,6 @@
 import type { SearchFilters } from "../../types";
 import { useQuery } from "@tanstack/react-query";
-import { getResultPerformances } from "../fetchers/get-performance-result";
+import { getResultPerformances } from "../fetchers/getResultPerformances";
 import mapToPerformanceDetail from "../mappers/performance-detail.mapper";
 
 const useResultPerformances = (params: SearchFilters) => {

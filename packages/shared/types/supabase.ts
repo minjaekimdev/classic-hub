@@ -251,7 +251,6 @@ export type Database = {
           period_to: string | null
           poster: string | null
           price: Json | null
-          program: Json | null
           raw_data: Json | null
           runtime: string | null
           state: string | null
@@ -275,7 +274,6 @@ export type Database = {
           period_to?: string | null
           poster?: string | null
           price?: Json | null
-          program?: Json | null
           raw_data?: Json | null
           runtime?: string | null
           state?: string | null
@@ -299,7 +297,6 @@ export type Database = {
           period_to?: string | null
           poster?: string | null
           price?: Json | null
-          program?: Json | null
           raw_data?: Json | null
           runtime?: string | null
           state?: string | null
@@ -385,80 +382,40 @@ export type Database = {
         }
         Relationships: []
       }
-      performances_test: {
+      programs: {
         Row: {
-          age: string | null
-          area: string | null
-          booking_links: Json | null
-          cast: string | null
-          created_at: string
-          detail_image: Json | null
-          max_price: number | null
-          min_price: number | null
+          composer_en: string | null
+          composer_ko: string | null
+          id: string
           performance_id: string
-          performance_name: string | null
-          period_from: string | null
-          period_to: string | null
-          poster: string | null
-          price: Json | null
-          program: Json | null
-          raw_data: Json | null
-          runtime: string | null
-          state: string | null
-          time: string | null
-          updated_at: string | null
-          venue_id: string | null
-          venue_name: string | null
+          title_en: string | null
+          title_ko: string | null
         }
         Insert: {
-          age?: string | null
-          area?: string | null
-          booking_links?: Json | null
-          cast?: string | null
-          created_at?: string
-          detail_image?: Json | null
-          max_price?: number | null
-          min_price?: number | null
+          composer_en?: string | null
+          composer_ko?: string | null
+          id?: string
           performance_id: string
-          performance_name?: string | null
-          period_from?: string | null
-          period_to?: string | null
-          poster?: string | null
-          price?: Json | null
-          program?: Json | null
-          raw_data?: Json | null
-          runtime?: string | null
-          state?: string | null
-          time?: string | null
-          updated_at?: string | null
-          venue_id?: string | null
-          venue_name?: string | null
+          title_en?: string | null
+          title_ko?: string | null
         }
         Update: {
-          age?: string | null
-          area?: string | null
-          booking_links?: Json | null
-          cast?: string | null
-          created_at?: string
-          detail_image?: Json | null
-          max_price?: number | null
-          min_price?: number | null
+          composer_en?: string | null
+          composer_ko?: string | null
+          id?: string
           performance_id?: string
-          performance_name?: string | null
-          period_from?: string | null
-          period_to?: string | null
-          poster?: string | null
-          price?: Json | null
-          program?: Json | null
-          raw_data?: Json | null
-          runtime?: string | null
-          state?: string | null
-          time?: string | null
-          updated_at?: string | null
-          venue_id?: string | null
-          venue_name?: string | null
+          title_en?: string | null
+          title_ko?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "performance_programs_performance_id_fkey"
+            columns: ["performance_id"]
+            isOneToOne: false
+            referencedRelation: "performances"
+            referencedColumns: ["performance_id"]
+          },
+        ]
       }
       task_queue: {
         Row: {
@@ -493,33 +450,6 @@ export type Database = {
           retry_count?: number
           status?: string
           updated_at?: string | null
-        }
-        Relationships: []
-      }
-      test_table: {
-        Row: {
-          c1: string | null
-          c2: string | null
-          created_at: string
-          id: number
-          jsondata: Json | null
-          mt20id: string
-        }
-        Insert: {
-          c1?: string | null
-          c2?: string | null
-          created_at?: string
-          id?: number
-          jsondata?: Json | null
-          mt20id: string
-        }
-        Update: {
-          c1?: string | null
-          c2?: string | null
-          created_at?: string
-          id?: number
-          jsondata?: Json | null
-          mt20id?: string
         }
         Relationships: []
       }
@@ -585,7 +515,8 @@ export type Database = {
           period_to: string | null
           poster: string | null
           price: Json | null
-          program: Json | null
+          program_en: Json | null
+          program_ko: Json | null
           venue_name: string | null
         }
         Relationships: []
@@ -636,6 +567,8 @@ export type Database = {
           raw_item: Json
         }[]
       }
+      upsert_full_performance: { Args: { payload: Json }; Returns: string }
+      upsert_performances_bulk: { Args: { payload: Json }; Returns: string }
     }
     Enums: {
       [_ in never]: never

@@ -18,6 +18,6 @@ export const mapToHomeRanking = (data: DBRanking): PerformanceSummary => {
     startDate: data.period_from ?? "",
     endDate: data.period_to ?? "",
     rank: data.current_rank!,
-    program: data.program as unknown as Program[]
+    composers: data.program_ko.filter((item) => item.name).map((item) => item.name))
   };
 };

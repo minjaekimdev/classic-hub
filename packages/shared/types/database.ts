@@ -29,3 +29,5 @@ export type DBFaciltyWrite = InsertTables<"facilities">;
 // 세부 공연장 데이터
 export type DBHallRead = Tables<"halls">;
 export type DBHallWrite = Tables<"halls">;
+
+export type DBPrograms = Tables<"programs">;

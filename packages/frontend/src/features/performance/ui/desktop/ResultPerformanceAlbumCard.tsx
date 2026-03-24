@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 const ResultPerformanceAlbumCard = ({ data }: { data: DetailPerformance }) => {
   return (
     <Link to={`/detail/${data.id}`}>
-      <div className="flex flex-col gap-[0.66rem] cursor-pointer">
+      <div className="flex flex-col gap-066 cursor-pointer">
         <div className="relative rounded-main border border-[rgba(0,0,0,0.1)] overflow-hidden aspect-10/14">
           <img className="w-full h-full" src={data.poster ?? ""} alt="공연 포스터" />
         </div>
