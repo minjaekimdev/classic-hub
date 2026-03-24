@@ -31,6 +31,7 @@ FROM
 ORDER BY
   r.current_rank ASC;
 
+DROP VIEW IF EXISTS weekend_performances_with_program;
 
 CREATE OR REPLACE VIEW weekend_performances_with_program AS
 WITH 
@@ -40,12 +41,13 @@ WITH
       (CURRENT_DATE + (6 - EXTRACT(DOW FROM CURRENT_DATE)::int)) AS sat,
       (CURRENT_DATE + (7 - EXTRACT(DOW FROM CURRENT_DATE)::int)) AS sun
   ),
-  -- [2단계] 작곡가 뭉치기 (기존 로직 활용)
+  -- [2단계] 작곡가 뭉치기 (NULL 제외 로직 추가)
   composer_agg AS (
     SELECT
       performance_id,
       jsonb_agg(DISTINCT composer_ko) AS composers_ko
     FROM programs
+    WHERE composer_ko IS NOT NULL
     GROUP BY performance_id
   )
 SELECT
@@ -60,8 +62,7 @@ SELECT
   ca.composers_ko
 FROM 
   performances p
-  CROSS JOIN target_weekend tw -- 위에서 계산한 날짜를 가져옴
+  CROSS JOIN target_weekend tw
   LEFT JOIN composer_agg ca ON p.performance_id = ca.performance_id
 WHERE 
-  -- 공연 기간이 이번 주말(토~일)과 겹치는지 확인
   p.period_from::date <= tw.sun AND p.period_to::date >= tw.sat;
