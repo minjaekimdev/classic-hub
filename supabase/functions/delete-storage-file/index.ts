@@ -1,5 +1,5 @@
-import { deleteFromStorage } from "../_shared/service.ts";
-import { getResponse, getStoragePath } from "../_shared/utils.ts";
+import { deleteFromStorage } from "../../_shared/service.ts";
+import { getResponse, getStoragePath } from "../../_shared/utils.ts";
 
 Deno.serve(async (req) => {
   try {
