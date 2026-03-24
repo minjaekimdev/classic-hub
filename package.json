@@ -8,7 +8,8 @@
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "test-backend": "bash ./scripts/test-backend.sh"
+    "test-backend": "bash ./scripts/test-backend.sh",
+    "db:gen:remote": "supabase gen types typescript --project-id razltwjkvwqiyksaydcw > packages/shared/types/supabase.ts"
   },
   "repository": {
     "type": "git",

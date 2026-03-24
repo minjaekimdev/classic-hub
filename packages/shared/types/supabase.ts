@@ -515,8 +515,7 @@ export type Database = {
           period_to: string | null
           poster: string | null
           price: Json | null
-          program_en: Json | null
-          program_ko: Json | null
+          program: Json | null
           venue_name: string | null
         }
         Relationships: []

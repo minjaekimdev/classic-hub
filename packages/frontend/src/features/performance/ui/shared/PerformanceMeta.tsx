@@ -31,11 +31,11 @@ const PerformanceMeta = ({
   program = [],
 }: PerformanceMetaProps) => {
   const renderComposers = () => {
-    const composers = program.filter((item) => item.composerKo);
+    const composers = program.filter((item) => item.composerKo).slice(0, 3);
     if (composers.length === 0) return null;
     return (
       <div className="flex max-h-11 w-full flex-wrap items-center gap-1 overflow-hidden">
-        {program
+        {composers
           .filter((item) => item.composerKo)
           .map((item, idx) => (
             <ComposerBadge key={idx} composer={item.composerKo!} />

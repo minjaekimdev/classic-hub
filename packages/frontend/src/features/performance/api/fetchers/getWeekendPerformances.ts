@@ -30,7 +30,7 @@ export const getWeekendPerformances = async () => {
     .from("performances")
     .select("*")
     .or(
-      `and(period_from.gte."${parsedStartDate}",period_from.lte."${parsedEndDate}"),and(period_to.gte."${parsedStartDate}",period_to.lte."${parsedEndDate}"),and(period_from.lte."${parsedStartDate}",period_to.gte."${parsedEndDate}")`,
+      `and(period_from.lte.${parsedEndDate},period_to.gte.${parsedStartDate})`
     )
     .returns<DBPerformanceRead[]>();
 

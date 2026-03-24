@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getWeekendPerformances } from "./getWeekendPerformances";
+import { getWeekendPerformances } from "../fetchers/getWeekendPerformances";
 import { mapToHomeWeekend } from "../mappers/mapToHomeWeekend";
 
 export const useWeekendPerformances = () => {
