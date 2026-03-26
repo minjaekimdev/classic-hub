@@ -1,99 +1,51 @@
-import ResultPriceDisplay from "./ResultPriceDisplay";
+import ResultPriceDisplay from "../ResultPriceDisplay";
 import { Link } from "react-router-dom";
-import { MetaItem } from "../shared/PerformanceMeta";
+import { MetaItem } from "../../shared/PerformanceMeta";
 import calendarIcon from "@shared/assets/icons/calendar-gray.svg";
 import locationIcon from "@shared/assets/icons/location-gray.svg";
 import formatDateRange from "@/shared/utils/formatDateRange";
 import type { ResultPerformance } from "@classic-hub/shared/types/client";
-import { useResult } from "../../contexts/result-context";
+import { useResult } from "../../../contexts/result-context";
 import type { Program } from "@classic-hub/shared/types/common";
-import ComposerList from "../shared/ComposerList";
+import ComposerList from "../../shared/ComposerList";
+import noteIcon from "@shared/assets/icons/single-note-red.svg";
+import type { ProgramMatchResult } from "./type";
+import { getMatchedProgram } from "./utils";
 
-export interface ProgramMatchResult {
-  composer: string | null;
-  piece: string | null;
-  highlight: "composer" | "piece";
-}
-const getMatchedProgram = (
-  program: Program[],
-  keyword: string,
-): ProgramMatchResult | null => {
-  // 키워드가 존재하지 않거나, program이 존재하지 않는다면 null 리턴
-  if (!program || program.length === 0) {
-    return null;
-  }
-
-  for (const item of program) {
-    if (item.composerKo?.includes(keyword)) {
-      return {
-        composer: item.composerKo,
-        piece: item.workTitleKr[0] ?? null,
-        highlight: "composer",
-      };
-    }
-    if (item.workTitleKr.length > 0) {
-      const matchedPiece = item.workTitleKr.find((work) =>
-        work.includes(keyword),
-      );
-      if (matchedPiece) {
-        return {
-          composer: item.composerKo,
-          piece: matchedPiece,
-          highlight: "piece",
-        };
-      }
-    }
-    if (item.composerEn?.includes(keyword)) {
-      return {
-        composer: item.composerEn,
-        piece: item.workTitleEn[0] ?? null,
-        highlight: "composer",
-      };
-    }
-    if (item.workTitleEn.length > 0) {
-      const matchedPiece = item.workTitleEn.find((work) =>
-        work.includes(keyword),
-      );
-      if (matchedPiece) {
-        return {
-          composer: item.composerEn,
-          piece: matchedPiece,
-          highlight: "piece",
-        };
-      }
-    }
-  }
-
-  // 아무것도 매칭되지 않았으면 null 반환
-  return null;
+const CalloutLayout = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <p className="callout-container">
+      <img src={noteIcon} alt="" />
+      {children}
+    </p>
+  );
 };
 
-const ProgramString = ({ composer, piece, highlight }: ProgramMatchResult) => {
+const ProgramCallout = ({ composer, piece, highlight }: ProgramMatchResult) => {
   if (composer && piece) {
     return highlight === "composer" ? (
-      <p className="">
-        프로그램: <span className="font-semibold">{composer}</span>
-        {" - "}
-        <span>{piece}</span>
-      </p>
+      <CalloutLayout>
+        <span className="font-semibold">{composer}</span>
+        <span>: {piece}</span>
+      </CalloutLayout>
     ) : (
-      <p className="">
-        프로그램: <span>{composer}</span>
-        {" - "}
+      <CalloutLayout>
+        <span>{composer}: </span>
         <span className="font-semibold">{piece}</span>
-      </p>
+      </CalloutLayout>
     );
   } else if (composer && !piece) {
     return (
-      <p className="">
-        작곡가: <span className="font-semibold">{composer}</span>
-      </p>
+      <CalloutLayout>
+        <span className="font-semibold">{composer}</span>
+        <span> (세부 곡명 미정)</span>
+      </CalloutLayout>
     );
   } else if (!composer && piece) {
     return (
-      <p className="">
-        연주곡: <span className="font-semibold">{piece}</span>
-      </p>
+      <CalloutLayout>
+        <span className="font-semibold">{piece}</span>
+      </CalloutLayout>
     );
   }
 };
@@ -109,7 +61,7 @@ const MatchedProgram = ({ program, keyword }: MatchedProgramProps) => {
 
   return (
     <div className="">
-      <ProgramString composer={composer} piece={piece} highlight={highlight} />
+      <ProgramCallout composer={composer} piece={piece} highlight={highlight} />
     </div>
   );
 };
