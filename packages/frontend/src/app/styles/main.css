@@ -70,14 +70,14 @@
   letter-spacing: 0.00575rem;
 }
 
-@utility callout-container {
+@utility callout-box {
   padding: 0.53rem 0.5rem 0.56rem;
   border-radius: 0.21875rem;
   background-color: #eceef2;
   border: 1px solid #d1d5db;
   font-size: 0.65625rem;
   line-height: 0.875rem;
-  letter-spacing: 0.00575rem;
+  letter-spacing: 0.00575rem;  
 }
 
 /* Pretendard */

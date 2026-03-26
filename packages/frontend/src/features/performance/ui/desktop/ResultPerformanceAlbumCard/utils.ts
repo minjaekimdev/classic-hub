@@ -1,7 +1,7 @@
 import type { Program } from "@classic-hub/shared/types/common";
 import type { ProgramMatchResult } from "./type";
 
-export const getMatchedProgram = (
+export const getProgramInfo = (
   program: Program[],
   keyword: string,
 ): ProgramMatchResult | null => {

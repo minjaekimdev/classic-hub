@@ -9,65 +9,69 @@ import { useResult } from "../../../contexts/result-context";
 import type { Program } from "@classic-hub/shared/types/common";
 import ComposerList from "../../shared/ComposerList";
 import noteIcon from "@shared/assets/icons/single-note-red.svg";
-import type { ProgramMatchResult } from "./type";
-import { getMatchedProgram } from "./utils";
+import { getPieceCount, getProgramInfo } from "./utils";
 
 const CalloutLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <p className="callout-container">
-      <img src={noteIcon} alt="" />
-      {children}
-    </p>
+    <div className="callout-box my-088">
+      <div className="gap-022 flex items-start">
+        <img src={noteIcon} alt="" />
+        {children}
+      </div>
+    </div>
   );
-};
-
-const ProgramCallout = ({ composer, piece, highlight }: ProgramMatchResult) => {
-  if (composer && piece) {
-    return highlight === "composer" ? (
-      <CalloutLayout>
-        <span className="font-semibold">{composer}</span>
-        <span>: {piece}</span>
-      </CalloutLayout>
-    ) : (
-      <CalloutLayout>
-        <span>{composer}: </span>
-        <span className="font-semibold">{piece}</span>
-      </CalloutLayout>
-    );
-  } else if (composer && !piece) {
-    return (
-      <CalloutLayout>
-        <span className="font-semibold">{composer}</span>
-        <span> (세부 곡명 미정)</span>
-      </CalloutLayout>
-    );
-  } else if (!composer && piece) {
-    return (
-      <CalloutLayout>
-        <span className="font-semibold">{piece}</span>
-      </CalloutLayout>
-    );
-  }
 };
 
 interface MatchedProgramProps {
   program: Program[];
   keyword: string;
+  pieceCount: number;
 }
-const MatchedProgram = ({ program, keyword }: MatchedProgramProps) => {
-  const matchedProgram = getMatchedProgram(program, keyword);
+const MatchedProgram = ({
+  program,
+  keyword,
+  pieceCount,
+}: MatchedProgramProps) => {
+  const matchedProgram = getProgramInfo(program, keyword);
   if (!matchedProgram) return null;
   const { composer, piece, highlight } = matchedProgram;
 
   return (
-    <div className="">
-      <ProgramCallout composer={composer} piece={piece} highlight={highlight} />
-    </div>
+    <CalloutLayout>
+      {/* 작곡가와 곡명이 모두 프로그램에 존재하는 경우 */}
+      {composer && piece && (
+        <p>
+          <span className={highlight === "composer" ? "font-semibold" : ""}>
+            {composer}
+          </span>
+          <span>: </span>
+          <span className={highlight === "piece" ? "font-semibold" : ""}>
+            {piece} 외 {pieceCount - 1}곡
+          </span>
+        </p>
+      )}
+      {/* 작곡가명이 검색어와 매칭되었지만 프로그램에 주어진 작품명이 없는경우 */}
+      {composer && !piece && (
+        <p>
+          <span className="font-semibold">{composer}</span>
+          <span> (세부 곡명 미정)</span>
+        </p>
+      )}
+      {/* 작곡가명이 작품명과 매칭되었지만 프로그램에 주어진 작곡가가 없는경우 */}
+      {!composer && piece && (
+        <p>
+          <span className="font-semibold">
+            {piece}외 {pieceCount - 1}곡
+          </span>
+        </p>
+      )}
+    </CalloutLayout>
   );
 };
 
 const ResultPerformanceAlbumCard = ({ data }: { data: ResultPerformance }) => {
   const { keyword } = useResult();
+  const pieceCount = getPieceCount(data.programs);
   return (
     <Link to={`/detail/${data.id}`}>
       <div className="gap-066 flex cursor-pointer flex-col">
@@ -97,10 +101,14 @@ const ResultPerformanceAlbumCard = ({ data }: { data: ResultPerformance }) => {
           </div>
           <div className="">
             {keyword && (
-              <MatchedProgram program={data.programs} keyword={keyword} />
+              <MatchedProgram
+                program={data.programs}
+                keyword={keyword}
+                pieceCount={pieceCount}
+              />
             )}
           </div>
-          <div className="mt-4 flex items-center justify-between">
+          <div className="flex items-center justify-between">
             <ResultPriceDisplay
               minPrice={data.minPrice}
               maxPrice={data.maxPrice}
