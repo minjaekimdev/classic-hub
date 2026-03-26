@@ -1,12 +1,13 @@
-import type { DetailPerformance } from "@classic-hub/shared/types/client";
+import type {  ResultPerformance } from "@classic-hub/shared/types/client";
 import type { QueryObserverResult } from "@tanstack/react-query";
 import { createContext, useContext } from "react";
 
 interface ResultContextType {
-  allPerformances: DetailPerformance[] | undefined;
-  filteredPerformances: DetailPerformance[];
+  allPerformances: ResultPerformance[] | undefined;
+  filteredPerformances: ResultPerformance[];
   isLoading: boolean;
   isError: boolean;
+  keyword: string | null;
   refetch: () => Promise<QueryObserverResult>;
 }
 

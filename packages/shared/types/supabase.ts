@@ -426,6 +426,13 @@ export type Database = {
             foreignKeyName: "performance_programs_performance_id_fkey"
             columns: ["performance_id"]
             isOneToOne: false
+            referencedRelation: "performances_with_program_view"
+            referencedColumns: ["performance_id"]
+          },
+          {
+            foreignKeyName: "performance_programs_performance_id_fkey"
+            columns: ["performance_id"]
+            isOneToOne: false
             referencedRelation: "weekend_performances_with_program"
             referencedColumns: ["performance_id"]
           },
@@ -549,6 +556,25 @@ export type Database = {
         }
         Relationships: []
       }
+      performances_with_program_view: {
+        Row: {
+          area: string | null
+          booking_links: Json | null
+          cast: string | null
+          max_price: number | null
+          min_price: number | null
+          performance_id: string | null
+          performance_name: string | null
+          period_from: string | null
+          period_to: string | null
+          poster: string | null
+          programs: Json | null
+          search_target: string | null
+          venue_id: string | null
+          venue_name: string | null
+        }
+        Relationships: []
+      }
       weekend_performances_with_program: {
         Row: {
           cast: string | null
@@ -592,6 +618,19 @@ export type Database = {
           item_index: number
           item_type: string
           raw_item: Json
+        }[]
+      }
+      search_performances_with_unique_composers: {
+        Args: { search_keyword: string }
+        Returns: {
+          cast: string
+          performance_id: string
+          performance_name: string
+          period_from: string
+          period_to: string
+          poster: string
+          programs: Json
+          venue_name: string
         }[]
       }
       upsert_full_performance: { Args: { payload: Json }; Returns: string }

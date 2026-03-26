@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import type { Filter, SortType } from "../types/filter";
-import type { DetailPerformance } from "@classic-hub/shared/types/client";
+import type { ResultPerformance } from "@classic-hub/shared/types/client";
 
 // a와 b에 대한 null 체크를 한 뒤 비교함수의 리턴값을 반환하는 로직을 추상화
 const getSortReturn = <T>(
@@ -17,7 +17,7 @@ const getSortReturn = <T>(
 };
 
 const useSortedPerformances = (
-  performances: DetailPerformance[] | undefined,
+  performances: ResultPerformance[] | undefined,
   sortBy: SortType | null,
 ) => {
   const sortedPerformances = useMemo(() => {
@@ -48,7 +48,7 @@ const useSortedPerformances = (
 };
 
 const useVenuedPerformances = (
-  performances: DetailPerformance[] | undefined,
+  performances: ResultPerformance[] | undefined,
   selectedVenues: string[],
 ) => {
   const result = useMemo(() => {
@@ -66,7 +66,7 @@ const useVenuedPerformances = (
 };
 
 const useFilteredPerformances = (
-  allPerformances: DetailPerformance[] | undefined,
+  allPerformances: ResultPerformance[] | undefined,
   filters: Filter,
 ) => {
   // 선택된 공연장들에 해당하는 공연 데이터 필터링하기

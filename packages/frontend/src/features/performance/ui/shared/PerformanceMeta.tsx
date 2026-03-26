@@ -10,7 +10,7 @@ interface MetaItemProps {
   children: React.ReactNode;
 }
 
-const MetaItem = ({ iconSrc, children }: MetaItemProps) => {
+export const MetaItem = ({ iconSrc, children }: MetaItemProps) => {
   return (
     <li className="gap-022 flex items-center text-[0.66rem]/[0.88rem] text-[#6a7282]">
       <img src={iconSrc} alt="" />
@@ -30,7 +30,6 @@ const PerformanceMeta = ({
   venue,
   composers = [],
 }: PerformanceMetaProps) => {
-  console.log(composers);
   const renderComposers = () => {
     if (!composers || composers.length === 0) return null;
     const composersKo = composers.slice(0, 5);

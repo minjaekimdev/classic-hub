@@ -1,14 +1,14 @@
 import type { SearchFilters } from "../../types";
 import { useQuery } from "@tanstack/react-query";
 import { getResultPerformances } from "../fetchers/getResultPerformances";
-import mapToPerformanceDetail from "../mappers/performance-detail.mapper";
+import mapToResult from "../mappers/mapToResult";
 
 const useResultPerformances = (params: SearchFilters) => {
   return useQuery({
     queryKey: ["performance", "result", params],
     queryFn: () => getResultPerformances(params),
-    select: (item) => item.map(mapToPerformanceDetail)
-  })
+    select: (data) => data.map(mapToResult),
+  });
 };
 
 export default useResultPerformances;

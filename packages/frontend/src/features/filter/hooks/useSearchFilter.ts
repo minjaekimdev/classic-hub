@@ -62,7 +62,6 @@ const useSearchFilter = ({ onSearch }: { onSearch: () => void }) => {
     }
 
     const queryString = params.toString();
-    console.log(`queryString: ${queryString}`);
     onSearch?.();
     navigate(queryString ? `/result?${queryString}` : "/result");
   };

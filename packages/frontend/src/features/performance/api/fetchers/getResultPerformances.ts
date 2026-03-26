@@ -1,68 +1,62 @@
-import { PostgrestFilterBuilder } from "@supabase/postgrest-js";
-import type { Database } from "@classic-hub/shared/types/supabase";
 import supabase from "@/app/api/supabase-client";
 import formatQueryDate from "@/shared/utils/formatToQueryDate";
 import type { SearchFilters } from "../../types";
-import type { DBPerformanceRead } from "@classic-hub/shared/types/database";
+import type {
+  DBPerformanceRead,
+  DBProgramsRead,
+} from "@classic-hub/shared/types/database";
 
-type PerformanceRow = Database["public"]["Tables"]["performances"]["Row"];
+const getLocationQuery = (query: any, location: string) => {
+  const areaMap: Record<string, string[]> = {
+    충북: ["충북", "충청북도"],
+    충남: ["충남", "충청남도"],
+    전북: ["전북", "전라북도", "전북특별자치도"],
+    전남: ["전남", "전라남도"],
+    경북: ["경북", "경상북도"],
+    경남: ["경남", "경상남도"],
+    제주: ["제주", "제주특별자치도"],
+  };
 
-type PerformanceQuery = PostgrestFilterBuilder<
-  Database["__InternalSupabase"],
-  Database["public"],
-  PerformanceRow,
-  PerformanceRow[],
-  string,
-  unknown,
-  unknown
->;
-
-const getLocationQuery = (query: PerformanceQuery, location: string) => {
-  if (location === "충북") {
-    return query.in("area", ["충북", "충청북도"]);
-  }
-  if (location === "충남") {
-    return query.in("area", ["충남", "충청남도"]);
-  }
-  if (location === "전북") {
-    return query.in("area", ["전북", "전라북도", "전북특별자치도"]);
-  }
-  if (location === "전남") {
-    return query.in("area", ["전남", "전라남도"]);
-  }
-  if (location === "경북") {
-    return query.in("area", ["경북", "경상북도"]);
-  }
-  if (location === "경남") {
-    return query.in("area", ["경남", "경상남도"]);
-  }
-  if (location === "제주") {
-    return query.in("area", ["제주", "제주특별자치도"]);
+  if (location in areaMap) {
+    return query.in("area", areaMap[location]);
   }
   return query.ilike("area", `%${location}%`);
 };
 
+type PerformanceType = Pick<
+  DBPerformanceRead,
+  | "performance_id"
+  | "poster"
+  | "performance_name"
+  | "cast"
+  | "period_from"
+  | "period_to"
+  | "venue_id"
+  | "venue_name"
+  | "min_price"
+  | "max_price"
+  | "booking_links"
+  | "area"
+>;
+
+type ProgramType = Pick<
+  DBProgramsRead,
+  "composer_ko" | "composer_en" | "title_ko" | "title_en"
+>;
+
+export type PerformanceWithProgram = PerformanceType & {
+  programs: ProgramType[];
+};
+
 export const getResultPerformances = async (
   filters: SearchFilters,
-): Promise<DBPerformanceRead[]> => {
-  // 1. 기본 쿼리 시작
-  let query = supabase.from("performances").select("*");
+): Promise<PerformanceWithProgram[]> => {
+  let query = supabase.from("performances_with_program_view").select("*");
 
   // 2. 동적 필터링 (값이 존재할 때만 체이닝)
   if (filters.keyword) {
-    // 제목(title) 혹은 장소명(venue) 등 원하는 컬럼 지정
-    query = query.or(
-      `performance_name.ilike.%${filters.keyword}%, cast.ilike.%${filters.keyword}%`,
-    );
+    query = query.ilike("search_target", `%${filters.keyword}%`);
   }
-
-  // 키워드에 해당하는 공연들에 대한 정보 모두 가져오기
-  
-  // 각 공연마다
-  // 키워드가 작곡가에 포함되는 경우 -> 첫 번째 곡명 같이 가져오기
-  // 키워드가 특정 곡에 포함되는 경우 -> 해당 곡의 작곡가명 같이 가져오기
-  // 키워드가 영어인 경우 영문 작곡가명 + 영문 곡명
-  // 이 모든 경우에 해당 공연에서 연주되는 곡의 개수 가져오기
 
   // 지역
   if (filters.location) {
@@ -91,6 +85,7 @@ export const getResultPerformances = async (
     throw new Error(error.message);
   }
 
-  const result = data as unknown as DBPerformanceRead[];
+  const result = data as unknown as PerformanceWithProgram[];
+
   return result;
 };

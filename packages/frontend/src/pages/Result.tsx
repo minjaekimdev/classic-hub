@@ -56,6 +56,8 @@ const Result = () => {
     endDate,
   });
 
+  console.log(allPerformances);
+
   const filteredPerformances = useFilteredPerformances(
     allPerformances,
     filters,
@@ -68,6 +70,7 @@ const Result = () => {
         filteredPerformances,
         isLoading,
         isError,
+        keyword,
         refetch,
       }}
     >

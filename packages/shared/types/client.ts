@@ -29,6 +29,23 @@ export interface RankingPerformance extends Performance {
   bookingLinks: BookingLink[] | null;
 }
 
+// 결과 페이지 공연 카드
+export interface ResultPerformance {
+  id: string;
+  poster: string | null;
+  title: string | null;
+  artist: string | null;
+  bookingLinks: BookingLink[];
+  startDate: string | null;
+  endDate: string | null;
+  minPrice: number | null;
+  maxPrice: number | null;
+  venueId: string | null;
+  venue: string | null;
+  area: string | null;
+  programs: Program[];
+}
+
 // 상세 정보에서 사용
 // 좌석 및 가격 정보
 export interface DetailPerformance extends Performance {
@@ -44,7 +61,7 @@ export interface DetailPerformance extends Performance {
   priceInfo: SeatPrice[];
   detailImages: string[];
   bookingLinks: BookingLink[];
-  program: Program[]
+  program: Program[];
 }
 
 export interface Hall {
