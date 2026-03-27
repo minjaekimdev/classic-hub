@@ -1,14 +1,13 @@
 import formatMinMaxPrice from "@/shared/utils/formatMinMaxPrice";
-import type { PerformanceSummary } from "@classic-hub/shared/types/client";
-import type { DBRanking } from "@classic-hub/shared/types/database";
 import type { Price } from "@classic-hub/shared/types/common";
+import type { DBRanking } from "@classic-hub/shared/types/database";
 
-export const mapToHomeRanking = (data: DBRanking): PerformanceSummary => {
+export const mapToHomeRanking = (data: DBRanking) => {
   const { minPrice, maxPrice } = formatMinMaxPrice(
     data.price as unknown as Price[] | null,
   );
   return {
-    id: data.performance_id!,
+    id: data.performance_id ?? "",
     title: data.performance_name ?? "",
     poster: data.poster ?? "",
     artist: data.cast ?? "",
@@ -17,6 +16,7 @@ export const mapToHomeRanking = (data: DBRanking): PerformanceSummary => {
     maxPrice,
     startDate: data.period_from ?? "",
     endDate: data.period_to ?? "",
-    rank: data.current_rank!,
+    rank: data.current_rank ?? undefined,
+    composers: (data.composers_ko as string[]) ?? [],
   };
 };

@@ -16,7 +16,7 @@ const PerformanceListCard = ({ data }: { data: PerformanceSummary }) => {
         <div className="flex flex-col gap-[0.6rem]">
           <PerformanceAlbumMeta
             title={data.title}
-            artist={data.artist}
+            composers={data.composers}
             startDate={data.startDate}
             endDate={data.endDate}
             venue={data.venue}

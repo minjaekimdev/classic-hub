@@ -1,9 +1,11 @@
 import type { DetailPerformance } from "@classic-hub/shared/types/client";
-import type { BookingLink, Price } from "@classic-hub/shared/types/common";
+import type {
+  BookingLink,
+  Price,
+} from "@classic-hub/shared/types/common";
 import type { DBPerformanceRead } from "@classic-hub/shared/types/database";
 
-const mapToPerformanceDetail = (raw: DBPerformanceRead): DetailPerformance => {
-  console.log(raw);
+const mapToDetail = (raw: DBPerformanceRead): DetailPerformance => {
   return {
     id: raw.performance_id,
     poster: raw.poster ?? "",
@@ -26,7 +28,8 @@ const mapToPerformanceDetail = (raw: DBPerformanceRead): DetailPerformance => {
     detailImages: raw.detail_image
       ? (raw.detail_image as unknown as string[])
       : [],
+
   };
 };
 
-export default mapToPerformanceDetail;
+export default mapToDetail;

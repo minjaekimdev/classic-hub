@@ -10,7 +10,7 @@ import { MobileList } from "../shared/MobileList";
 
 const WEEKEND_BREAKPOINTS = {
   1280: { slidesPerView: 5 },
-  960: {slidesPerView: 4},
+  960: { slidesPerView: 4 },
 };
 
 export const WeekendPerformances = () => {
@@ -37,6 +37,7 @@ export const WeekendPerformances = () => {
           isError={isError}
           refetch={refetch}
           breakPoints={WEEKEND_BREAKPOINTS}
+          slidesPerGroup={5}
           renderItem={(performance) => (
             <HomePerformanceAlbumCard data={performance} />
           )}

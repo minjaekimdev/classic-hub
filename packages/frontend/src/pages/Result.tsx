@@ -68,6 +68,7 @@ const Result = () => {
         filteredPerformances,
         isLoading,
         isError,
+        keyword,
         refetch,
       }}
     >

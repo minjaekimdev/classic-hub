@@ -21,6 +21,7 @@ export type DBPerformanceWrite = InsertTables<"performances">;
 
 // performances 테이블과 JOIN된 랭킹 데이터
 export type DBRanking = View<"daily_ranking_with_details">;
+export type DBWeekendPerformances = View<"weekend_performances_with_program">;
 
 // 공연장 데이터
 export type DBFacilityRead = Tables<"facilities">;
@@ -28,4 +29,6 @@ export type DBFaciltyWrite = InsertTables<"facilities">;
 
 // 세부 공연장 데이터
 export type DBHallRead = Tables<"halls">;
-export type DBHallWrite = Tables<"halls">;
+export type DBHallWrite = InsertTables<"halls">;
+
+export type DBProgramsRead = Tables<"programs">;

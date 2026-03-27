@@ -7,12 +7,23 @@
 @theme {
   --color-main: #c00;
   --color-dark: #0a0a0a;
+  --color-light: #f9fafb;
+  --color-gray-150: #eceef2;
+
+  --spacing-011: 0.11rem;
+  --spacing-022: 0.22rem;
+  --spacing-044: 0.44rem;
+  --spacing-066: 0.66rem;
+  --spacing-088: 0.88rem;
+
   --font-logo: "Josefin Sans", sans-serif;
   --breakpoint-tablet: 600px;
   --breakpoint-desktop: 960px;
   --breakpoint-large-desktop: 1280px;
   --radius-main: 0.55rem;
   --radius-button: 0.42rem;
+  --radius-022: 0.22rem;
+
   --spacing-desktop-header-expanded: 13.19rem;
   --spacing-desktop-header-shrinked: 5.25rem;
   --spacing-mobile-header-expanded: 8.75rem;
@@ -25,7 +36,22 @@
   --z-modal: 99;
   --z-modal-overlay: 90;
   --z-header: 80;
-  --z-header-dropdown: 85; 
+  --z-header-dropdown: 85;
+
+  --color-composer-dark: #364153;
+
+  /* 편의시설 뱃지, 작곡가 뱃지 등에 사용되는 스타일 */
+  --spacing-badge-y: 0.11rem;
+  --spacing-badge-x: 0.44rem;
+  --text-badge: 0.65625rem;
+  --text-badge--line-height: 0.875rem;
+  --text-badge--letter-spacing: 0.00575rem;
+
+  /* 프로그램 콜아웃 ui */
+  --spacing-callout: 0.53rem 0.5rem 0.56rem;
+  --radius-callout: var(--spacing-022);
+  --color-callout-bg: #eceef2;
+  --color-callout-border: #d1d5db;
 }
 
 @utility bookmark-position {
@@ -41,6 +67,16 @@
   font-style: normal;
   font-weight: 400;
   line-height: 0.88rem;
+  letter-spacing: 0.00575rem;
+}
+
+@utility callout-box {
+  padding: 0.53rem 0.5rem 0.56rem;
+  border-radius: 0.21875rem;
+  background-color: #eceef2;
+  border: 1px solid #d1d5db;
+  font-size: 0.65625rem;
+  line-height: 0.875rem;
   letter-spacing: 0.00575rem;
 }
 

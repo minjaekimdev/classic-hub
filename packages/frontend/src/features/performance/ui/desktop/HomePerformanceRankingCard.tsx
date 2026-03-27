@@ -32,20 +32,20 @@ export const HomePerformanceRankingCard = ({ data }: { data: PerformanceSummary 
             src={data.poster ?? ""}
             alt=""
           />
-          <RankBadge className="top-[0.66rem] left-[0.66rem]">
+          <RankBadge className="top-066 left-088">
             {data.rank}위
           </RankBadge>
           <div className="hidden desktop:block bookmark-position">
             <BookmarkButtonDesktop />
           </div>
         </div>
-        <div className="grow flex flex-col justify-between p-[0.88rem]">
+        <div className="grow flex flex-col justify-between p-088">
           <PerformanceMeta
             title={data.title}
-            artist={data.artist}
             startDate={data.startDate}
             endDate={data.endDate}
             venue={data.venue}
+            composers={data.composers}
           />
           <div className="mt-3">
             <PriceDisplay minPrice={data.minPrice} maxPrice={data.maxPrice} />

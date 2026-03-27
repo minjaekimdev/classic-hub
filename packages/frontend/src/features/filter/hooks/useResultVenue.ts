@@ -1,6 +1,6 @@
 import formatArea from "@/shared/utils/formatArea";
 import formatVenue from "@/shared/utils/formatVenue";
-import type { DetailPerformance } from "@classic-hub/shared/types/client";
+import type { ResultPerformance } from "@classic-hub/shared/types/client";
 import { REGION_LIST } from "@classic-hub/shared/constants/region-list";
 import type { Location } from "@classic-hub/shared/types/common";
 
@@ -27,7 +27,7 @@ type TempGroupMap = Partial<
 >;
 
 const useResultVenue = (
-  result: DetailPerformance[] | undefined,
+  result: ResultPerformance[] | undefined,
 ): VenueGroup[] => {
   if (result === undefined) return [];
 

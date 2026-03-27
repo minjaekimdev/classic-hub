@@ -13,6 +13,7 @@ interface AsyncCarousel<T> {
   isError: boolean;
   refetch: () => Promise<QueryObserverResult>;
   breakPoints: Record<number, { slidesPerView: number }>;
+  slidesPerGroup?: number;
   renderItem: (item: T) => React.ReactNode;
 }
 export const AsyncCarousel = <T extends BaseItem>({
@@ -21,6 +22,7 @@ export const AsyncCarousel = <T extends BaseItem>({
   isError,
   refetch,
   breakPoints,
+  slidesPerGroup,
   renderItem,
 }: AsyncCarousel<T>) => {
   const skeletonItems = Array.from({ length: 5 }, (_, index) => ({
@@ -43,6 +45,7 @@ export const AsyncCarousel = <T extends BaseItem>({
     <DesktopCarousel
       items={performances as T[]}
       slidesPerView={2.2}
+      slidesPerGroup={slidesPerGroup}
       breakpoints={breakPoints}
       renderItem={renderItem}
     />

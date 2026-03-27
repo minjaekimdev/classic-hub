@@ -110,6 +110,7 @@
             "npm:motion@^12.23.26",
             "npm:next-themes@~0.4.6",
             "npm:playwright@^1.56.1",
+            "npm:prettier-plugin-tailwindcss@~0.7.2",
             "npm:react-day-picker@^9.13.0",
             "npm:react-dom@^19.1.0",
             "npm:react-router-dom@^7.7.1",

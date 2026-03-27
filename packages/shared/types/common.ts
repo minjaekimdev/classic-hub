@@ -12,4 +12,11 @@ export interface BookingLink {
   url: string;
 }
 
+export interface Program {
+  composerKo: string | null;
+  composerEn: string | null;
+  workTitleKr: string[];
+  workTitleEn: string[];
+}
+
 export type Location = (typeof REGION_LIST)[number];

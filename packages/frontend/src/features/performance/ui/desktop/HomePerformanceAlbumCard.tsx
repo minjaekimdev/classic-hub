@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import BookmarkButtonDesktop from "@/shared/ui/buttons/BookmarkButtonDesktop";
 import PerformanceMeta from "../shared/PerformanceMeta";
 import { PriceDisplay } from "../shared/PriceDisplayHome";
 import type { PerformanceSummary } from "@classic-hub/shared/types/client";
@@ -37,17 +36,14 @@ export const HomePerformanceAlbumCard = ({
             src={data.poster ?? ""}
             alt=""
           />
-          <div className="hidden desktop:block bookmark-position">
-            <BookmarkButtonDesktop />
-          </div>
         </div>
-        <div className="grow flex flex-col justify-between p-[0.88rem]">
+        <div className="grow flex flex-col justify-between p-088">
           <PerformanceMeta
             title={data.title ?? ""}
-            artist={data.artist ?? ""}
             startDate={data.startDate}
             endDate={data.endDate}
             venue={data.venue ?? ""}
+            composers={data.composers}
           />
           <div className="mt-3">
             <PriceDisplay minPrice={data.minPrice} maxPrice={data.maxPrice} />

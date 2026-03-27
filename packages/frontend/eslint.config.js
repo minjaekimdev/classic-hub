@@ -23,6 +23,9 @@ export default tseslint.config(
         ecmaVersion: 2020,
         globals: globals.browser,
       },
+      rules: {
+        "@typescript-eslint/no-explicit-any": "off", // 'any' 사용 시 경고/에러를 끕니다.
+      },
     },
   ],
   storybook.configs["flat/recommended"]

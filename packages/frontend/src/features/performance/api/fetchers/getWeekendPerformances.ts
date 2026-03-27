@@ -1,5 +1,5 @@
 import supabase from "@/app/api/supabase-client";
-import type { DBPerformanceRead } from "@classic-hub/shared/types/database";
+import type { DBWeekendPerformances } from "@classic-hub/shared/types/database";
 import dayjs from "dayjs";
 
 export const getWeekendDate = () => {
@@ -24,15 +24,10 @@ export const getWeekendDate = () => {
 };
 
 export const getWeekendPerformances = async () => {
-  const { parsedStartDate, parsedEndDate } = getWeekendDate();
-
   const { error, data } = await supabase
-    .from("performances")
+    .from("weekend_performances_with_program")
     .select("*")
-    .or(
-      `and(period_from.gte."${parsedStartDate}",period_from.lte."${parsedEndDate}"),and(period_to.gte."${parsedStartDate}",period_to.lte."${parsedEndDate}"),and(period_from.lte."${parsedStartDate}",period_to.gte."${parsedEndDate}")`,
-    )
-    .returns<DBPerformanceRead[]>();
+    .returns<DBWeekendPerformances[]>();
 
   if (error) {
     throw new Error(
