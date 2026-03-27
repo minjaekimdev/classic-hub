@@ -1,5 +1,4 @@
-export interface ProgramMatchResult {
-  composer: string | null;
-  piece: string | null;
-  highlight: "composer" | "piece";
-}
+// export interface ProgramMatchResult {
+//   composer: string[] | null;
+//   piece: string[] | null;
+// }

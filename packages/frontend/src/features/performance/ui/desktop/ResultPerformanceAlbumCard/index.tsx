@@ -15,7 +15,7 @@ const CalloutLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="callout-box my-088">
       <div className="gap-022 flex items-start">
-        <img src={noteIcon} alt="" />
+        <img src={noteIcon} className="relative top-0.5" />
         {children}
       </div>
     </div>
@@ -34,34 +34,36 @@ const MatchedProgram = ({
 }: MatchedProgramProps) => {
   const matchedProgram = getProgramInfo(program, keyword);
   if (!matchedProgram) return null;
-  const { composer, piece, highlight } = matchedProgram;
+  const { composer, piece } = matchedProgram;
 
   return (
     <CalloutLayout>
-      {/* 작곡가와 곡명이 모두 프로그램에 존재하는 경우 */}
-      {composer && piece && (
+      {/* 작곡가명이 매칭된 경우 */}
+      {composer && composer.length === 3 && (
         <p>
-          <span className={highlight === "composer" ? "font-semibold" : ""}>
-            {composer}
+          <span>
+            {composer[0]}
+            <mark className="font-semibold">{composer[1]}</mark>
+            {composer[2]}
           </span>
-          <span>: </span>
-          <span className={highlight === "piece" ? "font-semibold" : ""}>
-            {piece} 외 {pieceCount - 1}곡
-          </span>
+          {piece ? (
+            <span>
+              : {piece} 외 {pieceCount - 1}곡
+            </span>
+          ) : (
+            <span> (세부 곡명 미정)</span>
+          )}
         </p>
       )}
-      {/* 작곡가명이 검색어와 매칭되었지만 프로그램에 주어진 작품명이 없는경우 */}
-      {composer && !piece && (
+
+      {/* 곡명이 매칭된 경우 */}
+      {piece && piece.length === 3 && (
         <p>
-          <span className="font-semibold">{composer}</span>
-          <span> (세부 곡명 미정)</span>
-        </p>
-      )}
-      {/* 작곡가명이 작품명과 매칭되었지만 프로그램에 주어진 작곡가가 없는경우 */}
-      {!composer && piece && (
-        <p>
-          <span className="font-semibold">
-            {piece}외 {pieceCount - 1}곡
+          {composer ? <span>{composer}: </span> : ""}
+          <span>
+            {piece[0]}
+            <mark className="font-semibold">{piece[1]}</mark>
+            {piece[2]} 외 {pieceCount - 1}곡
           </span>
         </p>
       )}
@@ -72,6 +74,7 @@ const MatchedProgram = ({
 const ResultPerformanceAlbumCard = ({ data }: { data: ResultPerformance }) => {
   const { keyword } = useResult();
   const pieceCount = getPieceCount(data.programs);
+  console.log(data.programs);
   return (
     <Link to={`/detail/${data.id}`}>
       <div className="gap-066 flex cursor-pointer flex-col">

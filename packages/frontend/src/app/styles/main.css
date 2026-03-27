@@ -77,7 +77,7 @@
   border: 1px solid #d1d5db;
   font-size: 0.65625rem;
   line-height: 0.875rem;
-  letter-spacing: 0.00575rem;  
+  letter-spacing: 0.00575rem;
 }
 
 /* Pretendard */
@@ -327,6 +327,13 @@
 
   .swiper {
     padding-bottom: 20px !important;
+  }
+
+  // 검색어 하이라이팅을 위해 <mark> 사용 시 기본 스타일 제거
+  mark {
+    background-color: transparent; /* 배경색 제거 */
+    color: inherit; /* 부모 글자색 유지 */
+    padding: 0; /* 기본 패딩 제거 */
   }
 
   /* * {

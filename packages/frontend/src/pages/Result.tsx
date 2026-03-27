@@ -56,8 +56,6 @@ const Result = () => {
     endDate,
   });
 
-  console.log(allPerformances);
-
   const filteredPerformances = useFilteredPerformances(
     allPerformances,
     filters,
