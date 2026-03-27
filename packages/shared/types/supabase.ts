@@ -137,6 +137,30 @@ export type Database = {
         }
         Relationships: []
       }
+      feedbacks: {
+        Row: {
+          content: string
+          created_at: string | null
+          email: string | null
+          id: number
+          status: string
+        }
+        Insert: {
+          content: string
+          created_at?: string | null
+          email?: string | null
+          id?: number
+          status?: string
+        }
+        Update: {
+          content?: string
+          created_at?: string | null
+          email?: string | null
+          id?: number
+          status?: string
+        }
+        Relationships: []
+      }
       halls: {
         Row: {
           created_at: string
@@ -530,7 +554,6 @@ export type Database = {
           period_to: string | null
           poster: string | null
           price: Json | null
-          program: Json | null
           venue_name: string | null
         }
         Relationships: []

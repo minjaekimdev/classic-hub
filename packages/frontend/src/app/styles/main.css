@@ -12,8 +12,11 @@
 
   --spacing-011: 0.11rem;
   --spacing-022: 0.22rem;
+  --spacing-033: 0.33rem;
   --spacing-044: 0.44rem;
+  --spacing-055: 0.55rem;
   --spacing-066: 0.66rem;
+  --spacing-077: 0.77rem;
   --spacing-088: 0.88rem;
 
   --font-logo: "Josefin Sans", sans-serif;
@@ -52,6 +55,10 @@
   --radius-callout: var(--spacing-022);
   --color-callout-bg: #eceef2;
   --color-callout-border: #d1d5db;
+
+  /* 폼 input용 스타일 */
+  --height-input: 1.53rem;
+  --height-textarea: 2.63rem;
 }
 
 @utility bookmark-position {

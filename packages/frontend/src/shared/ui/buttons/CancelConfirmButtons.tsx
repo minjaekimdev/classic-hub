@@ -3,15 +3,17 @@ import React from "react";
 interface ButtonProps {
   text: string;
   isConfirm: boolean;
+  onConfirm?: (e: any) => void;
 }
 
-const Button = ({ text, isConfirm }: ButtonProps) => {
+const Button = ({ text, isConfirm, onConfirm }: ButtonProps) => {
   const style = isConfirm
     ? "bg-main text-white"
     : "bg-white text-[#0a0a0a] border border-[rgba(0,0,0,0.1)]";
   return (
     <button
-      className={`text-[#0a0a0a] text-[0.77rem]/[1.09rem] font-medium px-[0.88rem] py-[0.44rem] rounded-[0.42rem] ${style}`}
+      className={`text-dark px-088 rounded-button py-[0.44rem] text-[0.77rem]/[1.09rem] font-medium ${style}`}
+      onClick={onConfirm}
     >
       {text}
     </button>
@@ -20,13 +22,14 @@ const Button = ({ text, isConfirm }: ButtonProps) => {
 
 interface ButtonGroupProps {
   mainText: string;
+  onConfirm: (e: any) => void;
 }
 
-const ButtonGroup: React.FC<ButtonGroupProps> = ({ mainText }) => {
+const ButtonGroup: React.FC<ButtonGroupProps> = ({ mainText, onConfirm }) => {
   return (
-    <div className="flex justify-end items-center gap-[0.44rem] mt-[0.88rem]">
+    <div className="088 flex items-center justify-end gap-[0.44rem]">
       <Button text="취소" isConfirm={false} />
-      <Button text={mainText} isConfirm={true} />
+      <Button text={mainText} isConfirm={true} onConfirm={onConfirm} />
     </div>
   );
 };
