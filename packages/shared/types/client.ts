@@ -61,7 +61,6 @@ export interface DetailPerformance extends Performance {
   priceInfo: SeatPrice[];
   detailImages: string[];
   bookingLinks: BookingLink[];
-  program: Program[];
 }
 
 export interface Hall {
