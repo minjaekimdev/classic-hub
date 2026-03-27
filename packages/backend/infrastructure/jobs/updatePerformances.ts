@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import RateLimiter from "shared/utils/rateLimiter";
-import { syncPerformanceData } from "../actions/syncPerformanceData";
+import { syncPerformanceData } from "../../application/use-cases/orchestrators/syncPerformanceData";
 
 const MAX_REPEAT = 5;
 const kopisRateLimiter = new RateLimiter(300);

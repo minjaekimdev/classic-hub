@@ -329,8 +329,6 @@
     padding-bottom: 20px !important;
   }
 
-  // 검색어 하이라이팅을 위해 <mark> 사용 시 기본 스타일 제거
-
   /* * {
     outline: 1px solid red !important;
   } */
