@@ -12,7 +12,7 @@ const FilterHeader = () => {
     <div className="flex justify-between">
       <CategoryHeader iconSrc={filterIcon} text="필터" />
       <button
-        className="flex items-center h-7 px-[0.66rem] text-dark text-[0.77rem]/[1.09rem]"
+        className="text-dark flex h-7 items-center px-066 text-[0.77rem]/[1.09rem]"
         onClick={reset}
       >
         초기화
@@ -24,12 +24,12 @@ const FilterHeader = () => {
 const Summary = () => {
   const { filteredPerformances } = useResult();
   return (
-    <div className="flex flex-col gap-[0.44rem] rounded-main bg-[#f9fafb] px-[0.88rem] pt-[0.87rem] pb-[0.37rem]">
+    <div className="rounded-main flex flex-col gap-044 bg-light px-088 pt-[0.87rem] pb-[0.37rem]">
       <CategoryHeader iconSrc={noteIcon} text="검색 결과" />
       <span className="text-main text-[1.31rem]/[1.75rem] font-bold">
         {filteredPerformances.length}개
       </span>
-      <span className="text-[#6a7282] text-[0.77rem]/[1.09rem]">
+      <span className="text-[0.77rem]/[1.09rem] text-[#6a7282]">
         클래식 공연
       </span>
     </div>
@@ -38,17 +38,22 @@ const Summary = () => {
 
 const FilterDesktop = () => {
   const { isOpen } = useFilter();
+  const { allPerformances } = useResult();
   return (
     <>
       {isOpen && (
-        <div className="sticky top-desktop-header-shrinked shrink-0 flex flex-col gap-[1.31rem] border-l border-[rgba(0,0,0,0.1)] bg-white p-[1.31rem] w-70 h-main-desktop overflow-y-auto">
+        <div className="top-desktop-header-shrinked h-main-desktop sticky flex w-70 shrink-0 flex-col gap-[1.31rem] overflow-y-auto border-l border-[rgba(0,0,0,0.1)] bg-white p-[1.31rem]">
           <FilterHeader />
           {/* 검색된 공연 개수가 보여지는 영역 */}
           <Summary />
           {/* 구분선 */}
-          <div className="bg-[rgba(0,0,0,0.1)] h-[0.06rem]"></div>
-          <Sort />
-          <LocationSelector />
+          <div className="h-[0.06rem] bg-[rgba(0,0,0,0.1)]"></div>
+          {allPerformances && allPerformances.length > 0 && (
+            <>
+              <Sort />
+              <LocationSelector />
+            </>
+          )}
         </div>
       )}
     </>

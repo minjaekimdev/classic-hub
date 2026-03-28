@@ -6,6 +6,10 @@ import { useLayoutDesktop } from "@/layout/desktop/LayoutDesktop";
 import SearchDesktop from "@/features/filter/contexts/search-context.desktop";
 import SearchFilterDesktop from "@/features/filter/ui/desktop/SearchFilterDesktop";
 import SearchFilterSmall from "@/features/filter/ui/desktop/SearchFilterSmall";
+import contactIcon from "@shared/assets/icons/telephone-dark.svg";
+import feedbackIcon from "@shared/assets/icons/feedback.svg";
+import { useModal } from "@/app/providers/modal/useModal";
+import { ModalWrapper } from "@/app/providers/modal/ModalWrapper";
 
 interface MenuItemProps {
   icon: string;
@@ -28,7 +32,7 @@ const MenuItem = ({ icon, text, selected, onSelect }: MenuItemProps) => {
 
   return (
     <div
-      className={"flex flex-col gap-[0.69rem] cursor-pointer"}
+      className={"flex cursor-pointer flex-col gap-[0.69rem]"}
       onClick={() => onSelect(text)}
     >
       <div className={`flex items-center gap-3 ${textColorClass}`}>
@@ -38,7 +42,7 @@ const MenuItem = ({ icon, text, selected, onSelect }: MenuItemProps) => {
         </span>
       </div>
       {isSelected && (
-        <div className="border-b-3 border-black rounded-full"></div>
+        <div className="rounded-full border-b-3 border-black"></div>
       )}
     </div>
   );
@@ -76,7 +80,7 @@ const Menu = () => {
   )?.text;
 
   return (
-    <div className="shrink-0 flex gap-[1.56rem]">
+    <div className="flex shrink-0 gap-[1.56rem]">
       {menuItemArray.map((item) => (
         <MenuItem
           key={item.text}
@@ -90,16 +94,93 @@ const Menu = () => {
   );
 };
 
-const HeaderAuthButton = () => {
+// const HeaderAuthButton = () => {
+//   return (
+//     <div className="flex h-8 gap-[0.44rem]">
+//       <button className="rounded-button text-dark flex shrink-0 items-center justify-center p-[0.31rem_0.59rem] text-[0.77rem]/[1.09rem] font-medium">
+//         로그인
+//       </button>
+//       <button className="rounded-button bg-main flex shrink-0 items-center justify-center p-[0.31rem_0.54rem] text-[0.77rem]/[1.09rem] text-white">
+//         회원가입
+//       </button>
+//     </div>
+//   );
+// };
+
+const DEVELOPER_INFOS = [
+  {
+    label: "이메일",
+    content: "minjaekimm1@gmail.com",
+  },
+  {
+    label: "전화번호",
+    content: "010-3048-8058",
+  },
+  {
+    label: "블로그",
+    content: "https://velog.io/@minjaekimm/posts",
+  },
+];
+
+interface InfoLayoutProps {
+  label: string;
+  content: string;
+}
+
+const InfoLayout = ({ label, content }: InfoLayoutProps) => {
   return (
-    <div className="flex gap-[0.44rem] h-8">
-      <button className="shrink-0 flex justify-center items-center rounded-button p-[0.31rem_0.59rem] text-dark text-[0.77rem]/[1.09rem] font-medium">
-        로그인
-      </button>
-      <button className="shrink-0 flex justify-center items-center rounded-button p-[0.31rem_0.54rem] bg-main text-white text-[0.77rem]/[1.09rem]">
-        회원가입
-      </button>
+    <div className="flex flex-col gap-[0.34rem]">
+      <dt className="text-[0.77rem]/[1.09rem] text-[#717182]">{label}</dt>
+      <dd className="text-main text-[0.77rem]/[1.09rem]">{content}</dd>
     </div>
+  );
+};
+
+export const ContactModal = () => {
+  return (
+    <ModalWrapper>
+      <div className="rounded-main flex flex-col gap-4 bg-white p-[1.56rem]">
+        {DEVELOPER_INFOS.map((item) => (
+          <InfoLayout label={item.label} content={item.content} />
+        ))}
+      </div>
+    </ModalWrapper>
+  );
+};
+
+interface HeaderButtonLayoutProps {
+  onClick: (...args: any[]) => void;
+  children: React.ReactNode;
+}
+const HeaderButtonLayout = ({ onClick, children }: HeaderButtonLayoutProps) => {
+  return (
+    <div
+      className="rounded-button text-dark gap-044 flex shrink-0 cursor-pointer items-center justify-center p-[0.31rem_0.59rem] text-[0.77rem]/[1.09rem] font-medium hover:bg-slate-100/70"
+      onClick={onClick}
+    >
+      {children}
+    </div>
+  );
+};
+
+const ContactButton = () => {
+  const { openModal } = useModal();
+
+  return (
+    <HeaderButtonLayout onClick={() => openModal("CONTACT", {})}>
+      <img src={contactIcon} alt="" className="h-4 w-4" />
+      Developer
+    </HeaderButtonLayout>
+  );
+};
+
+const FeedbackButton = () => {
+  const { openModal } = useModal();
+  return (
+    <HeaderButtonLayout onClick={() => openModal("FEEDBACK", {})}>
+      <img src={feedbackIcon} alt="" className="h-4 w-4" />
+      Feedback
+    </HeaderButtonLayout>
   );
 };
 
@@ -117,12 +198,12 @@ const HeaderDesktop = () => {
   return (
     <div
       ref={headerRef}
-      className={`fixed top-0 z-(--z-header) bg-[linear-gradient(180deg,#FFF_39.9%,#F8F8F8_100%)] w-full ${height}`}
+      className={`fixed top-0 z-(--z-header) w-full bg-[linear-gradient(180deg,#FFF_39.9%,#F8F8F8_100%)] ${height}`}
     >
-      <div className="fixed inset-x-0 mx-auto flex flex-col px-7 w-full max-w-7xl">
-        <div className="absolute left-7 top-0">
+      <div className="fixed inset-x-0 mx-auto flex w-full max-w-7xl flex-col px-7">
+        <div className="absolute top-0 left-7">
           <Link to="/">
-            <div className="self-start flex p-[1.62rem_0]">
+            <div className="flex self-start p-[1.62rem_0]">
               <Logo />
             </div>
           </Link>
@@ -130,21 +211,24 @@ const HeaderDesktop = () => {
         <SearchDesktop>
           {isExpand ? (
             <>
-              <div className="flex justify-center mt-[1.87rem] mb-6">
+              <div className="mt-[1.87rem] mb-6 flex justify-center">
                 <Menu />
               </div>
-              <div className="flex justify-center mb-8">
+              <div className="mb-8 flex justify-center">
                 <SearchFilterDesktop />
               </div>
             </>
           ) : (
-            <div className="flex justify-center mt-4">
+            <div className="mt-4 flex justify-center">
               <SearchFilterSmall onFilterClick={expand} />
             </div>
           )}
         </SearchDesktop>
         <div className="absolute top-7 right-7">
-          <HeaderAuthButton />
+          <div className="gap-044 flex h-8 items-center">
+            <ContactButton />
+            <FeedbackButton />
+          </div>
         </div>
       </div>
     </div>

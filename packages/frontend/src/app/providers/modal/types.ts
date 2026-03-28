@@ -4,6 +4,7 @@ import type { BookingLink } from "@classic-hub/shared/types/common";
 export const MODAL_TYPES = {
   BOOKING: "BOOKING",
   FEEDBACK: "FEEDBACK",
+  CONTACT: "CONTACT",
 } as const;
 
 export type ModalType = typeof MODAL_TYPES[keyof typeof MODAL_TYPES]
@@ -14,4 +15,5 @@ export interface ModalPropsMap {
     bookingLinks: BookingLink[] | null;
   };
   [MODAL_TYPES.FEEDBACK]: object;
+  [MODAL_TYPES.CONTACT]: object;
 }

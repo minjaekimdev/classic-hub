@@ -59,6 +59,9 @@
   /* 폼 input용 스타일 */
   --height-input: 1.53rem;
   --height-textarea: 2.63rem;
+
+  /* fallback용 스타일 */
+  --color-fallback: #6b7280;
 }
 
 @utility bookmark-position {
@@ -86,6 +89,8 @@
   line-height: 0.875rem;
   letter-spacing: 0.00575rem;
 }
+
+@utility 
 
 /* Pretendard */
 @font-face {

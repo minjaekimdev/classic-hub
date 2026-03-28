@@ -8,19 +8,8 @@ import type { ResultPerformance } from "@classic-hub/shared/types/client";
 import { useResult } from "../../../contexts/result-context";
 import type { Program } from "@classic-hub/shared/types/common";
 import ComposerList from "../../shared/ComposerList";
-import noteIcon from "@shared/assets/icons/single-note-red.svg";
 import { getPieceCount, getProgramInfo } from "./utils";
-
-const CalloutLayout = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <div className="callout-box my-088">
-      <div className="gap-022 flex items-start">
-        <img src={noteIcon} className="relative top-0.5" />
-        {children}
-      </div>
-    </div>
-  );
-};
+import { CalloutLayout } from "@/shared/ui/callout/CalloutLayout";
 
 interface MatchedProgramProps {
   program: Program[];
@@ -76,7 +65,7 @@ const ResultPerformanceAlbumCard = ({ data }: { data: ResultPerformance }) => {
   const pieceCount = getPieceCount(data.programs);
   console.log(data.programs);
   return (
-    <Link to={`/detail/${data.id}`}>
+    <Link to={`/detail/${data.id}`} target="_blank">
       <div className="gap-066 flex cursor-pointer flex-col">
         <div className="rounded-main relative aspect-10/14 overflow-hidden border border-[rgba(0,0,0,0.1)]">
           <img
@@ -94,7 +83,7 @@ const ResultPerformanceAlbumCard = ({ data }: { data: ResultPerformance }) => {
               <ComposerList programs={data.programs} />
             </div>
             <div className="flex flex-col">
-              <ul className="flex flex-col gap-[0.33rem]">
+              <ul className="gap-033 flex flex-col">
                 <MetaItem iconSrc={calendarIcon}>
                   {formatDateRange(data.startDate, data.endDate)}
                 </MetaItem>

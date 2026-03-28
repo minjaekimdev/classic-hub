@@ -71,12 +71,18 @@ const PerformancesDesktop = () => {
   }
 
   return (
-    <div
-      className={`grid flex-1 ${gridStyle} p-088 h-full gap-[1.31rem] overflow-y-auto`}
-    >
-      {data.map((item: ResultPerformance) => (
-        <ResultPerformanceAlbumCard key={item.id} data={item} />
-      ))}
+    <div className="flex justify-center items-center min-h-100">
+      {data.length > 0 ? (
+        <div
+          className={`grid flex-1 ${gridStyle} p-088 h-full gap-[1.31rem] overflow-y-auto`}
+        >
+          {data.map((item: ResultPerformance) => (
+            <ResultPerformanceAlbumCard key={item.id} data={item} />
+          ))}
+        </div>
+      ) : (
+        <span className="text-fallback">검색된 공연이 없습니다.</span>
+      )}
     </div>
   );
 };
