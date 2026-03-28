@@ -118,13 +118,17 @@ const DEVELOPER_INFOS = [
   },
   {
     label: "블로그",
-    content: "https://velog.io/@minjaekimm/posts",
+    content: (
+      <a href="https://velog.io/@minjaekimm/posts" className="underline">
+        https://velog.io/@minjaekimm/posts
+      </a>
+    ),
   },
 ];
 
 interface InfoLayoutProps {
   label: string;
-  content: string;
+  content: React.ReactNode;
 }
 
 const InfoLayout = ({ label, content }: InfoLayoutProps) => {
@@ -139,7 +143,10 @@ const InfoLayout = ({ label, content }: InfoLayoutProps) => {
 export const ContactModal = () => {
   return (
     <ModalWrapper>
-      <div className="rounded-main flex flex-col gap-4 bg-white p-[1.56rem]">
+      <div
+        className="rounded-main flex flex-col gap-4 bg-white p-[1.56rem]"
+        onClick={(e) => e.stopPropagation()}
+      >
         {DEVELOPER_INFOS.map((item) => (
           <InfoLayout label={item.label} content={item.content} />
         ))}

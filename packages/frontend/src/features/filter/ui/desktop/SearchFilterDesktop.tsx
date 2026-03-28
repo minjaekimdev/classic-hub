@@ -11,7 +11,7 @@ import SearchField from "./SearchFilterFieldDesktop";
 import SearchDesktop, {
   useSearch,
 } from "../../contexts/search-context.desktop";
-import {REGION_LIST} from "@classic-hub/shared/constants/region-list";
+import { REGION_LIST } from "@classic-hub/shared/constants/region-list";
 
 const SearchFilterDesktop = () => {
   const { searchValue, changeValue } = useSearch();
@@ -19,19 +19,19 @@ const SearchFilterDesktop = () => {
   const areas = ["전체", ...REGION_LIST];
 
   return (
-    <div className="grid grid-cols-[2fr_1fr_1fr_1fr_auto] gap-[0.66rem] rounded-[0.875rem] border border-gray-200 bg-white shadow-xl p-[0.94rem] w-230 h-18">
+    <div className="gap-066 grid h-18 w-230 grid-cols-[2fr_1fr_1fr_1fr_auto] rounded-[0.875rem] border border-gray-200 bg-white p-[0.94rem] shadow-xl">
       <SearchInput />
       <SearchField iconSrc={locationIcon} field="location">
         <div onClick={(e) => e.stopPropagation()}>
           {areas.map((area) => (
             <DropdownMenuItem
-              className="text-xs cursor-pointer flex justify-between items-center"
+              className="flex cursor-pointer items-center justify-between text-xs"
               onSelect={() => changeValue({ ...searchValue, location: area })}
               key={area}
             >
               <span>{area}</span>
               {searchValue.location === area && (
-                <Check className="w-4 h-4 text-main" />
+                <Check className="text-main h-4 w-4" />
               )}
             </DropdownMenuItem>
           ))}
@@ -47,13 +47,13 @@ const SearchFilterDesktop = () => {
       </SearchField>
       <div className="flex gap-3">
         <SearchDesktop.Reset>
-          <div className="p-[0.69rem_0.56rem] border border-gray-200 rounded-main bg-white text-[0.77rem] transition-transform duration-200 hover:scale-105">
-            <div className="flex items-center gap-[0.44rem] w-fit">초기화</div>
+          <div className="rounded-main border border-gray-200 bg-white p-[0.69rem_0.56rem] text-[0.77rem] transition-transform duration-200 hover:scale-105">
+            <div className="flex w-fit items-center gap-[0.44rem]">초기화</div>
           </div>
         </SearchDesktop.Reset>
         <SearchDesktop.Apply>
-          <div className="p-[0.69rem_0.56rem] rounded-main bg-main text-white text-[0.77rem] transition-transform duration-200 hover:scale-105">
-            <div className="flex items-center gap-[0.44rem] w-fit">
+          <div className="rounded-main bg-main p-[0.69rem_0.56rem] text-[0.77rem] text-white transition-transform duration-200 hover:scale-105">
+            <div className="flex w-fit items-center gap-[0.44rem]">
               <img className="" src={searchIcon} alt="" />
               검색
             </div>
