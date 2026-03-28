@@ -2,6 +2,8 @@ import ticketIcon from "@shared/assets/icons/ticket-white.svg";
 import type { Price } from "@classic-hub/shared/types/common";
 import { useDetail } from "../../contexts/detail-context";
 import { useModal } from "@/app/providers/modal/useModal";
+import useBreakpoint from "@/shared/hooks/useBreakpoint";
+import { BREAKPOINTS } from "@/shared/constants";
 
 interface ItemProps {
   seat: string;
@@ -9,7 +11,7 @@ interface ItemProps {
 }
 const PriceItem = ({ seat, price }: ItemProps) => {
   return (
-    <div className="rounded-main flex h-[2.63rem] items-center justify-between bg-[#f9fafb] px-[0.66rem]">
+    <div className="rounded-main bg-light px-066 flex h-[2.63rem] items-center justify-between">
       <span className="text-dark text-[0.88rem]/[1.31rem] font-medium">
         {seat}
       </span>
@@ -20,8 +22,9 @@ const PriceItem = ({ seat, price }: ItemProps) => {
   );
 };
 
-const PriceInfoDesktop = () => {
-  const { bookingLinks, priceInfo } = useDetail();
+const PriceInfo = () => {
+  const { priceInfo, bookingLinks } = useDetail();
+  const isMobile = useBreakpoint(BREAKPOINTS.TABLET);
   const { openModal } = useModal();
 
   return (
@@ -36,16 +39,17 @@ const PriceInfoDesktop = () => {
           ))}
         </div>
       </div>
-      <div className="my-[1.31rem] h-px bg-black/10"></div>
-      <button
-        className="rounded-button bg-main flex w-full items-center justify-center gap-3 pt-[0.73rem] pb-[0.77rem] text-[0.98rem]/[1.53rem] font-semibold text-white"
-        onClick={() => openModal("BOOKING", { bookingLinks })}
-      >
-        <img src={ticketIcon} alt="" className="w-088 h-088" />
-        예매하기
-      </button>
+      {!isMobile && (
+        <button
+          className="rounded-button bg-main pb-077 mt-[1.31rem] flex w-full items-center justify-center gap-3 pt-[0.73rem] text-[0.98rem]/[1.53rem] font-semibold text-white"
+          onClick={() => openModal("BOOKING", { bookingLinks })}
+        >
+          <img src={ticketIcon} alt="" className="w-088 h-088" />
+          예매하기
+        </button>
+      )}
     </div>
   );
 };
 
-export default PriceInfoDesktop;
+export default PriceInfo;

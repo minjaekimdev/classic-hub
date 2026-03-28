@@ -1,4 +1,3 @@
-import BookmarkButton from "@/shared/ui/buttons/BookmarkButtonWithText";
 import ShareButton from "@/shared/ui/buttons/ShareButtonWithText";
 import { useDetail } from "../../contexts/detail-context";
 import formatDateRange from "@/shared/utils/formatDateRange";
@@ -21,7 +20,7 @@ const SummaryMobile = () => {
     useDetail();
   return (
     <div className="flex flex-col gap-[0.81rem] p-[1.09rem]">
-      <div className="flex flex-col gap-[0.22rem]">
+      <div className="flex flex-col gap-022">
         <h1 className="text-dark text-[1.09rem]/[1.53rem] font-semibold">
           {title}
         </h1>
@@ -36,8 +35,7 @@ const SummaryMobile = () => {
         <InfoRow label="공연시간" description={time} />
         <InfoRow label="관람시간" description={runningTime} />
       </ul>
-      <div className="flex gap-[0.66rem] h-10">
-        <BookmarkButton />
+      <div className="flex gap-066 h-10">
         <ShareButton />
       </div>
     </div>

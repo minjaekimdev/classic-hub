@@ -22,7 +22,7 @@ const SearchInput = () => {
         ref={inputRef}
         className="w-full text-[0.77rem] placeholder:text-[0.77rem] focus-visible:outline-none"
         type="text"
-        placeholder="공연명, 프로그램명 등으로 검색해보세요!"
+        placeholder="공연, 아티스트, 공연장, 작품 등 검색"
         value={searchValue.keyword}
         onFocus={() => openField("keyword")}
         onChange={handleChange}

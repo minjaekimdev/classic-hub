@@ -16,7 +16,7 @@ const Ranking = () => {
     <ModalProvider>
       <LayoutDesktop variant="main">
         <LayoutDesktop.Wrapper hasPaddingTop={true}>
-          <div className="flex flex-col gap-[2.19rem]">
+          <div className="flex flex-col gap-[2.19rem] px-4">
             <RankingHeader period={period} onToggle={handlePeriod} />
             <RankList period={period} />
           </div>
