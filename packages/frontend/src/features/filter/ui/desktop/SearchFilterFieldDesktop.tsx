@@ -1,5 +1,4 @@
 import bottomArrow from "@shared/assets/icons/bottom-arrow-gray.svg";
-
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -32,7 +31,7 @@ const SearchFilterField = ({ iconSrc, field, children }: FilterFieldProps) => {
       ? formatPriceToKo(searchValue.minPrice, searchValue.maxPrice)
       : null,
     period: searchValue.startDate
-      ? formatDateQueryToFilter(searchValue.startDate, searchValue.endDate)
+      ? formatDateQueryToFilter(searchValue.startDate, searchValue.endDate!)
       : null,
   };
 
@@ -51,17 +50,17 @@ const SearchFilterField = ({ iconSrc, field, children }: FilterFieldProps) => {
       }}
     >
       <DropdownMenuTrigger>
-        <div className="w-full h-full flex justify-center items-center">
-          <div className="flex place-content-between items-center w-full h-[1.97rem] p-[0_0.66rem]">
+        <div className="flex h-full w-full items-center justify-center">
+          <div className="flex h-[1.97rem] w-full place-content-between items-center p-[0_0.66rem]">
             <div className="flex items-center gap-[0.44rem]">
-              <img className="w-3.5 h-3.5" src={iconSrc} alt="" />
+              <img className="h-3.5 w-3.5" src={iconSrc} alt="" />
               <span className={`text-[0.77rem]/[1.09rem]`}>
                 {valueMap[field] || (
                   <span className="text-gray-400">{FIELD_MAP[field]}</span>
                 )}
               </span>
             </div>
-            <img className="w-3.5 h-3.5 mb-1" src={bottomArrow} alt="" />
+            <img className="mb-1 h-3.5 w-3.5" src={bottomArrow} alt="" />
           </div>
         </div>
       </DropdownMenuTrigger>

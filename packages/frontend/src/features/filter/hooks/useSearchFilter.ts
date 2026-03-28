@@ -1,15 +1,20 @@
+// 헤더에 있는 1차 필터에 대한 상태를 관리
+
 import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import type { FieldType, QueryParams } from "../types/filter";
+import useFilterParams from "@/shared/hooks/useFilterParams";
 
 const useSearchFilter = ({ onSearch }: { onSearch: () => void }) => {
+  const { keyword, location, minPrice, maxPrice, startDate, endDate } =
+    useFilterParams();
   const [searchValue, setSearchValue] = useState<QueryParams>({
-    keyword: "",
-    location: "",
-    minPrice: "",
-    maxPrice: "",
-    startDate: "",
-    endDate: "",
+    keyword: keyword ?? "",
+    location: location ?? "",
+    minPrice: minPrice ?? "",
+    maxPrice: maxPrice ?? "",
+    startDate: startDate ?? "",
+    endDate: endDate ?? "",
   });
 
   const [activeField, setActiveField] = useState<FieldType | null>(null);
