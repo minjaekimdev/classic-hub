@@ -7,7 +7,7 @@ import useResultVenue from "../../hooks/useResultVenue";
 import { useFilter } from "../../contexts/filter-context";
 
 const FilterLocationSelector = () => {
-  const { filters, openedRegion, handleRegionOpen } = useFilter();
+  const { filterValue, openedRegion, handleRegionOpen } = useFilter();
   const { allPerformances } = useResult();
   const venues = useResultVenue(allPerformances);
 
@@ -18,7 +18,7 @@ const FilterLocationSelector = () => {
         {venues.map((region) => {
           // 해당 지역 내 선택된 공연장 개수 계산 (UI 표시용)
           const selectedVenuesCount = region.venues.filter((v) =>
-            filters.selectedVenues.includes(v.name),
+            filterValue.selectedVenues.includes(v.name),
           ).length;
 
           return (

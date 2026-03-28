@@ -1,10 +1,10 @@
 import searchIcon from "@shared/assets/icons/search-white.svg";
 import formatPriceToKo from "../../../../shared/utils/formatPriceToKo";
 import formatDateQueryToFilter from "../../utils/formatDateQueryToFilter";
-import useQueryParams from "@/shared/hooks/useParams";
 import { FIELD_EN_TO_KO } from "../../constants/name-mapper";
 import type { FieldType } from "../../types/filter";
 import { useSearch } from "../../contexts/search-context.desktop";
+import useFilterParams from "@/shared/hooks/useFilterParams";
 
 interface FieldProps {
   field: FieldType;
@@ -16,7 +16,7 @@ const Field = ({ field, value, onFilterClick }: FieldProps) => {
 
   return (
     <div
-      className="flex-1 text-xs cursor-pointer m-auto px-4 w-full h-full text-center"
+      className="m-auto h-full w-full flex-1 cursor-pointer px-4 text-center text-xs"
       onClick={(e) => {
         e.stopPropagation();
         openField(field);
@@ -35,9 +35,9 @@ const Field = ({ field, value, onFilterClick }: FieldProps) => {
 interface SearchFilterSmallProps {
   onFilterClick: (isFilterActive: boolean) => void;
 }
-const SearchFilterSmall = ({ onFilterClick }: SearchFilterSmallProps) => {
+const SearchFilterShrinked = ({ onFilterClick }: SearchFilterSmallProps) => {
   const { openField } = useSearch();
-  const { filters } = useQueryParams();
+  const filters = useFilterParams();
   const { location, minPrice, maxPrice, startDate, endDate } = filters;
 
   const categoryArr: [FieldType, string | null][] = [
@@ -50,12 +50,9 @@ const SearchFilterSmall = ({ onFilterClick }: SearchFilterSmallProps) => {
   ];
 
   return (
-    <div
-      className="flex items-center rounded-[0.875rem] border border-gray-200 my-auto bg-white p-2 px-2 min-w-80
-    "
-    >
+    <div className="my-auto flex min-w-80 items-center rounded-[0.875rem] border border-gray-200 bg-white p-2 px-2">
       <div
-        className="grow-2 shrink-0 flex justify-center items-center ml-2 pl-2 pr-4 h-full text-xs cursor-pointer"
+        className="ml-2 flex h-full shrink-0 grow-2 cursor-pointer items-center justify-center pr-4 pl-2 text-xs"
         onClick={(e) => {
           e.stopPropagation();
           openField("keyword");
@@ -69,13 +66,13 @@ const SearchFilterSmall = ({ onFilterClick }: SearchFilterSmallProps) => {
         )}
       </div>
       {categoryArr.map(([label, value]) => (
-        <div key={label} className="grow flex">
-          <div className="flex-none w-px h-5 bg-[#E5E7EB]"></div>
+        <div key={label} className="flex grow">
+          <div className="h-5 w-px flex-none bg-[#E5E7EB]"></div>
           <Field field={label} value={value} onFilterClick={onFilterClick} />
         </div>
       ))}
-      <button className="shrink-0 p-[0.69rem_0.56rem] rounded-main bg-main text-white text-[0.77rem] transition-transform duration-200 hover:scale-105">
-        <div className="flex items-center gap-[0.44rem] w-fit">
+      <button className="rounded-main bg-main shrink-0 p-[0.69rem_0.56rem] text-[0.77rem] text-white transition-transform duration-200 hover:scale-105">
+        <div className="flex w-fit items-center gap-[0.44rem]">
           <img className="" src={searchIcon} alt="" />
         </div>
       </button>
@@ -83,4 +80,4 @@ const SearchFilterSmall = ({ onFilterClick }: SearchFilterSmallProps) => {
   );
 };
 
-export default SearchFilterSmall;
+export default SearchFilterShrinked;

@@ -9,14 +9,11 @@ import ResultPerformanceAlbumCardSkeleton from "@/features/performance/ui/deskto
 import EmptyState from "@/shared/ui/fallback/EmptyState";
 import { ErrorMessageWithRefetch } from "@/shared/ui/fallback/ErrorMessage";
 import ResultPerformanceListCard from "@/features/performance/ui/desktop/ResultPerformanceListCard";
+import { useFilter } from "@/features/filter/contexts/filter-context";
 
 const PerformancesMobile = () => {
-  const {
-    filteredPerformances: data,
-    isLoading,
-    isError,
-    refetch,
-  } = useResult();
+  const { isLoading, isError, refetch } = useResult();
+  const { filteredPerformances } = useFilter();
 
   if (isLoading) {
     return (
@@ -32,13 +29,13 @@ const PerformancesMobile = () => {
     return <ErrorMessageWithRefetch refetch={refetch} />;
   }
 
-  if (data.length === 0) {
+  if (filteredPerformances.length === 0) {
     return <EmptyState text="조건과 일치하는 정보가 없습니다." />;
   }
 
   return (
     <div className="gap-088 flex w-full flex-col">
-      {data.map((performance) => (
+      {filteredPerformances.map((performance) => (
         <ResultPerformanceListCard key={performance.title} data={performance} />
       ))}
     </div>
@@ -46,13 +43,9 @@ const PerformancesMobile = () => {
 };
 
 const PerformancesDesktop = () => {
-  const {
-    filteredPerformances: data,
-    isLoading,
-    isError,
-    refetch,
-  } = useResult();
+  const { isLoading, isError, refetch } = useResult();
   const gridStyle = useDesktopGridStyle();
+  const { filteredPerformances } = useFilter();
 
   if (isLoading) {
     return (
@@ -71,12 +64,12 @@ const PerformancesDesktop = () => {
   }
 
   return (
-    <div className="flex justify-center items-center min-h-100">
-      {data.length > 0 ? (
+    <div className="flex min-h-100 items-center justify-center">
+      {filteredPerformances.length > 0 ? (
         <div
           className={`grid flex-1 ${gridStyle} p-088 h-full gap-[1.31rem] overflow-y-auto`}
         >
-          {data.map((item: ResultPerformance) => (
+          {filteredPerformances.map((item: ResultPerformance) => (
             <ResultPerformanceAlbumCard key={item.id} data={item} />
           ))}
         </div>

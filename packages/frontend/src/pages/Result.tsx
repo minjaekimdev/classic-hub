@@ -8,10 +8,10 @@ import FilterDesktop from "@/features/filter/ui/desktop/FilterDesktop";
 import ResultHeader from "@/widgets/result/ui/ResultHeader";
 import { ResultContext } from "@/features/performance/contexts/result-context";
 import { FilterProvider } from "@/features/filter/contexts/filter-context";
-import useQueryParams from "@/shared/hooks/useParams";
+import { useSearchParams } from "react-router-dom";
 import useResultPerformances from "@/features/performance/api/hooks/useResultPerformances";
-import useFilteredPerformances from "@/features/filter/hooks/useFilteredPerformances";
 import { ModalProvider } from "@/app/providers/modal/ModalProvider";
+import type { QueryParams } from "@/features/filter/types/filter";
 
 const LayoutSwitcher = ({ children }: { children: React.ReactNode }) => {
   const isMobile = useBreakpoint(BREAKPOINTS.TABLET);
@@ -36,8 +36,10 @@ const LayoutSwitcher = ({ children }: { children: React.ReactNode }) => {
 };
 
 const Result = () => {
-  const { filters } = useQueryParams();
-  const { keyword, location, minPrice, maxPrice, startDate, endDate } = filters;
+  const [searchParams] = useSearchParams();
+  const searchParamsObj = Object.fromEntries(
+    searchParams,
+  ) as unknown as QueryParams;
 
   // 1차 필터에 필요한 정보, 2차 필터에 필요한 정보를 따로 나누어 가져온다는 정보만 남기고 추상화하기
   const {
@@ -45,29 +47,21 @@ const Result = () => {
     isLoading,
     isError,
     refetch,
-  } = useResultPerformances({
-    keyword,
-    location,
-    minPrice,
-    maxPrice,
-    startDate,
-    endDate,
-  });
+  } = useResultPerformances(searchParamsObj as unknown as QueryParams);
 
-  const filteredPerformances = useFilteredPerformances(
-    allPerformances,
-    filters,
-  );
+  // const filteredPerformances = useFilteredPerformances(
+  //   allPerformances,
+  //   filterValue,
+  // );
 
   return (
     <ModalProvider>
       <ResultContext.Provider
         value={{
           allPerformances,
-          filteredPerformances,
           isLoading,
           isError,
-          keyword,
+          keyword: searchParamsObj.keyword,
           refetch,
         }}
       >

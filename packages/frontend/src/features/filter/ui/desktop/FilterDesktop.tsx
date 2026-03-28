@@ -22,7 +22,7 @@ const FilterHeader = () => {
 };
 
 const Summary = () => {
-  const { filteredPerformances } = useResult();
+  const { filteredPerformances } = useFilter();
   return (
     <div className="rounded-main flex flex-col gap-044 bg-light px-088 pt-[0.87rem] pb-[0.37rem]">
       <CategoryHeader iconSrc={noteIcon} text="검색 결과" />

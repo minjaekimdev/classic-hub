@@ -1,6 +1,6 @@
 import supabase from "@/app/api/supabase-client";
+import type { QueryParams } from "@/features/filter/types/filter";
 import formatQueryDate from "@/shared/utils/formatToQueryDate";
-import type { SearchFilters } from "../../types";
 import type {
   DBPerformanceRead,
   DBProgramsRead,
@@ -49,33 +49,35 @@ export type PerformanceWithProgram = PerformanceType & {
 };
 
 export const getResultPerformances = async (
-  filters: SearchFilters,
+  queryParams: QueryParams,
 ): Promise<PerformanceWithProgram[]> => {
+  const { keyword, location, minPrice, maxPrice, startDate, endDate } =
+    queryParams;
   let query = supabase.from("performances_with_program_view").select("*");
 
   // 2. 동적 필터링 (값이 존재할 때만 체이닝)
-  if (filters.keyword) {
-    query = query.ilike("search_target", `%${filters.keyword}%`);
+  if (keyword) {
+    query = query.ilike("search_target", `%${keyword}%`);
   }
 
   // 지역
-  if (filters.location) {
-    query = getLocationQuery(query, filters.location);
+  if (location) {
+    query = getLocationQuery(query, location);
   }
 
   // 가격 범위
-  if (filters.minPrice) {
-    query = query.gte("max_price", filters.minPrice);
-    if (filters.maxPrice) {
-      query = query.lte("min_price", filters.maxPrice);
+  if (minPrice) {
+    query = query.gte("max_price", minPrice);
+    if (maxPrice) {
+      query = query.lte("min_price", maxPrice);
     }
   }
 
   // 날짜 범위 (공연 종료일이 검색 범위 사이에 있어야함)
-  if (filters.startDate && filters.endDate) {
+  if (startDate && endDate) {
     query = query
-      .lte("period_to", formatQueryDate(filters.endDate))
-      .gte("period_to", formatQueryDate(filters.startDate));
+      .lte("period_to", formatQueryDate(endDate))
+      .gte("period_to", formatQueryDate(startDate));
   }
 
   // 4. 실행

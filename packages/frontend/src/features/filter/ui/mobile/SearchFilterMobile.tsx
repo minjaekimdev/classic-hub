@@ -15,7 +15,7 @@ import { filterFieldTitleArray } from "../../utils/search-filter-strategy.mobile
 const Header = () => {
   const { close } = useBottomSheet();
   return (
-    <div className="flex flex-col gap-[0.33rem] border-b border-b-[rgba(0,0,0,0.1)] px-[1.31rem] pt-[1.31rem] pb-[0.94rem]">
+    <div className="flex flex-col gap-033 border-b border-b-[rgba(0,0,0,0.1)] px-[1.31rem] pt-[1.31rem] pb-[0.94rem]">
       <div className="flex justify-between items-center">
         <h3 className="text-dark text-[0.88rem]/[1.31rem] font-semibold">
           검색 필터
@@ -61,13 +61,13 @@ const SearchFilterMobile = () => {
     >
       <div className="flex-none">
         <Header />
-        <div className="border-b border-b-[rgba(0,0,0,0.1)] px-[1.31rem] py-[0.88rem]">
+        <div className="border-b border-b-[rgba(0,0,0,0.1)] px-[1.31rem] py-088">
           <FilterSearchInputMobile />
         </div>
       </div>
       <div className="flex-1 overflow-y-auto">
-        <div className="flex flex-col gap-[0.62rem] px-[1.31rem] py-[0.88rem]">
-          <span className="text-[#364153] text-[0.77rem]/[1.09rem] font-medium">
+        <div className="flex flex-col gap-[0.62rem] px-[1.31rem] py-088">
+          <span className="text-composer-dark text-[0.77rem]/[1.09rem] font-medium">
             추천 필터
           </span>
           {filterFieldTitleArray.map((item) => (
@@ -86,7 +86,7 @@ const SearchFilterMobile = () => {
         )}
       </div>
 
-      <div className="flex-none flex gap-[0.66rem] px-[1.31rem] py-[0.88rem]">
+      <div className="flex-none flex gap-066 px-[1.31rem] py-088">
         <button
           className="grow flex justify-center items-center button border border-[rgba(0,0,0,0.1)] rounded-button h-[1.97rem] text-dark text-[0.77rem]/[1.09rem]"
           onClick={reset}
@@ -95,7 +95,7 @@ const SearchFilterMobile = () => {
         </button>
         <div className="grow">
           <SearchMobile.Apply>
-            <button className="flex justify-center items-center gap-[0.88rem] rounded-button bg-main w-full h-[1.97rem] text-white text-[0.77rem]/[1.09rem]">
+            <button className="flex justify-center items-center gap-088 rounded-button bg-main w-full h-[1.97rem] text-white text-[0.77rem]/[1.09rem]">
               <img src={searchWhite} alt="" className="" />
               검색
             </button>

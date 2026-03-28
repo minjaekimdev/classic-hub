@@ -1,27 +1,21 @@
-import useQueryParams from "@/shared/hooks/useParams";
 import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import type { FieldType, SearchValue } from "../types/filter";
+import type { FieldType, QueryParams } from "../types/filter";
 
 const useSearchFilter = ({ onSearch }: { onSearch: () => void }) => {
-  // URL 파라미터 가져온 뒤 검색 필터의 초기값으로 사용
-  const { filters } = useQueryParams();
-  const { keyword, location, minPrice, maxPrice, startDate, endDate } = filters;
-
-  // 확장 필터의 상태를 관리(초기값만 URL 파라미터와 동일)
-  const [searchValue, setSearchValue] = useState<SearchValue>({
-    keyword: keyword ? keyword : "",
-    location: location ? location : "",
-    minPrice: minPrice ? minPrice : "",
-    maxPrice: maxPrice ? maxPrice : "",
-    startDate: startDate ? startDate : "",
-    endDate: endDate ? endDate : "",
+  const [searchValue, setSearchValue] = useState<QueryParams>({
+    keyword: "",
+    location: "",
+    minPrice: "",
+    maxPrice: "",
+    startDate: "",
+    endDate: "",
   });
 
   const [activeField, setActiveField] = useState<FieldType | null>(null);
   const navigate = useNavigate();
 
-  const changeValue = useCallback((value: SearchValue) => {
+  const changeValue = useCallback((value: QueryParams) => {
     setSearchValue(value);
   }, []);
 
@@ -42,10 +36,7 @@ const useSearchFilter = ({ onSearch }: { onSearch: () => void }) => {
     if (searchValue.keyword) {
       params.append("keyword", searchValue.keyword);
     }
-    if (
-      searchValue.location &&
-      searchValue.location !== "전체"
-    ) {
+    if (searchValue.location && searchValue.location !== "전체") {
       params.append("location", searchValue.location);
     }
     if (searchValue.minPrice) {

@@ -90,8 +90,6 @@
   letter-spacing: 0.00575rem;
 }
 
-@utility 
-
 /* Pretendard */
 @font-face {
   font-family: "Pretendard";
@@ -339,6 +337,10 @@
 
   .swiper {
     padding-bottom: 20px !important;
+  }
+
+  mark {
+    background: transparent;
   }
 
   /* * {

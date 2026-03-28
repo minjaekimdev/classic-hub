@@ -1,26 +1,22 @@
 // 1차 검색 필터 카테고리
-export type FieldType =
-  | "keyword"
-  | "location"
-  | "price"
-  | "period";
+export type FieldType = "keyword" | "location" | "price" | "period";
 
 export type SearchCategory = Record<FieldType, string>;
 
 // 1차 필터의 실제 값은 가격은 min max, 기간은 start와 end로 분리하여 관리
-export interface SearchValue {
-  keyword: string;
-  location: string;
-  minPrice: string;
-  maxPrice: string;
-  startDate: string;
-  endDate: string;
+export interface QueryParams {
+  keyword: string | null;
+  location: string | null;
+  minPrice: string | null;
+  maxPrice: string | null;
+  startDate: string | null;
+  endDate: string | null;
 }
 
 export interface SearchFilterContextType {
-  searchValue: SearchValue;
+  searchValue: QueryParams;
   activeField: FieldType | null; // 현재 활성화된 카테고리 드롭다운 상태 저장
-  changeValue: (value: SearchValue) => void;
+  changeValue: (value: QueryParams) => void;
   reset: () => void;
   search: () => void;
   openField: (field: FieldType) => void;
@@ -44,12 +40,6 @@ export type SortType = "imminent" | "price-low" | "price-high" | "alphabetical";
 
 // 전체 필터 카테고리(URL로부터 추출)
 export interface Filter {
-  keyword: string | null;
-  location: string | null;
-  minPrice: string | null;
-  maxPrice: string | null;
-  startDate: string | null;
-  endDate: string | null;
   sortBy: SortType | null;
   selectedVenues: Array<string>;
 }

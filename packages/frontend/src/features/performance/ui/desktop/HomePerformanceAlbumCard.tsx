@@ -27,7 +27,7 @@ export const HomePerformanceAlbumCard = ({
   data: PerformanceSummary;
 }) => {
   return (
-    <Link to={`/detail/${data.id}`}>
+    <Link to={`/detail/${data.id}`} target="_blank">
       {/* // group 클래스를 지정하여 해당 요소 hover시 자식의 스타일이 바뀌도록(transform: scale(1.05)) */}
       <div className="group flex flex-col rounded-main bg-white w-full shadow-[0_1px_3px_0_rgba(0,0,0,0.1),0_1px_2px_-1px_rgba(0,0,0,0.1)] overflow-hidden transition-shadow duration-200 ease-in-out hover:shadow-[0_10px_15px_-3px_rgba(0,0,0,0.1),0_4px_6px_-4px_rgba(0,0,0,0.1)] cursor-pointer">
         <div className="relative overflow-hidden aspect-10/14">

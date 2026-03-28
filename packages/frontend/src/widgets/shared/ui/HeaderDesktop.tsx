@@ -5,7 +5,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useLayoutDesktop } from "@/layout/desktop/LayoutDesktop";
 import SearchDesktop from "@/features/filter/contexts/search-context.desktop";
 import SearchFilterDesktop from "@/features/filter/ui/desktop/SearchFilterDesktop";
-import SearchFilterSmall from "@/features/filter/ui/desktop/SearchFilterSmall";
+import SearchFilterShrinked from "@/features/filter/ui/desktop/SearchFilterSmall";
 import contactIcon from "@shared/assets/icons/telephone-dark.svg";
 import feedbackIcon from "@shared/assets/icons/feedback.svg";
 import { useModal } from "@/app/providers/modal/useModal";
@@ -176,7 +176,7 @@ const ContactButton = () => {
   return (
     <HeaderButtonLayout onClick={() => openModal("CONTACT", {})}>
       <img src={contactIcon} alt="" className="h-4 w-4" />
-      Developer
+      Contact
     </HeaderButtonLayout>
   );
 };
@@ -227,7 +227,7 @@ const HeaderDesktop = () => {
             </>
           ) : (
             <div className="mt-4 flex justify-center">
-              <SearchFilterSmall onFilterClick={expand} />
+              <SearchFilterShrinked onFilterClick={expand} />
             </div>
           )}
         </SearchDesktop>
