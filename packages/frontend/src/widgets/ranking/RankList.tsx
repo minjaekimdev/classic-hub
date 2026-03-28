@@ -19,7 +19,7 @@ const RankList = ({ period }: { period: Period }) => {
           </span>
         </div>
       </div>
-      <div className="flex flex-col gap-[0.88rem] px-[1.31rem] pb-[1.38rem]">
+      <div className="flex flex-col gap-088 px-[1.31rem] pb-[1.38rem]">
         {isLoading ? (
           Array.from({ length: 50 }).map((_, index) => (
             <RankingItemSkeleton key={`skeleton-${index}`} />
@@ -35,7 +35,7 @@ const RankList = ({ period }: { period: Period }) => {
               title={item.title}
               poster={item.poster}
               artist={item.artist}
-              period={period}
+              period={item.period}
               venue={item.venue}
               bookingLinks={item.bookingLinks}
             />

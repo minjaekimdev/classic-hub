@@ -1,15 +1,14 @@
 import { useLoaderData, type LoaderFunctionArgs } from "react-router-dom";
 import type { DetailPerformance } from "@classic-hub/shared/types/client";
-import Modal from "@/shared/ui/modal/Modal";
 import useBreakpoint from "@/shared/hooks/useBreakpoint";
 import DetailMobile from "@/widgets/detail/mobile";
 import DetailDesktop from "@/widgets/detail/desktop";
 import { Toaster } from "sonner";
 import getPerformanceDetail from "@/features/performance/api/fetchers/get-performance-detail";
-import BookingModal from "@/features/booking/BookingModal";
 import { BREAKPOINTS } from "@/shared/constants";
 import LayoutDesktop from "@/layout/desktop/LayoutDesktop";
 import { DetailContext } from "@/features/performance/contexts/detail-context";
+import { ModalProvider } from "@/app/providers/modal/ModalProvider";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const loader = async ({ params }: LoaderFunctionArgs) => {
@@ -29,9 +28,8 @@ export const Detail = () => {
 
   return (
     <DetailContext.Provider value={performance}>
-      <Toaster />
-      <Modal>
-        <BookingModal />
+      <ModalProvider>
+        <Toaster />
         {isMobile ? (
           <DetailMobile />
         ) : (
@@ -41,7 +39,7 @@ export const Detail = () => {
             </LayoutDesktop.Wrapper>
           </LayoutDesktop>
         )}
-      </Modal>
+      </ModalProvider>
     </DetailContext.Provider>
   );
 };

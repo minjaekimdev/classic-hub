@@ -1,11 +1,8 @@
-import Modal from "@/shared/ui/modal/Modal";
 import useBreakpoint from "@/shared/hooks/useBreakpoint";
 import { Toaster } from "sonner";
-import BookingModal from "@/features/booking/BookingModal";
 import { BREAKPOINTS } from "@/shared/constants";
 import MainLayoutMobile from "@/layout/mobile/MainLayoutMobile";
 import LayoutDesktop from "@/layout/desktop/LayoutDesktop";
-import FeedbackModal from "@/features/feedback/FeedbackModal";
 import PerformanceSection from "@/widgets/result/ui/PerformanceSection";
 import FilterDesktop from "@/features/filter/ui/desktop/FilterDesktop";
 import ResultHeader from "@/widgets/result/ui/ResultHeader";
@@ -14,6 +11,7 @@ import { FilterProvider } from "@/features/filter/contexts/filter-context";
 import useQueryParams from "@/shared/hooks/useParams";
 import useResultPerformances from "@/features/performance/api/hooks/useResultPerformances";
 import useFilteredPerformances from "@/features/filter/hooks/useFilteredPerformances";
+import { ModalProvider } from "@/app/providers/modal/ModalProvider";
 
 const LayoutSwitcher = ({ children }: { children: React.ReactNode }) => {
   const isMobile = useBreakpoint(BREAKPOINTS.TABLET);
@@ -62,28 +60,25 @@ const Result = () => {
   );
 
   return (
-    <ResultContext.Provider
-      value={{
-        allPerformances,
-        filteredPerformances,
-        isLoading,
-        isError,
-        keyword,
-        refetch,
-      }}
-    >
-      <Toaster />
-      <Modal>
-        <BookingModal />
-        <FeedbackModal />
+    <ModalProvider>
+      <ResultContext.Provider
+        value={{
+          allPerformances,
+          filteredPerformances,
+          isLoading,
+          isError,
+          keyword,
+          refetch,
+        }}
+      >
         <Toaster />
         <FilterProvider>
           <LayoutSwitcher>
             <PerformanceSection />
           </LayoutSwitcher>
         </FilterProvider>
-      </Modal>
-    </ResultContext.Provider>
+      </ResultContext.Provider>
+    </ModalProvider>
   );
 };
 

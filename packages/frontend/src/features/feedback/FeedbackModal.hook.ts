@@ -1,9 +1,9 @@
 import supabase from "@/app/api/supabase-client";
-import { useModal } from "@/shared/ui/modal/Modal";
+import { useModal } from "@/app/providers/modal/useModal";
 import { useRef } from "react";
 
 const useFeedbackModal = () => {
-  const { isOpen, close } = useModal();
+  const { closeModal } = useModal();
   const emailInputRef = useRef<HTMLInputElement>(null);
   const contentInputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -31,10 +31,10 @@ const useFeedbackModal = () => {
     }
 
     alert("피드백이 저장되었습니다!");
-    close();
+    closeModal();
   };
 
-  return { isOpen, emailInputRef, contentInputRef, handleSubmit, close };
+  return { emailInputRef, contentInputRef, handleSubmit, closeModal };
 };
 
 export default useFeedbackModal;

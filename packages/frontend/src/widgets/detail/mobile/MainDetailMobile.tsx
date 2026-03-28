@@ -26,7 +26,7 @@ const Tab = ({ text, selected, onClick }: TabProps) => {
 const Detail = () => {
   return (
     <div className="flex flex-col gap-[0.44rem]">
-      <section className="px-[0.88rem] py-[1.09rem]">
+      <section className="px-088 py-[1.09rem]">
         <DetailImages />
       </section>
     </div>
