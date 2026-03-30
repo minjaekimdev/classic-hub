@@ -14,7 +14,7 @@ export const ModalWrapper = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <div
-      className="fixed top-0 left-0 w-full h-full z-99 flex justify-center items-center p-[6.8rem] bg-[rgba(0,0,0,0.5)]"
+      className="fixed top-0 left-0 w-full h-full z-99 flex justify-center items-center p-10 bg-[rgba(0,0,0,0.5)]"
       onClick={closeModal}
     >
       {children}

@@ -4,11 +4,11 @@ import { Link } from "react-router-dom";
 import { useBottomSheet } from "@/shared/ui/bottom-sheet/BottomSheet";
 import SearchFilterMobile from "@/features/filter/ui/mobile/SearchFilterMobile";
 import FilterMobile from "@/features/filter/ui/mobile/FilterMobile";
-// import useMainHeaderMobileText from "../../../layout/hooks/useMainHeaderMobileText";
+import useMainHeaderMobileText from "../../../layout/hooks/useMainHeaderMobileText";
 import searchIcon from "@shared/assets/icons/search-black.svg";
 
 const MainHeaderMobile = () => {
-  // const headerText = useMainHeaderMobileText();
+  const headerText = useMainHeaderMobileText();
   const { open } = useBottomSheet();
 
   return (
@@ -23,7 +23,7 @@ const MainHeaderMobile = () => {
           onClick={() => open(<SearchFilterMobile />)}
         >
           <div className="flex flex-col text-[#101828] text-[0.77rem]/[1.09rem] font-semibold">
-            {/* {headerText} */}
+            {headerText}
           </div>
           <img src={searchIcon} alt="" />
         </div>

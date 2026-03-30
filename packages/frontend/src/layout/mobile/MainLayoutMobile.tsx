@@ -9,7 +9,7 @@ const MainLayoutMobile = ({ children }: { children: React.ReactNode }) => {
     <SearchMobile>
       <BottomSheetProvider>
         <MainHeaderMobile />
-        <main className="bg-[#f3f4f6] p-3 min-h-main-mobile">{children}</main>
+        <main className="min-h-main-mobile bg-[#f3f4f6] p-3">{children}</main>
         <Footer />
       </BottomSheetProvider>
     </SearchMobile>
