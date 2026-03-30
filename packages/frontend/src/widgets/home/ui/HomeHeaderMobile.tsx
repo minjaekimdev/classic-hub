@@ -11,7 +11,7 @@ const HomeHeaderMobile = ({ isScrollZero }: { isScrollZero: boolean }) => {
         {isScrollZero && <Logo />}
         <div className="w-full">
           <div
-            className="flex h-[2.88rem] w-full cursor-pointer items-center justify-center rounded-full border border-gray-200 bg-white shadow-xl"
+            className="flex h-[2.88rem] w-full cursor-pointer items-center justify-center rounded-first-filter border border-gray-200 bg-white shadow-xl"
             onClick={() => open(<SearchFilterMobile />)}
           >
             <div className="flex gap-[0.28rem]">

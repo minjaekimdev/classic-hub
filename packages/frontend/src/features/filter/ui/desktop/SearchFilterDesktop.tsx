@@ -19,7 +19,7 @@ const SearchFilterDesktop = () => {
   const areas = ["전체", ...REGION_LIST];
 
   return (
-    <div className="gap-066 grid h-18 w-230 grid-cols-[2fr_1fr_1fr_1fr_auto] rounded-[0.875rem] border border-gray-200 bg-white p-[0.94rem] shadow-xl">
+    <div className="gap-066 grid h-18 w-230 grid-cols-[2fr_1fr_1fr_1fr_auto] rounded-first-filter border border-gray-200 bg-white p-[0.94rem] shadow-xl">
       <SearchInput />
       <SearchField iconSrc={locationIcon} field="location">
         <div onClick={(e) => e.stopPropagation()}>

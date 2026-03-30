@@ -23,6 +23,8 @@
   --breakpoint-tablet: 600px;
   --breakpoint-desktop: 960px;
   --breakpoint-large-desktop: 1280px;
+  /* 헤더 필터의 border-radius */
+  --radius-first-filter: var(--spacing-088);
   --radius-main: 0.55rem;
   --radius-button: 0.42rem;
   --radius-022: 0.22rem;
