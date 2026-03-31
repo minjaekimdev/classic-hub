@@ -2,8 +2,7 @@ import { type ReactNode } from "react";
 import { createContext, useContext } from "react";
 import type { SearchFilterContextType } from "../types/filter";
 import useSearchFilter from "../hooks/useSearchFilter";
-import { useBottomSheet } from "@/shared/ui/bottom-sheet/BottomSheet";
-
+import { useBottomSheet } from "@/app/providers/bottom-sheet/useBottomSheet";
 // eslint-disable-next-line react-refresh/only-export-components
 export const SearchFilterMobileContext =
   createContext<SearchFilterContextType | null>(null);
@@ -56,11 +55,11 @@ const SearchFilterReset = ({ children }: { children: ReactNode }) => {
 };
 
 const SearchFilterApply = ({ children }: { children: ReactNode }) => {
-  const { close } = useBottomSheet();
+  const { closeBottomSheet } = useBottomSheet();
   const { search } = useSearchMobile();
 
   const hanldeApply = () => {
-    close();
+    closeBottomSheet();
     search();
   };
   return <div onClick={hanldeApply}>{children}</div>;

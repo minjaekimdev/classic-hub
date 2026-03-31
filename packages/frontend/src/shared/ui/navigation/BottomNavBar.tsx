@@ -2,13 +2,13 @@ import searchIcon from "@shared/assets/icons/search-nav.svg";
 import searchActiveIcon from "@shared/assets/icons/search-nav-red.svg";
 import rankingIcon from "@shared/assets/icons/ranking-nav.svg";
 import rankingActiveIcon from "@shared/assets/icons/ranking-red.svg";
-import feedbackIcon from "@shared/assets/icons/speech-bubble-nav.svg";
-import feedbackActiveIcon from "@shared/assets/icons/feedback-nav-red.svg";
+import homeIcon from "@shared/assets/icons/house-nav.svg";
+import homeActiveIcon from "@shared/assets/icons/home-active.svg";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useModal } from "@/app/providers/modal/useModal";
 
-type NavContent = "검색" | "랭킹" | "의견 제안";
+type NavContent = "홈" | "검색" | "랭킹";
 
 interface ComponentProps {
   iconSrc: string;
@@ -48,9 +48,16 @@ interface NavItem {
 const BottomNavBar = () => {
   const [active, setActive] = useState<NavContent>("검색");
   const navigate = useNavigate();
-  const { openModal } = useModal();
 
   const NAV_ITEMS: NavItem[] = [
+    {
+      id: "홈",
+      iconSrc: homeIcon,
+      iconActiveSrc: homeActiveIcon,
+      action: () => {
+        navigate("/");
+      }
+    },
     {
       id: "검색",
       iconSrc: searchIcon,
@@ -65,18 +72,10 @@ const BottomNavBar = () => {
         navigate("/ranking");
       },
     },
-    {
-      id: "의견 제안",
-      iconSrc: feedbackIcon,
-      iconActiveSrc: feedbackActiveIcon,
-      action: () => {
-        openModal("FEEDBACK", {});
-      },
-    },
   ];
 
   return (
-    <div className="gap-022 p-044 fixed bottom-0 flex w-full border-t bg-white z-99">
+    <div className="gap-022 p-044 fixed bottom-0 flex w-full border-t bg-white z-70">
       {NAV_ITEMS.map((item) => (
         <Component
           key={item.id}

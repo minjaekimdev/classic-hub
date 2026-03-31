@@ -1,18 +1,17 @@
-import SearchFilterMobile from "@/features/filter/ui/mobile/SearchFilterMobile";
-import { useBottomSheet } from "@/shared/ui/bottom-sheet/BottomSheet";
+import { useBottomSheet } from "@/app/providers/bottom-sheet/useBottomSheet";
 import Logo from "@/shared/ui/logos/Logo";
 import searchIcon from "@shared/assets/icons/search-gray.svg";
 
 const HomeHeaderMobile = ({ isScrollZero }: { isScrollZero: boolean }) => {
-  const { open } = useBottomSheet();
+  const { openBottomSheet } = useBottomSheet();
   return (
     <header className="fixed top-0 z-20 flex w-full flex-col justify-center bg-[linear-gradient(180deg,#FFF_39.9%,#F8F8F8_100%)] px-[1.09rem] py-6">
       <div className="flex flex-col items-center gap-4">
         {isScrollZero && <Logo />}
         <div className="w-full">
           <div
-            className="flex h-[2.88rem] w-full cursor-pointer items-center justify-center rounded-first-filter border border-gray-200 bg-white shadow-xl"
-            onClick={() => open(<SearchFilterMobile />)}
+            className="rounded-first-filter flex h-[2.88rem] w-full cursor-pointer items-center justify-center border border-gray-200 bg-white shadow-xl"
+            onClick={() => openBottomSheet("SEARCH", {})}
           >
             <div className="flex gap-[0.28rem]">
               <img

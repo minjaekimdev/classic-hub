@@ -12,6 +12,8 @@ import { useSearchParams } from "react-router-dom";
 import useResultPerformances from "@/features/performance/api/hooks/useResultPerformances";
 import { ModalProvider } from "@/app/providers/modal/ModalProvider";
 import type { QueryParams } from "@/features/filter/types/filter";
+import { BottomSheetProvider } from "@/app/providers/bottom-sheet/BottomSheetProvider";
+import SearchMobile from "@/features/filter/contexts/search-context.mobile";
 
 const LayoutSwitcher = ({ children }: { children: React.ReactNode }) => {
   const isMobile = useBreakpoint(BREAKPOINTS.TABLET);
@@ -31,7 +33,13 @@ const LayoutSwitcher = ({ children }: { children: React.ReactNode }) => {
       </LayoutDesktop>
     );
   } else {
-    return <MainLayoutMobile>{children}</MainLayoutMobile>;
+    return (
+      <SearchMobile>
+        <BottomSheetProvider>
+          <MainLayoutMobile>{children}</MainLayoutMobile>
+        </BottomSheetProvider>
+      </SearchMobile>
+    );
   }
 };
 
@@ -41,18 +49,13 @@ const Result = () => {
     searchParams,
   ) as unknown as QueryParams;
 
-  // 1차 필터에 필요한 정보, 2차 필터에 필요한 정보를 따로 나누어 가져온다는 정보만 남기고 추상화하기
+  // 최상위 컴포넌트에서는 url 상태를 바탕으로 선택된 기준에 해당되는 전체 공연을 가져오기
   const {
     data: allPerformances,
     isLoading,
     isError,
     refetch,
   } = useResultPerformances(searchParamsObj as unknown as QueryParams);
-
-  // const filteredPerformances = useFilteredPerformances(
-  //   allPerformances,
-  //   filterValue,
-  // );
 
   return (
     <ModalProvider>
