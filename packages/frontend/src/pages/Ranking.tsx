@@ -4,9 +4,6 @@ import RankingHeader from "@/widgets/ranking/RankingHeader";
 import RankList from "@/widgets/ranking/RankList";
 import LayoutDesktop from "@/layout/desktop/LayoutDesktop";
 import { ModalProvider } from "@/app/providers/modal/ModalProvider";
-import BottomNavBar from "@/shared/ui/navigation/BottomNavBar";
-import useBreakpoint from "@/shared/hooks/useBreakpoint";
-import { BREAKPOINTS } from "@/shared/constants";
 
 const Ranking = () => {
   const [period, setPeriod] = useState<Period>("daily");
@@ -14,8 +11,6 @@ const Ranking = () => {
   const handlePeriod = (period: Period) => {
     setPeriod(period);
   };
-
-  const isMobile = useBreakpoint(BREAKPOINTS.MOBILE);
 
   return (
     <ModalProvider>
@@ -27,7 +22,6 @@ const Ranking = () => {
           </div>
         </LayoutDesktop.Wrapper>
       </LayoutDesktop>
-      {isMobile && <BottomNavBar />}
     </ModalProvider>
   );
 };
