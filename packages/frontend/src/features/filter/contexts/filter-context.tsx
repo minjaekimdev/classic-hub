@@ -66,7 +66,6 @@ export const FilterProvider = ({ children }: { children: React.ReactNode }) => {
 
     changeFilterValue({ selectedVenues: newVenues });
   };
-  console.log(`selectedVenues: ${JSON.stringify(filterValue.selectedVenues)}`);
 
   const { allPerformances } = useResult();
   const filteredPerformances = useFilteredPerformances(

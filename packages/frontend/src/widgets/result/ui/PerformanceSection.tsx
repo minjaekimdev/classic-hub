@@ -36,7 +36,7 @@ const PerformancesMobile = () => {
   return (
     <div className="gap-088 flex w-full flex-col">
       {filteredPerformances.map((performance) => (
-        <ResultPerformanceListCard key={performance.title} data={performance} />
+        <ResultPerformanceListCard key={performance.id} data={performance} />
       ))}
     </div>
   );
