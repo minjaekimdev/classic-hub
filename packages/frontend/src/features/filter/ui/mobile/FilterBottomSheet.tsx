@@ -13,7 +13,7 @@ const FilterBottomSheet = () => {
     <BottomSheetWrapper>
       {/* Bottom Sheet Container */}
       <div
-        className="z-(--z-modal) flex max-h-[90vh] flex-col rounded-t-2xl bg-white"
+        className="relative h-full flex flex-col"
         onClick={(e: React.MouseEvent) => e.stopPropagation()}
       >
         {/* Header */}
@@ -38,7 +38,7 @@ const FilterBottomSheet = () => {
         )}
 
         {/* Footer (Sticky) */}
-        <div className="safe-area-bottom flex items-center gap-3 border-t border-gray-100 bg-white px-5 py-4">
+        <div className="absolute bottom-0 w-full safe-area-bottom flex items-center gap-3 border-t border-gray-100 bg-white px-5 py-4">
           <button
             onClick={reset}
             className="flex items-center justify-center px-4 py-3.5 text-sm font-medium text-gray-500 transition-colors hover:text-gray-800"

@@ -58,7 +58,7 @@ const SearchBottomSheet = () => {
   return (
     <BottomSheetWrapper>
       <div
-        className="flex h-[90vh] flex-col"
+        className="flex flex-col h-full"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex-none">
@@ -88,7 +88,7 @@ const SearchBottomSheet = () => {
           )}
         </div>
 
-        <div className="gap-066 py-088 flex flex-none px-[1.31rem]">
+        <div className="absolute bottom-0 w-full gap-066 py-088 flex flex-none px-[1.31rem] bg-white">
           <button
             className="button rounded-button text-dark flex h-[1.97rem] grow items-center justify-center border border-[rgba(0,0,0,0.1)] text-[0.77rem]/[1.09rem]"
             onClick={reset}
