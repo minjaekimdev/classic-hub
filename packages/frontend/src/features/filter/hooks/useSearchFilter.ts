@@ -4,6 +4,7 @@ import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import type { FieldType, QueryParams } from "../types/filter";
 import useFilterParams from "@/shared/hooks/useFilterParams";
+import { usePostHog } from "@posthog/react";
 
 const useSearchFilter = ({ onSearch }: { onSearch: () => void }) => {
   const { keyword, location, minPrice, maxPrice, startDate, endDate } =
@@ -19,6 +20,7 @@ const useSearchFilter = ({ onSearch }: { onSearch: () => void }) => {
 
   const [activeField, setActiveField] = useState<FieldType | null>(null);
   const navigate = useNavigate();
+  const posthog = usePostHog();
 
   const changeValue = useCallback((value: QueryParams) => {
     setSearchValue(value);
@@ -58,6 +60,14 @@ const useSearchFilter = ({ onSearch }: { onSearch: () => void }) => {
     }
 
     const queryString = params.toString();
+    posthog.capture("search_performed", {
+      keyword: searchValue.keyword || null,
+      location: searchValue.location || null,
+      min_price: searchValue.minPrice || null,
+      max_price: searchValue.maxPrice || null,
+      start_date: searchValue.startDate || null,
+      end_date: searchValue.endDate || null,
+    });
     onSearch?.();
     navigate(queryString ? `/result?${queryString}` : "/result");
   };

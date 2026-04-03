@@ -1,11 +1,13 @@
 import supabase from "@/app/api/supabase-client";
 import { useModal } from "@/app/providers/modal/useModal";
 import { useRef } from "react";
+import { usePostHog } from "@posthog/react";
 
 const useFeedbackModal = () => {
   const { closeModal } = useModal();
   const emailInputRef = useRef<HTMLInputElement>(null);
   const contentInputRef = useRef<HTMLTextAreaElement>(null);
+  const posthog = usePostHog();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,6 +32,7 @@ const useFeedbackModal = () => {
       return;
     }
 
+    posthog.capture("feedback_submitted", { has_email: !!email });
     alert("피드백이 저장되었습니다!");
     closeModal();
   };

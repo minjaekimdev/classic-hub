@@ -4,8 +4,15 @@ import OAuthButton from "./OAuthButton";
 import googleLogo from "@shared/assets/logos/google.svg";
 import ModalHeader from "@/shared/ui/modal/ModalHeader";
 import FormField from "@/shared/ui/modal/FormField";
+import { usePostHog } from "@posthog/react";
 
 const SignupModal = () => {
+  const posthog = usePostHog();
+
+  const handleGoogleSignup = () => {
+    posthog.capture("signup_clicked", { provider: "google" });
+  };
+
   return (
     <div>
       <Modal>
@@ -52,7 +59,7 @@ const SignupModal = () => {
                 또는
               </span>
             </div>
-            <OAuthButton iconSrc={googleLogo}>Google로 회원가입</OAuthButton>
+            <OAuthButton iconSrc={googleLogo} onClick={handleGoogleSignup}>Google로 회원가입</OAuthButton>
           </form>
         </div>
       </Modal>

@@ -4,8 +4,15 @@ import OAuthButton from "./OAuthButton";
 import Modal from "@/shared/ui/modal/Modal";
 import ModalHeader from "@/shared/ui/modal/ModalHeader";
 import FormField from "@/shared/ui/modal/FormField";
+import { usePostHog } from "@posthog/react";
 
 const LoginModal = () => {
+  const posthog = usePostHog();
+
+  const handleGoogleLogin = () => {
+    posthog.capture("login_clicked", { provider: "google" });
+  };
+
   return (
     <Modal>
       <div className="flex flex-col gap-7">
@@ -42,7 +49,7 @@ const LoginModal = () => {
               또는
             </span>
           </div>
-          <OAuthButton iconSrc={googleLogo}>Google로 로그인</OAuthButton>
+          <OAuthButton iconSrc={googleLogo} onClick={handleGoogleLogin}>Google로 로그인</OAuthButton>
         </form>
       </div>
     </Modal>

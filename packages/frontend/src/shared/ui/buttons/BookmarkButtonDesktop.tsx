@@ -2,9 +2,11 @@ import { useState } from "react";
 import heartIconActive from "@shared/assets/icons/heart-red.svg";
 import heartIconInactive from "@shared/assets/icons/heart-gray.svg";
 import { toast } from "sonner";
+import { usePostHog } from "@posthog/react";
 
 const BookmarkButtonDesktop = () => {
   const [isBookmarked, setIsBookmarked] = useState(false);
+  const posthog = usePostHog();
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
@@ -12,8 +14,10 @@ const BookmarkButtonDesktop = () => {
     setIsBookmarked((prev) => !prev);
     if (isBookmarked) {
       toast("찜한 공연에서 삭제되었습니다.");
+      posthog.capture("performance_bookmark_removed");
     } else {
       toast("찜한 공연에 추가되었습니다.");
+      posthog.capture("performance_bookmarked");
     }
   };
 
