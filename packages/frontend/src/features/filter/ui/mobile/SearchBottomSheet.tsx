@@ -3,7 +3,7 @@ import closeIcon from "@shared/assets/icons/close-gray.svg";
 import FilterFieldMobile from "./SearchFilterFieldMobile";
 import LocationSelectMobile from "./SearchFilterLocationSelectMobile";
 import FilterSearchInputMobile from "./SearchFilterInputMobile";
-import FilterFieldContentMobile from "./SearchFilterFieldContentMobile";
+import FirstFilterFieldContentMobile from "./SearchFilterFieldContentMobile";
 import { Calendar05 } from "./SearchFilterDateSelectMobile";
 import PriceRangeSlider from "./SearchFilterPriceRangeSliderMobile";
 import SearchMobile, {
@@ -58,7 +58,7 @@ const SearchBottomSheet = () => {
   return (
     <BottomSheetWrapper>
       <div
-        className="flex flex-col h-full"
+        className="flex h-full flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex-none">
@@ -82,13 +82,13 @@ const SearchBottomSheet = () => {
             ))}
           </div>
           {activeField && (
-            <FilterFieldContentMobile fieldName={activeField}>
+            <FirstFilterFieldContentMobile fieldName={activeField}>
               {showFieldContent()}
-            </FilterFieldContentMobile>
+            </FirstFilterFieldContentMobile>
           )}
         </div>
 
-        <div className="absolute bottom-0 w-full gap-066 py-088 flex flex-none px-[1.31rem] bg-white">
+        <div className="gap-066 py-088 absolute bottom-0 flex w-full flex-none bg-white px-[1.31rem]">
           <button
             className="button rounded-button text-dark flex h-[1.97rem] grow items-center justify-center border border-[rgba(0,0,0,0.1)] text-[0.77rem]/[1.09rem]"
             onClick={reset}

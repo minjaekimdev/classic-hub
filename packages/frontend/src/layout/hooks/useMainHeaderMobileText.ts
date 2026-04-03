@@ -24,9 +24,9 @@ const useMainHeaderMobileText = () => {
 
   let periodText = "";
   if (startDate) {
-    periodText = DateTransformer.format(startDate, "korean");
+    periodText = DateTransformer.format(startDate, "slash");
     if (endDate && startDate !== endDate) {
-      periodText += ` ~ ${DateTransformer.format(endDate, "korean")}`;
+      periodText += ` ~ ${DateTransformer.format(endDate, "slash")}`;
     }
   }
 

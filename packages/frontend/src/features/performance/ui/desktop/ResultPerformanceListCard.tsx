@@ -23,7 +23,7 @@ const ResultPerformanceListCard = ({ data }: { data: ResultPerformance }) => {
             alt=""
           />
         </div>
-        <div className="flex flex-col justify-between">
+        <div className="flex flex-col justify-between min-w-0">
           <div className="flex flex-col gap-[0.6rem]">
             <div className="gap-066 flex flex-col">
               <div className="flex flex-col gap-3">
