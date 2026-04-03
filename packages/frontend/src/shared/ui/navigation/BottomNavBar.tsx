@@ -2,13 +2,10 @@ import searchIcon from "@shared/assets/icons/search-nav.svg";
 import searchActiveIcon from "@shared/assets/icons/search-nav-red.svg";
 import rankingIcon from "@shared/assets/icons/ranking-nav.svg";
 import rankingActiveIcon from "@shared/assets/icons/ranking-red.svg";
-import homeIcon from "@shared/assets/icons/house-nav.svg";
-import homeActiveIcon from "@shared/assets/icons/home-active.svg";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useModal } from "@/app/providers/modal/useModal";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
-type NavContent = "홈" | "검색" | "랭킹";
+type NavContent = "검색" | "랭킹";
 
 interface ComponentProps {
   iconSrc: string;
@@ -27,7 +24,7 @@ const Component = ({
   const src = isActive ? iconActiveSrc : iconSrc;
   return (
     <div
-      className="py-044 gap-022 flex flex-1 cursor-pointer flex-col items-center"
+      className="py-044 gap-022 flex w-24 cursor-pointer flex-col items-center"
       onClick={onClick}
     >
       <img src={src} alt="" className="bottom-nav-icon" />
@@ -47,22 +44,46 @@ interface NavItem {
 
 const BottomNavBar = () => {
   const [active, setActive] = useState<NavContent>("검색");
+  const [isVisible, setIsVisible] = useState(true);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.pathname === "/ranking") {
+      setActive("랭킹");
+    } else {
+      setActive("검색");
+    }
+  }, [location.pathname]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 0) {
+        setIsVisible(false);
+      } else {
+        setIsVisible(true);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [location.pathname]);
+
+  const handleSearchClick = () => {
+    if (location.pathname === "/ranking") {
+      navigate("/");
+    } else if (location.pathname === "/result") {
+      navigate("/");
+    }
+    // Home에서는 변화 없음
+  };
 
   const NAV_ITEMS: NavItem[] = [
-    {
-      id: "홈",
-      iconSrc: homeIcon,
-      iconActiveSrc: homeActiveIcon,
-      action: () => {
-        navigate("/");
-      }
-    },
     {
       id: "검색",
       iconSrc: searchIcon,
       iconActiveSrc: searchActiveIcon,
-      action: () => {},
+      action: handleSearchClick,
     },
     {
       id: "랭킹",
@@ -75,7 +96,9 @@ const BottomNavBar = () => {
   ];
 
   return (
-    <div className="gap-022 p-044 fixed bottom-0 flex w-full border-t bg-white z-70">
+    <div
+      className={`gap-022 p-044 fixed bottom-0 z-70 flex w-full justify-center border-t bg-white transition-transform duration-100 ease-in-out ${!isVisible ? "translate-y-full" : ""}`}
+    >
       {NAV_ITEMS.map((item) => (
         <Component
           key={item.id}

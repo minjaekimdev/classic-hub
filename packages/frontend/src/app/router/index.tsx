@@ -6,13 +6,20 @@ import { BREAKPOINTS } from "@/shared/constants";
 import useBreakpoint from "@/shared/hooks/useBreakpoint";
 import BottomNavBar from "@/shared/ui/navigation/BottomNavBar";
 import { createBrowserRouter, Outlet } from "react-router-dom";
+import { BottomSheetProvider } from "../providers/bottom-sheet/BottomSheetProvider";
+import { ModalProvider } from "../providers/modal/ModalProvider";
+import SearchMobile from "@/features/filter/contexts/search-context.mobile";
 
 // eslint-disable-next-line react-refresh/only-export-components
 const RootLayout = () => {
   return (
-    <>
-      <Outlet />
-    </>
+    <BottomSheetProvider>
+      <ModalProvider>
+        <SearchMobile>
+          <Outlet />
+        </SearchMobile>
+      </ModalProvider>
+    </BottomSheetProvider>
   );
 };
 
@@ -20,8 +27,8 @@ const RootLayout = () => {
 const MainLayout = () => {
   const isMobile = useBreakpoint(BREAKPOINTS.MOBILE);
   return (
-    <div className="">
-      <main className="">
+    <div>
+      <main>
         <Outlet />
       </main>
       {isMobile && <BottomNavBar />}
@@ -35,7 +42,7 @@ const router = createBrowserRouter([
     element: <RootLayout />,
     children: [
       {
-        // 하단 네비게이션이 존재하는 레이아웃
+        // 모바일 모드일 때 하단 네비게이션이 존재하는 레이아웃
         element: <MainLayout />,
         children: [
           { index: true, element: <Home /> },
@@ -44,6 +51,7 @@ const router = createBrowserRouter([
         ],
       },
       {
+        // 상세 페이지는 하단 네비게이션이 존재하지 않음
         path: "detail/:performanceId",
         loader: detailLoader,
         element: <Detail />,
