@@ -96,23 +96,25 @@ const BottomNavBar = () => {
   ];
 
   return (
-    <div
-      className={`gap-022 p-044 fixed bottom-0 z-70 flex w-full justify-center border-t bg-white transition-transform duration-100 ease-in-out ${!isVisible ? "translate-y-full" : ""}`}
-    >
-      {NAV_ITEMS.map((item) => (
-        <Component
-          key={item.id}
-          text={item.id}
-          iconSrc={item.iconSrc}
-          iconActiveSrc={item.iconActiveSrc}
-          isActive={active === item.id}
-          onClick={() => {
-            setActive(item.id);
-            item.action();
-          }}
-        />
-      ))}
-    </div>
+    <>
+      {isVisible && (
+        <div className="gap-022 p-044 fixed bottom-0 z-70 flex w-full justify-center border-t bg-white">
+          {NAV_ITEMS.map((item) => (
+            <Component
+              key={item.id}
+              text={item.id}
+              iconSrc={item.iconSrc}
+              iconActiveSrc={item.iconActiveSrc}
+              isActive={active === item.id}
+              onClick={() => {
+                setActive(item.id);
+                item.action();
+              }}
+            />
+          ))}
+        </div>
+      )}
+    </>
   );
 };
 

@@ -9,7 +9,7 @@ const HomeLayoutMobile = ({ children }: { children: React.ReactNode }) => {
     <BottomSheet>
       <HomeHeaderMobile isScrollZero={isScrollZero} />
       <div ref={ref} className="h-1 bg-transparent"></div>
-      <main className={`pt-6 pb-[6.12rem] ${marginTop}`}>{children}</main>
+      <main className={`pt-6 ${marginTop}`}>{children}</main>
     </BottomSheet>
   );
 };
