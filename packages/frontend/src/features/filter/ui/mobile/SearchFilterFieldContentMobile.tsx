@@ -12,7 +12,7 @@ const FilterFieldContentMobile = ({
   children,
 }: FilterFieldContentMobileProps) => {
   return (
-    <div className="flex flex-col gap-[0.66rem] p-[1.31rem]">
+    <div className="flex flex-col gap-066 p-[1.31rem] pb-20">
       <FilterFieldHeaderMobile fieldName={fieldName} />
       {children}
     </div>
