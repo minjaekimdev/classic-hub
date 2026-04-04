@@ -7,16 +7,16 @@ interface FilterFieldContentMobileProps {
   children: React.ReactNode;
 }
 
-const FilterFieldContentMobile = ({
+const FirstFilterFieldContentMobile = ({
   fieldName,
   children,
 }: FilterFieldContentMobileProps) => {
   return (
-    <div className="flex flex-col gap-[0.66rem] p-[1.31rem]">
+    <div className="gap-066 flex flex-col p-[1.31rem] pb-20">
       <FilterFieldHeaderMobile fieldName={fieldName} />
       {children}
     </div>
   );
 };
 
-export default FilterFieldContentMobile;
+export default FirstFilterFieldContentMobile;

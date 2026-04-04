@@ -10,7 +10,7 @@ const SearchFilterInputMobile = () => {
         type="text"
         className="w-full placeholder:text-[#717182] text-[0.88rem] cursor-pointer"
         placeholder="공연명, 아티스트명, 작품명 등"
-        value={searchValue.keyword}
+        value={searchValue.keyword ?? ""}
         onChange={(e) =>
           changeValue({ ...searchValue, keyword: e.target.value })
         }

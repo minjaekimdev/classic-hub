@@ -9,8 +9,6 @@ const formatDateQueryToFilter = (startDate: string, endDate: string) => {
     return formattedStartDate;
   }
 
-
-
   const formattedEndDate = formatDate(endDate);
   return `${formattedStartDate} ~ ${formattedEndDate}`
 

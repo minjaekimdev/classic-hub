@@ -1,5 +1,5 @@
 import DetailImages from "@/features/performance/ui/shared/DetailImages";
-import PriceInfoDesktop from "@/features/performance/ui/shared/DetailPriceInfo";
+import PriceInfo from "@/features/performance/ui/shared/DetailPriceInfo";
 import DetailVenueInfo from "@/features/performance/ui/shared/DetailVenueInfo";
 import { useState } from "react";
 
@@ -15,7 +15,7 @@ const Tab = ({ text, selected, onClick }: TabProps) => {
     : "text-[#4a5565]";
   return (
     <div
-      className={`flex-1 flex justify-center items-center h-[2.53rem] text-[#4a5565] text-[0.77rem]/[1.09rem] cursor-pointer ${style}`}
+      className={`flex h-[2.53rem] flex-1 cursor-pointer items-center justify-center text-[0.77rem]/[1.09rem] text-[#4a5565] ${style}`}
       onClick={() => onClick(text)}
     >
       {text}
@@ -26,7 +26,7 @@ const Tab = ({ text, selected, onClick }: TabProps) => {
 const Detail = () => {
   return (
     <div className="flex flex-col gap-[0.44rem]">
-      <section className="px-[0.88rem] py-[1.09rem]">
+      <section className="px-088 py-[1.09rem]">
         <DetailImages />
       </section>
     </div>
@@ -45,7 +45,7 @@ const MainDetailMobile = () => {
 
   const detailObj: Record<CategoryType, React.ReactNode> = {
     공연상세: <Detail />,
-    가격정보: <PriceInfoDesktop />,
+    가격정보: <PriceInfo />,
     장소정보: <DetailVenueInfo />,
   };
 

@@ -25,7 +25,7 @@ export const MobileList = ({
   }
 
   return (
-    <ul className="flex flex-col gap-[0.88rem] w-full">
+    <ul className="flex flex-col gap-088 w-full">
       {performances!.map((performance) => (
         <PerformanceListCard key={performance.title} data={performance} />
       ))}

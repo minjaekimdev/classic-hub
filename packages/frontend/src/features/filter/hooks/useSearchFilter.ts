@@ -1,27 +1,28 @@
-import useQueryParams from "@/shared/hooks/useParams";
+// 헤더에 있는 1차 필터에 대한 상태를 관리
+
 import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import type { FieldType, SearchValue } from "../types/filter";
+import type { FieldType, QueryParams } from "../types/filter";
+import useFilterParams from "@/shared/hooks/useFilterParams";
+import { usePostHog } from "@posthog/react";
 
 const useSearchFilter = ({ onSearch }: { onSearch: () => void }) => {
-  // URL 파라미터 가져온 뒤 검색 필터의 초기값으로 사용
-  const { filters } = useQueryParams();
-  const { keyword, location, minPrice, maxPrice, startDate, endDate } = filters;
-
-  // 확장 필터의 상태를 관리(초기값만 URL 파라미터와 동일)
-  const [searchValue, setSearchValue] = useState<SearchValue>({
-    keyword: keyword ? keyword : "",
-    location: location ? location : "",
-    minPrice: minPrice ? minPrice : "",
-    maxPrice: maxPrice ? maxPrice : "",
-    startDate: startDate ? startDate : "",
-    endDate: endDate ? endDate : "",
+  const { keyword, location, minPrice, maxPrice, startDate, endDate } =
+    useFilterParams();
+  const [searchValue, setSearchValue] = useState<QueryParams>({
+    keyword: keyword ?? "",
+    location: location ?? "",
+    minPrice: minPrice ?? "",
+    maxPrice: maxPrice ?? "",
+    startDate: startDate ?? "",
+    endDate: endDate ?? "",
   });
 
   const [activeField, setActiveField] = useState<FieldType | null>(null);
   const navigate = useNavigate();
+  const posthog = usePostHog();
 
-  const changeValue = useCallback((value: SearchValue) => {
+  const changeValue = useCallback((value: QueryParams) => {
     setSearchValue(value);
   }, []);
 
@@ -42,10 +43,7 @@ const useSearchFilter = ({ onSearch }: { onSearch: () => void }) => {
     if (searchValue.keyword) {
       params.append("keyword", searchValue.keyword);
     }
-    if (
-      searchValue.location &&
-      searchValue.location !== "전체"
-    ) {
+    if (searchValue.location && searchValue.location !== "전체") {
       params.append("location", searchValue.location);
     }
     if (searchValue.minPrice) {
@@ -62,6 +60,14 @@ const useSearchFilter = ({ onSearch }: { onSearch: () => void }) => {
     }
 
     const queryString = params.toString();
+    posthog.capture("search_performed", {
+      keyword: searchValue.keyword || null,
+      location: searchValue.location || null,
+      min_price: searchValue.minPrice || null,
+      max_price: searchValue.maxPrice || null,
+      start_date: searchValue.startDate || null,
+      end_date: searchValue.endDate || null,
+    });
     onSearch?.();
     navigate(queryString ? `/result?${queryString}` : "/result");
   };

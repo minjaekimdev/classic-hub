@@ -4,7 +4,6 @@ import { createContext, useContext } from "react";
 
 interface ResultContextType {
   allPerformances: ResultPerformance[] | undefined;
-  filteredPerformances: ResultPerformance[];
   isLoading: boolean;
   isError: boolean;
   keyword: string | null;

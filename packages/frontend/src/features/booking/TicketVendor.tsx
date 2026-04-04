@@ -1,5 +1,6 @@
 import type { BookingLink } from "@classic-hub/shared/types/common";
 import React from "react";
+import { usePostHog } from "@posthog/react";
 
 interface ModalTicketVendorProps extends BookingLink {
   icon: string;
@@ -12,8 +13,17 @@ const TicketVendor: React.FC<ModalTicketVendorProps> = ({
   name,
   url,
 }) => {
+  const posthog = usePostHog();
+
+  const handleClick = () => {
+    posthog.capture("ticket_vendor_clicked", {
+      vendor_name: name,
+      vendor_url: url,
+    });
+  };
+
   return (
-    <a href={url} className="block">
+    <a href={url} className="block" target="_blank" onClick={handleClick}>
       <div className="flex flex-col justify-center items-center rounded-main border-2 border-black/10 h-[7.47rem] w-full">
         <div className="flex flex-col items-center gap-[0.47rem]">
           <div

@@ -1,16 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import ProgramCallout from './ProgramCallout';
+import BottomNavBar from './BottomNavBar';
 
 const meta = {
-  title: 'shared/ui/ProgramCallout',
-  component: ProgramCallout,
+  title: 'shared/navigation/BottomNavBar',
+  component: BottomNavBar,
   tags: ['autodocs'],
   args: { 
-    composer: "베토벤",
-    piece: '교향곡 9번 "합창"',
-    other: 3,
   },
-} satisfies Meta<typeof ProgramCallout>;
+} satisfies Meta<typeof BottomNavBar>;
 
 export default meta;
 

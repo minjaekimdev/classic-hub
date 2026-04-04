@@ -18,6 +18,7 @@ const SearchFilterProvider = ({ children }: { children: React.ReactNode }) => {
     search,
     openField,
     closeField,
+    // 검색 버튼을 눌렀을 때 자동으로 축소되도록 shrink 함수를 전달
   } = useSearchFilter({ onSearch: shrink });
 
   // activeField가 null이 아니면 특정 field가 클릭(활성화)되었다는 의미

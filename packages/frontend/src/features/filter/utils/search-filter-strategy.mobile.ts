@@ -1,5 +1,5 @@
 import formatPriceToKo from "@/shared/utils/formatPriceToKo";
-import type { FieldType, SearchValue } from "../types/filter";
+import type { FieldType, QueryParams } from "../types/filter";
 import DateTransformer from "@/shared/utils/dateTransformer";
 import locationIcon from "@shared/assets/icons/location-blue.svg";
 import calendarIcon from "@shared/assets/icons/calendar-purple.svg";
@@ -9,8 +9,8 @@ export type FieldTypeKo = "지역" | "가격" | "기간";
 
 interface FilterInterface {
   key: Exclude<FieldType, "keyword">;
-  format: (value: SearchValue) => string | undefined;
-  isSelected: (value: SearchValue) => boolean;
+  format: (value: QueryParams) => string | null;
+  isSelected: (value: QueryParams) => boolean;
 }
 
 export const FILTER_STRATEGY: Record<FieldTypeKo, FilterInterface> = {
@@ -27,7 +27,9 @@ export const FILTER_STRATEGY: Record<FieldTypeKo, FilterInterface> = {
   기간: {
     key: "period",
     format: (v) =>
-      `${DateTransformer.format(v.startDate, "slash")} ~ ${DateTransformer.format(v.endDate, "slash")}`,
+      v.startDate
+        ? `${DateTransformer.format(v.startDate, "slash")} ~ ${DateTransformer.format(v.endDate!, "slash")}`
+        : "",
     isSelected: (v) => !!v.startDate,
   },
 };

@@ -16,14 +16,14 @@ const SearchInput = () => {
   }, [activeField]);
 
   return (
-    <div className="flex items-center gap-[0.66rem] p-[0.22rem_0.66rem]">
+    <div className="gap-066 flex items-center p-[0.22rem_0.66rem]">
       <img src={searchIcon} alt="" />
       <input
         ref={inputRef}
         className="w-full text-[0.77rem] placeholder:text-[0.77rem] focus-visible:outline-none"
         type="text"
-        placeholder="공연명, 아티스트명 등으로 검색해보세요!"
-        value={searchValue.keyword}
+        placeholder="공연, 작품, 아티스트, 공연장 등 검색"
+        value={searchValue.keyword ?? ""}
         onFocus={() => openField("keyword")}
         onChange={handleChange}
       />

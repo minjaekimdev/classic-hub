@@ -1,9 +1,9 @@
 import { MAX_PRICE } from "../constants/max-value";
-import type { SearchValue } from "../types/filter";
+import type { QueryParams } from "../types/filter";
 
 const usePriceSlider = (
-  searchValue: SearchValue,
-  changeValue: (value: SearchValue) => void,
+  searchValue: QueryParams,
+  changeValue: (value: QueryParams) => void,
 ) => {
   const { minPrice, maxPrice } = searchValue;
 

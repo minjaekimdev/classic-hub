@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import BookmarkButtonDesktop from "@/shared/ui/buttons/BookmarkButtonDesktop";
 import PerformanceMeta from "../shared/PerformanceMeta";
 import { PriceDisplay } from "../shared/PriceDisplayHome";
 import type { PerformanceSummary } from "@classic-hub/shared/types/client";
@@ -12,7 +11,7 @@ interface CardBadgeProps {
 export const RankBadge = ({ children, className }: CardBadgeProps) => {
   return (
     <div
-      className={`absolute z-10 shrink-0 flex justify-center items-center rounded-full p-[0.47rem_0.65rem_0.38rem] bg-linear-to-b from-[#cc0000] to-[#990000] text-white text-[0.77rem]/[1.09rem] font-bold ${
+      className={`absolute z-10 flex shrink-0 items-center justify-center rounded-full bg-linear-to-b from-[#cc0000] to-[#990000] p-[0.47rem_0.65rem_0.38rem] text-[0.77rem]/[1.09rem] font-bold text-white ${
         className || ""
       }`}
     >
@@ -21,25 +20,24 @@ export const RankBadge = ({ children, className }: CardBadgeProps) => {
   );
 };
 
-export const HomePerformanceRankingCard = ({ data }: { data: PerformanceSummary }) => {
+export const HomePerformanceRankingCard = ({
+  data,
+}: {
+  data: PerformanceSummary;
+}) => {
   return (
-    <Link to={`/detail/${data.id}`}>
+    <Link to={`/detail/${data.id}`} target="_blank">
       {/* // group 클래스를 지정하여 해당 요소 hover시 자식의 스타일이 바뀌도록(transform: scale(1.05)) */}
-      <div className="group flex flex-col rounded-main bg-white w-full shadow-[0_1px_3px_0_rgba(0,0,0,0.1),0_1px_2px_-1px_rgba(0,0,0,0.1)] overflow-hidden transition-shadow duration-200 ease-in-out hover:shadow-[0_10px_15px_-3px_rgba(0,0,0,0.1),0_4px_6px_-4px_rgba(0,0,0,0.1)] cursor-pointer">
-        <div className="relative overflow-hidden aspect-10/14">
+      <div className="group rounded-main flex w-full cursor-pointer flex-col overflow-hidden bg-white shadow-[0_1px_3px_0_rgba(0,0,0,0.1),0_1px_2px_-1px_rgba(0,0,0,0.1)] transition-shadow duration-200 ease-in-out hover:shadow-[0_10px_15px_-3px_rgba(0,0,0,0.1),0_4px_6px_-4px_rgba(0,0,0,0.1)]">
+        <div className="relative aspect-10/14 overflow-hidden">
           <img
-            className="w-full h-full group-hover:scale-105 transition-scale duration-200 ease-in-out"
+            className="transition-scale h-full w-full duration-200 ease-in-out group-hover:scale-105"
             src={data.poster ?? ""}
             alt=""
           />
-          <RankBadge className="top-066 left-088">
-            {data.rank}위
-          </RankBadge>
-          <div className="hidden desktop:block bookmark-position">
-            <BookmarkButtonDesktop />
-          </div>
+          <RankBadge className="top-066 left-088">{data.rank}위</RankBadge>
         </div>
-        <div className="grow flex flex-col justify-between p-088">
+        <div className="p-088 flex grow flex-col justify-between">
           <PerformanceMeta
             title={data.title}
             startDate={data.startDate}

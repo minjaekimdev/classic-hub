@@ -1,52 +1,43 @@
-// 필터의 열고닫힘 상태를 전역적으로 관리
+// 검색 결과 필터의 상태를 관리(열림/닫힘, 정렬 조건, 선택 지역 및 공연장)
 
-import useQueryParams from "@/shared/hooks/useParams";
 import { createContext, useContext, useState } from "react";
-import type { Filter, SortType } from "../types/filter";
+import type { Filter } from "../types/filter";
+import { useResult } from "@/features/performance/contexts/result-context";
+import useFilteredPerformances from "../hooks/useFilteredPerformances";
+import type { ResultPerformance } from "@classic-hub/shared/types/client";
 
 interface FilterUIContextType {
-  filters: Filter;
+  filterValue: Filter;
+  filteredPerformances: Array<ResultPerformance>;
   isOpen: boolean;
   openedRegion: string | null;
   open: () => void;
   close: () => void;
   reset: () => void;
+  changeFilterValue: (value: Partial<Filter>) => void;
   handleRegionOpen: (region: string) => void;
-  handleSortSelect: (sortBy: SortType) => void;
   handleVenueSelect: (venueId: string) => void;
-  updateParams: (newParams: URLSearchParams) => void;
 }
 
 const FilterUIContext = createContext<FilterUIContextType | null>(null);
 
-export const FilterProvider = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => {
-  const [isOpen, setIsOpen] = useState(true); // 기본값은 닫힘 추천
-  const [openedRegion, setOpenedRegion] = useState<string | null>(null);
-
-  const { filters, searchParams, setSearchParams } = useQueryParams();
+export const FilterProvider = ({ children }: { children: React.ReactNode }) => {
+  const [filterValue, setFilterValue] = useState<Filter>({
+    sortBy: "imminent",
+    // venue는 여러 개일 수 있으므로 배열로 관리
+    selectedVenues: [],
+  });
+  const [isOpen, setIsOpen] = useState(true);
+  const [openedRegion, setOpenedRegion] = useState<string | null>(null); // 지역 아코디언 토글
 
   const open = () => setIsOpen(true);
   const close = () => setIsOpen(false);
+  const changeFilterValue = (value: Partial<Filter>) => {
+    setFilterValue((prev) => ({ ...prev, ...value }));
+  };
   const reset = () => {
     setOpenedRegion(null);
-    setSearchParams({ sortBy: "imminent" }); // 기본값으로 초기화
-  };
-
-  // 2. URL을 업데이트하는 헬퍼 함수 (Write)
-  const updateParams = (newParams: URLSearchParams) => {
-    // 페이지를 1페이지로 리셋하거나 하는 부가 로직이 여기에 들어갈 수 있음
-    setSearchParams(newParams);
-  };
-
-  // 정렬 변경
-  const handleSortSelect = (sortBy: SortType) => {
-    const newParams = new URLSearchParams(searchParams);
-    newParams.set("sortBy", sortBy);
-    updateParams(newParams);
+    changeFilterValue({ sortBy: "imminent", selectedVenues: [] }); // 기본값으로 초기화
   };
 
   const handleRegionOpen = (region: string) => {
@@ -61,38 +52,40 @@ export const FilterProvider = ({
 
   // 공연장 토글 (다중 선택 가능)
   const handleVenueSelect = (venueId: string) => {
-    const newParams = new URLSearchParams(searchParams);
-    const venues = newParams.getAll("venue");
-
-    // 기존 venue들을 싹 지우고
-    newParams.delete("venue");
+    console.log(`venueId: ${venueId}`);
+    const newVenues: string[] = [];
+    const venues = filterValue.selectedVenues;
 
     if (venues.includes(venueId)) {
       // 이미 있으면 걔만 빼고 다시 추가
-      venues
-        .filter((v) => v !== venueId)
-        .forEach((v) => newParams.append("venue", v));
+      venues.filter((v) => v !== venueId).forEach((v) => newVenues.push(v));
     } else {
       // 없으면 기존꺼 + 새거 추가
-      [...venues, venueId].forEach((v) => newParams.append("venue", v));
+      [...venues, venueId].forEach((v) => newVenues.push(v));
     }
 
-    updateParams(newParams);
+    changeFilterValue({ selectedVenues: newVenues });
   };
+
+  const { allPerformances } = useResult();
+  const filteredPerformances = useFilteredPerformances(
+    allPerformances,
+    filterValue,
+  );
 
   return (
     <FilterUIContext.Provider
       value={{
-        filters,
+        filteredPerformances,
+        filterValue,
+        changeFilterValue,
         isOpen,
         openedRegion,
         open,
         close,
         reset,
         handleRegionOpen,
-        handleSortSelect,
         handleVenueSelect,
-        updateParams,
       }}
     >
       {children}

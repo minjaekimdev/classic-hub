@@ -2,12 +2,16 @@ import { type ReactNode } from "react";
 import { createContext, useContext } from "react";
 import type { SearchFilterContextType } from "../types/filter";
 import useSearchFilter from "../hooks/useSearchFilter";
-
+import { useBottomSheet } from "@/app/providers/bottom-sheet/useBottomSheet";
 // eslint-disable-next-line react-refresh/only-export-components
 export const SearchFilterMobileContext =
   createContext<SearchFilterContextType | null>(null);
 
-const SearchFilterMobileProvider = ({ children }: { children: React.ReactNode }) => {
+const SearchFilterMobileProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   const {
     searchValue,
     activeField,
@@ -16,7 +20,7 @@ const SearchFilterMobileProvider = ({ children }: { children: React.ReactNode })
     search,
     openField,
     closeField,
-  } = useSearchFilter({onSearch: () => {}});
+  } = useSearchFilter({ onSearch: () => {} });
 
   // activeField가 null이 아니면 특정 field가 클릭(활성화)되었다는 의미
   return (
@@ -51,8 +55,14 @@ const SearchFilterReset = ({ children }: { children: ReactNode }) => {
 };
 
 const SearchFilterApply = ({ children }: { children: ReactNode }) => {
+  const { closeBottomSheet } = useBottomSheet();
   const { search } = useSearchMobile();
-  return <div onClick={search}>{children}</div>;
+
+  const hanldeApply = () => {
+    closeBottomSheet();
+    search();
+  };
+  return <div onClick={hanldeApply}>{children}</div>;
 };
 
 interface SearchFilterMobileRootProps {

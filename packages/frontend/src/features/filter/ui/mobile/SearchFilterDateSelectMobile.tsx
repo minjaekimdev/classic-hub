@@ -9,6 +9,9 @@ export function Calendar05() {
   // 오늘 날짜 (시간 제거)
   const today = new Date();
   today.setHours(0, 0, 0, 0);
+  const maxSelectableDate = new Date(today);
+  maxSelectableDate.setDate(maxSelectableDate.getDate() + 365);
+
   let calendarDateRange: DateRange | undefined;
 
   if (!searchValue.startDate) {
@@ -17,15 +20,15 @@ export function Calendar05() {
     const [startDate, endDate] = [searchValue.startDate, searchValue.endDate];
     calendarDateRange = {
       from: new Date(DateTransformer.format(startDate, "dash")),
-      to: new Date(DateTransformer.format(endDate, "dash")),
+      to: new Date(DateTransformer.format(endDate!, "dash")),
     };
   }
 
-  // 오늘 이전 날짜 비활성화
+  // 오늘 이전 및 365일 이후 날짜 비활성화
   const isDateDisabled = (date: Date) => {
     const checkDate = new Date(date);
     checkDate.setHours(0, 0, 0, 0);
-    return checkDate < today;
+    return checkDate < today || checkDate > maxSelectableDate;
   };
 
   const handleSelect = (range: DateRange | undefined) => {
@@ -59,29 +62,7 @@ export function Calendar05() {
       onSelect={handleSelect}
       disabled={isDateDisabled}
       numberOfMonths={2}
-      className="rounded-lg
-      /* 1. 단일 선택 날짜 (Single Selected) */
-        /* 배경을 #c00으로, 글자는 흰색으로, 호버 시 약간 진하게 */
-        [&_[data-selected-single=true]]:bg-[#c00]
-        [&_[data-selected-single=true]]:text-white
-        [&_[data-selected-single=true]]:hover:bg-[#c00]/90
-        
-        /* 2. 범위 선택 - 시작일 & 종료일 (Range Start/End) */
-        [&_[data-range-start=true]]:bg-[#c00]
-        [&_[data-range-start=true]]:text-white
-        [&_[data-range-end=true]]:bg-[#c00]
-        [&_[data-range-end=true]]:text-white
-
-        /* 3. 범위 선택 - 중간 날짜 (Range Middle) */
-        /* 배경을 연한 #c00(10% 투명도)으로, 글자는 검정색 */
-        [&_[data-range-middle=true]]:bg-[#c00]/10
-        [&_[data-range-middle=true]]:text-neutral-900
-
-        /* 4. 오늘 날짜 (Today) - 선택 안 됐을 때 */
-        /* 기본 회색 배경을 바꾸고 싶다면 아래 주석 해제 */
-        /* [&_.rdp-day_today:not([data-selected=true])]:bg-gray-100 */
-        /* [&_.rdp-day_today:not([data-selected=true])]:text-[#c00] */
-     "
+      className="/* 1. 단일 선택 날짜 (Single Selected) */ /* 배경을 #c00으로, 글자는 흰색으로, 호버 시 약간 진하게 */ /* 2. 범위 선택 - 시작일 & 종료일 (Range Start/End) */ /* 3. 범위 선택 - 중간 날짜 (Range Middle) */ /* 배경을 연한 #c00(10% 투명도)으로, 글자는 검정색 */ /* 4. 오늘 날짜 (Today) - 선택 안 됐을 때 */ /* 기본 회색 배경을 바꾸고 싶다면 아래 주석 해제 */ /* */ /* */ rounded-lg [&_.rdp-day_today:not([data-selected=true])]:bg-gray-100 [&_.rdp-day_today:not([data-selected=true])]:text-[#c00] [&_[data-range-end=true]]:bg-[#c00] [&_[data-range-end=true]]:text-white [&_[data-range-middle=true]]:bg-[#c00]/10 [&_[data-range-middle=true]]:text-neutral-900 [&_[data-range-start=true]]:bg-[#c00] [&_[data-range-start=true]]:text-white [&_[data-selected-single=true]]:bg-[#c00] [&_[data-selected-single=true]]:text-white [&_[data-selected-single=true]]:hover:bg-[#c00]/90"
     />
   );
 }

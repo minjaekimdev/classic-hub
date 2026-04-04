@@ -1,8 +1,7 @@
-import useQueryParams from "@/shared/hooks/useParams";
+import useFilterParams from "@/shared/hooks/useFilterParams";
 import DateTransformer from "@/shared/utils/dateTransformer";
 
 const useMainHeaderMobileText = () => {
-  const { filters } = useQueryParams();
   const {
     keyword: rawKeyword,
     location: rawLocation,
@@ -10,7 +9,7 @@ const useMainHeaderMobileText = () => {
     maxPrice,
     startDate,
     endDate,
-  } = filters;
+  } = useFilterParams();
 
   const keyword = rawKeyword ? rawKeyword : "";
   const location = rawLocation ? rawLocation : "";
@@ -25,9 +24,9 @@ const useMainHeaderMobileText = () => {
 
   let periodText = "";
   if (startDate) {
-    periodText = DateTransformer.format(startDate, "korean");
+    periodText = DateTransformer.format(startDate, "slash");
     if (endDate && startDate !== endDate) {
-      periodText += ` ~ ${DateTransformer.format(endDate, "korean")}`;
+      periodText += ` ~ ${DateTransformer.format(endDate, "slash")}`;
     }
   }
 

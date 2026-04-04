@@ -3,8 +3,8 @@ import type { Venue } from "../../types/filter";
 import { useFilter } from "../../contexts/filter-context";
 
 const FilterVenueItem = ({ venue }: { venue: Venue }) => {
-  const { filters, handleVenueSelect } = useFilter(); // url 상태를 필터와 동기화
-  const isSelected = filters.selectedVenues.includes(venue.id);
+  const { filterValue, handleVenueSelect } = useFilter(); // url 상태를 필터와 동기화
+  const isSelected = filterValue.selectedVenues.includes(venue.id);
   const checkStyle = isSelected
     ? "bg-[#cc0000] border-[#cc0000]"
     : "bg-white border-gray-300";

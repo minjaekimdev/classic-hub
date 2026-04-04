@@ -6,77 +6,18 @@ import locationIcon from "@shared/assets/icons/location-gray.svg";
 import formatDateRange from "@/shared/utils/formatDateRange";
 import type { ResultPerformance } from "@classic-hub/shared/types/client";
 import { useResult } from "../../../contexts/result-context";
-import type { Program } from "@classic-hub/shared/types/common";
 import ComposerList from "../../shared/ComposerList";
-import noteIcon from "@shared/assets/icons/single-note-red.svg";
-import { getPieceCount, getProgramInfo } from "./utils";
-
-const CalloutLayout = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <div className="callout-box my-088">
-      <div className="gap-022 flex items-start">
-        <img src={noteIcon} className="relative top-0.5" />
-        {children}
-      </div>
-    </div>
-  );
-};
-
-interface MatchedProgramProps {
-  program: Program[];
-  keyword: string;
-  pieceCount: number;
-}
-const MatchedProgram = ({
-  program,
-  keyword,
-  pieceCount,
-}: MatchedProgramProps) => {
-  const matchedProgram = getProgramInfo(program, keyword);
-  if (!matchedProgram) return null;
-  const { composer, piece } = matchedProgram;
-
-  return (
-    <CalloutLayout>
-      {/* 작곡가명이 매칭된 경우 */}
-      {composer && composer.length === 3 && (
-        <p>
-          <span>
-            {composer[0]}
-            <mark className="font-semibold">{composer[1]}</mark>
-            {composer[2]}
-          </span>
-          {piece ? (
-            <span>
-              : {piece} 외 {pieceCount - 1}곡
-            </span>
-          ) : (
-            <span> (세부 곡명 미정)</span>
-          )}
-        </p>
-      )}
-
-      {/* 곡명이 매칭된 경우 */}
-      {piece && piece.length === 3 && (
-        <p>
-          {composer ? <span>{composer}: </span> : ""}
-          <span>
-            {piece[0]}
-            <mark className="font-semibold">{piece[1]}</mark>
-            {piece[2]} 외 {pieceCount - 1}곡
-          </span>
-        </p>
-      )}
-    </CalloutLayout>
-  );
-};
+import { getPieceCount } from "./utils";
+import { MatchedProgram } from "../../shared/MatchedProgram";
+import { useModal } from "@/app/providers/modal/useModal";
 
 const ResultPerformanceAlbumCard = ({ data }: { data: ResultPerformance }) => {
   const { keyword } = useResult();
   const pieceCount = getPieceCount(data.programs);
-  console.log(data.programs);
+  const { openModal } = useModal();
+
   return (
-    <Link to={`/detail/${data.id}`}>
+    <Link to={`/detail/${data.id}`} target="_blank">
       <div className="gap-066 flex cursor-pointer flex-col">
         <div className="rounded-main relative aspect-10/14 overflow-hidden border border-[rgba(0,0,0,0.1)]">
           <img
@@ -94,7 +35,7 @@ const ResultPerformanceAlbumCard = ({ data }: { data: ResultPerformance }) => {
               <ComposerList programs={data.programs} />
             </div>
             <div className="flex flex-col">
-              <ul className="flex flex-col gap-[0.33rem]">
+              <ul className="gap-033 flex flex-col">
                 <MetaItem iconSrc={calendarIcon}>
                   {formatDateRange(data.startDate, data.endDate)}
                 </MetaItem>
@@ -111,12 +52,19 @@ const ResultPerformanceAlbumCard = ({ data }: { data: ResultPerformance }) => {
               />
             )}
           </div>
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between pt-3">
             <ResultPriceDisplay
               minPrice={data.minPrice}
               maxPrice={data.maxPrice}
             />
-            <button className="rounded-button bg-main transition-scale flex h-[1.53rem] w-[2.45rem] items-center justify-center text-[0.66rem]/[0.88rem] font-medium text-white duration-200 ease-in-out hover:scale-105">
+            <button
+              className="rounded-button bg-main transition-scale flex h-[1.53rem] w-[2.45rem] items-center justify-center text-[0.66rem]/[0.88rem] font-medium text-white duration-200 ease-in-out hover:scale-105"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                openModal("BOOKING", { bookingLinks: data.bookingLinks });
+              }}
+            >
               예매
             </button>
           </div>

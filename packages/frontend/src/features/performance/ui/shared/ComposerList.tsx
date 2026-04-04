@@ -8,7 +8,7 @@ const ComposerList = ({ programs }: { programs: Program[] }) => {
     .map((item) => item.composerKo)
     .slice(0, 5);
   return (
-    <div className="flex max-h-11 w-full flex-wrap items-center gap-1 overflow-hidden">
+    <div className="flex w-full max-h-11 flex-wrap items-center gap-1 overflow-hidden">
       {composersKo.map((composer, idx) => (
         <ComposerBadge key={idx} composer={composer!} />
       ))}

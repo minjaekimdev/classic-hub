@@ -1,31 +1,32 @@
 import HeaderMobile from "./HeaderMobile";
 import MainDetailMobile from "./MainDetailMobile";
-import Modal, { useModal } from "@/shared/ui/modal/Modal";
 import PosterMobile from "@/features/performance/ui/mobile/DetailPosterMobile";
 import SummaryMobile from "@/features/performance/ui/mobile/DetailSummaryMobile";
 import { useDetail } from "@/features/performance/contexts/detail-context";
+import { ModalProvider } from "@/app/providers/modal/ModalProvider";
+import { useModal } from "@/app/providers/modal/useModal";
 
 const DetailMobile = () => {
   const { bookingLinks } = useDetail();
-  const { sendData } = useModal();
+  const { openModal } = useModal();
 
   return (
-    <div className="flex flex-col">
-      <HeaderMobile />
-      <PosterMobile />
-      <SummaryMobile />
-      <MainDetailMobile />
-      <Modal.Trigger>
-        <div className="fixed bottom-0 border-t border-[rgba(0,0,0,0.1)] bg-white px-[0.72rem] py-[0.88rem] w-full">
+    <ModalProvider>
+      <div className="flex flex-col pb-20">
+        <HeaderMobile />
+        <PosterMobile />
+        <SummaryMobile />
+        <MainDetailMobile />
+        <div className="py-088 fixed bottom-0 w-full border-t border-[rgba(0,0,0,0.1)] bg-white px-[0.72rem]">
           <button
-            className="flex justify-center items-center rounded-main bg-main w-full h-[2.63rem] text-white text-[0.77rem]/[1.09rem]"
-            onClick={() => sendData(bookingLinks)}
+            className="rounded-main bg-main flex h-[2.63rem] w-full items-center justify-center text-[0.77rem]/[1.09rem] text-white"
+            onClick={() => openModal("BOOKING", { bookingLinks })}
           >
             예매하기
           </button>
         </div>
-      </Modal.Trigger>
-    </div>
+      </div>
+    </ModalProvider>
   );
 };
 
