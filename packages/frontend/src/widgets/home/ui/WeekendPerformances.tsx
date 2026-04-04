@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import getWeekendDate from "@/shared/utils/getWeekendDate";
 
 const WEEKEND_BREAKPOINTS = {
-  600: { slidesPerView: 2.2 },
+  600: { slidesPerView: 3.2 },
   960: { slidesPerView: 4 },
   1280: { slidesPerView: 5 },
 };

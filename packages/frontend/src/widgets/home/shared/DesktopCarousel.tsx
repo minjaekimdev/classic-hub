@@ -30,7 +30,7 @@ export const DesktopCarousel = <T extends BaseItem>({
   return (
     <div className="relative w-full">
       <button
-        className={`${prevClass} hidden desktop:flex absolute z-10 top-[50%] left-0 w-13 h-13 justify-center items-center border border-[rgba(0,0,0,0.1)] rounded-full bg-[rgba(255,255,255,0.9)] shadow-[0_0_8px_0_rgba(0,0,0,0.13)] translate-y-[-50%] translate-x-[-50%] disabled:opacity-0 transition-opacity`}
+        className={`${prevClass} desktop:flex absolute top-[50%] left-0 z-10 hidden h-13 w-13 translate-x-[-50%] translate-y-[-50%] items-center justify-center rounded-full border border-[rgba(0,0,0,0.1)] bg-[rgba(255,255,255,0.9)] shadow-[0_0_8px_0_rgba(0,0,0,0.13)] transition-opacity disabled:opacity-0`}
       >
         <img src={leftArrow} alt="이전" />
       </button>
@@ -48,7 +48,7 @@ export const DesktopCarousel = <T extends BaseItem>({
         ))}
       </Swiper>
       <button
-        className={`${nextClass} hidden desktop:flex absolute z-10 top-[50%] right-0 w-13 h-13 justify-center items-center border border-[rgba(0,0,0,0.1)] rounded-full bg-[rgba(255,255,255,0.9)] shadow-[0_0_8px_0_rgba(0,0,0,0.13)] translate-y-[-50%] translate-x-[50%] disabled:opacity-0 transition-opacity`}
+        className={`${nextClass} desktop:flex absolute top-[50%] right-0 z-10 hidden h-13 w-13 translate-x-[50%] translate-y-[-50%] items-center justify-center rounded-full border border-[rgba(0,0,0,0.1)] bg-[rgba(255,255,255,0.9)] shadow-[0_0_8px_0_rgba(0,0,0,0.13)] transition-opacity disabled:opacity-0`}
       >
         <img src={rightArrow} alt="다음" />
       </button>

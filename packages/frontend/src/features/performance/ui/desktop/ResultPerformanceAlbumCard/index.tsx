@@ -9,10 +9,13 @@ import { useResult } from "../../../contexts/result-context";
 import ComposerList from "../../shared/ComposerList";
 import { getPieceCount } from "./utils";
 import { MatchedProgram } from "../../shared/MatchedProgram";
+import { useModal } from "@/app/providers/modal/useModal";
 
 const ResultPerformanceAlbumCard = ({ data }: { data: ResultPerformance }) => {
   const { keyword } = useResult();
   const pieceCount = getPieceCount(data.programs);
+  const { openModal } = useModal();
+
   return (
     <Link to={`/detail/${data.id}`} target="_blank">
       <div className="gap-066 flex cursor-pointer flex-col">
@@ -49,12 +52,19 @@ const ResultPerformanceAlbumCard = ({ data }: { data: ResultPerformance }) => {
               />
             )}
           </div>
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between pt-3">
             <ResultPriceDisplay
               minPrice={data.minPrice}
               maxPrice={data.maxPrice}
             />
-            <button className="rounded-button bg-main transition-scale flex h-[1.53rem] w-[2.45rem] items-center justify-center text-[0.66rem]/[0.88rem] font-medium text-white duration-200 ease-in-out hover:scale-105">
+            <button
+              className="rounded-button bg-main transition-scale flex h-[1.53rem] w-[2.45rem] items-center justify-center text-[0.66rem]/[0.88rem] font-medium text-white duration-200 ease-in-out hover:scale-105"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                openModal("BOOKING", { bookingLinks: data.bookingLinks });
+              }}
+            >
               예매
             </button>
           </div>

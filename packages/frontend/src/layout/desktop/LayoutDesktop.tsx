@@ -109,7 +109,7 @@ export const LayoutDesktopWrapper = ({
         <div className="fixed top-0 left-0 z-15 bg-[rgba(0,0,0,0.3)] w-full h-full"></div>
       )}
       <div ref={ref} className="h-1 bg-transparent"></div>
-      <main className={`${paddingTopClassName} pb-[6.12rem] ${marginTopClassName} max-w-7xl mx-auto`}>
+      <main className={`${paddingTopClassName} ${marginTopClassName} pb-4 max-w-7xl mx-auto`}>
         {children}
       </main>
       <Footer />

@@ -23,7 +23,7 @@ const TicketVendor: React.FC<ModalTicketVendorProps> = ({
   };
 
   return (
-    <a href={url} className="block" onClick={handleClick}>
+    <a href={url} className="block" target="_blank" onClick={handleClick}>
       <div className="flex flex-col justify-center items-center rounded-main border-2 border-black/10 h-[7.47rem] w-full">
         <div className="flex flex-col items-center gap-[0.47rem]">
           <div
