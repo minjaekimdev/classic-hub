@@ -20,7 +20,7 @@ export function SearchFilterDateSelectDesktop() {
 
     calendarDateRange = {
       from: new Date(DateTransformer.format(startDate, "dash")),
-      to: new Date(DateTransformer.format(endDate, "dash")),
+      to: new Date(DateTransformer.format(endDate!, "dash")),
     };
   }
 

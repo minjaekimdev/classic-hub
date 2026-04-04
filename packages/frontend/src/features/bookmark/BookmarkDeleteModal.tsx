@@ -1,7 +1,6 @@
 import React from "react";
 import alertIcon from "@shared/assets/icons/alert.svg";
-import ButtonGroup from "@/shared/ui/buttons/CancelConfirmButtons";
-import Modal from "@/shared/ui/modal/Modal";
+import { ModalWrapper } from "@/app/providers/modal/ModalWrapper";
 
 interface BookmarkDeleteModalProps {
   title: string;
@@ -9,9 +8,9 @@ interface BookmarkDeleteModalProps {
 
 const BookmarkDeleteModal: React.FC<BookmarkDeleteModalProps> = ({ title }) => {
   return (
-    <Modal>
+    <ModalWrapper>
       <div className="flex flex-col">
-        <div className="flex items-center gap-[0.66rem]">
+        <div className="flex items-center gap-066">
           <img
             className="flex justify-center items-center rounded-full p-[0.66rem] bg-[#ffe2e2]"
             src={alertIcon}
@@ -29,9 +28,8 @@ const BookmarkDeleteModal: React.FC<BookmarkDeleteModalProps> = ({ title }) => {
             을(를) 찜한 공연 목록에서 삭제합니다.
           </span>
         </p>
-        <ButtonGroup mainText="삭제" />
       </div>
-    </Modal>
+    </ModalWrapper>
   );
 };
 

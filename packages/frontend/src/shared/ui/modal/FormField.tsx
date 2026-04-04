@@ -73,7 +73,7 @@ const FormField = forwardRef<
       >
         {props.isSingleLine ? (
           <input
-            // 이 부분이 핵심입니다!
+            // 이 부분이 핵심
             // 상위에서 넘어온 범용 ref를 input 전용으로 단언해줍니다.
             ref={ref as React.Ref<HTMLInputElement>}
             className="w-full bg-transparent text-[0.77rem] text-[#717182] outline-none"

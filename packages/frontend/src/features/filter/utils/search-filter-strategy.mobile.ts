@@ -9,7 +9,7 @@ export type FieldTypeKo = "지역" | "가격" | "기간";
 
 interface FilterInterface {
   key: Exclude<FieldType, "keyword">;
-  format: (value: QueryParams) => string | undefined;
+  format: (value: QueryParams) => string | null;
   isSelected: (value: QueryParams) => boolean;
 }
 
@@ -27,7 +27,9 @@ export const FILTER_STRATEGY: Record<FieldTypeKo, FilterInterface> = {
   기간: {
     key: "period",
     format: (v) =>
-      `${DateTransformer.format(v.startDate, "slash")} ~ ${DateTransformer.format(v.endDate, "slash")}`,
+      v.startDate
+        ? `${DateTransformer.format(v.startDate, "slash")} ~ ${DateTransformer.format(v.endDate!, "slash")}`
+        : "",
     isSelected: (v) => !!v.startDate,
   },
 };
