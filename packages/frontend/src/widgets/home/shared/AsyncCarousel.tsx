@@ -2,6 +2,7 @@ import { HomePerformanceAlbumCardSkeleton } from "@/features/performance/ui/desk
 import { DesktopCarousel } from "./DesktopCarousel";
 import { ErrorMessageWithRefetch } from "@/shared/ui/fallback/ErrorMessage";
 import type { QueryObserverResult } from "@tanstack/react-query";
+import type { SwiperOptions } from "swiper/types";
 
 export interface BaseItem {
   id: string;
@@ -12,17 +13,16 @@ interface AsyncCarousel<T> {
   isLoading: boolean;
   isError: boolean;
   refetch: () => Promise<QueryObserverResult>;
-  breakPoints: Record<number, { slidesPerView: number }>;
-  slidesPerGroup?: number;
+  breakPoints: SwiperOptions["breakpoints"];
   renderItem: (item: T) => React.ReactNode;
 }
+
 export const AsyncCarousel = <T extends BaseItem>({
   performances,
   isLoading,
   isError,
   refetch,
   breakPoints,
-  slidesPerGroup,
   renderItem,
 }: AsyncCarousel<T>) => {
   const skeletonItems = Array.from({ length: 5 }, (_, index) => ({
@@ -33,7 +33,6 @@ export const AsyncCarousel = <T extends BaseItem>({
     return (
       <DesktopCarousel
         items={skeletonItems}
-        slidesPerView={2.2} // 랭킹은 모바일에서 2.2개
         breakpoints={breakPoints}
         renderItem={() => <HomePerformanceAlbumCardSkeleton />}
       />
@@ -44,8 +43,6 @@ export const AsyncCarousel = <T extends BaseItem>({
   return (
     <DesktopCarousel
       items={performances as T[]}
-      slidesPerView={2.2}
-      slidesPerGroup={slidesPerGroup}
       breakpoints={breakPoints}
       renderItem={renderItem}
     />
