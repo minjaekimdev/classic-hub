@@ -26,12 +26,7 @@ const ResultPriceDisplay = ({ minPrice, maxPrice }: ResultPriceDisplay) => {
 
   return (
     <p className={`${fontStyle}`}>
-      {formattedMin}원
-      <span className="text-[#6a7282] text-[0.77rem]/[1.1rem font-normal]">
-        {" "}
-        ~{" "}
-      </span>
-      {formattedMax}원
+      {`${formattedMin}원 \u00A0~\u00A0${formattedMax}원`}
     </p>
   );
 };
