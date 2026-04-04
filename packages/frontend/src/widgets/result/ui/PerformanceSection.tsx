@@ -8,7 +8,7 @@ import useDesktopGridStyle from "../hooks/usePerformancesDesktop";
 import ResultPerformanceAlbumCardSkeleton from "@/features/performance/ui/desktop/ResultPerformanceAlbumCardSkeleton";
 import EmptyState from "@/shared/ui/fallback/EmptyState";
 import { ErrorMessageWithRefetch } from "@/shared/ui/fallback/ErrorMessage";
-import ResultPerformanceListCard from "@/features/performance/ui/desktop/ResultPerformanceListCard";
+import ResultPerformanceListCard from "@/features/performance/ui/mobile/ResultPerformanceListCard";
 import { useFilter } from "@/features/filter/contexts/filter-context";
 
 const PerformancesMobile = () => {

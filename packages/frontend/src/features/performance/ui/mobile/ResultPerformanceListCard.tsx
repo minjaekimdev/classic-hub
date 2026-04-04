@@ -4,9 +4,9 @@ import type { ResultPerformance } from "@classic-hub/shared/types/client";
 import calendarIcon from "@shared/assets/icons/calendar-gray.svg";
 import locationIcon from "@shared/assets/icons/location-gray.svg";
 import formatDateRange from "@/shared/utils/formatDateRange";
-import ResultPriceDisplay from "./ResultPriceDisplay";
+import ResultPriceDisplay from "../desktop/ResultPriceDisplay";
 import { useResult } from "../../contexts/result-context";
-import { getPieceCount } from "./ResultPerformanceAlbumCard/utils";
+import { getPieceCount } from "../desktop/ResultPerformanceAlbumCard/utils";
 import { MatchedProgram } from "../shared/MatchedProgram";
 import { Link } from "react-router-dom";
 
