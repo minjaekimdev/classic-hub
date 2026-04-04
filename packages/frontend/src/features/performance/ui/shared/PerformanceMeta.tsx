@@ -12,9 +12,9 @@ interface MetaItemProps {
 
 export const MetaItem = ({ iconSrc, children }: MetaItemProps) => {
   return (
-    <li className="gap-022 flex items-center text-[0.66rem]/[0.88rem] text-[#6a7282]">
+    <li className="gap-022 flex min-w-0 items-center text-[0.66rem]/[0.88rem] text-[#6a7282]">
       <img src={iconSrc} alt="" />
-      {children}
+      <div className="min-w-0 flex-1">{children}</div>
     </li>
   );
 };
@@ -50,11 +50,13 @@ const PerformanceMeta = ({
         {renderComposers()}
       </div>
       <div className="flex flex-col">
-        <ul className="flex flex-col gap-[0.33rem]">
+        <ul className="gap-033 flex flex-col">
           <MetaItem iconSrc={calendarIcon}>
             {formatDateRange(startDate, endDate)}
           </MetaItem>
-          <MetaItem iconSrc={locationIcon}>{venue}</MetaItem>
+          <MetaItem iconSrc={locationIcon}>
+            {venue}
+          </MetaItem>
         </ul>
       </div>
     </div>

@@ -10,7 +10,7 @@ const formatDateRange = (startDate: string | null, endDate: string | null) => {
   if (startDate === endDate) {
     return `${parsedStartDate}(${days[startDayIdx]})`;
   }
-  return `${parsedStartDate}(${days[startDayIdx]}) ~ ${parsedEndDate}(${days[endDayIdx]})`;
+  return `${parsedStartDate}(${days[startDayIdx]}) \u00A0~\u00A0${parsedEndDate}(${days[endDayIdx]})`;
 };
 
 export default formatDateRange;

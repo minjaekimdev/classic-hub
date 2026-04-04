@@ -34,6 +34,10 @@ export const FilterProvider = ({ children }: { children: React.ReactNode }) => {
   const close = () => setIsOpen(false);
   const changeFilterValue = (value: Partial<Filter>) => {
     setFilterValue((prev) => ({ ...prev, ...value }));
+    window.scrollTo({
+      top: 0,
+      behavior: "instant", // 부드럽게 올리고 싶으면 "smooth", 즉시 올리려면 "instant"
+    });
   };
   const reset = () => {
     setOpenedRegion(null);
