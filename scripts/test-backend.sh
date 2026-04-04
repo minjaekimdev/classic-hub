@@ -25,13 +25,16 @@ fi
 echo -e "${YELLOW}🚀 [3/5] Supabase 인프라 최적화 리셋...${NC}"
 
 # Supabase가 이미 실행 중인지 확인
+# 🚀 [3/5] 수정된 스마트 리셋 로직
+echo -e "${YELLOW}🚀 [3/5] Supabase 인프라 최적화 리셋...${NC}"
+
 if npx supabase status > /dev/null 2>&1; then
   echo -e "${GREEN}이미 Supabase가 실행 중입니다. DB 스키마만 빠르게 리셋합니다...${NC}"
-  # DB만 밀고 마이그레이션 파일을 다시 적용 (매우 빠름)
   npx supabase db reset
 else
-  echo -e "${YELLOW}Supabase가 꺼져 있습니다. 인프라를 새로 가동합니다...${NC}"
-  # 꺼져 있을 때는 전체 인프라 가동
+  echo -e "${YELLOW}Supabase 상태가 불안정하거나 꺼져 있습니다. 인프라를 새로 정리하고 가동합니다...${NC}"
+  # 💡 포인트: 혹시 모를 좀비 컨테이너를 위해 확실히 멈추고 시작
+  npx supabase stop --no-backup > /dev/null 2>&1 || true
   npx supabase start
 fi
 
