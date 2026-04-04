@@ -31,19 +31,19 @@ const Dropdown = ({ label, menuArray }: DropdownProps) => {
   const [selected, setSelected] = useState<string>(menuArray[0]);
   return (
     <div className="shrink-0 flex items-center gap-[0.38rem]">
-      <span className="text-[#0a0a0a] text-[0.77rem]/[1.09rem] font-medium">
+      <span className="text-dark text-[0.77rem]/[1.09rem] font-medium">
         {label}:
       </span>
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger>
-          <div className="flex items-center justify-between rounded-[0.42rem] border border-transparent bg-[#f3f3f5] w-[9.38rem] px-[0.66rem] h-[1.97rem] cursor-pointer">
-            <span className="text-[#0a0a0a] text-[0.77rem]/[1.09rem]">
+          <div className="flex items-center justify-between rounded-button border border-transparent bg-[#f3f3f5] w-[9.38rem] px-066 h-[1.97rem] cursor-pointer">
+            <span className="text-dark text-[0.77rem]/[1.09rem]">
               {selected}
             </span>
             <img
               src={dropdownIcon}
               alt="드롭다운 아이콘"
-              className="w-[0.88rem] h-[0.88rem]"
+              className="w-088 h-088"
             />
           </div>
         </DropdownMenuTrigger>
@@ -64,16 +64,16 @@ const Dropdown = ({ label, menuArray }: DropdownProps) => {
 
 const BookmarkFilter = () => {
   return (
-    <div className="flex justify-between items-center flex-wrap rounded-[0.55rem] bg-[rgba(236,236,240,0.3)] px-[0.88rem]">
-      <div className="shrink-0 flex items-center gap-[0.44rem] py-[0.88rem]">
+    <div className="flex justify-between items-center flex-wrap rounded-055 bg-[rgba(236,236,240,0.3)] px-088">
+      <div className="shrink-0 flex items-center gap-[0.44rem] py-088">
         <img
           src={calendarIcon}
           alt="달력 아이콘"
-          className="w-[0.88rem] h-[0.88rem]"
+          className="w-088 h-088"
         />
         <Dropdown label="월별 필터" menuArray={monthArray} />
       </div>
-      <div className="pb-[0.88rem] tablet:p-[0.88rem]">
+      <div className="pb-088 tablet:p-088">
         <Dropdown label="정렬" menuArray={sortMenuArray} />
       </div>
     </div>

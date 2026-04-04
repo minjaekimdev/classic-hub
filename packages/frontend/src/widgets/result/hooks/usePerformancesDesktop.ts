@@ -4,18 +4,22 @@ import useBreakpoint from "@/shared/hooks/useBreakpoint";
 const useDesktopGridStyle = () => {
   const { isOpen } = useFilter();
 
-  const isDesktop = useBreakpoint(1280);
-  const isMobile = useBreakpoint(960);
+  // useBreakpoint(n)은 너비가 n 이하일 때 true를 반환함
+  const isTabletSize = useBreakpoint(1280); // 1280px 이하인가?
 
-  let gridStyle;
-  // 뷰포트 너비와 필터 열림 여부를 확인하여 그리드 열 개수 설정
-  if (!isMobile && isDesktop) {
-    gridStyle = isOpen ? "grid-cols-2" : "grid-cols-3";
-  } else {
-    gridStyle = "grid-cols-4";
-  }
+  // 1. 상태를 하나의 키로 조합 (작은 순서대로 체크하는 것이 안전함)
+  const deviceState = isTabletSize ? "tablet" : "desktop";
 
-  return gridStyle;
+  const filterState = isOpen ? "open" : "closed";
+
+  // 2. 설정 맵 정의 (가독성이 좋아지고 수정이 쉬워짐)
+  const GRID_MAP = {
+    desktop: { open: "grid-cols-4", closed: "grid-cols-5" },
+    tablet: { open: "grid-cols-3", closed: "grid-cols-4" },
+  } as const;
+
+  // 3. 값 반환
+  return GRID_MAP[deviceState][filterState];
 };
 
 export default useDesktopGridStyle;

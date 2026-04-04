@@ -8,9 +8,10 @@ import { useNavigate } from "react-router-dom";
 import getWeekendDate from "@/shared/utils/getWeekendDate";
 
 const WEEKEND_BREAKPOINTS = {
-  600: { slidesPerView: 3.2 },
-  960: { slidesPerView: 4 },
-  1280: { slidesPerView: 5 },
+  320: { slidesPerView: 2.2, slidesPerGroup: 2, spaceBetween: 20 },
+  600: { slidesPerView: 3.2, slidesPerGroup: 3, spaceBetween: 20 },
+  960: { slidesPerView: 4, slidesPerGroup: 4, spaceBetween: 20 },
+  1280: { slidesPerView: 5, slidesPerGroup: 5, spaceBetween: 20 },
 };
 
 export const WeekendPerformances = () => {
@@ -37,7 +38,6 @@ export const WeekendPerformances = () => {
         isError={isError}
         refetch={refetch}
         breakPoints={WEEKEND_BREAKPOINTS}
-        slidesPerGroup={5}
         renderItem={(performance) => (
           <HomePerformanceAlbumCard data={performance} />
         )}

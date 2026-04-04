@@ -7,20 +7,32 @@ const HeaderMobile = () => {
   const navigate = useNavigate();
 
   const handleBack = () => {
-    navigate(-1); // 뒤로 가기 실행 
+    navigate(-1);
   };
 
   return (
-    <div className="flex h-14 items-center justify-between px-[0.44rem]">
-      <div className="flex flex-1 justify-start" onClick={handleBack}>
-        <img src={arrowIcon} alt="뒤로가기" className="" />
+    <div className="flex h-14 items-center justify-between bg-white px-4">
+      {/* 1. 뒤로가기 버튼 영역: 고정 너비를 주어 중앙 제목이 밀리지 않게 함 */}
+      <div className="flex w-10 shrink-0 justify-start">
+        <button
+          onClick={handleBack}
+          className="-ml-1 p-1 transition-opacity active:opacity-50"
+          aria-label="뒤로가기"
+        >
+          <img src={arrowIcon} alt="" className="h-6 w-6" />
+        </button>
       </div>
-      <span className="text-dark flex-none text-[0.88rem]/[1.31rem] font-semibold">
-        {title}
-      </span>
-      <div className="flex-1"></div>
+
+      {/* 2. 제목 영역: flex-1과 min-w-0을 주어 말줄임표가 작동하게 함 */}
+      <div className="min-w-0 flex-1 text-center">
+        <h1 className="text-dark truncate text-[0.88rem] font-semibold">
+          {title}
+        </h1>
+      </div>
+
+      {/* 3. 우측 여백 영역: 왼쪽 버튼 영역과 동일한 너비를 주어 제목을 정중앙에 배치 */}
+      <div className="w-10 shrink-0"></div>
     </div>
   );
 };
-
 export default HeaderMobile;

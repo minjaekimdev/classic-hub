@@ -7,9 +7,10 @@ import { HomePerformanceRankingCard } from "@/features/performance/ui/desktop/Ho
 import { useNavigate } from "react-router-dom";
 
 const RANKING_BREAKPOINTS = {
-  600: { slidesPerView: 3.2 },
-  960: { slidesPerView: 4 },
-  1280: { slidesPerView: 5 },
+  320: { slidesPerView: 2.2, slidesPerGroup: 1, spaceBetween: 20 },
+  600: { slidesPerView: 3.2, slidesPerGroup: 1, spaceBetween: 20 },
+  960: { slidesPerView: 4, slidesPerGroup: 1, spaceBetween: 20 },
+  1280: { slidesPerView: 5, slidesPerGroup: 1, spaceBetween: 20 },
 };
 
 export const RankingPerformances = () => {

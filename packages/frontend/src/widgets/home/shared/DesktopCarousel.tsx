@@ -10,18 +10,12 @@ interface DesktopCarouselProps<T> {
   items: T[];
   renderItem: (item: T) => React.ReactNode;
   breakpoints?: SwiperOptions["breakpoints"];
-  slidesPerView?: number | "auto";
-  slidesPerGroup?: number;
-  spaceBetween?: number;
 }
 
 export const DesktopCarousel = <T extends BaseItem>({
   items,
   renderItem,
   breakpoints,
-  slidesPerView = 4, // 기본값
-  slidesPerGroup = 1, // 기본값
-  spaceBetween = 21,
 }: DesktopCarouselProps<T>) => {
   const uniqueId = useId().replace(/:/g, "");
   const prevClass = `prev-${uniqueId}`;
@@ -37,9 +31,6 @@ export const DesktopCarousel = <T extends BaseItem>({
       <Swiper
         modules={[Navigation]}
         navigation={{ prevEl: `.${prevClass}`, nextEl: `.${nextClass}` }}
-        spaceBetween={spaceBetween}
-        slidesPerView={slidesPerView}
-        slidesPerGroup={slidesPerGroup}
         breakpoints={breakpoints}
         allowTouchMove={true} // 모바일 대응을 위해 true 권장
       >
