@@ -1,6 +1,6 @@
 # lefthook.yml
 pre-push:
-  parallel: false # 인프라 준비 순서가 중요하므로 순차 실행
+  parallel: true # 인프라 준비 순서가 중요하므로 순차 실행
   commands:
     backend-integrity:
       # 백엔드 코드나 공유 라이브러리(shared)가 바뀌었을 때만 실행
