@@ -1,13 +1,13 @@
 # lefthook.yml
 pre-push:
-  parallel: true # 인프라 준비 순서가 중요하므로 순차 실행
+  parallel: true
   commands:
     backend-integrity:
-      # 백엔드 코드나 공유 라이브러리(shared)가 바뀌었을 때만 실행
+      # 백엔드 코드나 shared가 바뀌었을 때 실행
       glob: "{packages/backend/**/*,packages/shared/**/*,scripts/**/*}"
       run: bash ./scripts/test-backend.sh
 
     frontend-check:
-      # 프런트엔드 관련 파일이 바뀌었을 때만 빌드 체크
-      glob: "packages/frontend/**/*"
+      # 프론트엔드 코드나 shared가 바뀌었을 때 실행
+      glob: "{packages/frontend/**/*,packages/shared/**/*}"
       run: npx turbo run build --filter=frontend
