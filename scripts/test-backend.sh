@@ -7,7 +7,8 @@ YELLOW='\033[1;33m'
 NC='\033[0m'
 
 echo -e "${YELLOW}🏗️  [1/5] 빌드 및 타입 체크 시작...${NC}"
-npx turbo run build --filter=backend...
+# 준비에 오래 걸리는 테스트를 하기 전에 빌드를 통해 에러를 걸러낸다.
+npx turbo run build --filter=backend
 
 # [2/5] Docker 엔진 상태 확인... (동일)
 echo -e "${YELLOW}🐳 [2/5] Docker 엔진 상태 확인...${NC}"
