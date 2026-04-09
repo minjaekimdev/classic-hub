@@ -45,9 +45,6 @@ node ./scripts/sync-env.js
 
 # [5/5] 백엔드 로직 통합 테스트 실행... (동일)
 echo -e "${YELLOW}🧪 [5/5] 백엔드 로직 통합 테스트 실행...${NC}"
-
-# DB 테스트 이므로 순차 실행을 위해 && 사용
-# --continue=never를 통해 테스트 하나가 실패하면 전체가 실패하도록
 npx turbo run test-update-performances --filter=backend
 
 echo -e "${GREEN}🎉 모든 검증을 통과했습니다! 안전하게 푸시를 진행합니다.${NC}"
