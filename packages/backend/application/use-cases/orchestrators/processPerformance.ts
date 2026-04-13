@@ -1,8 +1,5 @@
 import getProgramJSON from "@/application/use-cases/program/getProgramJSON";
-import {
-  getPerformanceDetail,
-  toMappedPerformanceDetail,
-} from "@/application/use-cases/fetchers/getPerformanceDetailArray";
+import { getPerformanceDetail } from "@/application/use-cases/fetchers/getPerformanceDetailArray";
 import getProgramText from "@/application/use-cases/program/getProgramText";
 import { ProcessResult } from "shared/types/sync";
 import { imageFetcher } from "@/shared/utils/imageFetcher";
@@ -11,6 +8,7 @@ import logger from "@/shared/utils/logger";
 import { uploadPosterToStorage } from "../database/uploadPosterToStorage";
 import { sanitizeImageBuffer } from "../program/sanitizeImageBuffer";
 import { splitLongImage } from "../program/splitLongImage";
+import { toDbPerformance } from "../mappers/toDbPerformance";
 
 export const processPerformance = async (
   id: string,
@@ -152,10 +150,11 @@ export const processPerformance = async (
     };
   }
 
-  const processedPerformance = toMappedPerformanceDetail(
+  const processedPerformance = toDbPerformance(
     performanceDetail,
     programJSON,
     storagePosterUrl,
+    detailUrlArray,
   );
 
   return {

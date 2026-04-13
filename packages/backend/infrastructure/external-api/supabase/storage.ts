@@ -53,7 +53,9 @@ export const getStorageContentPaths = async (
   bucketName: string,
   path: string = "",
 ) => {
-  const { data, error } = await supabase.storage.from(bucketName).list(path); // path가 빈 문자열이면 루트(폴더) 목록을 가져옵니다.
+  const { data, error } = await supabase.storage
+    .from(bucketName)
+    .list(path, { limit: 10000 }); // path가 빈 문자열이면 루트(폴더) 목록을 가져옵니다.
 
   if (error) {
     throw new APIError(
