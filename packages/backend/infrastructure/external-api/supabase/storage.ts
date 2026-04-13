@@ -32,57 +32,24 @@ export const uploadToStorage = async (
   return `${publicUrl}?t=${Date.now()}`;
 };
 
-export const clearStorage = async (bucket: string) => {
-  // 1. 모든 파일(하위 폴더 포함)의 전체 경로를 가져오는 헬퍼 함수
-  const getAllFiles = async (path: string = ""): Promise<string[]> => {
-    const { data, error } = await supabase.storage.from(bucket).list(path);
-    if (error) throw error;
-    if (!data) return [];
-
-    let files: string[] = [];
-
-    for (const item of data) {
-      const fullPath = path ? `${path}/${item.name}` : item.name;
-
-      // id가 있으면 파일, 없으면 폴더로 간주 (Supabase 특성)
-      if (item.id) {
-        files.push(fullPath);
-      } else {
-        // 폴더인 경우 재귀적으로 내부 파일 탐색
-        const subFiles = await getAllFiles(fullPath);
-        files = [...files, ...subFiles];
-      }
-    }
-    return files;
-  };
-
+export const clearStorage = async (bucket: string, filePaths: string[]) => {
   try {
-    const allFilePaths = await getAllFiles();
-
-    if (allFilePaths.length === 0) {
-      console.log("삭제할 파일이 없습니다.");
-      return;
-    }
-
     // 2. 찾아낸 모든 '파일' 경로로 삭제 실행
-    const { data, error: removeError } = await supabase.storage
+    const { error: removeError } = await supabase.storage
       .from(bucket)
-      .remove(allFilePaths);
+      .remove(filePaths);
 
     if (removeError) throw removeError;
-
-    console.log(`data: ${data}`);
-    console.log(`error: ${removeError}`);
     logger.info("Storage bucket cleared successfully", {
       bucket,
-      count: allFilePaths.length,
+      count: filePaths.length,
     });
   } catch (error: any) {
     throw new APIError(`[CLEAR_STORAGE_FAIL] ${error.message}`);
   }
 };
 
-export const getStorageFiles = async (
+export const getStorageContentPaths = async (
   bucketName: string,
   path: string = "",
 ) => {
@@ -98,6 +65,6 @@ export const getStorageFiles = async (
     service: "supabase",
   });
 
-  // 파일들의 이름(name)만 추출해서 배열로 반환
+  // 폴더 혹은 파일들의 이름(name)만 추출해서 배열로 반환
   return data.map((file) => file.name);
 };
