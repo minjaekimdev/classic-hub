@@ -16,8 +16,7 @@ export const toMappedPerformanceDetail = (
   performanceDetail: PerformanceDetail,
   programJSON: ProgramExtractionResponse,
   storagePosterUrl: string,
-  storageDetailUrls: string[],
-): DBPerformanceWrite => {
+) => {
   const {
     mt20id,
     mt10id,
@@ -58,7 +57,6 @@ export const toMappedPerformanceDetail = (
     poster: storagePosterUrl,
     state: prfstate,
     booking_links: getParsedBookingLinks(relates.relate) as unknown as Json,
-    detail_image: storageDetailUrls,
     time: dtguidance,
     raw_data: rest, // 나머지 15개 내외의 데이터가 JSON 형태로 들어감
     program: programJSON as unknown as Json,

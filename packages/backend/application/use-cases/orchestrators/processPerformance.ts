@@ -8,7 +8,6 @@ import { ProcessResult } from "shared/types/sync";
 import { imageFetcher } from "@/shared/utils/imageFetcher";
 import sharp from "sharp";
 import logger from "@/shared/utils/logger";
-import { uploadDetailImagesToStorage } from "../database/uploadDetailImagesToStorage";
 import { uploadPosterToStorage } from "../database/uploadPosterToStorage";
 import { sanitizeImageBuffer } from "../program/sanitizeImageBuffer";
 import { splitLongImage } from "../program/splitLongImage";
@@ -153,25 +152,10 @@ export const processPerformance = async (
     };
   }
 
-  const storageDetailUrls = await uploadDetailImagesToStorage(
-    id,
-    processedDetailImageBuffers,
-  );
-
-  if (!storageDetailUrls) {
-    logger.error("[INSERT_FAIL] Storage Insert Failed");
-    return {
-      id,
-      error: "StorageError",
-      data: null,
-    };
-  }
-
   const processedPerformance = toMappedPerformanceDetail(
     performanceDetail,
     programJSON,
     storagePosterUrl,
-    storageDetailUrls,
   );
 
   return {
