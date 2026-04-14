@@ -13,18 +13,6 @@ import { toDbPerformance } from "../mappers/toDbPerformance";
 export const processPerformance = async (
   id: string,
 ): Promise<ProcessResult> => {
-  logger.info("Fetching Performance...");
-  const performanceDetail = await getPerformanceDetail(id);
-
-  if (!performanceDetail) {
-    logger.error("[FETCH_FAIL] Performance fetch failed");
-    return {
-      id,
-      error: "PerformanceFetchError",
-      data: null,
-    };
-  }
-
   // 이미지 페칭 (포스터 + 상세이미지)
   const posterUrl = performanceDetail.poster;
   const rawDetailUrls = performanceDetail.styurls.styurl;

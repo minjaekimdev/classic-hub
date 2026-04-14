@@ -1,13 +1,12 @@
-import { deletePerformances } from "@/application/use-cases/database/deletePerformances";
-import { getPerformanceIds } from "@/application/use-cases/fetchers/getPerformanceIds";
 import { ProcessResult } from "@/shared/types/sync";
 import logger from "@/shared/utils/logger";
 import { sendSlackNotification } from "@/shared/utils/monitor";
 import promiseLimiter from "@/shared/utils/promiseLimiter";
 import RateLimiter from "@/shared/utils/rateLimiter";
 import { Dayjs } from "dayjs";
-import { callDatabaseFunction, insertData } from "../../../infrastructure/external-api/supabase/database";
-import { compareNewOld } from "../database/compareNewOld";
+import {
+  callDatabaseFunction,
+} from "../../../infrastructure/external-api/supabase/database";
 import { saveFailuresToArtifact } from "../../../infrastructure/external-api/github/saveFailuresToArtifact";
 import { processPerformance } from "./processPerformance";
 
@@ -15,7 +14,7 @@ const retry = async (
   initialFailures: Array<ProcessResult>,
   maxRepeat: number,
 ) => {
-  const retrySuccesses = [];
+  const retrytransformSuccesses = [];
   let retryFailures = initialFailures;
   let repeat = 1;
 
@@ -37,7 +36,7 @@ const retry = async (
       1000,
     );
 
-    retrySuccesses.push(
+    retrytransformSuccesses.push(
       ...results.filter((result) => result.data).map((item) => item.data),
     );
 
@@ -49,8 +48,11 @@ const retry = async (
     repeat++;
   }
 
-  return { retrySuccesses, retryFailures }; // 최종적으로 성공, 실패한 목록 반환
+  return { retrytransformSuccesses, retryFailures }; // 최종적으로 성공, 실패한 목록 반환
 };
+
+const failedPerformances = [];
+
 
 export const syncPerformanceData = async (
   now: Dayjs,
@@ -58,59 +60,23 @@ export const syncPerformanceData = async (
   endDate: string,
   afterDate: string,
   updateEndDate: string,
-  kopisRateLimiter: RateLimiter,
-  table: string,
   maxRepeat: number,
 ) => {
-  logger.info(
-    `Fetching new performance datas at ${now.format("YYYYMMDD")} (target period: ${startDate} ~ ${endDate})`,
-  );
-  const newPerformances = await getPerformanceIds(
-    startDate,
-    endDate,
-    kopisRateLimiter,
-  );
-
-  const { idsToDelete, idsToInsert } = await compareNewOld(newPerformances);
-
-  // 공연 데이터 삭제
-  if (idsToDelete.length > 0) {
-    console.log(`🚀 IDs to Delete: ${idsToDelete.length}`);
-    logger.info("Deleting old performance datas...");
-
-    // 내부에서 fallback 로직 실행
-    await deletePerformances(idsToDelete);
-  } else {
-    logger.info("Nothing to Delete.");
-  }
-
-  if (idsToInsert.length > 0) {
-    console.log(`🚀 IDs to Insert: ${idsToInsert.length}`);
-  } else {
-    logger.info("Noting to Insert.");
-  }
-
-  // 수정된 공연 데이터 가져오기
-  logger.info("Processing New & Updated Performance datas...");
-
-  const idsToUpdate = await getPerformanceIds(
-    startDate,
-    updateEndDate,
-    kopisRateLimiter,
-    afterDate,
-  );
-
-  // isToUpdate와 isToInsert에 동일한 key를 가진 데이터가 존재할 수 있으므로 set으로 제외
-  const targetIds = [...new Set([...idsToInsert, ...idsToUpdate])];
+  const failedIds = []; // 추후 재시도 및 로깅을 위해 처리에 실패한 데이터들을 저장
 
   // DB에 배치 삽입할 데이터들을 저장하는 배열
-  const successes = [];
+  const transformSuccesses = [];
 
   // 공연 데이터 처리
-  const results = await promiseLimiter(targetIds, processPerformance, 5, 1000);
+  const results = await promiseLimiter(
+    idsToProcess,
+    processPerformance,
+    5,
+    1000,
+  );
 
-  // 첫 시도에서 성공한 공연 데이터들을 successes 배열에 저장
-  successes.push(
+  // 첫 시도에서 성공한 공연 데이터들을 transformSuccesses 배열에 저장
+  transformSuccesses.push(
     ...results.filter((result) => result.data).map((item) => item.data),
   );
 
@@ -121,11 +87,11 @@ export const syncPerformanceData = async (
   }
 
   // 재시도
-  const { retrySuccesses, retryFailures } = await retry(
+  const { retrytransformSuccesses, retryFailures } = await retry(
     initialFailures,
     maxRepeat,
   );
-  successes.push(...retrySuccesses);
+  transformSuccesses.push(...retrytransformSuccesses);
 
   // 재시도 이후에도 처리에 실패한 데이터가 존재한다면 알림 전송 & Artifact에 저장
   if (retryFailures.length > 0) {
@@ -141,14 +107,16 @@ export const syncPerformanceData = async (
 
   // DB에 bulk insert
   try {
-    await callDatabaseFunction("upsert_performances_bulk", {payload: successes});
+    await callDatabaseFunction("upsert_performances_bulk", {
+      payload: transformSuccesses,
+    });
   } catch (error) {
     logger.error("[INSERT_FAIL] DB Batch Insert failed", error);
     await sendSlackNotification("❌ [INSERT_FAIL] Data Bulk Insert Failed");
     // DB insert에 실패한 데이터도 알림 전송 & Artifact에 저장
     saveFailuresToArtifact(
       "failed_actions.json",
-      successes,
+      transformSuccesses,
       "BatchInsertError",
     );
   }

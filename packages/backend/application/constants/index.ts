@@ -1,2 +1,3 @@
-export const STORAGE_NAME = "performances";
-export const KOPIS_RATE_LIMIT = 300;
+export const RATE_LIMIT = {
+  KOPIS: 300,
+}

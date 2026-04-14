@@ -22,8 +22,6 @@ export async function withErrorHandling<T>(
   try {
     return await operation();
   } catch (error: any) {
-    logger.error("Operation failed", { error, stack: error.stack, service });
-
     if (fallback !== undefined) {
       return typeof fallback === "function" ? await fallback() : fallback;
     }
