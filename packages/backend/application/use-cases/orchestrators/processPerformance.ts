@@ -1,5 +1,5 @@
 import getProgramJSON from "@/application/use-cases/program/getProgramJSON";
-import { getPerformanceDetail } from "@/application/use-cases/fetchers/getPerformanceDetailArray";
+import { getPerformanceDetail } from "@/application/use-cases/fetchers/getPerformanceDetail";
 import getProgramText from "@/application/use-cases/program/getProgramText";
 import { ProcessResult } from "shared/types/sync";
 import { imageFetcher } from "@/shared/utils/imageFetcher";

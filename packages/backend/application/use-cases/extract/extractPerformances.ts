@@ -4,9 +4,10 @@ import { Dayjs } from "dayjs";
 import { compareNewOld } from "../database/compareNewOld";
 import { getPerformanceIds } from "../fetchers/getPerformanceIds";
 import { deletePerformances } from "../database/deletePerformances";
-import { getPerformanceDetail } from "../fetchers/getPerformanceDetailArray";
+import { getPerformanceDetail } from "../fetchers/getPerformanceDetail";
 import { RATE_LIMIT } from "@/application/constants";
 import { failureCollector } from "../shared/failureCollector";
+import { DetailPerformance } from "@classic-hub/shared/types/client";
 
 const kopisRateLimiter = new RateLimiter(RATE_LIMIT.KOPIS);
 
@@ -23,31 +24,32 @@ const deleteOldPerformances = async (ids: string[]) => {
 };
 
 const getNewPerformances = async (ids: string[]) => {
+  const result: DetailPerformance[] = [];
   for (const id of ids) {
-    const performanceDetail = await kopisRateLimiter.execute(() =>
-      getPerformanceDetail(id),
-    );
-
-    if (!performanceDetail) {
+    try {
+      const performanceDetail = await kopisRateLimiter.execute(() =>
+        getPerformanceDetail(id),
+      );
+      result.push(performanceDetail);
+    } catch (error: unknown) {
       logger.error("[FETCH_FAIL] Performance fetch failed");
-      failureCollector.add(id, "EXTRACT", );
-      failedPerformances.push({
-        id,
-        error: "kopisFetchError",
-      });
-      continue;
+      if (error instanceof Error) {
+        failureCollector.add(id, "EXTRACT", error.message);
+      } else {
+        failureCollector.add(id, "EXTRACT", String(error));
+      }
     }
   }
+
+  return result;
 };
 
-// TODO: ETL 파이프라인에서 실패한 데이터를 모을 배열을 각 단계별 함수에 일일이 인자로 줘야 할까?
 export const extractPerformances = async (
   now: Dayjs,
   startDate: string,
   endDate: string,
   afterDate: string,
   updateEndDate: string,
-  kopisRateLimiter: RateLimiter,
 ) => {
   logger.info(
     `Fetching new performance datas at ${now.format("YYYYMMDD")} (target period: ${startDate} ~ ${endDate})`,
@@ -81,4 +83,6 @@ export const extractPerformances = async (
   const idsToProcess = [...new Set([...idsToInsert, ...idsToUpdate])];
 
   logger.info("Fetching Performance Details...");
+
+  return getNewPerformances(idsToProcess);
 };
