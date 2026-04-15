@@ -2,9 +2,9 @@ import logger from "@/shared/utils/logger";
 import { Dayjs } from "dayjs";
 import { compareNewOld } from "../database/compareNewOld";
 import { kopisRateLimiter } from "../lib/kopisRateLimiter";
-import { getPerformanceIds } from "./getPerformanceIds";
-import { getPerformanceList } from "./getPerformanceList";
-import { deleteOldPerformances } from "./deleteOldPerformances";
+import { getPerformanceIds } from "./modules/getPerformanceIds";
+import { getPerformanceList } from "./modules/getPerformanceList";
+import { deleteOldPerformances } from "./modules/deleteOldPerformances";
 
 export const extractPerformances = async (
   now: Dayjs,

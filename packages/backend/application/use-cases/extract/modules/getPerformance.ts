@@ -1,5 +1,5 @@
 import { imageFetcher } from "@/shared/utils/imageFetcher";
-import { mapExternalToInternal } from "./mappers/mapExternalToInternal";
+import { mapExternalToInternal } from "../mappers/mapExternalToInternal";
 import { getPerformanceDetail } from "./getPerformanceDetail";
 
 // kopis API로 상세 데이터 페칭한 뒤, 포스터 URL과 상세이미지 URL을 바탕으로

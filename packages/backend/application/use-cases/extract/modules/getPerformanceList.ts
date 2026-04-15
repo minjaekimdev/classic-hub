@@ -1,8 +1,8 @@
 import logger from "@/shared/utils/logger";
-import { failureCollector } from "../shared/failureCollector";
-import { kopisRateLimiter } from "../lib/kopisRateLimiter";
+import { failureCollector } from "../../shared/failureCollector";
+import { kopisRateLimiter } from "../../lib/kopisRateLimiter";
 import { getPerformance } from "./getPerformance";
-import { InternalPerformance } from "./types";
+import { InternalPerformance } from "../types";
 
 export const getPerformanceList = async (ids: string[]) => {
   const result: InternalPerformance[] = [];

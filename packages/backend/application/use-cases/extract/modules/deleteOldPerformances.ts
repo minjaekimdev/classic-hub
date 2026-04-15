@@ -1,5 +1,5 @@
 import logger from "@/shared/utils/logger";
-import { deletePerformances } from "../database/deletePerformances";
+import { deletePerformances } from "../../database/deletePerformances";
 
 // DB의 오래된 데이터를 삭제하는 로직 수행
 export const deleteOldPerformances = async (ids: string[]) => {
