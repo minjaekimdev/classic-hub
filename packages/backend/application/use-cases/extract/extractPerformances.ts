@@ -1,48 +1,10 @@
 import logger from "@/shared/utils/logger";
-import RateLimiter from "@/shared/utils/rateLimiter";
 import { Dayjs } from "dayjs";
 import { compareNewOld } from "../database/compareNewOld";
-import { getPerformanceIds } from "../fetchers/getPerformanceIds";
-import { deletePerformances } from "../database/deletePerformances";
-import { getPerformanceDetail } from "../fetchers/getPerformanceDetail";
-import { RATE_LIMIT } from "@/application/constants";
-import { failureCollector } from "../shared/failureCollector";
-import { DetailPerformance } from "@classic-hub/shared/types/client";
-
-const kopisRateLimiter = new RateLimiter(RATE_LIMIT.KOPIS);
-
-// DB의 오래된 데이터를 삭제하는 로직 수행
-const deleteOldPerformances = async (ids: string[]) => {
-  if (ids.length > 0) {
-    console.log(`🚀 IDs to Delete: ${ids.length}`);
-
-    // 내부에서 fallback 로직 실행
-    await deletePerformances(ids);
-  } else {
-    logger.info("Nothing to Delete.");
-  }
-};
-
-const getNewPerformances = async (ids: string[]) => {
-  const result: DetailPerformance[] = [];
-  for (const id of ids) {
-    try {
-      const performanceDetail = await kopisRateLimiter.execute(() =>
-        getPerformanceDetail(id),
-      );
-      result.push(performanceDetail);
-    } catch (error: unknown) {
-      logger.error("[FETCH_FAIL] Performance fetch failed");
-      if (error instanceof Error) {
-        failureCollector.add(id, "EXTRACT", error.message);
-      } else {
-        failureCollector.add(id, "EXTRACT", String(error));
-      }
-    }
-  }
-
-  return result;
-};
+import { kopisRateLimiter } from "../lib/kopisRateLimiter";
+import { getPerformanceIds } from "./getPerformanceIds";
+import { getPerformanceList } from "./getPerformanceList";
+import { deleteOldPerformances } from "./deleteOldPerformances";
 
 export const extractPerformances = async (
   now: Dayjs,
@@ -55,7 +17,7 @@ export const extractPerformances = async (
     `Fetching new performance datas at ${now.format("YYYYMMDD")} (target period: ${startDate} ~ ${endDate})`,
   );
   // 1) 새로운 데이터를 페칭
-  const newPerformances = await getPerformanceIds(
+  const newPerformanceIds = await getPerformanceIds(
     startDate,
     endDate,
     kopisRateLimiter,
@@ -63,7 +25,7 @@ export const extractPerformances = async (
 
   // 2) DB와 새로운 데이터를 비교하여 삭제할 데이터와 삽입할 데이터의 id를 가져오기
   logger.info("Comparing new datas with DB...");
-  const { idsToDelete, idsToInsert } = await compareNewOld(newPerformances);
+  const { idsToDelete, idsToInsert } = await compareNewOld(newPerformanceIds);
 
   // 3) 데이터 삭제
   logger.info("Deleting old performance datas...");
@@ -84,5 +46,5 @@ export const extractPerformances = async (
 
   logger.info("Fetching Performance Details...");
 
-  return getNewPerformances(idsToProcess);
+  return getPerformanceList(idsToProcess);
 };

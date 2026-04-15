@@ -1,8 +1,6 @@
-import { ProcessResult } from "@/shared/types/sync";
 import logger from "@/shared/utils/logger";
 import { sendSlackNotification } from "@/shared/utils/monitor";
 import promiseLimiter from "@/shared/utils/promiseLimiter";
-import RateLimiter from "@/shared/utils/rateLimiter";
 import { Dayjs } from "dayjs";
 import { callDatabaseFunction } from "../../../infrastructure/external-api/supabase/database";
 import { saveFailuresToArtifact } from "../../../infrastructure/external-api/github/saveFailuresToArtifact";

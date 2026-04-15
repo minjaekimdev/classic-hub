@@ -9,9 +9,10 @@ import { uploadPosterToStorage } from "../database/uploadPosterToStorage";
 import { sanitizeImageBuffer } from "../program/sanitizeImageBuffer";
 import { splitLongImage } from "../program/splitLongImage";
 import { toDbPerformance } from "../mappers/toDbPerformance";
+import { PerformanceDetail } from "@/shared/types/kopis";
 
 export const processPerformance = async (
-  id: string,
+  performanceDetail: PerformanceDetail,
 ): Promise<ProcessResult> => {
   // 이미지 페칭 (포스터 + 상세이미지)
   const posterUrl = performanceDetail.poster;
