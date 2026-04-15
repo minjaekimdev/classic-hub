@@ -1,7 +1,7 @@
 import { ProcessResult } from "@/shared/types/sync";
 import logger from "@/shared/utils/logger";
 import promiseLimiter from "@/shared/utils/promiseLimiter";
-import { processPerformance } from "./processPerformance";
+import { processPerformance } from "../2_transform/transformPerformances";
 
 export const retry = async (
   initialFailures: Array<ProcessResult>,

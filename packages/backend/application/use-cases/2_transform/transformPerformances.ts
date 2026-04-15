@@ -10,6 +10,7 @@ import { sanitizeImageBuffer } from "../program/sanitizeImageBuffer";
 import { splitLongImage } from "../program/splitLongImage";
 import { toDbPerformance } from "../mappers/toDbPerformance";
 import { PerformanceDetail } from "@/shared/types/kopis";
+import { InternalPerformance } from "../1_extract/types";
 
 export const processPerformance = async (
   performanceDetail: PerformanceDetail,
@@ -152,3 +153,7 @@ export const processPerformance = async (
     data: processedPerformance,
   };
 };
+
+export const transformedPerformances = (performances: InternalPerformance[]) => {
+  // DB 형태에 맞는 데이터로 매핑하는 과정까지 수행
+}

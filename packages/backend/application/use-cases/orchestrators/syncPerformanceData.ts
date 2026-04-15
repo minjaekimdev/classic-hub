@@ -4,9 +4,9 @@ import promiseLimiter from "@/shared/utils/promiseLimiter";
 import { Dayjs } from "dayjs";
 import { callDatabaseFunction } from "../../../infrastructure/external-api/supabase/database";
 import { saveFailuresToArtifact } from "../../../infrastructure/external-api/github/saveFailuresToArtifact";
-import { processPerformance } from "./processPerformance";
+import { processPerformance } from "../2_transform/transformPerformances";
 import { retry } from "./retry";
-import { extractPerformances } from "../extract/extractPerformances";
+import { extractPerformances } from "../1_extract/extractPerformances";
 
 // TODO: 테스트를 어디에 적용해야 할지 잘 모르겠다..
 export const syncPerformanceData = async (
@@ -26,13 +26,8 @@ export const syncPerformanceData = async (
     updateEndDate,
   );
 
-  // 공연 데이터 처리
-  const results = await promiseLimiter(
-    idsToProcess,
-    processPerformance,
-    5,
-    1000,
-  );
+  // 2. Transform 단계(공연 데이터 가공)
+  const transformedPerformances = transformPerformances(extractPerformances);
 
   // 첫 시도에서 성공한 공연 데이터들을 transformSuccesses 배열에 저장
   transformSuccesses.push(

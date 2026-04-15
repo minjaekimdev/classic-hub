@@ -1,7 +1,6 @@
 import logger from "@/shared/utils/logger";
 import { Dayjs } from "dayjs";
-import { compareNewOld } from "../database/compareNewOld";
-import { kopisRateLimiter } from "../lib/kopisRateLimiter";
+import { compareNewOld } from "./modules/compareNewOld";
 import { getPerformanceIds } from "./modules/getPerformanceIds";
 import { getPerformanceList } from "./modules/getPerformanceList";
 import { deleteOldPerformances } from "./modules/deleteOldPerformances";
@@ -17,11 +16,7 @@ export const extractPerformances = async (
     `Fetching new performance datas at ${now.format("YYYYMMDD")} (target period: ${startDate} ~ ${endDate})`,
   );
   // 1) 새로운 데이터를 페칭
-  const newPerformanceIds = await getPerformanceIds(
-    startDate,
-    endDate,
-    kopisRateLimiter,
-  );
+  const newPerformanceIds = await getPerformanceIds(startDate, endDate);
 
   // 2) DB와 새로운 데이터를 비교하여 삭제할 데이터와 삽입할 데이터의 id를 가져오기
   logger.info("Comparing new datas with DB...");
@@ -31,13 +26,11 @@ export const extractPerformances = async (
   logger.info("Deleting old performance datas...");
   await deleteOldPerformances(idsToDelete);
 
-  // 4) 데이터 삽입
   // 어제 이후 업데이트된 공연 데이터 가져오기
   logger.info("Fetching updated datas...");
   const idsToUpdate = await getPerformanceIds(
     startDate,
     updateEndDate,
-    kopisRateLimiter,
     afterDate,
   );
 
