@@ -1,4 +1,4 @@
-import { STORAGE_NAME } from "@/application/constants";
+import { STORAGE_NAME } from "@/application/constants/limits";
 import { uploadToStorage } from "@/infrastructure/external-api/supabase/storage";
 import { withErrorHandling } from "@/shared/utils/error";
 import { fileTypeFromBuffer } from "file-type";

@@ -17,6 +17,7 @@ export const extractPerformances = async (
   );
   // 1) 새로운 데이터를 페칭
   const newPerformanceIds = await getPerformanceIds(startDate, endDate);
+  console.log(newPerformanceIds);
 
   // 2) DB와 새로운 데이터를 비교하여 삭제할 데이터와 삽입할 데이터의 id를 가져오기
   logger.info("Comparing new datas with DB...");
@@ -36,6 +37,7 @@ export const extractPerformances = async (
 
   // isToUpdate와 isToInsert에 동일한 id를 가진 데이터가 존재할 수 있으므로 set으로 제외
   const idsToProcess = [...new Set([...idsToInsert, ...idsToUpdate])];
+  console.log(idsToProcess);
 
   logger.info("Fetching Performance Details...");
 

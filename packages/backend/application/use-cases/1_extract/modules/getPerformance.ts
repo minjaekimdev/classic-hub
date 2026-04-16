@@ -11,7 +11,7 @@ export const getPerformance = async (id: string) => {
   // 받아온 상세 데이터에서 포스터 이미지 및 상세 이미지 받아와서 객체에 저장하기
   const posterUrl = rawData.poster;
 
-  const rawDetailImages = rawData.styurls;
+  const rawDetailImages = rawData.styurls.styurl;
   const detailImageUrls = Array.isArray(rawDetailImages)
     ? rawDetailImages
     : [rawDetailImages];

@@ -31,6 +31,7 @@
     "delete-storage-files": "npx tsx --env-file=.env ./scripts/deleteStorageFiles.ts",
     "test": "NODE_ENV=test vitest",
     "test-update-performances": "NODE_ENV=test vitest updatePerformances",
-    "test-ranking-performances": "NODE_ENV=test vitest updateRanking"
+    "test-ranking-performances": "NODE_ENV=test vitest updateRanking",
+    "test-kopisxml": "npx tsx ./scripts/kopisXmlTest.ts"
   }
 }
