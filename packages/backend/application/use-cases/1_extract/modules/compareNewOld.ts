@@ -1,5 +1,5 @@
 import { APIError } from "@/shared/utils/error";
-import { getColumnData } from "../../../infrastructure/external-api/supabase/database";
+import { getColumnData } from "../../../../infrastructure/external-api/supabase/database";
 import { sendSlackNotification } from "@/shared/utils/monitor";
 
 export const compareNewOld = async (newPerformances: string[]) => {

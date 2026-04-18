@@ -1,33 +1,20 @@
 import getProgramJSON from "@/application/use-cases/program/getProgramJSON";
-import {
-  getPerformanceDetail,
-  toMappedPerformanceDetail,
-} from "@/application/use-cases/fetchers/getPerformanceDetailArray";
+import { getPerformanceDetail } from "@/application/use-cases/fetchers/getPerformanceDetail";
 import getProgramText from "@/application/use-cases/program/getProgramText";
 import { ProcessResult } from "shared/types/sync";
 import { imageFetcher } from "@/shared/utils/imageFetcher";
 import sharp from "sharp";
 import logger from "@/shared/utils/logger";
-import { uploadDetailImagesToStorage } from "../database/uploadDetailImagesToStorage";
 import { uploadPosterToStorage } from "../database/uploadPosterToStorage";
 import { sanitizeImageBuffer } from "../program/sanitizeImageBuffer";
 import { splitLongImage } from "../program/splitLongImage";
+import { toDbPerformance } from "../mappers/toDbPerformance";
+import { PerformanceDetail } from "@/shared/types/kopis";
+import { InternalPerformance } from "../1_extract/types";
 
 export const processPerformance = async (
-  id: string,
+  performanceDetail: PerformanceDetail,
 ): Promise<ProcessResult> => {
-  logger.info("Fetching Performance...");
-  const performanceDetail = await getPerformanceDetail(id);
-
-  if (!performanceDetail) {
-    logger.error("[FETCH_FAIL] Performance fetch failed");
-    return {
-      id,
-      error: "PerformanceFetchError",
-      data: null,
-    };
-  }
-
   // 이미지 페칭 (포스터 + 상세이미지)
   const posterUrl = performanceDetail.poster;
   const rawDetailUrls = performanceDetail.styurls.styurl;
@@ -153,25 +140,11 @@ export const processPerformance = async (
     };
   }
 
-  const storageDetailUrls = await uploadDetailImagesToStorage(
-    id,
-    processedDetailImageBuffers,
-  );
-
-  if (!storageDetailUrls) {
-    logger.error("[INSERT_FAIL] Storage Insert Failed");
-    return {
-      id,
-      error: "StorageError",
-      data: null,
-    };
-  }
-
-  const processedPerformance = toMappedPerformanceDetail(
+  const processedPerformance = toDbPerformance(
     performanceDetail,
     programJSON,
     storagePosterUrl,
-    storageDetailUrls,
+    detailUrlArray,
   );
 
   return {
@@ -180,3 +153,7 @@ export const processPerformance = async (
     data: processedPerformance,
   };
 };
+
+export const transformedPerformances = (performances: InternalPerformance[]) => {
+  // DB 형태에 맞는 데이터로 매핑하는 과정까지 수행
+}

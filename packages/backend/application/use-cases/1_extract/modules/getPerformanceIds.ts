@@ -9,7 +9,7 @@ import { sendSlackNotification } from "@/shared/utils/monitor";
 import { PerformanceSummary } from "shared/types/kopis";
 import { APIError, withErrorHandling } from "shared/utils/error";
 import logger from "shared/utils/logger";
-import RateLimiter from "shared/utils/rateLimiter";
+import { kopisRateLimiter } from "../../lib/kopisRateLimiter";
 
 export const getPerformanceIdsInPage = async (api: string) => {
   return withErrorHandling(
@@ -40,7 +40,6 @@ export const getPerformanceIdsInPage = async (api: string) => {
 export const getPerformanceIds = async (
   startDate: string,
   endDate: string,
-  rateLimiter: RateLimiter,
   afterDate?: string,
 ): Promise<Array<string>> => {
   const result = [];
@@ -48,7 +47,7 @@ export const getPerformanceIds = async (
   let page = 1;
   while (true) {
     const api = `${API_URL}/pblprfr?service=${SERVICE_KEY}&stdate=${startDate}&eddate=${endDate}&cpage=${page}&rows=${100}&shcate=${CLASSIC}${afterDate ? `&afterdate=${afterDate}` : ""}`;
-    const performanceIdArray = await rateLimiter.execute(async () => {
+    const performanceIdArray = await kopisRateLimiter.execute(async () => {
       return await getPerformanceIdsInPage(api);
     });
 
