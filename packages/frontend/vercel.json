@@ -4,9 +4,8 @@
       "source": "/maintenance.html",
       "destination": "/maintenance.html"
     },
-
     {
-      "source": "/((?!api|assets|favicon.ico).*)",
+      "source": "/((?!api|assets|favicon.ico|maintenance.html).*)",
       "destination": "/index.html"
     }
   ]
