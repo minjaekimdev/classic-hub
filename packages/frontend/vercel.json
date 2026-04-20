@@ -1,6 +1,11 @@
 {
   "rewrites": [
     {
+      "source": "/maintenance.html",
+      "destination": "/maintenance.html"
+    },
+
+    {
       "source": "/((?!api|assets|favicon.ico).*)",
       "destination": "/index.html"
     }
