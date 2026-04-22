@@ -28,7 +28,7 @@ Deno.serve(async (req) => {
       return getResponse({ message: "Not a Delete event. skipping..." });
     }
 
-    performanceId = old_record.id;
+    performanceId = old_record.performance_id;
     const bucketName = BUCKET_NAME;
 
     // 2. 해당 performance_id 폴더 내의 모든 파일 목록 조회
