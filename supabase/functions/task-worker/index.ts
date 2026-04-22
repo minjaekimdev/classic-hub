@@ -1,13 +1,15 @@
-import { deleteFromStorage } from "../_shared/service.ts";
-import { supabaseAdmin } from "../_shared/supabaseAdmin.ts";
-import { Queue } from "../_shared/typeExtract.ts";
-import { getResponse } from "../_shared/utils.ts";
+import { deleteFromStorage } from "../../_shared/utils.ts";
+import { supabaseAdmin } from "../../_shared/client.ts";
+import { Queue } from "../../_shared/typeExtractor.ts";
+import { getResponse } from "../../_shared/utils.ts";
 
 interface Payload {
   performanceId: string;
   storagePaths: string[];
 }
 
+// DB의 task_queue 테이블에 쌓여 있는 작업들(주로 파일 삭제) 중
+// PENDING이거나 FAILED한 것들 가져와서 재시도하고, 상태를 업데이트한다.
 // pg_cron을 통해 실행 스케줄링
 Deno.serve(async () => {
   // 이벤트가 발생하면 다음 내용 실행
@@ -17,6 +19,7 @@ Deno.serve(async () => {
       .from("task_queue")
       .select("*")
       .in("status", ["PENDING", "FAILED"])
+      // 재시도 예정 시간이 현재 시점보다 과거인 데이터만 가져와서 실행한다.
       .lte("next_retry_at", new Date().toISOString())
       .returns<Queue[]>();
 
@@ -26,6 +29,19 @@ Deno.serve(async () => {
     }
 
     // 모은 대상 데이터들에 한해 다시 storage 파일 삭제 수행
+    // allSettled: 하나가 실패해도 다른 작업은 끝까지 진행
+    /* allSettled 내에서는 각 호출마다 다음과 같은 객체를 리턴한다.
+      성공 시
+      {
+        status: "fullfilled",
+        value: "..."(리턴한 값)
+      }
+      실패 시
+      { 
+        status: "rejected"
+        reason: Error(...)
+      }
+    */
     const results = await Promise.allSettled(
       targets.map(async (target) => {
         const content = target.payload as unknown as Payload;
@@ -71,7 +87,7 @@ Deno.serve(async () => {
       await supabaseAdmin
         .from("task_queue")
         .update({ status: "COMPLETED" })
-        .in("id", successIds);
+        .in("id", successIds); // id 컬럼의 값이 successIds 배열 안에 포함된 데이터들만 골라서 업데이트한다.
     }
 
     if (failureUpdates.length > 0) {

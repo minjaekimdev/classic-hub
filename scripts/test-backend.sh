@@ -31,9 +31,6 @@ if ! docker info > /dev/null 2>&1; then
   echo -e "${GREEN}✅ Docker 준비 완료!${NC}"
 fi
 
-# 🚀 [3/5] 이 부분이 스마트 리셋으로 변경되었습니다!
-echo -e "${YELLOW}🚀 [3/5] Supabase 인프라 최적화 리셋...${NC}"
-
 # Supabase가 이미 실행 중인지 확인
 # 🚀 [3/5] 수정된 스마트 리셋 로직
 echo -e "${YELLOW}🚀 [3/5] Supabase 인프라 최적화 리셋...${NC}"
@@ -58,5 +55,22 @@ node ./scripts/sync-env.js
 # [5/5] 백엔드 로직 통합 테스트 실행... (동일)
 echo -e "${YELLOW}🧪 [5/5] 백엔드 로직 통합 테스트 실행...${NC}"
 npx turbo run test-update-performances --filter=backend
+
+echo -e "${YELLOW}⚡ [6/6] Edge Functions 통합 테스트 실행...${NC}"
+
+# 1. Edge Function 서버를 배경에서 실행 (로그는 휴지통으로)
+# --no-verify-jwt 옵션을 주어야 테스트 시 토큰 인증 과정을 단순화할 수 있다.
+# &(명령어 끝): 명령어를 실행한 뒤 이를 별도의 프로세스(백그라운드)로 던지고, 곧바로 다음 명령어를 입력받을 준비를 한다.
+npx supabase functions serve --no-verify-jwt > /dev/null 2>&1 &
+SERVE_PID=$! # 방금 실행한 서버의 프로세스 ID(PID)를 저장
+
+echo "⏳ Edge Function 서버 예열 중... (5초 대기)"
+sleep 5
+
+# 2. Deno 테스트 실행
+# 실패할 경우 set -e에 의해 즉시 중단되며 trap cleanup이 호출된다.
+# --allow-net: Deno는 명시적으로 허락하지 않으면 인터넷이나 로컬 네트워크에 접속할 수 없다.
+# --allow-env: Deno는 시스템의 환경 변수를 읽는 것도 허락을 받아야 한다.
+deno test --allow-net --allow-env supabase/functions/_tests/delete-storage-file/index_test.ts
 
 echo -e "${GREEN}🎉 모든 검증을 통과했습니다! 안전하게 푸시를 진행합니다.${NC}"
