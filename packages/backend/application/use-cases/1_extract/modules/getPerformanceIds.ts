@@ -1,22 +1,20 @@
 import { kopisFetcher } from "@/application/services/kopisFetcher";
 import { removeTextProperty } from "@/application/services/kopisPreprocessor";
-import {
-  API_URL,
-  SERVICE_KEY,
-  CLASSIC,
-} from "@/infrastructure/external-api/kopis";
+import { API_URL, SERVICE_KEY, CLASSIC } from "@/infrastructure/kopis/client";
 import { sendSlackNotification } from "@/shared/utils/monitor";
 import { PerformanceSummary } from "shared/types/kopis";
 import { APIError, withErrorHandling } from "shared/utils/error";
 import logger from "shared/utils/logger";
 import { kopisRateLimiter } from "../../lib/kopisRateLimiter";
 
-export const getPerformanceIdsInPage = async (api: string) => {
+export const getPerformanceIdsInPage = async (
+  api: string,
+): Promise<string[]> => {
   return withErrorHandling(
     async () => {
       const parsedData = await kopisFetcher(api);
 
-      // API 요청에는 성공했으나 더이상 데이터가 없는 경우
+      // API 요청에는 성공했으나 더이상 데이터가 없는 경우, 빈 배열 리턴
       if (!parsedData.dbs.db) {
         return [];
       }
@@ -37,6 +35,7 @@ export const getPerformanceIdsInPage = async (api: string) => {
 };
 
 // 오늘 ~ 대상 기간동안의 새 공연 데이터 id 배열 리턴하기
+// TODO: 페이지네이션 테스트 필요
 export const getPerformanceIds = async (
   startDate: string,
   endDate: string,

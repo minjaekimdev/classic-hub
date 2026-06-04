@@ -1,5 +1,5 @@
 import { STORAGE_NAME } from "@/application/constants/limits";
-import { uploadToStorage } from "@/infrastructure/external-api/supabase/storage";
+import { uploadToStorage } from "@/infrastructure/supabase/storage";
 import { withErrorHandling } from "@/shared/utils/error";
 
 export const uploadPosterToStorage = async (

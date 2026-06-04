@@ -1,4 +1,4 @@
-import { API_URL, SERVICE_KEY } from "@/infrastructure/external-api/kopis";
+import { API_URL, SERVICE_KEY } from "@/infrastructure/kopis/client";
 import { kopisFetcher } from "@/application/services/kopisFetcher";
 import { removeTextProperty } from "@/application/services/kopisPreprocessor";
 import { PerformanceDetail } from "@/shared/types/kopis";

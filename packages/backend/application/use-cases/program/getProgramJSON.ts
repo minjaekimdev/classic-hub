@@ -1,5 +1,5 @@
 import "dotenv/config";
-import ai from "@/infrastructure/external-api/gemini/gemini";
+import ai from "@/infrastructure/gemini/gemini";
 import { APIError, withErrorHandling } from "shared/utils/error";
 import logger from "shared/utils/logger";
 import { ProgramExtractionResponse } from "shared/types/gemini";
@@ -42,7 +42,7 @@ const getProgramJSON = async (
     async () => {
       const response = await ai.models.generateContent({
         // 최신 고성능/저비용 모델 사용 (필요 시 버전 조정)
-        model: "gemini-2.5-flash", 
+        model: "gemini-2.5-flash",
         contents: instruction + programText,
         config: {
           temperature: 0, // 결과의 일관성을 위해 0으로 고정
@@ -70,7 +70,8 @@ const getProgramJSON = async (
                 workTitleEn: {
                   type: "array",
                   items: { type: "string" },
-                  description: "List of work titles in English (Excluding movements)",
+                  description:
+                    "List of work titles in English (Excluding movements)",
                 },
               },
               required: [
@@ -83,7 +84,7 @@ const getProgramJSON = async (
           },
         },
       });
-      
+
       if (!response?.text) {
         throw new APIError("Gemini API가 빈 응답을 반환했습니다.");
       }

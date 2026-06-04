@@ -1,10 +1,6 @@
 import { kopisFetcher } from "@/application/services/kopisFetcher";
 import { removeTextProperty } from "@/application/services/kopisPreprocessor";
-import {
-  API_URL,
-  SERVICE_KEY,
-  CLASSIC,
-} from "@/infrastructure/external-api/kopis";
+import { API_URL, SERVICE_KEY, CLASSIC } from "@/infrastructure/kopis/client";
 import { Ranking } from "shared/types/kopis";
 import { withErrorHandling } from "shared/utils/error";
 

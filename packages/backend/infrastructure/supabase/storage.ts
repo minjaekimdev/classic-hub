@@ -1,6 +1,6 @@
 import { APIError } from "@/shared/utils/error";
 import logger from "@/shared/utils/logger";
-import supabase from ".";
+import supabase from "./client";
 
 // storage에 저장
 export const uploadToStorage = async (

@@ -1,4 +1,4 @@
-import { callDatabaseFunction } from "@/infrastructure/external-api/supabase/database";
+import { callDatabaseFunction } from "@/infrastructure/supabase/database";
 import { withErrorHandling } from "shared/utils/error";
 import logger from "shared/utils/logger";
 import { sendSlackNotification } from "shared/utils/monitor";

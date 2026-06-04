@@ -1,6 +1,6 @@
-import supabase from ".";
-import { APIError } from "../../../shared/utils/error";
-import logger from "../../../shared/utils/logger";
+import supabase from "./client";
+import { APIError } from "../../shared/utils/error";
+import logger from "../../shared/utils/logger";
 // DB 테이블에 존재하는 데이터의 값만을 배열로 반환
 // ex) [ {mt20id: PF1234}, ... ] -> [ PF1234, ... ]
 export const getColumnData = async (
@@ -61,9 +61,9 @@ export const deleteData = async <T>(
   const { error } = await supabase.from(table).delete().in(column, data);
 
   if (error) {
-    throw new APIError(`DB Delete Failed: ${error.message}`);
+    throw new APIError(`[DB_FAIL] DB 데이터 삭제 실패: ${error.message}`);
   } else {
-    logger.info("DB delete succeeded", {
+    logger.info("[DB_SUCCESS] DB 데이터 삭제 성공", {
       service: "supabase",
       table,
     });

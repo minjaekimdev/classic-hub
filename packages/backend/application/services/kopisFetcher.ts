@@ -6,7 +6,7 @@ export const kopisFetcher = async (api: string) => {
 
   // HTTP 에러일 경우
   if (!response.ok) {
-    throw new APIError("KOPIS API request failed!", response.status);
+    throw new APIError("[KOPIS_ERROR] KOPIS API 요청 실패", response.status);
   }
 
   const xmlText = await response.text();

@@ -3,7 +3,7 @@ import { Dayjs } from "dayjs";
 import { compareNewOld } from "./modules/compareNewOld";
 import { getPerformanceIds } from "./modules/getPerformanceIds";
 import { getPerformanceList } from "./modules/getPerformanceList";
-import { getColumnData } from "@/infrastructure/external-api/supabase/database";
+import { getColumnData } from "@/infrastructure/supabase/database";
 import { deletePerformances } from "./modules/deletePerformances";
 
 export const extractPerformances = async (
@@ -33,6 +33,8 @@ export const extractPerformances = async (
   if (idsToDelete.length > 0) {
     logger.info(`[DB] 삭제할 데이터 개수: ${idsToDelete.length}개`);
     // 내부에서 fallback 로직 실행
+    // TODO: deletePerformances같이 extract에서만 활용하는 db함수의 경우 1_extract에 응집해도 좋을 것 같다.
+    // supabase에서 가져오는 함수는 extract에서만 활용하기 때문
     await deletePerformances(idsToDelete);
   } else {
     logger.info("[DB] 삭제할 데이터가 없음");

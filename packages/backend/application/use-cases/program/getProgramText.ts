@@ -1,4 +1,4 @@
-import ocr from "@/infrastructure/external-api/vision/vision";
+import ocr from "@/infrastructure/vision/client";
 import logger from "@/shared/utils/logger";
 
 const googleHttpMapping: Record<number, number> = {
@@ -23,7 +23,7 @@ const googleHttpMapping: Record<number, number> = {
 interface GoogleServiceError {
   code: number;
   details?: string;
-  note? : string;
+  note?: string;
   metadata?: any;
   stack?: any;
 }
@@ -40,17 +40,20 @@ export const withGoogleErrorHandling = async <T>(
     const customErrorObj = {
       code: googleHttpMapping[error.code] || 500,
       detail: error.details,
-      note: error.note
-    }
-    logger.error("[OCR_FAIL] Text Detection Failed", {error: customErrorObj, stack: error.stack, service });
-    
+      note: error.note,
+    };
+    logger.error("[OCR_FAIL] Text Detection Failed", {
+      error: customErrorObj,
+      stack: error.stack,
+      service,
+    });
+
     if (fallback !== undefined) {
       return fallback;
     }
     throw error;
   }
 };
-
 
 const getProgramText = async (
   images: Array<Buffer>,
