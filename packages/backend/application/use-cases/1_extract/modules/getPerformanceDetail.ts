@@ -1,6 +1,6 @@
 import { API_URL, SERVICE_KEY } from "@/infrastructure/kopis/client";
-import { kopisFetcher } from "@/application/services/kopisFetcher";
-import { removeTextProperty } from "@/application/services/kopisPreprocessor";
+import { kopisFetcher } from "@/infrastructure/kopis/kopisFetcher";
+import { removeTextProperty } from "@/infrastructure/kopis/kopisPreprocessor";
 import { PerformanceDetail } from "@/shared/types/kopis";
 
 export const getPerformanceDetail = async (

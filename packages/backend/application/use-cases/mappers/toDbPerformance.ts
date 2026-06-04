@@ -1,8 +1,8 @@
-import { getMinMaxPrice } from "@/application/services/getMinMaxPrice";
+import { getMinMaxPrice } from "@/application/utils/getMinMaxPrice";
 import {
   getParsedPrice,
   getParsedBookingLinks,
-} from "@/application/services/parser";
+} from "@/application/utils/parser";
 import { ProgramExtractionResponse } from "@/shared/types/gemini";
 import { PerformanceDetail } from "@/shared/types/kopis";
 import { Json } from "@classic-hub/shared/types/supabase";
