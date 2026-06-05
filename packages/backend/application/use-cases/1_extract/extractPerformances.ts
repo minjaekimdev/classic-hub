@@ -1,9 +1,9 @@
 import logger from "@/shared/utils/logger";
-import { compareNewOld } from "./modules/compareNewOld";
-import { getPerformanceIds } from "./modules/getPerformanceIds";
-import { getPerformanceList } from "./modules/getPerformanceList";
+import { compareNewOld } from "./domain/compareNewOld";
+import { getPerformanceIds } from "./flows/getPerformanceIds";
+import { getPerformanceList } from "./flows/getPerformanceList";
 import { getColumnData } from "@/infrastructure/supabase/database";
-import { deletePerformances } from "./modules/deletePerformances";
+import { deletePerformances } from "./infra/deletePerformances";
 
 export const extractPerformances = async (
   startDate: string,

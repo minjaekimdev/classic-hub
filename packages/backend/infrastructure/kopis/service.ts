@@ -21,7 +21,6 @@ export interface IKopisService {
   ): Promise<string[]>;
   getPerformanceDetail(performanceId: string): Promise<PerformanceDetail>;
   getFacilityIdsInPage(page: number): Promise<string[]>;
-  getFacilityDetail(mt10id: string): Promise<Facility>;
 }
 
 // 실제 KOPIS API와 통신하는 구현체
@@ -83,14 +82,5 @@ export const kopisService: IKopisService = {
 
     // 전처리(removeTextProperty)를 거쳤으므로 이제 안전하게 mt10id를 바로 꺼낼 수 있습니다.
     return facilitySummaryArray.map((item) => item.mt10id);
-  },
-
-  async getFacilityDetail(mt10id: string) {
-    const parsedData = await kopisFetcher(
-      `${API_URL}/prfplc/${mt10id}?service=${SERVICE_KEY}`,
-    );
-
-    const result = removeTextProperty(parsedData.dbs.db);
-    return result as unknown as Facility;
   },
 };

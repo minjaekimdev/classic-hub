@@ -1,6 +1,6 @@
 import { imageFetcher } from "@/shared/utils/imageFetcher";
 import { mapExternalToInternal } from "../mappers/mapExternalToInternal";
-import { getPerformanceDetail } from "./getPerformanceDetail";
+import { getPerformanceDetail } from "../infra/getPerformanceDetail";
 
 // kopis API로 상세 데이터 페칭한 뒤, 포스터 URL과 상세이미지 URL을 바탕으로
 // 버퍼 값을 받아와 객체에 매핑하여 반환하는 함수
