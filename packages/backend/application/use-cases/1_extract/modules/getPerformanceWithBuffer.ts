@@ -4,7 +4,7 @@ import { getPerformanceDetail } from "./getPerformanceDetail";
 
 // kopis API로 상세 데이터 페칭한 뒤, 포스터 URL과 상세이미지 URL을 바탕으로
 // 버퍼 값을 받아와 객체에 매핑하여 반환하는 함수
-export const getPerformance = async (id: string) => {
+export const getPerformanceWithBuffer = async (id: string) => {
   // getPerformanceDetail 호출해서 상세 데이터 받아오기
   const rawData = await getPerformanceDetail(id);
 

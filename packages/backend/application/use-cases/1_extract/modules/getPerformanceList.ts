@@ -1,7 +1,7 @@
 import logger from "@/shared/utils/logger";
 import { failureCollector } from "../../shared/failureCollector";
 import { kopisRateLimiter } from "../../lib/kopisRateLimiter";
-import { getPerformance } from "./getPerformance";
+import { getPerformanceWithBuffer } from "./getPerformanceWithBuffer";
 import { InternalPerformance } from "../types";
 
 export const getPerformanceList = async (ids: string[]) => {
@@ -9,7 +9,7 @@ export const getPerformanceList = async (ids: string[]) => {
   for (const id of ids) {
     try {
       const performanceDetail = await kopisRateLimiter.execute(() =>
-        getPerformance(id),
+        getPerformanceWithBuffer(id),
       );
       result.push(performanceDetail);
     } catch (error: unknown) {

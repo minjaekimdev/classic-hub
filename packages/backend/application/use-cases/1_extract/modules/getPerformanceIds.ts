@@ -1,5 +1,5 @@
-import { kopisFetcher } from "@/infrastructure/kopis/kopisFetcher";
-import { removeTextProperty } from "@/infrastructure/kopis/kopisPreprocessor";
+import { kopisFetcher } from "@/infrastructure/kopis/fetcher";
+import { removeTextProperty } from "@/infrastructure/kopis/preprocessor";
 import { API_URL, SERVICE_KEY, CLASSIC } from "@/infrastructure/kopis/client";
 import { sendSlackNotification } from "@/shared/utils/monitor";
 import { PerformanceSummary } from "shared/types/kopis";
@@ -8,11 +8,16 @@ import logger from "shared/utils/logger";
 import { kopisRateLimiter } from "../../lib/kopisRateLimiter";
 
 export const getPerformanceIdsInPage = async (
-  api: string,
+  startDate: string,
+  endDate: string,
+  page: number,
+  afterDate?: string,
 ): Promise<string[]> => {
   return withErrorHandling(
     async () => {
-      const parsedData = await kopisFetcher(api);
+      const parsedData = await kopisFetcher(
+        `${API_URL}/pblprfr?service=${SERVICE_KEY}&stdate=${startDate}&eddate=${endDate}&cpage=${page}&rows=${100}&shcate=${CLASSIC}${afterDate ? `&afterdate=${afterDate}` : ""}`,
+      );
 
       // API 요청에는 성공했으나 더이상 데이터가 없는 경우, 빈 배열 리턴
       if (!parsedData.dbs.db) {
@@ -45,9 +50,8 @@ export const getPerformanceIds = async (
 
   let page = 1;
   while (true) {
-    const api = `${API_URL}/pblprfr?service=${SERVICE_KEY}&stdate=${startDate}&eddate=${endDate}&cpage=${page}&rows=${100}&shcate=${CLASSIC}${afterDate ? `&afterdate=${afterDate}` : ""}`;
     const performanceIdArray = await kopisRateLimiter.execute(async () => {
-      return await getPerformanceIdsInPage(api);
+      return await getPerformanceIdsInPage(startDate, endDate, page, afterDate);
     });
 
     // 페이지별 새 공연 id 배열을 받아올 때 에러가 발생한 경우 빈 배열 리턴

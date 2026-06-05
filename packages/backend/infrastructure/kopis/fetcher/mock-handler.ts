@@ -1,5 +1,5 @@
 import { http, HttpResponse } from "msw";
-import { mockKopisXmlResponse } from "./kopisFetcher.fixture";
+import { mockKopisXmlResponse } from "./fixture";
 
 // KOPIS API의 베이스 URL (쿼리 스트링을 제외한 메인 주소)
 const KOPIS_BASE_URL = "https://www.kopis.or.kr/openApi/restful/pblprfr";

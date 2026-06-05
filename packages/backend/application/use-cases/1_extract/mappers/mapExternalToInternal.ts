@@ -1,6 +1,7 @@
 import { PerformanceDetail } from "@/shared/types/kopis";
 import { InternalPerformance } from "../types";
 
+// KOPIS 원본 객체 데이터를 개발용 객체 데이터로 변환
 export const mapExternalToInternal = (
   rawData: PerformanceDetail,
   posterBuffer: Buffer,

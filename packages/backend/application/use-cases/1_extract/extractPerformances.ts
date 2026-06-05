@@ -1,5 +1,4 @@
 import logger from "@/shared/utils/logger";
-import { Dayjs } from "dayjs";
 import { compareNewOld } from "./modules/compareNewOld";
 import { getPerformanceIds } from "./modules/getPerformanceIds";
 import { getPerformanceList } from "./modules/getPerformanceList";
@@ -7,7 +6,6 @@ import { getColumnData } from "@/infrastructure/supabase/database";
 import { deletePerformances } from "./modules/deletePerformances";
 
 export const extractPerformances = async (
-  now: Dayjs,
   startDate: string,
   endDate: string,
   afterDate: string,
@@ -29,6 +27,8 @@ export const extractPerformances = async (
   const { idsToDelete, idsToInsert } = compareNewOld(newIds, dbIds);
 
   // 3) 데이터 삭제
+  // TODO: 삭제는 extractPerformances에서 직접 수행하지 않고, 삭제할 명단을 다음 단계로 전달하는 편이 좋을것같다.
+  // extract이라는 이름에 위배되고, 여기서 발생한 에러로 인해 다른 extract 기능이 수행되지 않을 우려가 있기 때문
   logger.info("[PROCESS] DB에 있는 오래된 공연 데이터 삭제");
   if (idsToDelete.length > 0) {
     logger.info(`[DB] 삭제할 데이터 개수: ${idsToDelete.length}개`);
@@ -49,10 +49,16 @@ export const extractPerformances = async (
   );
 
   // 5) isToUpdate와 isToInsert에 동일한 id를 가진 데이터가 존재할 수 있으므로 set으로 제외
-  const idsToProcess = [...new Set([...idsToInsert, ...idsToUpdate])];
-  logger.info("[PROCESS] 가공해야 할 공연 id:", idsToProcess);
+  const idsToTransform = [...new Set([...idsToInsert, ...idsToUpdate])];
+  logger.info("[PROCESS] 가공해야 할 공연 id:", idsToTransform);
 
   // 6) id를 바탕으로 공연 상세 데이터 가져오기
   logger.info("[PROCESS] 공연 상세 데이터 가져오기");
-  return getPerformanceList(idsToProcess);
+  const performances = await getPerformanceList(idsToTransform);
+  // TODO: getPerformanceWithBuffer를 이쪽에서 호출하여 한번에 버퍼 처리를 한다.
+
+  return {
+    performancesToTransform,
+    idsToDelete,
+  };
 };
