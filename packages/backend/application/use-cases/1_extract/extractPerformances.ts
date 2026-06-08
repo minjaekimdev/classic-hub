@@ -56,10 +56,11 @@ export const createExtractPerformances = ({
     const newIds = await getAllPerformanceIdList(startDate, endDate);
     logger.info("[KOPIS] 새로운 공연 ID 개수:", newIds.length);
 
+    // 2) 비교를 위해 DB에 있는 기존 데이터 페칭
     const dbIds = await getColumnData("performances", "performance_id");
     logger.info("[DB] DB에 존재하는 공연 ID 개수:", dbIds.length);
 
-    // 2) DB와 새로운 데이터를 비교하여 삭제할 데이터와 삽입할 데이터의 id를 가져오기
+    // 3) 기존 데이터와 새로운 데이터를 비교하여 삭제할 데이터와 삽입할 데이터의 id를 가져오기
     logger.info("[PROCESS] DB에 존재하는 공연 ID와 새로운 공연 ID 비교");
     const { idsToDelete, idsToInsert } = compareNewOld(newIds, dbIds);
 
@@ -81,19 +82,20 @@ export const createExtractPerformances = ({
 
     // 7) 이미지 url만 순수하게 뽑아내기 (껍질 까기)
     const imageTargets = rawPerformances.map((rawData) => {
-      const detailImageUrls = rawData.styurls?.styurl || []; // 🟢 오타 교정 완료
+      const detailImageUrls = rawData.styurls?.styurl || [];
       const detailImageUrlList = Array.isArray(detailImageUrls)
         ? detailImageUrls
         : [detailImageUrls];
 
       return {
         id: rawData.mt20id,
-        posterUrl: rawData.poster,
+        posterUrl: rawData.poster, // null일 수도 있음
         detailImageUrls: detailImageUrlList,
       };
     });
 
     // 8) Promise.all을 사용하여 병렬로 안전하게 버퍼 데이터 가져오기
+    // 에러 발생 시 posterBuffer는 null, detailImageBuffers는 빈 배열로 반환된다.
     logger.info("[PROCESS] 이미지 URL 바탕으로 버퍼 데이터 병렬 페칭 시작");
     const datasWithImageBuffer = await Promise.all(
       imageTargets.map((target) => getPerformanceImageBuffers(target)),
@@ -106,16 +108,22 @@ export const createExtractPerformances = ({
 
     // 10) 오케스트레이터에서 안전하게 1:1 매칭하며 매퍼 호출하기
     // datasWithImageBuffer에 id가 들어있으므로, 안전하게 ID 기반으로 매칭합니다.
-    const bufferMap = new Map(datasWithImageBuffer.map((b) => [b.id, b]));
+    const bufferMap = new Map(
+      datasWithImageBuffer.filter((item) => item).map((b) => [b.id, b]),
+    );
 
     const performances = rawPerformances.map((rawData) => {
       const targetBuffer = bufferMap.get(rawData.mt20id);
 
+      if (targetBuffer === undefined) {
+        return null;
+      }
+
       // 개별 데이터 단위로 순수하게 매핑 함수 호출
       return mapExternalToInternal(
         rawData,
-        targetBuffer?.posterBuffer || null,
-        targetBuffer?.detailImageBuffers || [],
+        targetBuffer.posterBuffer,
+        targetBuffer.detailImageBuffers || [],
       );
     });
 

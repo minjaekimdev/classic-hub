@@ -14,8 +14,8 @@ export interface InternalPerformance {
   hostCompany: string; // 주최 (entrpsnmH)
   organizerCompany: string; // 주관 (entrpsnmS)
   priceInfo: string; // 티켓가격 (pcseguidance)
-  posterUrl: string; // 포스터 이미지 경로
-  posterImage: Buffer; // 포스터 이미지 데이터 (Buffer)
+  posterUrl: string | null; // 포스터 이미지 경로
+  posterImage: Buffer | null; // 포스터 이미지 데이터 (Buffer)
   description: string; // 줄거리 (sty)
   area: string; // 지역 (area)
   genre: string; // 장르 (genrenm)
