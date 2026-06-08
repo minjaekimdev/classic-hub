@@ -7,7 +7,7 @@ import { createGetPerformanceIdsInPage } from "../infra/getPerformanceIdsInPage"
 
 // 오늘 ~ 대상 기간동안의 새 공연 데이터 id 배열 리턴하기
 // TODO: 페이지네이션 테스트 필요
-export const createGetPerformanceIds = (kopisService: IKopisService) => {
+export const createGetAllPerformanceIdList = (kopisService: IKopisService) => {
   const getPerformanceIdsInPage = createGetPerformanceIdsInPage(kopisService);
 
   return async (

@@ -2,7 +2,7 @@
 // 최초 1회만 수행하므로, use-cases가 아닌 scripts 폴더에 둔다
 import { API_URL, SERVICE_KEY } from "@/infrastructure/kopis/client";
 import RateLimiter from "shared/utils/rateLimiter";
-import { kopisFetcher } from "../../infrastructure/kopis/fetcher";
+import { kopisFetcher } from "../../infrastructure/kopis/utils/fetcher";
 import getFacilityDetail from "../../../application/use-cases/fetchers/getFacilityDetail";
 import insertFacilityToDB from "../use-cases/database/insertFacilityToDB";
 

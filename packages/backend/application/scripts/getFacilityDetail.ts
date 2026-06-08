@@ -1,5 +1,5 @@
-import { kopisFetcher } from "@/infrastructure/kopis/fetcher";
-import { removeTextProperty } from "@/infrastructure/kopis/preprocessor";
+import { kopisFetcher } from "@/infrastructure/kopis/utils/fetcher";
+import { removeTextProperty } from "@/infrastructure/kopis/utils/preprocessor";
 import { API_URL, SERVICE_KEY } from "@/infrastructure/kopis/client";
 import { Facility } from "shared/types/kopis";
 import { withErrorHandling } from "shared/utils/error";

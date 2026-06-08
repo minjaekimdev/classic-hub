@@ -2,7 +2,7 @@ import getProgramJSON from "@/application/use-cases/program/getProgramJSON";
 import { getPerformanceDetail } from "@/application/use-cases/fetchers/getPerformanceDetail";
 import getProgramText from "@/application/use-cases/program/getProgramText";
 import { ProcessResult } from "shared/types/sync";
-import { imageFetcher } from "@/shared/utils/imageFetcher";
+import { imageFetcher } from "@/infrastructure/kopis/utils/image-fetcher";
 import sharp from "sharp";
 import logger from "@/shared/utils/logger";
 import { uploadPosterToStorage } from "../database/uploadPosterToStorage";
@@ -154,6 +154,8 @@ export const processPerformance = async (
   };
 };
 
-export const transformedPerformances = (performances: InternalPerformance[]) => {
+export const transformedPerformances = (
+  performances: InternalPerformance[],
+) => {
   // DB 형태에 맞는 데이터로 매핑하는 과정까지 수행
-}
+};

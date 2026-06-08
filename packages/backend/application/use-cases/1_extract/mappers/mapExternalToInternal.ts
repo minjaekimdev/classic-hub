@@ -2,6 +2,7 @@ import { PerformanceDetail } from "@/shared/types/kopis";
 import { InternalPerformance } from "../types";
 
 // KOPIS 원본 객체 데이터를 개발용 객체 데이터로 변환
+// posterBuffer에는 데이터 정합성을 위해 완전한 형태의 버퍼가 들어와야 한다.
 export const mapExternalToInternal = (
   rawData: PerformanceDetail,
   posterBuffer: Buffer,
