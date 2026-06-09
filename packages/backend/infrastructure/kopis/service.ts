@@ -2,15 +2,14 @@ import { kopisFetcher } from "./utils/fetcher";
 import { removeTextProperty } from "./utils/preprocessor";
 import { API_URL, SERVICE_KEY, CLASSIC } from "./client";
 import {
-  Facility,
   PerformanceDetail,
   PerformanceSummary,
   Ranking,
 } from "shared/types/kopis";
 
-// 다른 파일들이 이 구조만 보고 일하도록 명세서를 선언한다.
+// KOPIS API를 찔러서 데이터 하나를 순수하게 가져온다는 단건 조회 기능만 가지고 있으면 됨
 // getPerformanceWithBuffer, getPerformanceList 등의 함수는 비즈니스 로직이 포함되어 있으므로 X
-// KOPIS API를 찔러서 데이터 하나를 순수하게 가져온다는 단건 조회 기능만 가지고 있으면 된다.
+// 데이터 변환에 필요한 전처리까지를 이곳 인프라 코드에서 수행한다.
 export interface IKopisService {
   getRanking(startDate: string, endDate: string): Promise<Ranking[]>;
   getPerformanceIdsInPage(
@@ -80,7 +79,6 @@ export const kopisService: IKopisService = {
       Array.isArray(processedResult) ? processedResult : [processedResult]
     ) as any[];
 
-    // 전처리(removeTextProperty)를 거쳤으므로 이제 안전하게 mt10id를 바로 꺼낼 수 있습니다.
     return facilitySummaryArray.map((item) => item.mt10id);
   },
 };

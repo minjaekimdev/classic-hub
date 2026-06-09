@@ -34,7 +34,6 @@ interface Dependencies {
   ) => Promise<ImagebuffersResult>;
 }
 
-// extractPerformances 자체는 1회만 재시도한다.
 export const createExtractPerformances = ({
   getColumnData,
   compareNewOld,
@@ -54,22 +53,19 @@ export const createExtractPerformances = ({
     );
 
     // 1) 새로운 데이터를 페칭
-    // 내부에서 3회 재시도 했는데도 전체 페이지를 가져오지 못했다면 에러 발생 후 상위로 throw
+    // 에러 발생 시 슬랙 알림 전송, 프로세스 종료
     const newIds = await getAllPerformanceIdList(startDate, endDate);
     logger.info("[KOPIS] 새로운 공연 ID 개수:", newIds.length);
 
     // 2) 비교를 위해 DB에 있는 기존 데이터 페칭
-    // 에러 발생 시 상위로 throw
     const dbIds = await getColumnData("performances", "performance_id");
     logger.info("[DB] DB에 존재하는 공연 ID 개수:", dbIds.length);
 
     // 3) 기존 데이터와 새로운 데이터를 비교하여 삭제할 데이터와 삽입할 데이터의 id를 가져오기
-    // 에러 발생 시 상위로 throw
     logger.info("[PROCESS] DB에 존재하는 공연 ID와 새로운 공연 ID 비교");
     const { idsToDelete, idsToInsert } = compareNewOld(newIds, dbIds);
 
     // 4) 기존에 저장된 공연둘 중 수정된 공연의 id 가져오기
-
     logger.info("[PROCESS] DB에 있는 기존 공연들 중 수정된 공연 id 가져오기");
     const idsToUpdate = await getAllPerformanceIdList(
       startDate,
