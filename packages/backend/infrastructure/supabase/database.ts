@@ -16,13 +16,13 @@ export interface IDatabaseService {
 
   // 지정한 컬럼의 값이 주어진 배열 범위 내에 포함된 모든 데이터를 테이블에서 삭제한다.
   deleteData<T>(table: string, column: string, data: Array<T>): Promise<void>;
-  
+
   // 특정 컬럼의 값이 존재(NOT NULL)하는 모든 데이터를 삭제하여 테이블을 초기화한다.
   resetData(table: string, id: string): Promise<void>;
 
   // 데이터를 테이블에 삽입하거나, 중복된 키가 존재할 경우 업데이트(Upsert)를 수행한다.
   insertData<T>(table: string, data: T, onConflict: string): Promise<void>;
-  
+
   // 데이터베이스 내부의 RPC 또는 함수를 호출한다.
   callDatabaseFunction<T>(fnName: string, args?: T): Promise<void>;
 }
@@ -37,9 +37,8 @@ export const getColumnData = async (
 
   if (error) {
     throw new APIError(`[FETCH_FAIL] DB Fetch Failed: ${error.message}`);
-  } else {
-    return data.map((element: Record<string, any>) => element[column]);
   }
+  return data.map((element: Record<string, any>) => element[column]);
 };
 
 // 컬럼의 값이 null/true/false인지
@@ -55,9 +54,8 @@ export const getRowsByIs = async <T>(
 
   if (error) {
     throw new APIError(`DB Fetch Failed: ${error.message}`);
-  } else {
-    return data;
   }
+  return data;
 };
 
 // 컬럼의 값이 특정 값과 같은지
@@ -73,9 +71,8 @@ export const getRowsByEq = async <T>(
 
   if (error) {
     throw new APIError(`DB Fetch Failed: ${error.message}`);
-  } else {
-    return data;
   }
+  return data;
 };
 
 // 데이터 삭제
@@ -88,11 +85,6 @@ export const deleteData = async <T>(
 
   if (error) {
     throw new APIError(`[DB_FAIL] DB 데이터 삭제 실패: ${error.message}`);
-  } else {
-    logger.info("[DB_SUCCESS] DB 데이터 삭제 성공", {
-      service: "supabase",
-      table,
-    });
   }
 };
 
@@ -119,15 +111,11 @@ export const insertData = async <T>(
 };
 
 // rpc 호출
+// TODO: 외부에서 callDatabaseFunction 호출 시 성공 상태 로깅을 해주어야 함
 export const callDatabaseFunction = async <T>(fnName: string, args?: T) => {
   const { error } = await supabase.rpc(fnName, args);
 
   if (error) {
     throw new APIError(`RPC Failed: ${error.message}`);
-  } else {
-    logger.info("DB RPC succeeded", {
-      service: "supabase",
-      fnName,
-    });
   }
 };

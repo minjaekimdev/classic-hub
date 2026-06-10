@@ -1,5 +1,4 @@
 import logger from "@/shared/utils/logger";
-import { failureCollector } from "../../shared/failureCollector";
 import { kopisRateLimiter } from "../../../services/kopisRateLimiter";
 import { PerformanceDetail } from "shared/types/kopis";
 
@@ -27,12 +26,7 @@ export const createGetPerformanceDetailList = ({
         result.push(rawData);
       } catch (error: unknown) {
         logger.error(`[KOPIS_FAIL] 상세 데이터 조회 실패 (ID: ${id})`);
-
-        if (error instanceof Error) {
-          failureCollector.add(id, "EXTRACT", error.message);
-        } else {
-          failureCollector.add(id, "EXTRACT", String(error));
-        }
+        // TODO: failureCollector 로직 추가 필요
       }
     }
 

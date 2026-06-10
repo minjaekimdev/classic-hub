@@ -1,5 +1,4 @@
 import logger from "@/shared/utils/logger";
-import { failureCollector } from "../../shared/failureCollector";
 import { kopisRateLimiter } from "../../../services/kopisRateLimiter";
 import { InternalPerformance } from "../types";
 
@@ -22,11 +21,8 @@ export const createGetCompletePerformances = ({
         result.push(performanceDetail);
       } catch (error: unknown) {
         logger.error(`[FETCH_FAIL] Performance fetch failed (ID: ${id})`);
-        if (error instanceof Error) {
-          failureCollector.add(id, "EXTRACT", error.message);
-        } else {
-          failureCollector.add(id, "EXTRACT", String(error));
-        }
+        
+        // TODO: failureCollector 로직 추가 필요
       }
     }
 

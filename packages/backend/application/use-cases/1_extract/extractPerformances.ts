@@ -15,7 +15,7 @@ interface ImagebuffersResult {
 }
 
 interface Dependencies {
-  getColumnData: (table: string, column: string) => Promise<string[]>;
+  getDbPerformanceIds: (table: string, column: string) => Promise<string[]>;
   compareNewOld: (
     newIds: string[],
     dbIds: string[],
@@ -36,7 +36,7 @@ interface Dependencies {
 
 // extractPerformances 자체는 1회만 재시도한다.
 export const createExtractPerformances = ({
-  getColumnData,
+  getDbPerformanceIds,
   compareNewOld,
   getAllPerformanceIdList,
   getPerformanceDetailList,
@@ -60,7 +60,7 @@ export const createExtractPerformances = ({
 
     // 2) 비교를 위해 DB에 있는 기존 데이터 페칭
     // 에러 발생 시 상위로 throw
-    const dbIds = await getColumnData("performances", "performance_id");
+    const dbIds = await getDbPerformanceIds("performances", "performance_id");
     logger.info("[DB] DB에 존재하는 공연 ID 개수:", dbIds.length);
 
     // 3) 기존 데이터와 새로운 데이터를 비교하여 삭제할 데이터와 삽입할 데이터의 id를 가져오기

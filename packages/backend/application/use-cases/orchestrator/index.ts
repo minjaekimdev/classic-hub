@@ -6,8 +6,7 @@ import { callDatabaseFunction } from "../../../infrastructure/supabase/database"
 import { saveFailuresToArtifact } from "../../../infrastructure/github/saveFailuresToArtifact";
 import { processPerformance } from "../2_transform/transformPerformances";
 import { retry } from "../shared/retry";
-import { extractPerformances } from "../1_extract/extractPerformances";
-
+import { createExtractPerformances, extractPerformances } from "../1_extract/extractPerformances";
 // TODO: 테스트를 어디에 적용해야 할지 잘 모르겠다..
 export const syncPerformanceData = async (
   now: Dayjs,

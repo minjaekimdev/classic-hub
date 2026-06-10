@@ -1,5 +1,4 @@
 import logger from "@/shared/utils/logger";
-import { failureCollector } from "../../shared/failureCollector";
 
 type imageFetcherFn = (url: string, messgage: string) => Promise<Buffer>;
 
@@ -45,10 +44,9 @@ export const createGetPerformanceImageBuffers = ({
       logger.error(`[IMAGE_FAIL] 이미지 다운로드 실패 (ID: ${id})`);
 
       // TODO: 재시도는 extract, transform, load 각 단계별로 수행하는 것이 올바름
-      // 따라서 failureCollector도 단계별로 모으고, 추후 최종본을 합치는게 좋을 것 같다.
-      failureCollector.add(id, "EXTRACT", String(error));
+      // 따라서 failureCollector로직 추가 시 별도 단계별로 모으고, 추후 최종본을 합치는게 좋을 것 같다.
 
-      // 에러 시 빈 버퍼나 null을 반환하여 다음 공정이 진행되도록 방어벽 구축
+      // 에러 시 빈 버퍼나 null을 반환하여 다음 과정이 진행되도록
       return null;
     }
   };
