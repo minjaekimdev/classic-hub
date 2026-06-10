@@ -1,6 +1,6 @@
 import logger from "@/shared/utils/logger";
 import { failureCollector } from "../../shared/failureCollector";
-import { kopisRateLimiter } from "../../lib/kopisRateLimiter";
+import { kopisRateLimiter } from "../../../services/kopisRateLimiter";
 import { PerformanceDetail } from "shared/types/kopis";
 
 interface GetPerformanceDetailsDependencies {
@@ -11,9 +11,7 @@ interface GetPerformanceDetailsDependencies {
 export const createGetPerformanceDetailList = ({
   getPerformanceDetail,
 }: GetPerformanceDetailsDependencies) => {
-  return async (
-    ids: string[],
-  ): Promise<PerformanceDetail[]> => {
+  return async (ids: string[]): Promise<PerformanceDetail[]> => {
     const result: PerformanceDetail[] = [];
 
     logger.info(

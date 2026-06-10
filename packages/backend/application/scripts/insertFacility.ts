@@ -4,7 +4,7 @@ import { API_URL, SERVICE_KEY } from "@/infrastructure/kopis/client";
 import RateLimiter from "shared/utils/rateLimiter";
 import { kopisFetcher } from "../../infrastructure/kopis/utils/fetcher";
 import getFacilityDetail from "../../../application/use-cases/fetchers/getFacilityDetail";
-import insertFacilityToDB from "../use-cases/database/insertFacilityToDB";
+import insertFacilityToDB from "../use-cases/scripts/insertFacilityToDB";
 
 // 공연시설 목록 조회
 const getFacilityAndInsertToDB = async () => {

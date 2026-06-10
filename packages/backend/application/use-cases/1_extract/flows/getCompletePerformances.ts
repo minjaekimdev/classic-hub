@@ -1,6 +1,6 @@
 import logger from "@/shared/utils/logger";
 import { failureCollector } from "../../shared/failureCollector";
-import { kopisRateLimiter } from "../../lib/kopisRateLimiter";
+import { kopisRateLimiter } from "../../../services/kopisRateLimiter";
 import { InternalPerformance } from "../types";
 
 interface Dependencies {

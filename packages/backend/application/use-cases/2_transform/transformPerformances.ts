@@ -1,14 +1,14 @@
-import getProgramJSON from "@/application/use-cases/program/getProgramJSON";
+import getProgramJSON from "@/application/use-cases/2_transform/program/getProgramJSON";
 import { getPerformanceDetail } from "@/application/use-cases/fetchers/getPerformanceDetail";
-import getProgramText from "@/application/use-cases/program/getProgramText";
+import getProgramText from "@/application/use-cases/2_transform/program/getProgramText";
 import { ProcessResult } from "shared/types/sync";
 import { imageFetcher } from "@/infrastructure/kopis/utils/image-fetcher";
 import sharp from "sharp";
 import logger from "@/shared/utils/logger";
-import { uploadPosterToStorage } from "../database/uploadPosterToStorage";
-import { sanitizeImageBuffer } from "../program/sanitizeImageBuffer";
-import { splitLongImage } from "../program/splitLongImage";
-import { toDbPerformance } from "../mappers/toDbPerformance";
+import { uploadPosterToStorage } from "../scripts/uploadPosterToStorage";
+import { sanitizeImageBuffer } from "./program/sanitizeImageBuffer";
+import { splitLongImage } from "./program/splitLongImage";
+import { toDbPerformance } from "../3_load/mappers/toDbPerformance";
 import { PerformanceDetail } from "@/shared/types/kopis";
 import { InternalPerformance } from "../1_extract/types";
 

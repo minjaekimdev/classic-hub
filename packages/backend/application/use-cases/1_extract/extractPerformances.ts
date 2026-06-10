@@ -69,7 +69,6 @@ export const createExtractPerformances = ({
     const { idsToDelete, idsToInsert } = compareNewOld(newIds, dbIds);
 
     // 4) 기존에 저장된 공연둘 중 수정된 공연의 id 가져오기
-
     logger.info("[PROCESS] DB에 있는 기존 공연들 중 수정된 공연 id 가져오기");
     const idsToUpdate = await getAllPerformanceIdList(
       startDate,
@@ -77,7 +76,8 @@ export const createExtractPerformances = ({
       afterDate,
     );
 
-    // 5) isToUpdate와 isToInsert에 동일한 id를 가진 데이터가 존재할 수 있으므로 set으로 중복 제외
+    // 5) 변환(Transform) 단계에 투입할 데이터를 골라낸다.
+    // isToUpdate와 isToInsert에 동일한 id를 가진 데이터가 존재할 수 있으므로 set으로 중복을 제외한다.
     const idsToTransform = [...new Set([...idsToInsert, ...idsToUpdate])];
     logger.info("[PROCESS] 가공해야 할 최종 공연 개수:", idsToTransform.length);
 
@@ -85,7 +85,7 @@ export const createExtractPerformances = ({
     logger.info("[PROCESS] 공연 상세 데이터 추출 시작");
     const rawPerformances = await getPerformanceDetailList(idsToTransform);
 
-    // 7) 이미지 url만 순수하게 뽑아내기 (껍질 까기)
+    // 7) 이미지 url만 순수하게 뽑아내기
     const imageTargets = rawPerformances.map((rawData) => {
       const detailImageUrls = rawData.styurls?.styurl || [];
       const detailImageUrlList = Array.isArray(detailImageUrls)

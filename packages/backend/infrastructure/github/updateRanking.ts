@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
-import updateRanking from "@/application/use-cases/database/updateRanking";
-import { kopisRateLimiter } from "@/application/use-cases/lib/kopisRateLimiter";
+import updateRanking from "@/application/use-cases/scripts/updateRanking";
+import { kopisRateLimiter } from "@/application/services/kopisRateLimiter";
 
 (async () => {
   const END_DATE = dayjs().subtract(1, "day");

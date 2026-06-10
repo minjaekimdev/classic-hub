@@ -1,7 +1,7 @@
 import { sendSlackNotification } from "@/shared/utils/monitor";
 import { APIError, withErrorHandling } from "shared/utils/error";
 import logger from "shared/utils/logger";
-import { kopisRateLimiter } from "../../lib/kopisRateLimiter";
+import { kopisRateLimiter } from "../../../services/kopisRateLimiter";
 import { IKopisService } from "@/infrastructure/kopis/service";
 import { createGetPerformanceIdsInPage } from "../infra/getPerformanceIdsInPage";
 

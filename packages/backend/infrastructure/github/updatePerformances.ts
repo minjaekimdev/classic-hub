@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { syncPerformanceData } from "../../application/use-cases/orchestrators/syncPerformanceData";
+import { syncPerformanceData } from "../../application/use-cases/orchestrator";
 
 const MAX_REPEAT = 5;
 
