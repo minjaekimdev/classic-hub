@@ -56,12 +56,12 @@ export const createExtractPerformances = ({
     // 1) 새로운 데이터를 페칭
     // 내부에서 3회 재시도 했는데도 전체 페이지를 가져오지 못했다면 에러 발생 후 상위로 throw
     const newIds = await getAllPerformanceIdList(startDate, endDate);
-    logger.info("[KOPIS] 새로운 공연 ID 개수:", newIds.length);
+    logger.info("[KOPIS_SUCCESS] 새로운 공연 ID 개수:", newIds.length);
 
     // 2) 비교를 위해 DB에 있는 기존 데이터 페칭
     // 에러 발생 시 상위로 throw
     const dbIds = await getDbPerformanceIds("performances", "performance_id");
-    logger.info("[DB] DB에 존재하는 공연 ID 개수:", dbIds.length);
+    logger.info("[DB_SUCCESS] DB에 존재하는 공연 ID 개수:", dbIds.length);
 
     // 3) 기존 데이터와 새로운 데이터를 비교하여 삭제할 데이터와 삽입할 데이터의 id를 가져오기
     // 에러 발생 시 상위로 throw

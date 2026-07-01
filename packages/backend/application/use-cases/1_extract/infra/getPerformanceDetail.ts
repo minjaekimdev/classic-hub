@@ -4,6 +4,6 @@ export const createGetPerformanceDetail = async (
   kopisService: IKopisService
 ) => {
   return async (performanceId: string) => {
-    return await kopisService.getPerformanceDetail(performanceId);
+    return kopisService.getPerformanceDetail(performanceId);
   }
 };
