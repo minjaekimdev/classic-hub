@@ -4,6 +4,7 @@ export interface GetDbPerformanceIdsDeps {
 
 // 호출부에서 전달한 table/column을 그대로 getColumnData에 전달하여
 // 해당 컬럼의 값만 1차원 문자열 배열로 반환한다.
+// getColumnData를 테스트했으므로 createGetDbPerformanceIds에서 리턴되는 함수는 테스트하지 않는다.
 export const createGetDbPerformanceIds = ({
   getColumnData,
 }: GetDbPerformanceIdsDeps) => {

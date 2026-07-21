@@ -49,4 +49,5 @@ export const extractPerformances = createExtractPerformances({
   getAllPerformanceIdList,
   getPerformanceDetailList,
   getPerformanceImageBuffers,
+  log: logger,
 });

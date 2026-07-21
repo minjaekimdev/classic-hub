@@ -1,4 +1,3 @@
-import logger from "@/shared/utils/logger";
 import { mapExternalToInternal } from "./mappers/mapExternalToInternal";
 import { PerformanceDetail } from "@/shared/types/kopis";
 
@@ -32,6 +31,9 @@ interface Dependencies {
   getPerformanceImageBuffers: (
     target: ImageTarget,
   ) => Promise<ImagebuffersResult | null>;
+  log: {
+    info: (msg: string) => void;
+  };
 }
 
 // extractPerformances 자체는 1회만 재시도한다.
@@ -41,6 +43,7 @@ export const createExtractPerformances = ({
   getAllPerformanceIdList,
   getPerformanceDetailList,
   getPerformanceImageBuffers,
+  log,
 }: Dependencies) => {
   return async (
     startDate: string,
@@ -49,27 +52,27 @@ export const createExtractPerformances = ({
     updateEndDate: string,
   ) => {
     // 로그를 현재 단계, KOPIS페칭, DB관련 로직 등등에 따라 각각 PROCESS, KOPIS, DB로 분류
-    logger.info(
+    log.info(
       `[PROCESS] 새로운 공연 데이터 동기화 시작 (대상 기간: ${startDate} ~ ${endDate})`,
     );
 
     // 1) 새로운 데이터를 페칭
     // 내부에서 3회 재시도 했는데도 전체 페이지를 가져오지 못했다면 에러 발생 후 상위로 throw
     const newIds = await getAllPerformanceIdList(startDate, endDate);
-    logger.info("[KOPIS_SUCCESS] 새로운 공연 ID 개수:", newIds.length);
+    log.info(`[KOPIS_SUCCESS] 새로운 공연 ID 개수: ${newIds.length}`);
 
     // 2) 비교를 위해 DB에 있는 기존 데이터 페칭
     // 에러 발생 시 상위로 throw
     const dbIds = await getDbPerformanceIds("performances", "performance_id");
-    logger.info("[DB_SUCCESS] DB에 존재하는 공연 ID 개수:", dbIds.length);
+    log.info(`[DB_SUCCESS] DB에 존재하는 공연 ID 개수: ${dbIds.length}`);
 
     // 3) 기존 데이터와 새로운 데이터를 비교하여 삭제할 데이터와 삽입할 데이터의 id를 가져오기
     // 에러 발생 시 상위로 throw
-    logger.info("[PROCESS] DB에 존재하는 공연 ID와 새로운 공연 ID 비교");
+    log.info("[PROCESS] DB에 존재하는 공연 ID와 새로운 공연 ID 비교");
     const { idsToDelete, idsToInsert } = compareNewOld(newIds, dbIds);
 
     // 4) 기존에 저장된 공연둘 중 수정된 공연의 id 가져오기
-    logger.info("[PROCESS] DB에 있는 기존 공연들 중 수정된 공연 id 가져오기");
+    log.info("[PROCESS] DB에 있는 기존 공연들 중 수정된 공연 id 가져오기");
     const idsToUpdate = await getAllPerformanceIdList(
       startDate,
       updateEndDate,
@@ -79,10 +82,10 @@ export const createExtractPerformances = ({
     // 5) 변환(Transform) 단계에 투입할 데이터를 골라낸다.
     // isToUpdate와 isToInsert에 동일한 id를 가진 데이터가 존재할 수 있으므로 set으로 중복을 제외한다.
     const idsToTransform = [...new Set([...idsToInsert, ...idsToUpdate])];
-    logger.info("[PROCESS] 가공해야 할 최종 공연 개수:", idsToTransform.length);
+    log.info(`[PROCESS] 가공해야 할 최종 공연 개수: ${idsToTransform.length}`);
 
     // 6) id를 바탕으로 공연 상세 데이터만 먼저 가져오기
-    logger.info("[PROCESS] 공연 상세 데이터 추출 시작");
+    log.info("[PROCESS] 공연 상세 데이터 추출 시작");
     const rawPerformances = await getPerformanceDetailList(idsToTransform);
 
     // 7) 이미지 url만 순수하게 뽑아내기
@@ -101,13 +104,13 @@ export const createExtractPerformances = ({
 
     // 8) Promise.all을 사용하여 병렬로 안전하게 버퍼 데이터 가져오기
     // 에러 발생 시 posterBuffer는 null, detailImageBuffers는 빈 배열로 반환된다.
-    logger.info("[PROCESS] 이미지 URL 바탕으로 버퍼 데이터 병렬 페칭 시작");
+    log.info("[PROCESS] 이미지 URL 바탕으로 버퍼 데이터 병렬 페칭 시작");
     const datasWithImageBuffer = await Promise.all(
       imageTargets.map((target) => getPerformanceImageBuffers(target)),
     );
 
     // 9) 로그 타이밍 최적화
-    logger.info(
+    log.info(
       "[PROCESS] 2단계: 가져온 데이터를 바탕으로 이미지 버퍼 및 최종 리스트 가공 시작",
     );
 
