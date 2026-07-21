@@ -31,7 +31,7 @@ interface Dependencies {
   getPerformanceDetailList: (ids: string[]) => Promise<PerformanceDetail[]>;
   getPerformanceImageBuffers: (
     target: ImageTarget,
-  ) => Promise<ImagebuffersResult>;
+  ) => Promise<ImagebuffersResult | null>;
 }
 
 // extractPerformances 자체는 1회만 재시도한다.
@@ -114,7 +114,9 @@ export const createExtractPerformances = ({
     // 10) 오케스트레이터에서 안전하게 1:1 매칭하며 매퍼 호출하기
     // datasWithImageBuffer에 id가 들어있으므로, 안전하게 ID 기반으로 매칭합니다.
     const bufferMap = new Map(
-      datasWithImageBuffer.filter((item) => item).map((b) => [b.id, b]),
+      datasWithImageBuffer
+        .filter((item): item is ImagebuffersResult => item !== null)
+        .map((b) => [b.id, b]),
     );
 
     const performances = rawPerformances.map((rawData) => {

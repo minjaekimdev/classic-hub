@@ -6,13 +6,13 @@ import logger from "@/shared/utils/logger";
 import { kopisService } from "@/infrastructure/kopis/service";
 import { getColumnData } from "@/infrastructure/supabase/database";
 import { imageFetcher } from "@/infrastructure/kopis/utils/image-fetcher";
-import { createGetPerformanceIdsInPage } from "../1_extract/infra/getPerformanceIdsInPage";
-import { createGetDbPerformanceIds } from "../1_extract/infra/getDbPerformanceIds";
-import { createGetAllPerformanceIdList } from "../1_extract/flows/getAllPerformanceIdList";
-import { createGetPerformanceDetailList } from "../1_extract/flows/getPerformanceDetailList";
-import { createGetPerformanceImageBuffers } from "../1_extract/flows/getPerformanceImageBuffers";
-import { compareNewOld } from "../1_extract/flows/compareNewOld";
-import { createExtractPerformances } from "../1_extract/extractPerformances";
+import { createGetPerformanceIdsInPage } from "./infra/getPerformanceIdsInPage";
+import { createGetDbPerformanceIds } from "./infra/getDbPerformanceIds";
+import { createGetAllPerformanceIdList } from "./flows/getAllPerformanceIdList";
+import { createGetPerformanceDetailList } from "./flows/getPerformanceDetailList";
+import { createGetPerformanceImageBuffers } from "./flows/getPerformanceImageBuffers";
+import { compareNewOld } from "./flows/compareNewOld";
+import { createExtractPerformances } from "./extractPerformances";
 
 // KOPIS에서 한 페이지의 id를 가져오는 실제 구현 (withErrorHandling 래핑 포함)
 const fetchPage = createGetPerformanceIdsInPage(kopisService);
