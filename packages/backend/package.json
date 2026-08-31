@@ -1,9 +1,11 @@
 {
   "name": "backend",
+  "version": "1.0.0",
   "dependencies": {
+    "@classic-hub/shared": "1.0.0",
     "@google-cloud/vision": "^5.3.4",
     "@google/genai": "^1.15.0",
-    "@supabase/supabase-js": "^2.51.0",
+    "@supabase/supabase-js": "^2.54.0",
     "@types/express": "^5.0.3",
     "cors": "^2.8.5",
     "dayjs": "^1.11.13",
@@ -22,11 +24,12 @@
     "msw": "^2.14.6",
     "supabase": "^2.39.2",
     "tsx": "^4.21.0",
-    "typescript": "^5.8.3",
+    "typescript": "~5.8.3",
     "vite-tsconfig-paths": "^6.1.1",
     "vitest": "^4.0.18"
   },
   "scripts": {
+    "build": "tsc --noEmit",
     "insert-failed-performances": "npx tsx --env-file=.env ./scripts/insertFailedPerformances.ts",
     "reset-performances": "npx tsx --env-file=.env ./scripts/resetPerformances.ts",
     "delete-storage-files": "npx tsx --env-file=.env ./scripts/deleteStorageFiles.ts",

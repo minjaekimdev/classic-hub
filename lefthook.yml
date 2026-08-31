@@ -11,3 +11,8 @@ pre-push:
       # 프론트엔드 코드나 shared가 바뀌었을 때 실행
       glob: "{packages/frontend/**/*,packages/shared/**/*}"
       run: npx turbo run build --filter=frontend
+
+    syncpack:
+      # 의존성 버전 불일치 검사 (package.json이 바뀐 push에서만)
+      glob: "packages/*/package.json"
+      run: npx syncpack lint
