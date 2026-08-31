@@ -14,7 +14,7 @@ import { createGetPerformanceImageBuffers } from "./flows/getPerformanceImageBuf
 import { compareNewOld } from "./flows/compareNewOld";
 import { createExtractPerformances } from "./extractPerformances";
 
-// KOPIS에서 한 페이지의 id를 가져오는 실제 구현 (withErrorHandling 래핑 포함)
+// KOPIS에서 한 페이지의 id를 가져오는 실제 구현 (실패 시 에러를 던지며 재시도 정책은 flow가 담당)
 const fetchPage = createGetPerformanceIdsInPage(kopisService);
 
 // 1) 대상 기간동안의 새 공연 데이터 id 배열 리턴

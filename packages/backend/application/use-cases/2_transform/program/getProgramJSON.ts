@@ -1,4 +1,4 @@
-import { APIError, withErrorHandling } from "shared/utils/error";
+import { APIError } from "shared/utils/error";
 import { ProgramExtractionResponse } from "shared/types/gemini";
 import {
   GenerateContentParams,
@@ -73,36 +73,31 @@ const RESPONSE_JSON_SCHEMA = {
 };
 
 // KOPIS 응답의 프로그램 텍스트를 분석하여 구조화된 JSON으로 변환하는 함수
+// 실패 시 에러를 그대로 던지며, null fallback 정책은 상위 오케스트레이터가 담당한다.
 export const createGetProgramJSON = ({ generateContent, log }: GetProgramJSONDeps) => {
   return async (
     programText: string,
-  ): Promise<ProgramExtractionResponse | null> => {
-    return withErrorHandling(
-      async () => {
-        const response = await generateContent({
-          model: "gemini-2.5-flash",
-          contents: INSTRUCTION + programText,
-          config: {
-            temperature: 0,
-            maxOutputTokens: 15000,
-            responseMimeType: "application/json",
-            responseJsonSchema: RESPONSE_JSON_SCHEMA,
-          },
-        });
-
-        if (!response?.text) {
-          throw new APIError("Gemini API가 빈 응답을 반환했습니다.");
-        }
-
-        log.info("Gemini 프로그램 분석 완료", {
-          service: "gemini",
-          usage: response.usageMetadata,
-        });
-
-        return JSON.parse(response.text);
+  ): Promise<ProgramExtractionResponse> => {
+    const response = await generateContent({
+      model: "gemini-2.5-flash",
+      contents: INSTRUCTION + programText,
+      config: {
+        temperature: 0,
+        maxOutputTokens: 15000,
+        responseMimeType: "application/json",
+        responseJsonSchema: RESPONSE_JSON_SCHEMA,
       },
-      null,
-      "gemini",
-    );
+    });
+
+    if (!response?.text) {
+      throw new APIError("Gemini API가 빈 응답을 반환했습니다.");
+    }
+
+    log.info("Gemini 프로그램 분석 완료", {
+      service: "gemini",
+      usage: response.usageMetadata,
+    });
+
+    return JSON.parse(response.text);
   };
 };

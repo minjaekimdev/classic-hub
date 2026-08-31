@@ -1,4 +1,4 @@
-import { APIError, withErrorHandling } from "../../../shared/utils/error";
+import { APIError } from "../../../shared/utils/error";
 
 export const imageFetcher = async (url: string, message: string) => {
   const response = await fetch(url);

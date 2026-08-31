@@ -3,6 +3,7 @@
 import { API_URL, SERVICE_KEY } from "@/infrastructure/kopis/client";
 import RateLimiter from "shared/utils/rateLimiter";
 import { kopisFetcher } from "../../infrastructure/kopis/utils/fetcher";
+import logger from "shared/utils/logger";
 import getFacilityDetail from "../../../application/use-cases/fetchers/getFacilityDetail";
 import insertFacilityToDB from "../use-cases/scripts/insertFacilityToDB";
 
@@ -28,13 +29,16 @@ const getFacilityAndInsertToDB = async () => {
         // 목록에서는 아직 _text가 남아있으므로 ._text로 접근
         const mt10id = item.mt10id._text;
 
-        const facility = await KOPISrateLimiter.execute(() =>
-          getFacilityDetail(mt10id),
-        );
-
-        // null 체크: facility가 null이 아닐 때만 저장
-        if (facility) {
+        // 개별 공연장의 실패가 전체 스크립트를 중단시키지 않도록 여기서 catch한다.
+        try {
+          const facility = await KOPISrateLimiter.execute(() =>
+            getFacilityDetail(mt10id),
+          );
           await insertFacilityToDB(facility);
+        } catch (error) {
+          logger.warn(
+            `[FACILITY_FAIL] facility 처리 실패 (mt10id: ${mt10id}): ${error}`,
+          );
         }
       }),
     );

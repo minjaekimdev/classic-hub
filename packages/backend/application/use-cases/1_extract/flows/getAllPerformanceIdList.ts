@@ -44,14 +44,6 @@ export const createGetAllPerformanceIdList = (
           fetchPage(startDate, endDate, page, afterDate),
         );
 
-        // 페이지별 새 공연 id 배열을 받아올 때 에러가 발생한 경우 (null 반환)
-        // 해당 페이지부터 다시 실행할 수 있도록 한다.
-        if (!performanceIdArray) {
-          throw new APIError(
-            `[KOPIS_FAIL] 최신 공연 데이터 가져오기 실패 (page: ${page})`,
-          );
-        }
-
         // 더 이상 데이터가 없는 경우 반복문 빠져나오기
         if (performanceIdArray.length === 0) {
           break;

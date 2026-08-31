@@ -1,8 +1,6 @@
 import { insertData } from "@/infrastructure/supabase/database";
 import { Facility } from "shared/types/kopis";
 import { DBFaciltyWrite } from "@classic-hub/shared/types/database";
-import { withErrorHandling } from "shared/utils/error";
-import logger from "shared/utils/logger";
 
 // 공연장은 facilities 테이블에, 세부 공연장은 halls 테이블에 저장
 const insertFacilityToDB = async (facilityDetail: Facility) => {
@@ -59,17 +57,9 @@ const insertFacilityToDB = async (facilityDetail: Facility) => {
   }));
 
   // PK가 존재하는 facilities 데이터가 먼저 삽입되어야 함(halls FK -> facilities PK)
-  await withErrorHandling(
-    async () => {
-      await insertData("facilities", DBfaciltyData, "id");
-      await insertData("halls", DBhallData, "id");
-    },
-    () => {
-      logger.warn(
-        `[INSERT_FAIL] facility detail insert failed: ${facility.mt10id}`,
-      );
-    },
-  );
+  // 실패 시 에러를 그대로 던지며, 건너뛰기 정책은 호출자 스크립트가 담당한다.
+  await insertData("facilities", DBfaciltyData, "id");
+  await insertData("halls", DBhallData, "id");
 };
 
 export default insertFacilityToDB;

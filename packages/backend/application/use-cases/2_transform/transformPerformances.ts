@@ -9,20 +9,23 @@ import { InternalPerformance } from "../1_extract/types";
 
 export interface TransformPerformancesDeps {
   imageFetcher: (url: string, message: string) => Promise<Buffer>;
-  getProgramText: (images: Buffer[]) => Promise<string | null>;
+  getProgramText: (images: Buffer[]) => Promise<string>;
   getProgramJSON: (
     programText: string,
-  ) => Promise<ProgramExtractionResponse | null>;
+  ) => Promise<ProgramExtractionResponse>;
   uploadPosterToStorage: (
     id: string,
     compressedPoster: Buffer,
-  ) => Promise<string | null>;
+  ) => Promise<string>;
   log: {
     info: (msg: string) => void;
     error: (msg: string) => void;
   };
 }
 
+// 공연 1건을 변환하는 항목 단위 오케스트레이터이자 에러 정책 계층.
+// 하위 함수들은 에러를 그대로 던지고, 이곳에서 catch하여
+// ProcessResult 에러 객체로 변환한다. (개별 공연의 실패가 전체 파이프라인을 중단시키지 않게 하기 위함)
 export const createTransformPerformances = ({
   imageFetcher,
   getProgramText,
@@ -43,22 +46,23 @@ export const createTransformPerformances = ({
 
     // 포스터 이미지 원본과 상세이미지 원본(버퍼)를 요청
     log.info("Fetching images...");
-    const posterBuffer = await imageFetcher(
-      posterUrl,
-      `[FETCH_FAIL] Poster Image Fetch Failed (ID: ${id})`,
-    );
-    const detailImageBuffers = await Promise.all(
-      detailUrlArray.map(async (url) =>
-        imageFetcher(
-          url,
-          `[FETCH_FAIL] Detail Image Fetch Failed (ID: ${id})`,
+    let posterBuffer: Buffer;
+    let detailImageBuffers: Buffer[];
+    try {
+      posterBuffer = await imageFetcher(
+        posterUrl,
+        `[FETCH_FAIL] Poster Image Fetch Failed (ID: ${id})`,
+      );
+      detailImageBuffers = await Promise.all(
+        detailUrlArray.map(async (url) =>
+          imageFetcher(
+            url,
+            `[FETCH_FAIL] Detail Image Fetch Failed (ID: ${id})`,
+          ),
         ),
-      ),
-    );
-
-    // posterBuffer 페칭에 실패했거나 detailImageBuffers 배열에서 null인 요소가 하나라도 있다면 에러 객체를 리턴
-    if (!posterBuffer || detailImageBuffers.some((item) => !item)) {
-      log.error("[FETCH_FAIL] Images fetch failed");
+      );
+    } catch (error) {
+      log.error(`[FETCH_FAIL] Images fetch failed (ID: ${id}): ${error}`);
       return {
         id,
         error: "ImageFetchError",
@@ -67,12 +71,15 @@ export const createTransformPerformances = ({
     }
 
     // 상세 이미지 버퍼에 있는 더미 데이터 삭제
-    const processedDetailImageBuffers = await Promise.all(
-      detailImageBuffers.map(sanitizeImageBuffer),
-    );
-
-    if (processedDetailImageBuffers.some((item) => item === null)) {
-      log.error("[OPTIMIZE_FAIL] Detail Images Optimization Failed");
+    let processedDetailImageBuffers: Buffer[];
+    try {
+      processedDetailImageBuffers = await Promise.all(
+        detailImageBuffers.map(sanitizeImageBuffer),
+      );
+    } catch (error) {
+      log.error(
+        `[OPTIMIZE_FAIL] Detail Images Optimization Failed (ID: ${id}): ${error}`,
+      );
       return {
         id,
         error: "ImageFetchError",
@@ -83,10 +90,13 @@ export const createTransformPerformances = ({
     // Vision API 입력 픽셀 한도를 만족하기 위해 분할
     log.info("Splitting images...");
 
-    const splitedDetailImageBuffers = await Promise.all(
-      processedDetailImageBuffers.map(splitLongImage),
-    );
-    if (splitedDetailImageBuffers.some((item) => !item)) {
+    let splitedDetailImageBuffers: Buffer[][];
+    try {
+      splitedDetailImageBuffers = await Promise.all(
+        processedDetailImageBuffers.map(splitLongImage),
+      );
+    } catch (error) {
+      log.error(`[SPLIT_FAIL] Image split failed (ID: ${id}): ${error}`);
       return {
         id,
         error: "ImageSplitError",
@@ -98,8 +108,19 @@ export const createTransformPerformances = ({
     log.info("Extracting Program text...");
 
     const textFromStyField = performanceDetail.sty;
-    const textFromDetailImage =
-      (await getProgramText(splitedDetailImageBuffers.flat())) ?? "";
+    let textFromDetailImage: string;
+    try {
+      textFromDetailImage = await getProgramText(
+        splitedDetailImageBuffers.flat(),
+      );
+    } catch (error) {
+      log.error(`[OCR_FAIL] Extracting Program text failed (ID: ${id}): ${error}`);
+      return {
+        id,
+        error: "OCRError",
+        data: null,
+      };
+    }
 
     if (!textFromDetailImage) {
       log.error(`[OCR_FAIL] Extracting Program text failed (ID: ${id})`);
@@ -120,10 +141,13 @@ export const createTransformPerformances = ({
 
     // Gemini API로 변환
     log.info("Converting Program text to JSON...");
-    const programJSON = await getProgramJSON(programText);
-
-    if (!programJSON) {
-      log.error("[GEMINI_FAIL] Converting Program text to JSON failed");
+    let programJSON: ProgramExtractionResponse;
+    try {
+      programJSON = await getProgramJSON(programText);
+    } catch (error) {
+      log.error(
+        `[GEMINI_FAIL] Converting Program text to JSON failed (ID: ${id}): ${error}`,
+      );
       return {
         id,
         error: "GeminiError",
@@ -143,7 +167,7 @@ export const createTransformPerformances = ({
         .webp({ quality: 80 })
         .toBuffer();
     } catch (error) {
-      log.error("[OPTIMIZE_FAIL] Poster Optimize Failed");
+      log.error(`[OPTIMIZE_FAIL] Poster Optimize Failed (ID: ${id}): ${error}`);
       return {
         id,
         error: "SharpError",
@@ -151,10 +175,11 @@ export const createTransformPerformances = ({
       };
     }
 
-    const storagePosterUrl = await uploadPosterToStorage(id, compressedPoster);
-
-    if (!storagePosterUrl) {
-      log.error("[INSERT_FAIL] Storage Insert Failed");
+    let storagePosterUrl: string;
+    try {
+      storagePosterUrl = await uploadPosterToStorage(id, compressedPoster);
+    } catch (error) {
+      log.error(`[INSERT_FAIL] Storage Insert Failed (ID: ${id}): ${error}`);
       return {
         id,
         error: "StorageError",
