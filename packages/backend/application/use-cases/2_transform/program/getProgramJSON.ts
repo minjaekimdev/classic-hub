@@ -1,5 +1,9 @@
+import { z } from "zod";
 import { APIError } from "shared/utils/error";
-import { ProgramExtractionResponse } from "shared/types/gemini";
+import {
+  programExtractionSchema,
+  ProgramExtractionResponse,
+} from "shared/types/gemini";
 import {
   GenerateContentParams,
   GenerateContentResult,
@@ -43,34 +47,12 @@ const INSTRUCTION = `
 분석할 프로그램 텍스트:
 `;
 
-const RESPONSE_JSON_SCHEMA = {
-  type: "array",
-  description: "작곡가별 연주 곡목 리스트",
-  items: {
-    type: "object",
-    properties: {
-      composerKo: {
-        type: ["string", "null"],
-        description: "작곡가 또는 편곡자의 한국어 전체 성명",
-      },
-      composerEn: {
-        type: ["string", "null"],
-        description: "Full name of the composer in English",
-      },
-      workTitleKr: {
-        type: "array",
-        items: { type: "string" },
-        description: "연주 곡목의 한국어 제목 리스트 (악장 제외)",
-      },
-      workTitleEn: {
-        type: "array",
-        items: { type: "string" },
-        description: "List of work titles in English (Excluding movements)",
-      },
-    },
-    required: ["composerKo", "composerEn", "workTitleKr", "workTitleEn"],
-  },
-};
+// zod 스키마(shared/types/gemini)에서 생성하므로 런타임 검증 스키마와 항상 일치한다.
+// $schema 키는 Gemini가 기대하는 스키마 형식이 아니므로 제거한다.
+// TODO: 실제 Gemini 구동 시 작동하는지 확인하기
+const { $schema: _, ...RESPONSE_JSON_SCHEMA } = z.toJSONSchema(
+  programExtractionSchema,
+);
 
 // KOPIS 응답의 프로그램 텍스트를 분석하여 구조화된 JSON으로 변환하는 함수
 // 실패 시 에러를 그대로 던지며, null fallback 정책은 상위 오케스트레이터가 담당한다.
@@ -89,8 +71,24 @@ export const createGetProgramJSON = ({ generateContent, log }: GetProgramJSONDep
       },
     });
 
+    // RESPONSE_JSON_SCHEMA에 명시한 구조에 따라 반환해야 하므로
+    // 빈 문자열을 반환할 경우 에러를 throw한다.
+    // JSON.parse("")는 SyntaxError를 throw하므로 밑의 zod 로직에서 잡지 못한다.
     if (!response?.text) {
       throw new APIError("Gemini API가 빈 응답을 반환했습니다.");
+    }
+
+    // Gemini의 responseJsonSchema는 모델에 대한 요청일 뿐 응답 구조를 보장하지 않으므로
+    // 실제 응답이 스키마와 일치하는지 런타임에 검증한다.
+    // 검증 실패 시 APIError를 던지며, null fallback 정책은 상위 오케스트레이터가 담당한다.
+    // JSON 파싱 에러는 감싸지 않고 그대로 전파한다(기존 계약 유지).
+    const parsed = programExtractionSchema.safeParse(JSON.parse(response.text));
+    if (!parsed.success) {
+      throw new APIError(
+        "Gemini 응답이 RESPONSE_JSON_SCHEMA와 일치하지 않습니다.",
+        500,
+        parsed.error,
+      );
     }
 
     log.info("Gemini 프로그램 분석 완료", {
@@ -98,6 +96,6 @@ export const createGetProgramJSON = ({ generateContent, log }: GetProgramJSONDep
       usage: response.usageMetadata,
     });
 
-    return JSON.parse(response.text);
+    return parsed.data;
   };
 };

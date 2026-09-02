@@ -9,6 +9,7 @@ export const createGetProgramText = ({ detectText }: GetProgramTextDeps) => {
     const extractedTexts = await Promise.all(
       images.map(async (buffer) => detectText(buffer)),
     );
+    // 토크나이저는 \n\n와 ---를 잘 압축해서 대략 3~4토큰 수준, 이걸 최적화할 필요는 X.
     return extractedTexts.join("\n\n---\n\n");
   };
 };

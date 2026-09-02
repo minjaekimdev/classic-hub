@@ -5,6 +5,7 @@ import sharp from "sharp";
 export const MAX_PIXELS = 70_000_000;
 
 // 실패 시 에러를 그대로 던지며, null fallback 정책은 상위 오케스트레이터가 담당한다.
+// 외부에 의존하지 않는 함수이므로 의존성을 주입하지 않는다.
 export const splitLongImage = async (buffer: Buffer): Promise<Buffer[]> => {
   const image = sharp(buffer) // 문제 발생 시 rotate() 추가하기
   const { width, height } = await image.metadata();
