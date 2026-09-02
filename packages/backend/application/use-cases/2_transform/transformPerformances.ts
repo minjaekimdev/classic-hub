@@ -5,7 +5,6 @@ import { ProgramExtractionResponse } from "shared/types/gemini";
 import { sanitizeImageBuffer } from "./program/sanitizeImageBuffer";
 import { splitLongImage } from "./program/splitLongImage";
 import { toDbPerformance } from "../3_load/mappers/toDbPerformance";
-import { InternalPerformance } from "../1_extract/types";
 
 export interface TransformPerformancesDeps {
   imageFetcher: (url: string, message: string) => Promise<Buffer>;
@@ -201,8 +200,3 @@ export const createTransformPerformances = ({
     };
   };
 };
-
-// DB 형태에 맞는 데이터로 매핑하는 과정까지 수행
-export const transformedPerformances = (
-  performances: InternalPerformance[],
-) => {};

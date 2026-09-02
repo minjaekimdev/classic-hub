@@ -3,7 +3,7 @@ import { sendSlackNotification } from "@/shared/utils/monitor";
 import promiseLimiter from "@/shared/utils/promiseLimiter";
 import { Dayjs } from "dayjs";
 import { callDatabaseFunction } from "../../../infrastructure/supabase/database";
-import { saveFailuresToArtifact } from "../../../infrastructure/github/saveFailuresToArtifact";
+import { saveFailuresToArtifact, FAILED_RECORDS_FILENAME } from "../../../infrastructure/github/saveFailuresToArtifact";
 import { processPerformance } from "../2_transform/transformPerformances";
 import { retry } from "../shared/retry";
 import { extractPerformances } from "../1_extract";
@@ -53,7 +53,7 @@ export const syncPerformanceData = async (
       `❌ [PROCESS_FAIL] ${retryFailures.length} Item Process Failed`,
     );
     saveFailuresToArtifact(
-      "failed_actions.json",
+      FAILED_RECORDS_FILENAME,
       retryFailures,
       "ProcessError",
     );
@@ -69,7 +69,7 @@ export const syncPerformanceData = async (
     await sendSlackNotification("❌ [INSERT_FAIL] Data Bulk Insert Failed");
     // DB insert에 실패한 데이터도 알림 전송 & Artifact에 저장
     saveFailuresToArtifact(
-      "failed_actions.json",
+      FAILED_RECORDS_FILENAME,
       transformSuccesses,
       "BatchInsertError",
     );

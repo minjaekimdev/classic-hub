@@ -75,6 +75,8 @@ jobs:
         with:
           # github.run_id: 실행의 고유 일련번호, 자동으로 부여된다.
           name: failed-performances-${{ github.run_id }}
+          # ⚠️ 파일명은 saveFailuresToArtifact.ts의 FAILED_RECORDS_FILENAME 상수와 일치해야 한다.
+          # 어긋나면 if-no-files-found: ignore 때문에 실패 데이터가 조용히 유실된다.
           path: packages/backend/failed_records.json
           retention-days: 5 
           # 에러가 발생하지 않아서 failed_records.json 파일이 없는 경우에도 경고가 뜨지 않는다.

@@ -3,6 +3,11 @@ import fs from "fs";
 import path from "path";
 import { Artifact, WorkflowError } from "shared/types/sync";
 
+// 실패 데이터 artifact 파일명의 단일 진실 공급원.
+// performance-update.yml 의 artifact path(packages/backend/failed_records.json)와 반드시 일치해야 한다.
+// 파일명이 어긋나면 if-no-files-found: ignore 때문에 실패 데이터가 조용히 유실된다.
+export const FAILED_RECORDS_FILENAME = "failed_records.json";
+
 // 파일 저장 위치 (GitHub Actions 루트 기준)
 const keyMapper: Record<WorkflowError, keyof Artifact> = {
   ProcessError: "processFailures",
