@@ -1,4 +1,4 @@
-// backend/.env.local에 일시 생성된 supabase 환경변수들을 저장한다.
+// backend/.env.test에 일시 생성된 supabase 환경변수들을 저장한다.
 const fs = require("fs");
 const path = require("path");
 const { execSync } = require("child_process"); // 명령어를 실행해주는 도구
@@ -37,7 +37,7 @@ SCRIPT_MODE=standalone
 
   console.log("--- ✅ 실시간 환경 변수 동기화 완료! ---");
   console.log(`🔗 URL: ${supabaseUrl}`);
-  console.log(`📝 파일: .env.local 업데이트됨`);
+  console.log(`📝 파일: .env.test 업데이트됨`);
 } catch (error) {
   console.error("❌ 실패: Supabase가 켜져 있는지 확인해 주세요!");
   console.error(`에러 내용: ${error.message}`);
