@@ -1,17 +1,4 @@
-import { mapExternalToInternal } from "./mappers/mapExternalToInternal";
 import { PerformanceDetail } from "@/shared/types/kopis";
-
-interface ImageTarget {
-  id: string;
-  posterUrl: string;
-  detailImageUrls: string[];
-}
-
-interface ImagebuffersResult {
-  id: string;
-  posterBuffer: Buffer | null;
-  detailImageBuffers: Buffer[];
-}
 
 interface Dependencies {
   getDbPerformanceIds: (table: string, column: string) => Promise<string[]>;
@@ -28,9 +15,6 @@ interface Dependencies {
     afterDate?: string,
   ) => Promise<string[]>;
   getPerformanceDetailList: (ids: string[]) => Promise<PerformanceDetail[]>;
-  getPerformanceImageBuffers: (
-    target: ImageTarget,
-  ) => Promise<ImagebuffersResult | null>;
   log: {
     info: (msg: string) => void;
   };
@@ -42,7 +26,6 @@ export const createExtractPerformances = ({
   compareNewOld,
   getAllPerformanceIdList,
   getPerformanceDetailList,
-  getPerformanceImageBuffers,
   log,
 }: Dependencies) => {
   return async (
@@ -86,57 +69,9 @@ export const createExtractPerformances = ({
 
     // 6) id를 바탕으로 공연 상세 데이터만 먼저 가져오기
     log.info("[PROCESS] 공연 상세 데이터 추출 시작");
-    const rawPerformances = await getPerformanceDetailList(idsToTransform);
+    const performances = await getPerformanceDetailList(idsToTransform);
 
-    // 7) 이미지 url만 순수하게 뽑아내기
-    const imageTargets = rawPerformances.map((rawData) => {
-      const detailImageUrls = rawData.styurls?.styurl || [];
-      const detailImageUrlList = Array.isArray(detailImageUrls)
-        ? detailImageUrls
-        : [detailImageUrls];
-
-      return {
-        id: rawData.mt20id,
-        posterUrl: rawData.poster, // null일 수도 있음
-        detailImageUrls: detailImageUrlList,
-      };
-    });
-
-    // 8) Promise.all을 사용하여 병렬로 안전하게 버퍼 데이터 가져오기
-    // 에러 발생 시 posterBuffer는 null, detailImageBuffers는 빈 배열로 반환된다.
-    log.info("[PROCESS] 이미지 URL 바탕으로 버퍼 데이터 병렬 페칭 시작");
-    const datasWithImageBuffer = await Promise.all(
-      imageTargets.map((target) => getPerformanceImageBuffers(target)),
-    );
-
-    // 9) 로그 타이밍 최적화
-    log.info(
-      "[PROCESS] 2단계: 가져온 데이터를 바탕으로 이미지 버퍼 및 최종 리스트 가공 시작",
-    );
-
-    // 10) 오케스트레이터에서 안전하게 1:1 매칭하며 매퍼 호출하기
-    // datasWithImageBuffer에 id가 들어있으므로, 안전하게 ID 기반으로 매칭합니다.
-    const bufferMap = new Map(
-      datasWithImageBuffer
-        .filter((item): item is ImagebuffersResult => item !== null)
-        .map((b) => [b.id, b]),
-    );
-
-    const performances = rawPerformances.map((rawData) => {
-      const targetBuffer = bufferMap.get(rawData.mt20id);
-
-      if (targetBuffer === undefined) {
-        return null;
-      }
-
-      // 개별 데이터 단위로 순수하게 매핑 함수 호출
-      return mapExternalToInternal(
-        rawData,
-        targetBuffer.posterBuffer,
-        targetBuffer.detailImageBuffers || [],
-      );
-    });
-
+    // 이미지 버퍼는 transform 단계에서 공연 1건 단위로 페칭한다. (중복 페칭 제거)
     // 삭제해야할 공연 id만 전달하고, 실제 삭제는 뒤로 미룬다.
     return {
       performances,

@@ -5,12 +5,10 @@ import { sendSlackNotification } from "@/shared/utils/monitor";
 import logger from "@/shared/utils/logger";
 import { kopisService } from "@/infrastructure/kopis/service";
 import { getColumnData } from "@/infrastructure/supabase/database";
-import { imageFetcher } from "@/infrastructure/kopis/utils/image-fetcher";
 import { createGetPerformanceIdsInPage } from "./infra/getPerformanceIdsInPage";
 import { createGetDbPerformanceIds } from "./infra/getDbPerformanceIds";
 import { createGetAllPerformanceIdList } from "./flows/getAllPerformanceIdList";
 import { createGetPerformanceDetailList } from "./flows/getPerformanceDetailList";
-import { createGetPerformanceImageBuffers } from "./flows/getPerformanceImageBuffers";
 import { compareNewOld } from "./flows/compareNewOld";
 import { createExtractPerformances } from "./extractPerformances";
 
@@ -36,18 +34,11 @@ const getPerformanceDetailList = createGetPerformanceDetailList({
   log: logger,
 });
 
-// 4) 포스터/상세 이미지 url로 버퍼 데이터 반환
-const getPerformanceImageBuffers = createGetPerformanceImageBuffers({
-  imageFetcher,
-  log: logger,
-});
-
 // 최상위 use-case: extractPerformances 조립
 export const extractPerformances = createExtractPerformances({
   getDbPerformanceIds,
   compareNewOld,
   getAllPerformanceIdList,
   getPerformanceDetailList,
-  getPerformanceImageBuffers,
   log: logger,
 });

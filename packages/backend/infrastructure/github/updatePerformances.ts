@@ -11,7 +11,6 @@ const MAX_REPEAT = 5;
   const updateEndDate = now.add(364, "days").format("YYYYMMDD");
 
   await syncPerformanceData(
-    now,
     startDate,
     endDate,
     afterDate,
