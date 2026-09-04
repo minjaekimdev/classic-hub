@@ -52,11 +52,12 @@ export const syncPerformanceData = async (
   }
 
   // 3. 재시도 (실패한 공연의 원본 입력을 들고 동일한 처리 묶음을 재호출)
-  const { retrySuccesses, retryFailures } = await retry(
-    failedInputs,
-    transformPerformances,
-    maxRepeat,
-  );
+  // processor/sleep/log은 컴포지션 시점에 주입한다 (extract flows의 deps 패턴과 동일)
+  const { retrySuccesses, retryFailures } = await retry(failedInputs, maxRepeat, {
+    processor: transformPerformances,
+    sleep: (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
+    log: logger,
+  });
   transformSuccesses.push(
     ...retrySuccesses
       .map((result) => result.data)
