@@ -1,10 +1,14 @@
 import { describe, it, expect, vi } from "vitest";
+import fs from "fs";
+import os from "os";
+import path from "path";
 import {
   createSyncPerformanceData,
   SyncPerformancesDeps,
 } from "./syncPerformances";
 import { ProcessResult } from "shared/types/sync";
 import { PerformanceDetail } from "@/shared/types/kopis";
+import { saveFailuresToArtifact } from "@/infrastructure/github/saveFailuresToArtifact";
 
 const makeDetail = (id: string): PerformanceDetail =>
   ({ mt20id: id }) as unknown as PerformanceDetail;
@@ -259,5 +263,47 @@ describe("syncPerformances 오케스트레이션 테스트", () => {
     expect(deps.transformPerformances).not.toHaveBeenCalled();
     expect(deps.retry).not.toHaveBeenCalled();
     expect(deps.insertPerformancesBulk).not.toHaveBeenCalled();
+  });
+
+  it("재시도 소진 실패 시 진짜 artifact writer가 임시 파일에 processFailures를 기록한다", async () => {
+    const performances = [makeDetail("PF2")];
+    const transformPerformances = vi
+      .fn()
+      .mockImplementation((p: PerformanceDetail) =>
+        Promise.resolve(failResult(p.mt20id, "GeminiError")),
+      );
+    const retry = vi.fn().mockResolvedValue({
+      retrySuccesses: [],
+      retryFailures: [failResult("PF2", "GeminiError")],
+    });
+
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "artifact-real-"));
+    const artifactPath = path.join(dir, "failed_records.json");
+
+    const deps = makeDeps({
+      extractPerformances: vi
+        .fn()
+        .mockResolvedValue({ performances, idsToDelete: [] }),
+      transformPerformances,
+      retry,
+      saveFailuresToArtifact,
+      failedRecordsFilename: artifactPath,
+    });
+
+    try {
+      await run(deps);
+
+      const artifact = JSON.parse(fs.readFileSync(artifactPath, "utf-8"));
+
+      expect(artifact.processFailures).toHaveLength(1);
+      expect(artifact.processFailures[0]).toMatchObject({
+        id: "PF2",
+        error: "GeminiError",
+        attempts: 1,
+      });
+      expect(artifact.processFailures[0].failedAt).toBeTruthy();
+    } finally {
+      fs.rmSync(dir, { recursive: true, force: true });
+    }
   });
 });

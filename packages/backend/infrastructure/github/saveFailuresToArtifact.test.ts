@@ -2,7 +2,10 @@ import { describe, it, expect, beforeEach } from "vitest";
 import fs from "fs";
 import os from "os";
 import path from "path";
-import { saveFailuresToArtifact } from "./saveFailuresToArtifact";
+import {
+  saveFailuresToArtifact,
+  FAILED_RECORDS_FILENAME,
+} from "./saveFailuresToArtifact";
 
 const testFilePath = path.join(os.tmpdir(), "failed_records.test.json");
 
@@ -49,5 +52,17 @@ describe("saveFailuresToArtifact 테스트", () => {
     expect(result.processFailures).toHaveLength(1);
     expect(result.batchInsertFailures[0].id).toBe(101);
     expect(result.processFailures[0].msg).toBe("Parsing Error");
+  });
+
+  it("FAILED_RECORDS_FILENAME은 performance-update.yml의 artifact path와 일치해야 한다", () => {
+    // 이 계약이 어긋나면 if-no-files-found: ignore 때문에 실패 데이터가 조용히 유실된다.
+    // (과거 failed_actions.json vs failed_records.json 불일치로 실제 유실이 발생한 적이 있다)
+    const workflowPath = path.join(
+      __dirname,
+      "../../../../.github/workflows/performance-update.yml",
+    );
+    const workflow = fs.readFileSync(workflowPath, "utf-8");
+
+    expect(workflow).toContain(`packages/backend/${FAILED_RECORDS_FILENAME}`);
   });
 });
