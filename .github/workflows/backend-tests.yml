@@ -64,3 +64,19 @@ jobs:
         env:
           NODE_ENV: test
         run: npx vitest run syncPerformances.integration
+
+      # ── Edge Function 테스트 (같은 Supabase 스택 재사용) ──
+      - name: Setup Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
+      - name: Run Edge Function tests
+        env:
+          SUPABASE_URL: http://127.0.0.1:54321
+          # 로컬 스택의 표준 데모 서비스롤 키 (config.toml 기본 JWT 시크릿에서 파생)
+          SUPABASE_SERVICE_ROLE_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImV4cCI6MTk4MzgxMjk5Nn0.EGIM96RAZx35lJzdJsyH-qQwv8Hdp7fsn3W0YpN81IU
+        run: |
+          npx supabase functions serve --no-verify-jwt > /dev/null 2>&1 &
+          sleep 5
+          deno test --allow-net --allow-env supabase/functions/_tests/deleteStorageFileTest.ts supabase/functions/_tests/taskWorkerTest.ts

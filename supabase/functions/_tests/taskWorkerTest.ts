@@ -1,10 +1,14 @@
 import { supabaseAdmin } from "../_shared/supabaseAdmin.ts";
 import { assertEquals } from "https://deno.land/std@0.224.0/assert/mod.ts";
 
-Deno.test("태스크 큐 기반 스토리지 삭제 통합 테스트", async () => {
-  const bucketName = "performances";
-  const testFileName = `test-folder/integration-test-${Date.now()}.jpg`;
-  const performanceId = "test-perf-id";
+Deno.test(
+  {
+    name: "태스크 큐 기반 스토리지 삭제 통합 테스트",
+    sanitizeResources: false,
+    fn: async () => {
+      const bucketName = "performances";
+      const testFileName = `test-folder/integration-test-${Date.now()}.jpg`;
+      const performanceId = "test-perf-id";
 
   // 🛠️ 1. 테스트 환경 준비 (파일 업로드 및 태스크 등록)
   console.log("🛠️ 1. 테스트용 파일 업로드 및 큐 데이터 생성 중...");
@@ -79,4 +83,6 @@ Deno.test("태스크 큐 기반 스토리지 삭제 통합 테스트", async () 
 
   // 🧹 4. 테스트 데이터 정리 (Cleanup)
   await supabaseAdmin.from("task_queue").delete().eq("id", taskId);
-});
+    },
+  },
+);

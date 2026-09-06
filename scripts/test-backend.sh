@@ -71,6 +71,11 @@ sleep 5
 # 실패할 경우 set -e에 의해 즉시 중단되며 trap cleanup이 호출된다.
 # --allow-net: Deno는 명시적으로 허락하지 않으면 인터넷이나 로컬 네트워크에 접속할 수 없다.
 # --allow-env: Deno는 시스템의 환경 변수를 읽는 것도 허락을 받아야 한다.
-deno test --allow-net --allow-env supabase/functions/_tests/delete-storage-file/index_test.ts
+# _shared/client.ts가 읽을 로컬 크레덴셜을 .env.test에서 로드한다.
+set -a
+source packages/backend/.env.test
+set +a
+# 테스트 파일명이 Deno 기본 규칙(*_test.ts)과 다르므로 파일을 명시한다.
+deno test --allow-net --allow-env supabase/functions/_tests/deleteStorageFileTest.ts supabase/functions/_tests/taskWorkerTest.ts
 
 echo -e "${GREEN}🎉 모든 검증을 통과했습니다! 안전하게 푸시를 진행합니다.${NC}"
