@@ -3,6 +3,11 @@ import { DBPerformanceWrite } from "@classic-hub/shared/types/database";
 import { ProcessResult, WorkflowError } from "shared/types/sync";
 import { PerformanceDetail } from "@/shared/types/kopis";
 import { RetryDeps, RetryFailure } from "@/application/services/retry";
+import {
+  buildSyncSummaryMessage,
+  getRunArtifactUrl,
+  SyncRunSummary,
+} from "./runSummary";
 
 const TRANSFORM_CONCURRENCY = 5;
 
@@ -43,8 +48,9 @@ export interface SyncPerformancesDeps {
   };
 }
 
-// 대상 기간에 따라 Extract → Transform → Load 전체 과정을 수행하는 오케스트레이터.
-// 로그는 개수 요약만 남기고, 실패 데이터의 전체 내역은 artifact로 넘긴다.
+// 오케스트레이터. 실행 결과를 SyncRunSummary로 반환한다.
+// - 로그/Slack은 실행당 요약 1건만 (전체 내역은 artifact로)
+// - 치명적 실패(최종 실패 존재, insert 실패) 판정은 반환값을 받은 호출자가 한다.
 export const createSyncPerformanceData = ({
   extractPerformances,
   transformPerformances,
@@ -81,6 +87,7 @@ export const createSyncPerformanceData = ({
     const transformSuccesses: DBPerformanceWrite[] = results
       .map((result) => result.data)
       .filter((data): data is DBPerformanceWrite => data !== null);
+    const firstPassSuccesses = transformSuccesses.length;
 
     // 첫 시도에서 실패한 공연의 원본 입력 + 결과 추출
     const failedInputs: RetryFailure<PerformanceDetail>[] = performances
@@ -115,16 +122,13 @@ export const createSyncPerformanceData = ({
       `[PROCESS] 재시도 완료 (회복: ${retrySuccesses.length}, 최종 실패: ${retryFailures.length})`,
     );
 
-    // 4. 재시도 이후에도 실패한 데이터가 존재한다면 Artifact에 저장 후 알림 전송
-    // (전체 내역은 artifact로, 로그/알림은 요약만. Slack 실패로 데이터가 유실되지 않게 artifact를 먼저 저장)
+    // 4. 재시도 이후에도 실패한 데이터가 존재한다면 Artifact에 저장
+    // (전체 내역은 artifact로, 로그/알림은 요약만)
     if (retryFailures.length > 0) {
       saveFailuresToArtifact(
         failedRecordsFilename,
         retryFailures,
         "ProcessError",
-      );
-      await notify(
-        `❌ [PROCESS_FAIL] ${retryFailures.length} Item Process Failed`,
       );
       log.error(
         `[PROCESS_FAIL] 재시도 후에도 실패한 공연 ${retryFailures.length}건 → artifact 저장 완료`,
@@ -132,9 +136,12 @@ export const createSyncPerformanceData = ({
     }
 
     // 5. DB에 bulk insert (성공 데이터가 있을 때만)
-    if (transformSuccesses.length > 0) {
+    let insertSucceeded = false;
+    const insertAttempted = transformSuccesses.length > 0;
+    if (insertAttempted) {
       try {
         await insertPerformancesBulk(transformSuccesses);
+        insertSucceeded = true;
         log.info(
           `[DB_SUCCESS] DB Bulk Insert 성공 (${transformSuccesses.length}건)`,
         );
@@ -145,11 +152,23 @@ export const createSyncPerformanceData = ({
           transformSuccesses,
           "BatchInsertError",
         );
-        await notify("❌ [INSERT_FAIL] Data Bulk Insert Failed");
         log.error(
           `[INSERT_FAIL] Insert 실패 공연 ${transformSuccesses.length}건 → artifact 저장 완료`,
         );
       }
     }
+
+    // 6. 실행 단위 요약 알림 — 성공 시에도 조용히 1건 (크론 스킵 감지)
+    const summary: SyncRunSummary = {
+      totalTargets: performances.length,
+      firstPassSuccesses,
+      retryRecovered: retrySuccesses.length,
+      finalFailures: retryFailures,
+      insertAttempted,
+      insertSucceeded,
+    };
+    await notify(buildSyncSummaryMessage(summary, getRunArtifactUrl()));
+
+    return summary;
   };
 };
