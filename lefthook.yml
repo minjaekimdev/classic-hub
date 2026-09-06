@@ -2,10 +2,15 @@
 pre-push:
   parallel: true
   commands:
-    backend-integrity:
-      # 백엔드 코드나 shared가 바뀌었을 때 실행
-      glob: "{packages/backend/**/*,packages/shared/**/*,scripts/**/*}"
-      run: bash ./scripts/test-backend.sh
+    backend-typecheck:
+      # 백엔드 코드나 shared가 바뀌었을 때 타입 체크 (tsc --noEmit)
+      glob: "{packages/backend/**/*,packages/shared/**/*}"
+      run: npx turbo run build --filter=backend
+
+    backend-unit:
+      # DB가 필요 없는 유닛 테스트만 실행 (통합 테스트는 PR CI의 db 잡이 담당)
+      glob: "{packages/backend/**/*,packages/shared/**/*}"
+      run: npm test --prefix packages/backend -- run --exclude '**/*.integration.test.ts'
 
     frontend-check:
       # 프론트엔드 코드나 shared가 바뀌었을 때 실행

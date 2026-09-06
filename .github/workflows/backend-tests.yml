@@ -1,0 +1,66 @@
+name: Backend Tests
+
+on:
+  pull_request:
+
+  workflow_dispatch:
+
+# 같은 브랜치에 새 커밋이 push되면 진행 중인 실행을 취소 (낭비 제거)
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  unit:
+    name: Unit tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # DB가 필요 없는 테스트만 실행 — 통합 테스트는 로컬 Supabase가 필요하다
+      - name: Run unit tests
+        working-directory: packages/backend
+        env:
+          NODE_ENV: test
+        run: npx vitest run --exclude '**/*.integration.test.ts'
+
+  # PR 머지 전에 로컬 Supabase 환경에서의 전체 파이프라인을 반드시 검증한다.
+  # 연속 push에는 concurrency로 마지막 실행만 남는다.
+  db:
+    name: Integration tests (local Supabase)
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Start local Supabase
+        run: npx supabase start && npx supabase db reset
+
+      - name: Run integration tests
+        working-directory: packages/backend
+        env:
+          NODE_ENV: test
+        run: npx vitest run syncPerformances.integration

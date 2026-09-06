@@ -2,7 +2,10 @@ import { callDatabaseFunction } from "@/infrastructure/supabase/database";
 import { withErrorHandling } from "shared/utils/error";
 import logger from "shared/utils/logger";
 import { sendSlackNotification } from "shared/utils/monitor";
-import getRanking from "../fetchers/getRanking";
+import { kopisService } from "@/infrastructure/kopis/service";
+import { createGetRanking } from "../1_extract/infra/getRanking";
+
+const getRanking = createGetRanking(kopisService);
 
 const updateRanking = async (
   period: string,

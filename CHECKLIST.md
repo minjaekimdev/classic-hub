@@ -11,20 +11,20 @@
 - [ ]  1-7. CI: 루트 **`npm ci`**로 수정 (실행 step의 working-directory는 유지)
 - [ ]  1-8. CI: **`cache: npm`** 추가
 - [ ]  1-9. CI: **`timeout-minutes`** + **`concurrency`** 추가
-- [ ]  1-10. pre-push에 **`syncpack check`** 게이트 추가
+- [x]  1-10. pre-push에 **`syncpack check`** 게이트 추가 (lefthook pre-push: typecheck + 유닛 테스트 + syncpack + frontend build)
 - [ ]  1-11. 검증: **`npm ci`** ✅ / **`syncpack lint`** ✅ / **`turbo run build`** ⏳ (아래 🚨 마이그레이션 완료 후 재검증) / 테스트 ⏳
 
 ### 🚨 마이그레이션 잔여 작업 (1-11 검증 중 발견 — 긴급)
 
 > 7/21 `transform 단계 리팩토링` 커밋 이후 **두 크론잡(performance/ranking) 모두 런타임에서 import 실패로 즉시 크래시**하는 상태로 확인됨 (tsx 실행 재현 완료). 새 DI 팩토리 아키텍처로 마이그레이션을 완료해야 함.
 
-- [ ]  `syncPerformances.ts` 재작성 — 신버전 `extractPerformances` (4인자, `{performances, idsToDelete}` 반환) ↔ `createTransformPerformances` 팩토리 연결. 현재 구버전 호출(`processPerformance`, `../shared/retry`, 미선언 변수 다수) 혼재
-- [ ]  transform 팩토리와 extract 반환값 간 데이터 흐름 결정 — extract는 `InternalPerformance`(버퍼 포함, 이미지 페칭 완료)를 주고 transform 팩토리는 `PerformanceDetail`(이미지 자체 페칭)을 기대함. 중복 페칭 제거 방향으로 설계 필요
-- [ ]  `services/retry.ts` — `processPerformance` import 제거, processor 함수를 파라미터로 주입받도록 수정 + `../2_transform` → `../use-cases/2_transform` 경로 수정
-- [ ]  `use-cases/scripts/updateRanking.ts` — `../fetchers/getRanking` → `../1_extract/infra/getRanking` + `createGetRanking(kopisService)` 팩토리 적용
-- [ ]  `uploadPosterToStorage.ts`/`uploadDetailImagesToStorage.ts` — `STORAGE_NAME` import를 `@/application/constants/limits` → `../3_load/constants`로 수정
+- [x]  `syncPerformances.ts` 재작성 — 신버전 `extractPerformances` (4인자, `{performances, idsToDelete}` 반환) ↔ `createTransformPerformances` 팩토리 연결. 현재 구버전 호출(`processPerformance`, `../shared/retry`, 미선언 변수 다수) 혼재
+- [x]  transform 팩토리와 extract 반환값 간 데이터 흐름 결정 — extract는 `InternalPerformance`(버퍼 포함, 이미지 페칭 완료)를 주고 transform 팩토리는 `PerformanceDetail`(이미지 자체 페칭)을 기대함. 중복 페칭 제거 방향으로 설계 필요
+- [x]  `services/retry.ts` — `processPerformance` import 제거, processor 함수를 파라미터로 주입받도록 수정 + `../2_transform` → `../use-cases/2_transform` 경로 수정
+- [x]  `use-cases/scripts/updateRanking.ts` — `../fetchers/getRanking` → `../1_extract/infra/getRanking` + `createGetRanking(kopisService)` 팩토리 적용
+- [x]  `uploadPosterToStorage.ts`/`uploadDetailImagesToStorage.ts` — `STORAGE_NAME` import를 `@/application/constants/limits` → `../3_load/constants`로 수정
 - [ ]  `services/failureCollector.ts` — 존재하지 않는 `./types` 해소 (`FailedRecord`, `Step` 타입 정의)
-- [ ]  legacy 스크립트 2건 (`application/scripts/extractPerformances.ts`, `insertFacility.ts`) — 죽은 import 경로. 삭제 또는 수정 결정
+- [x]  legacy 스크립트 (`application/scripts/extractPerformances.ts` 삭제됨, `insertFacility.ts`) — 죽은 import 경로 수정 (`./getFacilityDetail`)
 - [x]  깨진 테스트 수정 — `saveFailuresToArtifact.test.ts` (시그니처 drift 4건, tmp 경로 사용 개선) + `getProgramText.test.ts` (빈 파일 → 실제 테스트 3건 작성). **47/47 통과**
 
 ## **📅 1일차 오후 — Phase 0: 기준선 측정**
