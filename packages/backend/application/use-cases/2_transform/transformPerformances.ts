@@ -43,6 +43,14 @@ export const createTransformPerformances = ({
       ? rawDetailUrls
       : [rawDetailUrls];
 
+    const failure = (error: string): ProcessResult => ({
+      id,
+      error,
+      data: null,
+      attempts: 1,
+      failedAt: new Date().toISOString(),
+    });
+
     // 포스터 이미지 원본과 상세이미지 원본(버퍼)를 요청
     log.info("Fetching images...");
     let posterBuffer: Buffer;
@@ -62,11 +70,7 @@ export const createTransformPerformances = ({
       );
     } catch (error) {
       log.error(`[FETCH_FAIL] Images fetch failed (ID: ${id}): ${error}`);
-      return {
-        id,
-        error: "ImageFetchError",
-        data: null,
-      };
+      return failure("ImageFetchError");
     }
 
     // 상세 이미지 버퍼에 있는 더미 데이터 삭제
@@ -79,11 +83,7 @@ export const createTransformPerformances = ({
       log.error(
         `[OPTIMIZE_FAIL] Detail Images Optimization Failed (ID: ${id}): ${error}`,
       );
-      return {
-        id,
-        error: "ImageFetchError",
-        data: null,
-      };
+      return failure("ImageFetchError");
     }
 
     // Vision API 입력 픽셀 한도를 만족하기 위해 분할
@@ -96,11 +96,7 @@ export const createTransformPerformances = ({
       );
     } catch (error) {
       log.error(`[SPLIT_FAIL] Image split failed (ID: ${id}): ${error}`);
-      return {
-        id,
-        error: "ImageSplitError",
-        data: null,
-      };
+      return failure("ImageSplitError");
     }
 
     // 프로그램 추출
@@ -114,20 +110,12 @@ export const createTransformPerformances = ({
       );
     } catch (error) {
       log.error(`[OCR_FAIL] Extracting Program text failed (ID: ${id}): ${error}`);
-      return {
-        id,
-        error: "OCRError",
-        data: null,
-      };
+      return failure("OCRError");
     }
 
     if (!textFromDetailImage) {
       log.error(`[OCR_FAIL] Extracting Program text failed (ID: ${id})`);
-      return {
-        id,
-        error: "OCRError",
-        data: null,
-      };
+      return failure("OCRError");
     }
 
     // performanceDetail.sty 필드에 데이터가 존재한다면 두 개 모두 고려
@@ -147,11 +135,7 @@ export const createTransformPerformances = ({
       log.error(
         `[GEMINI_FAIL] Converting Program text to JSON failed (ID: ${id}): ${error}`,
       );
-      return {
-        id,
-        error: "GeminiError",
-        data: null,
-      };
+      return failure("GeminiError");
     }
 
     // 공연 데이터의 포스터와 상세 이미지들을 WebP로 압축 후 supabase storage에 저장
@@ -167,11 +151,7 @@ export const createTransformPerformances = ({
         .toBuffer();
     } catch (error) {
       log.error(`[OPTIMIZE_FAIL] Poster Optimize Failed (ID: ${id}): ${error}`);
-      return {
-        id,
-        error: "SharpError",
-        data: null,
-      };
+      return failure("SharpError");
     }
 
     let storagePosterUrl: string;
@@ -179,11 +159,7 @@ export const createTransformPerformances = ({
       storagePosterUrl = await uploadPosterToStorage(id, compressedPoster);
     } catch (error) {
       log.error(`[INSERT_FAIL] Storage Insert Failed (ID: ${id}): ${error}`);
-      return {
-        id,
-        error: "StorageError",
-        data: null,
-      };
+      return failure("StorageError");
     }
 
     const processedPerformance = toDbPerformance(

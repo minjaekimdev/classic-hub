@@ -12,7 +12,7 @@ const getFacilityAndInsertToDB = async () => {
   let page = 1;
 
   while (true) {
-    console.log(`page: ${page}`);
+    logger.info(`[FACILITY] page: ${page}`);
     const parsedData = await kopisFetcher(
       `${API_URL}/prfplc?service=${SERVICE_KEY}&cpage=${page++}&rows=100`,
     );

@@ -1,4 +1,5 @@
 import sharp from "sharp";
+import logger from "@/shared/utils/logger";
 
 // Google Vision API의 이미지 픽셀 한도(75M)에 안전 마진을 둔 값.
 // 외부 API 계약에 의존하는 상수이므로 한도가 변경되면 함께 갱신한다.
@@ -15,7 +16,7 @@ export const splitLongImage = async (buffer: Buffer): Promise<Buffer[]> => {
   const totalPixels = width * height;
 
   if (totalPixels <= MAX_PIXELS) {
-    console.log("buffer length: ", buffer.length);
+    logger.info(`[SPLIT] buffer length: ${buffer.length}`);
 
     return [buffer];
   }

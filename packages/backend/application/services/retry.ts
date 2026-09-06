@@ -1,7 +1,7 @@
 import { ProcessResult } from "@/shared/types/sync";
 import promiseLimiter from "@/shared/utils/promiseLimiter";
 
-// 재시도 대상 1건: 재처리에 필요한 원본 입력 + 최신 실패 결과
+// 재시도 대상 1건: 재처리에 필요한 원본 입력(실패하기 전 상태의 데이터) + 최신 실패 결과
 export interface RetryFailure<T> {
   input: T;
   result: ProcessResult;
@@ -55,10 +55,19 @@ export const retry = async <T>(
     retrySuccesses.push(...results.filter((result) => result.data !== null));
 
     // 실패한 데이터만 원본 입력과 함께 남겨 다음 라운드 입력으로 사용
+    // attempts는 총 시도 횟수(첫 실패 1회 + 재시도 라운드)를 누적하고,
+    // failedAt은 마지막 실패 시각으로 갱신한다.
     pendingFailures = pendingFailures
       .map((failure, index) => ({ failure, result: results[index] }))
       .filter((pair) => pair.result.error !== null)
-      .map((pair) => ({ input: pair.failure.input, result: pair.result }));
+      .map((pair) => ({
+        input: pair.failure.input,
+        result: {
+          ...pair.result,
+          attempts: (pair.failure.result.attempts ?? 1) + 1,
+          failedAt: new Date().toISOString(),
+        },
+      }));
 
     log.info(
       `Failed Performances (Retry #${repeat}): ${pendingFailures.length}`,
