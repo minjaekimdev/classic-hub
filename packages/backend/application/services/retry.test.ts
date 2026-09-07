@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { retry, RetryDeps, RetryFailure } from "./retry";
 import { ProcessResult } from "shared/types/sync";
 
@@ -30,6 +30,26 @@ const makeDeps = (
   ...overrides,
 });
 
+// retry 내부의 promiseLimiter는 setTimeout 기반 interval(1초)로 실제 대기하므로
+// 가짜 타이머로 즉시 소진한다. 백오프 sleep은 deps로 주입된 가짜를 그대로 사용한다.
+beforeEach(() => {
+  vi.useFakeTimers();
+});
+
+afterEach(() => {
+  vi.useRealTimers();
+});
+
+// retry를 시작한 뒤 대기 중인 타이머를 모두 소진하고 결과를 반환한다.
+const runRetry = (
+  input: RetryFailure<string>[],
+  maxRepeat: number,
+  deps: RetryDeps<string>,
+) => {
+  const promise = retry(input, maxRepeat, deps);
+  return vi.runAllTimersAsync().then(() => promise);
+};
+
 describe("retry 비즈니스 로직 테스트", () => {
   // 시나리오 1: 첫 재시도에서 모두 성공 → 백오프 1회 후 종료
   it("실패 데이터가 첫 재시도에서 모두 성공하면 백오프 1회(2분) 후 종료한다", async () => {
@@ -38,7 +58,7 @@ describe("retry 비즈니스 로직 테스트", () => {
       .mockImplementation((id: string) => Promise.resolve(successResult(id)));
     const sleep = vi.fn().mockResolvedValue(undefined);
 
-    const result = await retry(
+    const result = await runRetry(
       [makeFailure("PF1"), makeFailure("PF2")],
       3,
       makeDeps({ processor, sleep }),
@@ -59,7 +79,7 @@ describe("retry 비즈니스 로직 테스트", () => {
       .mockImplementation((id: string) => Promise.resolve(failResult(id)));
     const sleep = vi.fn().mockResolvedValue(undefined);
 
-    const result = await retry(
+    const result = await runRetry(
       [makeFailure("PF1"), makeFailure("PF2")],
       3,
       makeDeps({ processor, sleep }),
@@ -73,7 +93,7 @@ describe("retry 비즈니스 로직 테스트", () => {
     expect(processor).toHaveBeenCalledTimes(6); // 2건 × 3회
     expect(result.retrySuccesses).toHaveLength(0);
     expect(result.retryFailures).toHaveLength(2);
-  }, 15000);
+  });
 
   // 시나리오 3: 입력 보존 — 실패한 원본 입력이 processor에 그대로 전달
   it("실패한 원본 입력이 processor에 그대로 전달된다", async () => {
@@ -81,7 +101,7 @@ describe("retry 비즈니스 로직 테스트", () => {
       .fn()
       .mockImplementation((id: string) => Promise.resolve(successResult(id)));
 
-    await retry(
+    await runRetry(
       [makeFailure("PF_A"), makeFailure("PF_B")],
       2,
       makeDeps({ processor }),
@@ -101,7 +121,7 @@ describe("retry 비즈니스 로직 테스트", () => {
       .mockResolvedValueOnce(successResult("PF2"));
     const sleep = vi.fn().mockResolvedValue(undefined);
 
-    const result = await retry(
+    const result = await runRetry(
       [makeFailure("PF1"), makeFailure("PF2")],
       3,
       makeDeps({ processor, sleep }),
@@ -111,14 +131,14 @@ describe("retry 비즈니스 로직 테스트", () => {
     expect(processor).toHaveBeenCalledTimes(3); // 1회차 2건 + 2회차 1건
     expect(result.retrySuccesses).toHaveLength(2);
     expect(result.retryFailures).toHaveLength(0);
-  }, 15000);
+  });
 
   // 시나리오 5: 재시도할 실패가 없으면 아무 일도 일어나지 않는다
   it("재시도할 실패가 없으면 sleep과 processor를 호출하지 않는다", async () => {
     const processor = vi.fn();
     const sleep = vi.fn().mockResolvedValue(undefined);
 
-    const result = await retry([], 3, makeDeps({ processor, sleep }));
+    const result = await runRetry([], 3, makeDeps({ processor, sleep }));
 
     expect(sleep).not.toHaveBeenCalled();
     expect(processor).not.toHaveBeenCalled();
@@ -131,7 +151,7 @@ describe("retry 비즈니스 로직 테스트", () => {
     const processor = vi.fn();
     const sleep = vi.fn().mockResolvedValue(undefined);
 
-    const result = await retry(
+    const result = await runRetry(
       [makeFailure("PF1")],
       0,
       makeDeps({ processor, sleep }),
@@ -150,7 +170,7 @@ describe("retry 비즈니스 로직 테스트", () => {
         : Promise.resolve(successResult(id)),
     );
 
-    const result = await retry(
+    const result = await runRetry(
       [makeFailure("PF_A"), makeFailure("PF_MID"), makeFailure("PF_C")],
       1,
       makeDeps({ processor }),

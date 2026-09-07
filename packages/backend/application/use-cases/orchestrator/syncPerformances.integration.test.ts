@@ -100,6 +100,8 @@ const GEMINI_RESPONSE = {
 };
 
 const server = setupServer(
+  // passthrough: msw가 가짜 데이터를 돌려주지 않고, 실제 로컬 컴퓨터에서 떠 있는
+  // Supabase 포트(54322)로 요청을 그대로 전달한다.
   http.all(/127\.0\.0\.1:54321\//, () => passthrough()),
   http.get("http://www.kopis.or.kr/openApi/restful/pblprfr", ({ request }) => {
     const page = new URL(request.url).searchParams.get("cpage");
