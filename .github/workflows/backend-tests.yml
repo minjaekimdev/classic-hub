@@ -63,7 +63,8 @@ jobs:
         working-directory: packages/backend
         env:
           NODE_ENV: test
-        run: npx vitest run syncPerformances.integration
+        # 'integration' 필터는 syncPerformances.integration과 rankingView.integration을 모두 실행한다.
+        run: npx vitest run integration
 
       # ── Edge Function 테스트 (같은 Supabase 스택 재사용) ──
       - name: Setup Deno
