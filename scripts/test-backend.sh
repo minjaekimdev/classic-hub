@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# [1/5] 빌드 및 타입 체크 시작... (동일)
 set -e # 스크립트 실행 도중 에러가 발생하면 뒤쪽 코드를 실행하지 않고 즉시 스크립트를 종료한다.
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -8,12 +7,7 @@ NC='\033[0m'
 
 # echo: 전달받은 텍스트를 터미널 화면에 그대로 출력한다.
 # -e 옵션은 \033같은 색상 기호를 색상 명령으로 인식하게 해준다(없을 경우 그대로 텍스트 출력)
-echo -e "${YELLOW}🏗️  [1/5] 빌드 및 타입 체크 시작...${NC}"
-# 준비에 오래 걸리는 테스트를 하기 전에 빌드를 통해 에러를 걸러낸다.
-npx turbo run build --filter=backend
-
-# [2/5] Docker 엔진 상태 확인... (동일)
-echo -e "${YELLOW}🐳 [2/5] Docker 엔진 상태 확인...${NC}"
+echo -e "${YELLOW}🐳 [1/5] Docker 엔진 상태 확인...${NC}"
 # if A then B: A라면 B를 실행한다.
 # docker info: Docker 엔진의 상태를 확인(켜져 있으면 0, 꺼져 있으면 에러 코드 반환)
 # 쉘 스크립트는 0을 참으로 인식한다.
@@ -32,8 +26,8 @@ if ! docker info > /dev/null 2>&1; then
 fi
 
 # Supabase가 이미 실행 중인지 확인
-# 🚀 [3/5] 수정된 스마트 리셋 로직
-echo -e "${YELLOW}🚀 [3/5] Supabase 인프라 최적화 리셋...${NC}"
+# 🚀 [2/5] 수정된 스마트 리셋 로직
+echo -e "${YELLOW}🚀 [2/5] Supabase 인프라 최적화 리셋...${NC}"
 
 # supabase status: 로컬 supabase 환경의 상태 확인
 # 이게 true가 되려면 모든 핵심 서비스(DB, API, Storage)가 전부 정상 작동하고 있어야 한다.
@@ -48,15 +42,17 @@ else # 일부 컨테이너만 살아있거나 꺼져 있는 경우 실행된다.
   npx supabase start
 fi
 
-# [4/5] 로컬 환경 변수 동기화... (동일)
-echo -e "${YELLOW}🔄 [4/5] 로컬 환경 변수 동기화...${NC}"
+# [3/5] 로컬 환경 변수 동기화...
+echo -e "${YELLOW}🔄 [3/5] 로컬 환경 변수 동기화...${NC}"
 node ./scripts/sync-env.js
 
-# [5/5] 백엔드 로직 통합 테스트 실행... (동일)
-echo -e "${YELLOW}🧪 [5/5] 백엔드 로직 통합 테스트 실행...${NC}"
-npx turbo run test-update-performances --filter=backend
+# [4/5] 백엔드 로직 통합 테스트 실행...
+echo -e "${YELLOW}🧪 [4/5] 백엔드 로직 통합 테스트 실행...${NC}"
+# PR CI의 db job과 동일한 필터로 통합 테스트만 실행한다.
+# (기존 test-update-performances 경로는 통합 테스트 파일 이름 변경 후 매칭되는 파일이 없어 깨져 있었다.)
+npm test --prefix packages/backend -- run syncPerformances.integration
 
-echo -e "${YELLOW}⚡ [6/6] Edge Functions 통합 테스트 실행...${NC}"
+echo -e "${YELLOW}⚡ [5/5] Edge Functions 통합 테스트 실행...${NC}"
 
 # 1. Edge Function 서버를 배경에서 실행 (로그는 휴지통으로)
 # --no-verify-jwt 옵션을 주어야 테스트 시 토큰 인증 과정을 단순화할 수 있다.
