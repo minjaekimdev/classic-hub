@@ -1,5 +1,4 @@
 import { callDatabaseFunction } from "@/infrastructure/supabase/database";
-import { withErrorHandling } from "shared/utils/error";
 import logger from "shared/utils/logger";
 import { sendSlackNotification } from "shared/utils/monitor";
 import { kopisService } from "@/infrastructure/kopis/service";
@@ -25,25 +24,24 @@ const updateRanking = async (
     return;
   }
 
-  await withErrorHandling(
-    async () => {
-      await callDatabaseFunction("bulk_update_concert_ranks", {
-        period,
-        payload: ranking,
-      });
-    },
-    async () => {
-      logger.error(
-        `[UPDATE_FAILED] ${period} ranking data update failed: ${dateRange}`,
-        {
-          service: "supabase",
-        },
-      );
-      await sendSlackNotification(
-        `❌ [UPDATE_FAILED] ${period} ranking data update failed: ${dateRange}`,
-      );
-    },
-  );
+  // 적재 실패는 삼켜서 알림만 보낸다. daily/weekly/monthly가 순차 실행되므로
+  // 한 period의 실패가 나머지 period 처리까지 죽이면 안 된다.
+  try {
+    await callDatabaseFunction("bulk_update_concert_ranks", {
+      period,
+      payload: ranking,
+    });
+  } catch {
+    logger.error(
+      `[UPDATE_FAILED] ${period} ranking data update failed: ${dateRange}`,
+      {
+        service: "supabase",
+      },
+    );
+    await sendSlackNotification(
+      `❌ [UPDATE_FAILED] ${period} ranking data update failed: ${dateRange}`,
+    );
+  }
 };
 
 export default updateRanking;
