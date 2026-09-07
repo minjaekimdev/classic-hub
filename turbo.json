@@ -4,9 +4,6 @@
     "build": {
       "dependsOn": ["^build"],
       "outputs": ["dist/**"]
-    },
-    "test-update-performances": {
-      "cache": false,
-    },
+    }
   }
 }

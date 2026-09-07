@@ -32,8 +32,7 @@
   "scripts": {
     "build": "tsc --noEmit",
     "test": "NODE_ENV=test vitest",
-    "test-update-performances": "NODE_ENV=test vitest updatePerformances",
-    "test-ranking-performances": "NODE_ENV=test vitest updateRanking",
+    "test-smoke": "NODE_ENV=test tsx application/scripts/e2eSmoke.ts",
     "reprocess-failures": "tsx application/scripts/reprocessFailures.ts"
   }
 }
