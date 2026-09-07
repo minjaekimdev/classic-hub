@@ -78,7 +78,7 @@ const makeDeps = (
     .fn()
     .mockResolvedValue({ program: "프로그램" } as unknown as ProgramExtractionResponse),
   uploadPosterToStorage: vi.fn().mockResolvedValue("https://storage/poster.webp"),
-  log: { info: vi.fn(), error: vi.fn() },
+  log: { debug: vi.fn(), info: vi.fn(), error: vi.fn() },
   ...overrides,
 });
 

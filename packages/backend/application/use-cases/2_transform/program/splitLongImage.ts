@@ -16,7 +16,7 @@ export const splitLongImage = async (buffer: Buffer): Promise<Buffer[]> => {
   const totalPixels = width * height;
 
   if (totalPixels <= MAX_PIXELS) {
-    logger.info(`[SPLIT] buffer length: ${buffer.length}`);
+    logger.debug(`[SPLIT] buffer length: ${buffer.length}`);
 
     return [buffer];
   }

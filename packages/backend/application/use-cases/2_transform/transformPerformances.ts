@@ -18,7 +18,8 @@ export interface TransformPerformancesDeps {
   ) => Promise<string>;
   log: {
     info: (msg: string) => void;
-    error: (msg: string) => void;
+    debug: (msg: string) => void;
+    error: (msg: string, meta?: Record<string, unknown>) => void;
   };
 }
 
@@ -43,6 +44,10 @@ export const createTransformPerformances = ({
       ? rawDetailUrls
       : [rawDetailUrls];
 
+    // ${error} 보간만으로는 스택이 사라지므로, Error의 스택을 meta로 별도 전달한다.
+    const errorMeta = (error: unknown): Record<string, unknown> =>
+      error instanceof Error ? { stack: error.stack } : {};
+
     const failure = (error: string): ProcessResult => ({
       id,
       error,
@@ -52,7 +57,7 @@ export const createTransformPerformances = ({
     });
 
     // 포스터 이미지 원본과 상세이미지 원본(버퍼)를 요청
-    log.info("Fetching images...");
+    log.debug("Fetching images...");
     let posterBuffer: Buffer;
     let detailImageBuffers: Buffer[];
     try {
@@ -69,7 +74,7 @@ export const createTransformPerformances = ({
         ),
       );
     } catch (error) {
-      log.error(`[FETCH_FAIL] Images fetch failed (ID: ${id}): ${error}`);
+      log.error(`[FETCH_FAIL] Images fetch failed (ID: ${id}): ${error}`, errorMeta(error));
       return failure("ImageFetchError");
     }
 
@@ -82,12 +87,13 @@ export const createTransformPerformances = ({
     } catch (error) {
       log.error(
         `[OPTIMIZE_FAIL] Detail Images Optimization Failed (ID: ${id}): ${error}`,
+        errorMeta(error),
       );
       return failure("ImageFetchError");
     }
 
     // Vision API 입력 픽셀 한도를 만족하기 위해 분할
-    log.info("Splitting images...");
+    log.debug("Splitting images...");
 
     let splitedDetailImageBuffers: Buffer[][];
     try {
@@ -95,12 +101,12 @@ export const createTransformPerformances = ({
         processedDetailImageBuffers.map(splitLongImage),
       );
     } catch (error) {
-      log.error(`[SPLIT_FAIL] Image split failed (ID: ${id}): ${error}`);
+      log.error(`[SPLIT_FAIL] Image split failed (ID: ${id}): ${error}`, errorMeta(error));
       return failure("ImageSplitError");
     }
 
     // 프로그램 추출
-    log.info("Extracting Program text...");
+    log.debug("Extracting Program text...");
 
     const textFromStyField = performanceDetail.sty;
     let textFromDetailImage: string;
@@ -109,7 +115,7 @@ export const createTransformPerformances = ({
         splitedDetailImageBuffers.flat(),
       );
     } catch (error) {
-      log.error(`[OCR_FAIL] Extracting Program text failed (ID: ${id}): ${error}`);
+      log.error(`[OCR_FAIL] Extracting Program text failed (ID: ${id}): ${error}`, errorMeta(error));
       return failure("OCRError");
     }
 
@@ -127,13 +133,14 @@ export const createTransformPerformances = ({
       : textFromDetailImage;
 
     // Gemini API로 변환
-    log.info("Converting Program text to JSON...");
+    log.debug("Converting Program text to JSON...");
     let programJSON: ProgramExtractionResponse;
     try {
       programJSON = await getProgramJSON(programText);
     } catch (error) {
       log.error(
         `[GEMINI_FAIL] Converting Program text to JSON failed (ID: ${id}): ${error}`,
+        errorMeta(error),
       );
       return failure("GeminiError");
     }
@@ -141,7 +148,7 @@ export const createTransformPerformances = ({
     // 공연 데이터의 포스터와 상세 이미지들을 WebP로 압축 후 supabase storage에 저장
     // 포스터: naturalWidth 보통 750px, 서비스에서 보여지는 최대크기 300px이므로 리사이징 필요
     // 상세 이미지: naturalWidth 보통 750px, 서비스에서 보여지는 최대크기가 700px이므로 굳이 리사이징 필요 x
-    log.info("Optimizing Images to WebP...");
+    log.debug("Optimizing Images to WebP...");
 
     let compressedPoster;
     try {
@@ -150,7 +157,7 @@ export const createTransformPerformances = ({
         .webp({ quality: 80 })
         .toBuffer();
     } catch (error) {
-      log.error(`[OPTIMIZE_FAIL] Poster Optimize Failed (ID: ${id}): ${error}`);
+      log.error(`[OPTIMIZE_FAIL] Poster Optimize Failed (ID: ${id}): ${error}`, errorMeta(error));
       return failure("SharpError");
     }
 
@@ -158,7 +165,8 @@ export const createTransformPerformances = ({
     try {
       storagePosterUrl = await uploadPosterToStorage(id, compressedPoster);
     } catch (error) {
-      log.error(`[INSERT_FAIL] Storage Insert Failed (ID: ${id}): ${error}`);
+      // DB 적재 실패는 오케스트레이터의 [INSERT_FAIL]이 담당하므로 Storage 실패는 [STORAGE_FAIL]로 구별한다.
+      log.error(`[STORAGE_FAIL] Storage Upload Failed (ID: ${id}): ${error}`, errorMeta(error));
       return failure("StorageError");
     }
 

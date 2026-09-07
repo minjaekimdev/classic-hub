@@ -17,7 +17,7 @@ export const uploadToStorage = async (
     throw new APIError(`Storage Upload Failed: ${error.message}`);
   }
 
-  logger.info("Storage upload succeeded", {
+  logger.debug("Storage upload succeeded", {
     service: "supabase",
     bucket,
     path,

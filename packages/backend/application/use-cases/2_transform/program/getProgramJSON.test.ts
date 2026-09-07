@@ -10,7 +10,7 @@ const makeDeps = (
   overrides: Partial<GetProgramJSONDeps> = {},
 ): GetProgramJSONDeps => ({
   generateContent: vi.fn(),
-  log: { info: vi.fn() },
+  log: { debug: vi.fn(), info: vi.fn() },
   ...overrides,
 });
 
@@ -102,7 +102,7 @@ describe("createGetProgramJSON", () => {
   // 시나리오 6: 관측성 - 토큰 사용량 로그에 usageMetadata가 전달되는가
   it("토큰 사용량을 로그로 남긴다", async () => {
     const usageMetadata = { totalTokenCount: 100 };
-    const log = { info: vi.fn() };
+    const log = { debug: vi.fn(), info: vi.fn() };
     const getProgramJSON = createGetProgramJSON(
       makeDeps({
         generateContent: vi
@@ -114,7 +114,7 @@ describe("createGetProgramJSON", () => {
 
     await getProgramJSON("프로그램 텍스트");
 
-    expect(log.info).toHaveBeenCalledWith(
+    expect(log.debug).toHaveBeenCalledWith(
       "Gemini 프로그램 분석 완료",
       expect.objectContaining({ usage: usageMetadata }),
     );

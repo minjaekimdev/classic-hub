@@ -14,6 +14,7 @@ export interface GetProgramJSONDeps {
     params: GenerateContentParams,
   ) => Promise<GenerateContentResult>;
   log: {
+    debug: (msg: string, meta?: Record<string, unknown>) => void;
     info: (msg: string, meta?: Record<string, unknown>) => void;
   };
 }
@@ -91,7 +92,7 @@ export const createGetProgramJSON = ({ generateContent, log }: GetProgramJSONDep
       );
     }
 
-    log.info("Gemini 프로그램 분석 완료", {
+    log.debug("Gemini 프로그램 분석 완료", {
       service: "gemini",
       usage: response.usageMetadata,
     });
