@@ -257,5 +257,22 @@ describe("syncPerformances 통합 테스트 (KOPIS/Gemini = msw, Supabase = 로�
     expect(posterBytes.length).toBeGreaterThan(0);
 
     expect(row!.raw_data).toMatchObject({ genrenm: "클래식" });
+
+    // program 키는 performances 컬럼이 아니라 RPC가 payload에서 찢어 적재하는
+    // programs 테이블의 원천이다. 이 키를 제거하면 파이프라인은 성공처럼 보이지만
+    // 프로그램 데이터가 조용히 유실되므로, programs 테이블까지 반드시 단언한다.
+    const { data: programs, error: programsError } = await supabase
+      .from("programs")
+      .select("composer_ko, composer_en, title_ko, title_en")
+      .eq("performance_id", FIXTURE_ID);
+    expect(programsError).toBeNull();
+    expect(programs).toEqual([
+      {
+        composer_ko: "루트비히 판 베토벤",
+        composer_en: "Ludwig van Beethoven",
+        title_ko: "교향곡 제5번",
+        title_en: "Symphony No. 5",
+      },
+    ]);
   }, 30000);
 });
