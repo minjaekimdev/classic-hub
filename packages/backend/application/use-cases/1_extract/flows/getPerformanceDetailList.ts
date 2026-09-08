@@ -24,7 +24,11 @@ export const createGetPerformanceDetailList = ({
       `[PROCESS] ${ids.length}개의 공연 상세 텍스트 데이터 페칭 시작`,
     );
 
-    for (const id of ids) {
+    for (const [index, id] of ids.entries()) {
+      // 진행 로그: 장시간 크론잡에서 현재/전체 진행률과 검색 키(ID)를 함께 남긴다.
+      log.info(
+        `[KOPIS] 상세 데이터 페칭 중 (${index + 1}/${ids.length}) ID: ${id}`,
+      );
       try {
         const rawData = await rateLimiter.execute(() =>
           getPerformanceDetail(id),

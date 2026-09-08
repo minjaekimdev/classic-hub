@@ -49,9 +49,9 @@ export const createGetAllPerformanceIdList = (
           break;
         }
 
-        // 현황 파악을 위한 로깅 (무한루프 등 체크)
-        log.debug(
-          `[KOPIS] ${page} 페이지: ${performanceIdArray.length} 개의 데이터`,
+        // 페이지별 진행 로그: 몇 페이지째인지와 누적 건수를 남겨 페칭 속도·볼륨을 추적한다.
+        log.info(
+          `[KOPIS] ${page}페이지 페칭 완료: ${performanceIdArray.length}건 (누적 ${result.length}건)`,
         );
         result.push(...performanceIdArray);
 
@@ -78,6 +78,10 @@ export const createGetAllPerformanceIdList = (
         await sleep(backoffDelay);
       }
     }
+
+    log.info(
+      `[KOPIS_SUCCESS] 공연 목록 페칭 완료: 총 ${page - 1}페이지 / ${result.length}건`,
+    );
 
     return result;
   };
