@@ -17,9 +17,10 @@ jobs:
     runs-on: ubuntu-latest
 
     # 매달린(hang) 잡을 강제 종료해 "실패"로 기록 → 알림 체계 작동
-    # 90분 근거: 재시도 백오프 최대 14분(MAX_REPEAT=3) + KOPIS 창 내 전체 재구축 시
-    # transform ~60분(공연 ~1,000건 × 동시 5건) + extract/insert 여유
-    timeout-minutes: 90
+    # 120분 근거 — 재구축 최악 시나리오(KOPIS 창 내 공연 ~1,000건):
+    # extract(목록 페이지네이션 + 상세 페칭 5회/초 ~15분) + transform(동시 5건 ~70분)
+    # + 재시도 백오프 최대 14분(MAX_REPEAT=3) + insert/알림 여유
+    timeout-minutes: 120
 
     # 동시 실행 방지: 이전 실행이 도는 중이면 새 실행이 이전 것을 취소
     concurrency:
