@@ -12,6 +12,7 @@ export const FAILED_RECORDS_FILENAME = "failed_records.json";
 const keyMapper: Record<WorkflowError, keyof Artifact> = {
   ProcessError: "processFailures",
   BatchInsertError: "batchInsertFailures",
+  DetailFetchError: "detailFetchFailures",
 };
 
 export const saveFailuresToArtifact = (

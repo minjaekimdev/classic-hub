@@ -10,9 +10,18 @@ export interface ProcessResult {
   attempts?: number;
 }
 
-export type WorkflowError = "ProcessError" | "BatchInsertError";
-// processFailures, batchInsertFailures 둘 중 하나만 존재할 수 있으므로 옵셔널 프로퍼티 사용
+export type WorkflowError = "ProcessError" | "BatchInsertError" | "DetailFetchError";
+
+// extract 단계의 상세 페칭 실패 기록 — 상세 데이터 자체가 없으므로 id/사유/시각만 남긴다.
+export interface DetailFetchFailure {
+  id: string;
+  error: string;
+  failedAt: string;
+}
+
+// processFailures, batchInsertFailures, detailFetchFailures는 배타적이지 않을 수 있으므로 옵셔널 프로퍼티 사용
 export interface Artifact {
   processFailures?: ProcessResult[];
   batchInsertFailures?: DBPerformanceWrite[];
+  detailFetchFailures?: DetailFetchFailure[];
 }

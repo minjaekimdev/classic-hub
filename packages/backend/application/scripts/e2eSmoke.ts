@@ -80,6 +80,7 @@ const DEFAULT_FIXTURE_ID = "PF286762";
     extractPerformances: async () => ({
       performances: [fixture],
       idsToDelete: [],
+      detailFetchFailures: [],
     }),
     transformPerformances,
     retry,

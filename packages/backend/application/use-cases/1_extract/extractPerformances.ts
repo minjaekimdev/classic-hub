@@ -1,4 +1,5 @@
 import { PerformanceDetail } from "@/shared/types/kopis";
+import { DetailFetchFailure } from "shared/types/sync";
 
 interface Dependencies {
   getDbPerformanceIds: (table: string, column: string) => Promise<string[]>;
@@ -14,7 +15,12 @@ interface Dependencies {
     endDate: string,
     afterDate?: string,
   ) => Promise<string[]>;
-  getPerformanceDetailList: (ids: string[]) => Promise<PerformanceDetail[]>;
+  getPerformanceDetailList: (
+    ids: string[],
+  ) => Promise<{
+    performances: PerformanceDetail[];
+    failures: DetailFetchFailure[];
+  }>;
   log: {
     info: (msg: string) => void;
   };
@@ -67,15 +73,27 @@ export const createExtractPerformances = ({
     const idsToTransform = [...new Set([...idsToInsert, ...idsToUpdate])];
     log.info(`[PROCESS] 가공해야 할 최종 공연 개수: ${idsToTransform.length}`);
 
-    // 6) id를 바탕으로 공연 상세 데이터만 먼저 가져오기
+    // 6) id를 바탕으로 공연 상세 데이터만 먼저 가져온다.
+    // 개별 실패는 flow 내부에서 인라인 재시도(3회) + 2차 패스까지 수행되고,
+    // 그래도 실패한 id는 detailFetchFailures로 반환되어 상위에서 artifact로 기록된다.
     log.info("[PROCESS] 공연 상세 데이터 추출 시작");
-    const performances = await getPerformanceDetailList(idsToTransform);
+    const {
+      performances,
+      failures: detailFetchFailures,
+    } = await getPerformanceDetailList(idsToTransform);
+
+    if (detailFetchFailures.length > 0) {
+      log.info(
+        `[KOPIS_FAIL] 상세 페칭 실패 ${detailFetchFailures.length}건 (전체 ${idsToTransform.length}건 중) — artifact 기록 대상`,
+      );
+    }
 
     // 이미지 버퍼는 transform 단계에서 공연 1건 단위로 페칭한다. (중복 페칭 제거)
     // 삭제해야할 공연 id만 전달하고, 실제 삭제는 뒤로 미룬다.
     return {
       performances,
       idsToDelete,
+      detailFetchFailures,
     };
   };
 };

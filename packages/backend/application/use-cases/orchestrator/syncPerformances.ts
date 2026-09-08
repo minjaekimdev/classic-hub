@@ -1,6 +1,6 @@
 import promiseLimiter from "@/shared/utils/promiseLimiter";
 import { DBPerformanceWrite } from "@classic-hub/shared/types/database";
-import { ProcessResult, WorkflowError } from "shared/types/sync";
+import { DetailFetchFailure, ProcessResult, WorkflowError } from "shared/types/sync";
 import { PerformanceDetail } from "@/shared/types/kopis";
 import { RetryDeps, RetryFailure } from "@/application/services/retry";
 import {
@@ -22,6 +22,7 @@ export interface SyncPerformancesDeps {
   ) => Promise<{
     performances: PerformanceDetail[];
     idsToDelete: string[];
+    detailFetchFailures: DetailFetchFailure[];
   }>;
   transformPerformances: (
     performance: PerformanceDetail,
@@ -69,7 +70,7 @@ export const createSyncPerformanceData = ({
     maxRepeat: number,
   ) => {
     // 1. Extract 단계 (공연 원본 데이터 페칭 — 이미지 버퍼는 transform에서 1건씩 페칭)
-    const { performances } = await extractPerformances(
+    const { performances, detailFetchFailures } = await extractPerformances(
       startDate,
       endDate,
       afterDate,
@@ -77,6 +78,7 @@ export const createSyncPerformanceData = ({
     );
 
     // 2. Transform 단계 (공연 1건 = 이미지 페칭 + 가공 묶음을 동시 5건씩 병렬 처리)
+    log.info(`[PROCESS] Transform 단계 시작 (대상: ${performances.length}건)`);
     const results = await promiseLimiter(
       performances,
       (performance) => transformPerformances(performance),
@@ -131,7 +133,19 @@ export const createSyncPerformanceData = ({
         "ProcessError",
       );
       log.error(
-        `[PROCESS_FAIL] 재시도 후에도 실패한 공연 ${retryFailures.length}건 → artifact 저장 완료`,
+        `[PROCESS_FAIL] 재시도 후에도 실패한 공연 ${retryFailures.length}건 → artifact 기록 완료`,
+      );
+    }
+
+    // 4.5 extract의 상세 페칭 실패 — 인라인 재시도·2차 패스로도 회복되지 않은 유실분을 기록한다.
+    if (detailFetchFailures.length > 0) {
+      saveFailuresToArtifact(
+        failedRecordsFilename,
+        detailFetchFailures,
+        "DetailFetchError",
+      );
+      log.error(
+        `[EXTRACT_FAIL] 상세 페칭 최종 실패 ${detailFetchFailures.length}건 → artifact 기록 완료`,
       );
     }
 
@@ -164,6 +178,7 @@ export const createSyncPerformanceData = ({
       firstPassSuccesses,
       retryRecovered: retrySuccesses.length,
       finalFailures: retryFailures,
+      detailFetchFailures: detailFetchFailures.length,
       insertAttempted,
       insertSucceeded,
     };

@@ -31,6 +31,7 @@ const getDbPerformanceIds = createGetDbPerformanceIds({ getColumnData });
 const getPerformanceDetailList = createGetPerformanceDetailList({
   getPerformanceDetail: (id) => kopisService.getPerformanceDetail(id),
   rateLimiter: kopisRateLimiter,
+  sleep: (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
   log: logger,
 });
 
