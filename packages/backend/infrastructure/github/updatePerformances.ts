@@ -7,10 +7,11 @@ const MAX_REPEAT = 5;
 
 (async () => {
   const now = dayjs();
+  // 월간 랭킹을 위해 31일 전을 startDate로 잡는다.
   const startDate = now.subtract(31, "days").format("YYYYMMDD");
-  const endDate = now.add(365, "days").format("YYYYMMDD");
+  const endDate = now.add(90, "days").format("YYYYMMDD");
   const afterDate = now.subtract(32, "days").format("YYYYMMDD");
-  const updateEndDate = now.add(364, "days").format("YYYYMMDD");
+  const updateEndDate = now.add(89, "days").format("YYYYMMDD");
 
   try {
     const summary = await syncPerformanceData(
