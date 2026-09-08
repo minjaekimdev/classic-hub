@@ -19,6 +19,7 @@ import { geminiService } from "@/infrastructure/gemini/service";
 import { uploadPosterToStorage } from "@/application/use-cases/scripts/uploadPosterToStorage";
 import { callDatabaseFunction } from "@/infrastructure/supabase/database";
 import supabase from "@/infrastructure/supabase/client";
+import { kopisRateLimiter } from "@/application/services/kopisRateLimiter";
 import type { PerformanceDetail } from "@/shared/types/kopis";
 
 const DEFAULT_FIXTURE_ID = "PF286762";
@@ -57,8 +58,10 @@ const DEFAULT_FIXTURE_ID = "PF286762";
   }
 
   // 3. 실제 구현체로 transform 조립 (2_transform/index.ts와 동일한 구성)
+  //    imageFetcher는 프로덕션과 동일하게 공유 kopisRateLimiter를 거친다.
   const transformPerformances = createTransformPerformances({
-    imageFetcher,
+    imageFetcher: (url, message) =>
+      kopisRateLimiter.execute(() => imageFetcher(url, message)),
     getProgramText: createGetProgramText({
       detectText: (buffer) => visionService.detectText(buffer),
     }),
