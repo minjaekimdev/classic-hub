@@ -7,7 +7,9 @@ const makeDeps = (overrides: Partial<Parameters<typeof createExtractPerformances
   getDbPerformanceIds: vi.fn().mockResolvedValue([]),
   compareNewOld: vi.fn().mockReturnValue({ idsToDelete: [], idsToInsert: [] }),
   getAllPerformanceIdList: vi.fn().mockResolvedValue([]),
-  getPerformanceDetailList: vi.fn().mockResolvedValue([]),
+  getPerformanceDetailList: vi
+    .fn()
+    .mockResolvedValue({ performances: [], failures: [] }),
   log: { info: vi.fn() },
   ...overrides,
 });
@@ -62,7 +64,10 @@ describe("extractPerformances 오케스트레이션 테스트", () => {
       .mockResolvedValueOnce([]); // 2차 호출: 수정 공연 id (없음)
     const getPerformanceDetailList = vi
       .fn()
-      .mockResolvedValue([makeDetail("ID_1"), makeDetail("ID_2")]);
+      .mockResolvedValue({
+        performances: [makeDetail("ID_1"), makeDetail("ID_2")],
+        failures: [],
+      });
 
     const extractPerformances = createExtractPerformances(
       makeDeps({
@@ -76,6 +81,7 @@ describe("extractPerformances 오케스트레이션 테스트", () => {
     const result = await extractPerformances("2026-01-01", "2026-06-30", "2026-07-01", "2026-07-31");
 
     expect(result.idsToDelete).toEqual(["ID_3"]);
+    expect(result.detailFetchFailures).toEqual([]);
     expect(result.performances).toHaveLength(2);
     expect(result.performances[0]!.mt20id).toBe("ID_1");
     expect(result.performances[1]!.mt20id).toBe("ID_2");
@@ -116,11 +122,10 @@ describe("extractPerformances 오케스트레이션 테스트", () => {
       .fn()
       .mockResolvedValueOnce(["ID_1", "ID_2"]) // 1차: 새 id
       .mockResolvedValueOnce(["ID_2", "ID_3"]); // 2차: 수정 id
-    const getPerformanceDetailList = vi.fn().mockResolvedValue([
-      makeDetail("ID_1"),
-      makeDetail("ID_2"),
-      makeDetail("ID_3"),
-    ]);
+    const getPerformanceDetailList = vi.fn().mockResolvedValue({
+      performances: [makeDetail("ID_1"), makeDetail("ID_2"), makeDetail("ID_3")],
+      failures: [],
+    });
 
     const extractPerformances = createExtractPerformances(
       makeDeps({ compareNewOld, getAllPerformanceIdList, getPerformanceDetailList }),
@@ -138,7 +143,7 @@ describe("extractPerformances 오케스트레이션 테스트", () => {
     const detail2 = makeDetail("ID_2", { poster: "", styurls: { styurl: [] } });
     const getPerformanceDetailList = vi
       .fn()
-      .mockResolvedValue([detail1, detail2]);
+      .mockResolvedValue({ performances: [detail1, detail2], failures: [] });
 
     const extractPerformances = createExtractPerformances(
       makeDeps({ getPerformanceDetailList }),
@@ -209,7 +214,10 @@ describe("extractPerformances 오케스트레이션 테스트", () => {
       .fn()
       .mockResolvedValueOnce([])
       .mockResolvedValueOnce([]);
-    const getPerformanceDetailList = vi.fn().mockResolvedValue([]);
+    const getPerformanceDetailList = vi.fn().mockResolvedValue({
+      performances: [],
+      failures: [],
+    });
 
     const extractPerformances = createExtractPerformances(
       makeDeps({
@@ -223,5 +231,26 @@ describe("extractPerformances 오케스트레이션 테스트", () => {
 
     expect(result.performances).toEqual([]);
     expect(result.idsToDelete).toEqual(["ID_OLD"]);
+    expect(result.detailFetchFailures).toEqual([]);
+  });
+
+  // 시나리오 9: 상세 페칭 실패 목록은 detailFetchFailures로 그대로 반환된다
+  it("상세 페칭 실패 목록을 detailFetchFailures로 반환해야 한다", async () => {
+    const failures = [
+      { id: "ID_X", error: "DetailFetchError", failedAt: "2026-09-08T00:00:00.000Z" },
+    ];
+    const getPerformanceDetailList = vi.fn().mockResolvedValue({
+      performances: [],
+      failures,
+    });
+
+    const extractPerformances = createExtractPerformances(
+      makeDeps({ getPerformanceDetailList }),
+    );
+
+    const result = await extractPerformances("2026-01-01", "2026-06-30", "2026-07-01", "2026-07-31");
+
+    expect(result.performances).toEqual([]);
+    expect(result.detailFetchFailures).toEqual(failures);
   });
 });

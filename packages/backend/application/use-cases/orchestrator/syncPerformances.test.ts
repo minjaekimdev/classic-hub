@@ -32,7 +32,7 @@ const makeDeps = (
 ): SyncPerformancesDeps => ({
   extractPerformances: vi
     .fn()
-    .mockResolvedValue({ performances: [], idsToDelete: [] }),
+    .mockResolvedValue({ performances: [], idsToDelete: [], detailFetchFailures: [] }),
   transformPerformances: vi.fn(),
   retry: vi.fn().mockResolvedValue({ retrySuccesses: [], retryFailures: [] }),
   insertPerformancesBulk: vi.fn().mockResolvedValue(undefined),
@@ -68,7 +68,7 @@ describe("syncPerformances 오케스트레이션 테스트", () => {
     const deps = makeDeps({
       extractPerformances: vi
         .fn()
-        .mockResolvedValue({ performances, idsToDelete: [] }),
+        .mockResolvedValue({ performances, idsToDelete: [], detailFetchFailures: [] }),
       transformPerformances,
     });
     const summary = await run(deps);
@@ -103,6 +103,7 @@ describe("syncPerformances 오케스트레이션 테스트", () => {
       firstPassSuccesses: 3,
       retryRecovered: 0,
       finalFailures: [],
+      detailFetchFailures: 0,
       insertAttempted: true,
       insertSucceeded: true,
     });
@@ -129,7 +130,7 @@ describe("syncPerformances 오케스트레이션 테스트", () => {
     const deps = makeDeps({
       extractPerformances: vi
         .fn()
-        .mockResolvedValue({ performances, idsToDelete: [] }),
+        .mockResolvedValue({ performances, idsToDelete: [], detailFetchFailures: [] }),
       transformPerformances,
       retry,
     });
@@ -162,6 +163,7 @@ describe("syncPerformances 오케스트레이션 테스트", () => {
       firstPassSuccesses: 2,
       retryRecovered: 1,
       finalFailures: [],
+      detailFetchFailures: 0,
       insertAttempted: true,
       insertSucceeded: true,
     });
@@ -188,7 +190,7 @@ describe("syncPerformances 오케스트레이션 테스트", () => {
     const deps = makeDeps({
       extractPerformances: vi
         .fn()
-        .mockResolvedValue({ performances, idsToDelete: [] }),
+        .mockResolvedValue({ performances, idsToDelete: [], detailFetchFailures: [] }),
       transformPerformances,
       retry,
       saveFailuresToArtifact,
@@ -228,7 +230,7 @@ describe("syncPerformances 오케스트레이션 테스트", () => {
     const deps = makeDeps({
       extractPerformances: vi
         .fn()
-        .mockResolvedValue({ performances, idsToDelete: [] }),
+        .mockResolvedValue({ performances, idsToDelete: [], detailFetchFailures: [] }),
       transformPerformances,
       insertPerformancesBulk: vi
         .fn()
@@ -283,7 +285,7 @@ describe("syncPerformances 오케스트레이션 테스트", () => {
     const deps = makeDeps({
       extractPerformances: vi
         .fn()
-        .mockResolvedValue({ performances, idsToDelete: [] }),
+        .mockResolvedValue({ performances, idsToDelete: [], detailFetchFailures: [] }),
       transformPerformances,
       retry,
       saveFailuresToArtifact,
@@ -305,5 +307,46 @@ describe("syncPerformances 오케스트레이션 테스트", () => {
     } finally {
       fs.rmSync(dir, { recursive: true, force: true });
     }
+  });
+
+  it("extract의 상세 페칭 실패는 artifact(DetailFetchError)에 기록되고 요약 알림에 포함된다", async () => {
+    const performances = [makeDetail("PF1")];
+    const detailFetchFailures = [
+      {
+        id: "PF_MISSING",
+        error: "DetailFetchError",
+        failedAt: "2026-01-01T00:00:00.000Z",
+      },
+    ];
+    const transformPerformances = vi
+      .fn()
+      .mockImplementation((p: PerformanceDetail) =>
+        Promise.resolve(successResult(p.mt20id)),
+      );
+
+    const deps = makeDeps({
+      extractPerformances: vi
+        .fn()
+        .mockResolvedValue({
+          performances,
+          idsToDelete: [],
+          detailFetchFailures,
+        }),
+      transformPerformances,
+    });
+    const summary = await run(deps);
+
+    expect(deps.saveFailuresToArtifact).toHaveBeenCalledWith(
+      "failed_records.json",
+      detailFetchFailures,
+      "DetailFetchError",
+    );
+    expect(deps.log.error).toHaveBeenCalledWith(
+      expect.stringContaining("상세 페칭 최종 실패 1건"),
+    );
+    expect(deps.notify).toHaveBeenCalledWith(
+      expect.stringContaining("상세 페칭 실패: 1건"),
+    );
+    expect(summary.detailFetchFailures).toBe(1);
   });
 });

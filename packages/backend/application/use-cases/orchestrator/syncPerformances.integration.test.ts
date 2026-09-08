@@ -182,6 +182,7 @@ describe("syncPerformances 통합 테스트 (KOPIS/Gemini = msw, Supabase = 로�
     const getPerformanceDetailList = createGetPerformanceDetailList({
       getPerformanceDetail: (id) => kopisService.getPerformanceDetail(id),
       rateLimiter: kopisRateLimiter,
+      sleep: (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
       log: logger,
     });
     const extractPerformances = createExtractPerformances({

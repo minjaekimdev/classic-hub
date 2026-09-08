@@ -25,9 +25,13 @@ const MAX_REPEAT = 3;
       MAX_REPEAT,
     );
 
-    // 조용한 실패 방지: 끝까지 실패한 데이터가 있거나 DB 적재가 실패한 날은
-    // Actions 히스토리에 실패로 기록되게 한다.
-    if (summary.finalFailures.length > 0 || !summary.insertSucceeded) {
+    // 조용한 실패 방지: 끝까지 실패한 데이터(재시도 소진, 상세 페칭 유실)가 있거나
+    // DB 적재가 실패한 날은 Actions 히스토리에 실패로 기록되게 한다.
+    if (
+      summary.finalFailures.length > 0 ||
+      summary.detailFetchFailures > 0 ||
+      !summary.insertSucceeded
+    ) {
       process.exitCode = 1;
     }
   } catch (error) {

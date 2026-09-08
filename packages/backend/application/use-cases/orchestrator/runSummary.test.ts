@@ -19,6 +19,7 @@ const makeSummary = (
   firstPassSuccesses: 42,
   retryRecovered: 2,
   finalFailures: [],
+  detailFetchFailures: 0,
   insertAttempted: true,
   insertSucceeded: true,
   ...overrides,
@@ -56,6 +57,17 @@ describe("buildSyncSummaryMessage 테스트", () => {
 
     expect(message).toContain("DB 적재: ❌ 실패");
     expect(message).toContain("⚠️ 공연 동기화 완료");
+  });
+
+  it("상세 페칭 실패가 있으면 ⚠️ 상태와 함께 건수를 표시한다", () => {
+    const message = buildSyncSummaryMessage(
+      makeSummary({ detailFetchFailures: 5 }),
+    );
+
+    expect(message).toContain("⚠️ 공연 동기화 완료");
+    expect(message).toContain(
+      "상세 페칭 실패: 5건 (DetailFetchError artifact 확인 필요)",
+    );
   });
 
   it("성공 데이터가 0건이면 insert를 시도하지 않았음을 표시한다", () => {

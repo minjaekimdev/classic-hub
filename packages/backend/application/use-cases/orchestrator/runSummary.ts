@@ -7,6 +7,8 @@ export interface SyncRunSummary {
   firstPassSuccesses: number;
   retryRecovered: number;
   finalFailures: ProcessResult[];
+  // extract 단계의 상세 페칭 최종 실패 건수 (인라인 재시도·2차 패스로도 회복되지 않은 유실분)
+  detailFetchFailures: number;
   insertAttempted: boolean;
   insertSucceeded: boolean;
 }
@@ -30,7 +32,9 @@ export const buildSyncSummaryMessage = (
   artifactUrl: string | null = null,
 ): string => {
   const hasProblem =
-    summary.finalFailures.length > 0 || !summary.insertSucceeded;
+    summary.finalFailures.length > 0 ||
+    summary.detailFetchFailures > 0 ||
+    !summary.insertSucceeded;
 
   const lines: string[] = [];
   lines.push(`${hasProblem ? "⚠️" : "✅"} 공연 동기화 완료`);
@@ -53,6 +57,12 @@ export const buildSyncSummaryMessage = (
   lines.push(
     `- 최종 실패: ${summary.finalFailures.length}건${aggregation ? ` (${aggregation})` : ""}`,
   );
+
+  if (summary.detailFetchFailures > 0) {
+    lines.push(
+      `- 상세 페칭 실패: ${summary.detailFetchFailures}건 (DetailFetchError artifact 확인 필요)`,
+    );
+  }
 
   if (!summary.insertAttempted) {
     lines.push("- DB 적재: 대상 없음 (성공 데이터 0건)");
