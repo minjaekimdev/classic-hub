@@ -23,9 +23,13 @@ export interface RetryDeps<T> {
 
 const RETRY_CONCURRENCY = 5;
 const RETRY_INTERVAL_MS = 1000;
+// 백오프 상한(분). 무증가 2^r이라면 MAX_REPEAT=5 풀코스 대기 합계가 2+4+8+16+32=62분으로
+// workflow timeout(60분)을 초과해 지속 실패 시 반드시 타임아웃이 난다.
+// 상한 8분으로 5라운드 최대 대기를 30분으로 고정해 타임아웃 예산 안에 수렴시킨다.
+const BACKOFF_CAP_MINUTES = 8;
 
 // 첫 시도에서 실패한 데이터를 대상으로 지수 백오프 재시도를 수행하는 정책 계층.
-// 재시도 r회차는 2^r 분 대기 후 수행된다 (2/4/8/...분).
+// 재시도 r회차는 min(2^r, 8)분 대기 후 수행된다 (2/4/8/8/8...분).
 export const retry = async <T>(
   initialFailures: RetryFailure<T>[],
   maxRepeat: number,
@@ -41,8 +45,8 @@ export const retry = async <T>(
       `🔄 Starting retry #${repeat}... (Remaining: ${pendingFailures.length})`,
     );
 
-    // 지수적 백오프 대기 (2^repeat 분)
-    await sleep(60000 * 2 ** repeat);
+    // 지수적 백오프 대기 (상한 8분)
+    await sleep(60000 * Math.min(2 ** repeat, BACKOFF_CAP_MINUTES));
 
     // 동시 실행 5회 제한. promiseLimiter는 입력 순서를 보존하므로 인덱스로 재매칭할 수 있다.
     const results = await promiseLimiter(

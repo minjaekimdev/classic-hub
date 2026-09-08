@@ -181,4 +181,28 @@ describe("retry 비즈니스 로직 테스트", () => {
     expect(result.retryFailures[0].error).toBe("GeminiError");
     expect(result.retrySuccesses).toHaveLength(2);
   });
+
+  // 시나리오 8: 백오프 상한 — 4회차부터 8분으로 고정 (타임아웃 예산 보호)
+  // 무증가 2^r이라면 MAX_REPEAT=5 풀코스 대기 합계가 62분으로 job timeout(60분)을 초과한다.
+  it("백오프는 8분에서 상한이 걸려 4회차 이후 16/32분으로 증가하지 않는다", async () => {
+    const processor = vi
+      .fn()
+      .mockImplementation((id: string) => Promise.resolve(failResult(id)));
+    const sleep = vi.fn().mockResolvedValue(undefined);
+
+    const result = await runRetry(
+      [makeFailure("PF1")],
+      5,
+      makeDeps({ processor, sleep }),
+    );
+
+    expect(sleep).toHaveBeenCalledTimes(5);
+    expect(sleep).toHaveBeenNthCalledWith(1, 120000); // 2분
+    expect(sleep).toHaveBeenNthCalledWith(2, 240000); // 4분
+    expect(sleep).toHaveBeenNthCalledWith(3, 480000); // 8분
+    expect(sleep).toHaveBeenNthCalledWith(4, 480000); // 8분 상한 (16분 아님)
+    expect(sleep).toHaveBeenNthCalledWith(5, 480000); // 8분 상한 (32분 아님)
+    expect(processor).toHaveBeenCalledTimes(5);
+    expect(result.retryFailures).toHaveLength(1);
+  });
 });
