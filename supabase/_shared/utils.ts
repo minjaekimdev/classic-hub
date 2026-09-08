@@ -1,9 +1,54 @@
-// full path로부터 storage 이름 이후의 경로를 추출하는 함수
-export const getStoragePath = (path: string | undefined | null) => {
-  if (!path) return null;
+import { supabaseAdmin } from "./client.ts";
 
-  const pathGroups = path.split("performances/");
-  return pathGroups.length > 1 ? pathGroups[1] : null;
+export const insertToDB = async <T>(
+  table: string,
+  data: T,
+  onConflict: string,
+) => {
+  const { error } = await supabaseAdmin
+    .from(table)
+    .upsert(data, { onConflict });
+
+  if (error) {
+    throw new Error("[INSERT_FAIL] DB Insert failed");
+  }
+};
+
+export const deleteFromDB = async <T>(
+  table: string,
+  column: string,
+  data: Array<T>,
+) => {
+  const { error } = await supabaseAdmin.from(table).delete().in(column, data);
+
+  if (error) {
+    throw new Error("[DELTE_FAIL] DB data delete failed");
+  }
+};
+
+export const getRowsByInFilter = async (
+  table: string,
+  column: string,
+  columnDatas: Array<string>,
+) => {
+  const { data, error } = await supabaseAdmin
+    .from(table)
+    .select("*")
+    .in(column, columnDatas);
+
+  if (error) {
+    throw new Error("[FETCH_FAIL] DB data fetch failed");
+  }
+
+  return data;
+};
+
+export const deleteFromStorage = async (bucket: string, path: string[]) => {
+  const { error } = await supabaseAdmin.storage.from(bucket).remove(path);
+
+  if (error) {
+    throw new Error("[DELETE_FAIL] Storage File delete failed");
+  }
 };
 
 // 응답을 생성하여 반환하는 함수

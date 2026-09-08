@@ -1,5 +1,9 @@
 {
   "version": "5",
+  "redirects": {
+    "https://esm.sh/@supabase/supabase-js@2": "https://esm.sh/@supabase/supabase-js@2.115.0",
+    "https://esm.sh/iceberg-js@^0.8.1?target=denonext": "https://esm.sh/iceberg-js@0.8.1?target=denonext"
+  },
   "remote": {
     "https://deno.land/std@0.224.0/assert/_constants.ts": "a271e8ef5a573f1df8e822a6eb9d09df064ad66a4390f21b3e31f820a38e0975",
     "https://deno.land/std@0.224.0/assert/assert.ts": "09d30564c09de846855b7b071e62b5974b001bb72a4b797958fe0660e7849834",
@@ -33,7 +37,19 @@
     "https://deno.land/std@0.224.0/fmt/colors.ts": "508563c0659dd7198ba4bbf87e97f654af3c34eb56ba790260f252ad8012e1c5",
     "https://deno.land/std@0.224.0/internal/diff.ts": "6234a4b493ebe65dc67a18a0eb97ef683626a1166a1906232ce186ae9f65f4e6",
     "https://deno.land/std@0.224.0/internal/format.ts": "0a98ee226fd3d43450245b1844b47003419d34d210fa989900861c79820d21c2",
-    "https://deno.land/std@0.224.0/internal/mod.ts": "534125398c8e7426183e12dc255bb635d94e06d0f93c60a297723abe69d3b22e"
+    "https://deno.land/std@0.224.0/internal/mod.ts": "534125398c8e7426183e12dc255bb635d94e06d0f93c60a297723abe69d3b22e",
+    "https://esm.sh/@supabase/auth-js@2.115.0/denonext/auth-js.mjs": "ee695fb5271cd20891151acb8f7b7dccd7a3d2cddcf7ea22707ed847c6310068",
+    "https://esm.sh/@supabase/functions-js@2.115.0/denonext/functions-js.mjs": "45dbef89b45252297c8088c37f5085fddf14f56e9d662efe9cf6fe928249b76a",
+    "https://esm.sh/@supabase/phoenix@0.4.5/denonext/phoenix.mjs": "40bd2a70829cd847848baac58e635bacd83fd62188f6624b44e2c295341004eb",
+    "https://esm.sh/@supabase/postgrest-js@2.115.0/denonext/postgrest-js.mjs": "be07c08a0221f3cc021ce179f3f3865899e7118a499a873609d35313cb6a0338",
+    "https://esm.sh/@supabase/realtime-js@2.115.0/denonext/realtime-js.mjs": "3032ecc022da4d8ad7a973ac9c7d3efb4d5d140940b32351ffe7753b2a656ae3",
+    "https://esm.sh/@supabase/storage-js@2.115.0/denonext/storage-js.mjs": "a79c4f054784fbc837b2ab250c3eaba8bcd8b7e7b001d8303dc6bc0a3ddaddf3",
+    "https://esm.sh/@supabase/supabase-js@2.115.0": "f4e488ef8059a64be766b58feb4d6a18aa812038fdcf9c7c916efbdf26ab9585",
+    "https://esm.sh/@supabase/supabase-js@2.115.0/denonext/dist/tracingRegistry.mjs": "5c7f16d4b145f80bc9b76e3c657854a91a8ef36df29558b35733ebc179d5ca47",
+    "https://esm.sh/@supabase/supabase-js@2.115.0/denonext/supabase-js.mjs": "6e4d33a86264c0c0505b514a2b748d184a0836d3f501f33d0c533731726c63db",
+    "https://esm.sh/iceberg-js@0.8.1/denonext/iceberg-js.mjs": "d839d81a2e3966500ca2cdd0c1cb458e9608bacfc91f7bb67a69b2e878dcdb4f",
+    "https://esm.sh/iceberg-js@0.8.1?target=denonext": "58c849d7fe2bf4eca4a84eb501e83c161a7d8c34ca1bec15a962b3bec3062633",
+    "https://esm.sh/tslib@2.8.1/denonext/tslib.mjs": "c38da5dd6da6281964435002ce204cd586634fe3bdfb24a0ee116f48cf3292e9"
   },
   "workspace": {
     "packageJson": {
@@ -46,9 +62,10 @@
       "packages/backend": {
         "packageJson": {
           "dependencies": [
+            "npm:@classic-hub/shared@1.0.0",
             "npm:@google-cloud/vision@^5.3.4",
             "npm:@google/genai@^1.15.0",
-            "npm:@supabase/supabase-js@^2.51.0",
+            "npm:@supabase/supabase-js@^2.54.0",
             "npm:@types/cors@^2.8.19",
             "npm:@types/express@^5.0.3",
             "npm:cors@^2.8.5",
@@ -56,17 +73,19 @@
             "npm:dotenv@^17.2.0",
             "npm:express@^5.1.0",
             "npm:file-type@^21.3.2",
+            "npm:msw@^2.14.6",
             "npm:p-limit@^3.1.0",
             "npm:sharp@~0.34.5",
             "npm:supabase@^2.39.2",
             "npm:tsconfig-paths@^4.2.0",
             "npm:tsx@^4.21.0",
-            "npm:typescript@^5.8.3",
+            "npm:typescript@~5.8.3",
             "npm:vite-tsconfig-paths@^6.1.1",
             "npm:vitest@^4.0.18",
             "npm:winston-daily-rotate-file@5",
             "npm:winston@^3.19.0",
-            "npm:xml-js@^1.6.11"
+            "npm:xml-js@^1.6.11",
+            "npm:zod@^4.5.4"
           ]
         }
       },
@@ -74,7 +93,7 @@
         "packageJson": {
           "dependencies": [
             "npm:@chromatic-com/storybook@^4.1.3",
-            "npm:@classic-hub/shared@*",
+            "npm:@classic-hub/shared@1.0.0",
             "npm:@eslint/js@^9.30.1",
             "npm:@posthog/react@^1.8.3",
             "npm:@radix-ui/react-accordion@^1.2.12",
@@ -128,8 +147,7 @@
             "npm:typescript-eslint@^8.35.1",
             "npm:typescript@~5.8.3",
             "npm:vite@^7.0.4",
-            "npm:vitest@^4.0.8",
-            "npm:xml-js@^1.6.11"
+            "npm:vitest@^4.0.18"
           ]
         }
       }

@@ -1,0 +1,52 @@
+{
+  "mt20id": "PF286762",
+  "mt13id": "FC000001-03",
+  "prfnm": "제209회 국립합창단 정기연주회: 베토벤 & 슈베르트",
+  "frstregdt": "2026-03-10 11:30:01",
+  "prfpdfrom": "2026.09.30",
+  "prfpdto": "2026.09.30",
+  "fcltynm": "예술의전당 [서울] (콘서트홀)",
+  "prfcast": "민인긴 등",
+  "prfcrew": "민인기",
+  "prfruntime": "1시간 50분",
+  "prfage": "만 7세 이상",
+  "entrpsnm": "(재)국립합창단",
+  "entrpsnmP": null,
+  "entrpsnmA": "(재)국립합창단",
+  "entrpsnmH": "(재)국립합창단",
+  "entrpsnmS": null,
+  "pcseguidance": "R석 70,000원, S석 50,000원, A석 30,000원",
+  "poster": "http://www.kopis.or.kr/upload/pfmPoster/PF_PF286762_260310_113000.gif",
+  "sty": "[프로그램]\n  \n 1부 Beethoven, Mass in C major, Op. 86\n2부 Schubert, Mass in E-flat major, D. 950",
+  "area": "서울특별시",
+  "genrenm": "서양음악(클래식)",
+  "openrun": "N",
+  "visit": "N",
+  "child": "N",
+  "daehakro": "N",
+  "festival": "N",
+  "musicallicense": "N",
+  "musicalcreate": "N",
+  "updatedate": "2026-03-17 10:23:49",
+  "prfstate": "공연예정",
+  "mt10id": "FC000001",
+  "dtguidance": "수요일(19:30)",
+  "styurls": {
+    "styurl": [
+      "http://www.kopis.or.kr/upload/pfmIntroImage/PF_PF286762_202603101130010171.jpg",
+      "http://www.kopis.or.kr/upload/pfmIntroImage/PF_PF286762_202603101130010110.jpg"
+    ]
+  },
+  "relates": {
+    "relate": [
+      {
+        "relatenm": "놀유니버스",
+        "relateurl": "http://ticket.interpark.com/Ticket/Goods/GoodsInfo.asp?GoodsCode=26001417"
+      },
+      {
+        "relatenm": "예스24",
+        "relateurl": "https://ticket.yes24.com/Perf/57483"
+      }
+    ]
+  }
+}

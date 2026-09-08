@@ -16,6 +16,14 @@ jobs:
     # 작업이 실행될 환경
     runs-on: ubuntu-latest
 
+    # 매달린(hang) 잡을 강제 종료해 "실패"로 기록 → 알림 체계 작동
+    timeout-minutes: 30
+
+    # 동시 실행 방지: 이전 실행이 도는 중이면 새 실행이 이전 것을 취소
+    concurrency:
+      group: ${{ github.workflow }}
+      cancel-in-progress: true
+
     # 작업의 단계(steps) 정의
     steps:
       # 1. 리포지토리 코드를 가상 머신으로 가져오기
@@ -26,17 +34,17 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20" # 안정적인 최신 LTS 버전 사용
+          node-version-file: .nvmrc
+          cache: npm
 
-      # 3. 필요한 라이브러리 설치 (npm 사용)
-      # package.json 파일에 명시된 모든 의존성을 설치합니다.
+      # 3. 필요한 라이브러리 설치 (루트 lockfile 기준, 재현 가능한 설치)
+      # workspaces이므로 루트에서 한 번에 설치하면 backend 의존성까지 포함된다.
       - name: Install dependencies
-        run: npm install
-        working-directory: ./packages/backend
+        run: npm ci
 
       # 4. 데이터 업데이트 스크립트 실행
       - name: Run daily tasks runner script
-        run: "npx tsx ./infrastructure/jobs/updateRanking.ts"
+        run: "npx tsx ./infrastructure/github/updateRanking.ts"
         working-directory: ./packages/backend
 
         # 환경 변수 주입 방식은 동일합니다.

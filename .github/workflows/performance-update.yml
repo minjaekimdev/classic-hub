@@ -16,6 +16,14 @@ jobs:
     # 작업이 실행될 환경
     runs-on: ubuntu-latest
 
+    # 매달린(hang) 잡을 강제 종료해 "실패"로 기록 → 알림 체계 작동
+    timeout-minutes: 60
+
+    # 동시 실행 방지: 이전 실행이 도는 중이면 새 실행이 이전 것을 취소
+    concurrency:
+      group: ${{ github.workflow }}
+      cancel-in-progress: true
+
     permissions:
       contents: 'read'
       id-token: 'write'
@@ -30,7 +38,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "24"
+          node-version-file: .nvmrc
+          cache: npm
 
       - uses: 'google-github-actions/auth@v3'
         with:
@@ -38,16 +47,15 @@ jobs:
           workload_identity_provider: 'projects/395932571942/locations/global/workloadIdentityPools/my-pool/providers/my-provider'
           service_account: 'minjaekim@project-a9ba8193-3b4b-4ac6-8ef.iam.gserviceaccount.com'
 
-      # 3. 필요한 라이브러리 설치 (npm 사용)
-      # package.json 파일에 명시된 모든 의존성을 설치합니다.
+      # 3. 필요한 라이브러리 설치 (루트 lockfile 기준, 재현 가능한 설치)
+      # workspaces이므로 루트에서 한 번에 설치하면 backend 의존성까지 포함된다.
       - name: Install dependencies
-        run: npm install
-        working-directory: ./packages/backend
+        run: npm ci
 
       # 4. 데이터 업데이트 스크립트 실행
       # 'deno run' 대신 'npx ts-node'를 사용해 TypeScript 파일을 직접 실행
       - name: Run daily tasks runner script
-        run: "npx tsx ./infrastructure/jobs/updatePerformances.ts"
+        run: "npx tsx ./infrastructure/github/updatePerformances.ts"
         working-directory: ./packages/backend
 
         # 환경 변수 주입 방식은 동일합니다.
@@ -67,6 +75,8 @@ jobs:
         with:
           # github.run_id: 실행의 고유 일련번호, 자동으로 부여된다.
           name: failed-performances-${{ github.run_id }}
+          # ⚠️ 파일명은 saveFailuresToArtifact.ts의 FAILED_RECORDS_FILENAME 상수와 일치해야 한다.
+          # 어긋나면 if-no-files-found: ignore 때문에 실패 데이터가 조용히 유실된다.
           path: packages/backend/failed_records.json
           retention-days: 5 
           # 에러가 발생하지 않아서 failed_records.json 파일이 없는 경우에도 경고가 뜨지 않는다.
