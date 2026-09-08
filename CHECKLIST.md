@@ -103,7 +103,6 @@
 - [ ]  C-1. 스테이징에 **`supabase db push`**
 - [ ]  C-2. RPC 테스트 스테이징 env로 재실행
 - [ ]  C-3. 로컬 ↔ 클라우드 차이 기록
-- [ ]  D-1. **`test-backend.sh`** **`-target=local|staging`** 지원
 - [ ]  D-2. 주 1회 스테이징 워크플로우
 - [ ]  D-3. **`if: failure()`** Slack 알림
 - [ ]  D-4. PR 검증 CI 신규 작성
