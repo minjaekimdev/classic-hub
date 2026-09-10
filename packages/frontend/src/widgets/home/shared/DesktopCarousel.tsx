@@ -8,7 +8,7 @@ import type { BaseItem } from "./AsyncCarousel";
 
 interface DesktopCarouselProps<T> {
   items: T[];
-  renderItem: (item: T) => React.ReactNode;
+  renderItem: (item: T, index: number) => React.ReactNode;
   breakpoints?: SwiperOptions["breakpoints"];
 }
 
@@ -34,8 +34,8 @@ export const DesktopCarousel = <T extends BaseItem>({
         breakpoints={breakpoints}
         allowTouchMove={true} // 모바일 대응을 위해 true 권장
       >
-        {items.map((item) => (
-          <SwiperSlide key={item.id}>{renderItem(item)}</SwiperSlide>
+        {items.map((item, index) => (
+          <SwiperSlide key={item.id}>{renderItem(item, index)}</SwiperSlide>
         ))}
       </Swiper>
       <button
