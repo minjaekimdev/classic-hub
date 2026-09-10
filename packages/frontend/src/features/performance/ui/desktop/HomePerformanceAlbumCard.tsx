@@ -38,6 +38,7 @@ export const HomePerformanceAlbumCard = ({
             className="transition-scale h-full w-full duration-200 ease-in-out group-hover:scale-105"
             src={data.poster ?? ""}
             alt=""
+            loading="lazy"
           />
         </div>
         <div className="p-088 flex grow flex-col justify-between">

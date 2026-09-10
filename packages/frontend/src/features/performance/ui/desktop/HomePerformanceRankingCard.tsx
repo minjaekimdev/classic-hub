@@ -37,6 +37,7 @@ export const HomePerformanceRankingCard = ({
             src={data.poster ?? ""}
             alt=""
             fetchPriority={priority ? "high" : undefined}
+            loading={priority ? undefined : "lazy"}
           />
           <RankBadge className="top-066 left-088">{data.rank}위</RankBadge>
         </div>
