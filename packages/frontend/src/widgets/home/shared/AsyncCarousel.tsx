@@ -14,7 +14,7 @@ interface AsyncCarousel<T> {
   isError: boolean;
   refetch: () => Promise<QueryObserverResult>;
   breakPoints: SwiperOptions["breakpoints"];
-  renderItem: (item: T) => React.ReactNode;
+  renderItem: (item: T, index: number) => React.ReactNode;
 }
 
 export const AsyncCarousel = <T extends BaseItem>({

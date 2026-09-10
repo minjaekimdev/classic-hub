@@ -22,8 +22,10 @@ export const RankBadge = ({ children, className }: CardBadgeProps) => {
 
 export const HomePerformanceRankingCard = ({
   data,
+  priority = false,
 }: {
   data: PerformanceSummary;
+  priority?: boolean;
 }) => {
   return (
     <Link to={`/detail/${data.id}`} target="_blank">
@@ -34,6 +36,7 @@ export const HomePerformanceRankingCard = ({
             className="transition-scale h-full w-full duration-200 ease-in-out group-hover:scale-105"
             src={data.poster ?? ""}
             alt=""
+            fetchPriority={priority ? "high" : undefined}
           />
           <RankBadge className="top-066 left-088">{data.rank}위</RankBadge>
         </div>

@@ -34,7 +34,10 @@ export const RankingPerformances = () => {
         isError={isError}
         refetch={refetch}
         breakPoints={RANKING_BREAKPOINTS}
-        renderItem={(item) => <HomePerformanceRankingCard data={item} />}
+        renderItem={(item, index) => (
+          // TODO: priority를 부여할 요소가 여러개가 될 수 있으므로 배열로 지정, 여기에 포함되는 인덱스면 priority 부여하기
+          <HomePerformanceRankingCard data={item} priority={index === 0} />
+        )}
       />
     </HomeSectionLayout>
   );
