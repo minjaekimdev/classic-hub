@@ -2,6 +2,7 @@ import dayjs from "dayjs";
 import logger from "@/shared/utils/logger";
 import { sendSlackNotification } from "@/shared/utils/monitor";
 import { syncPerformanceData } from "../../application/use-cases/orchestrator";
+import { buildSyncDateRange } from "./syncDateRange";
 
 // 런 내 재시도는 3라운드(백오프 2+4+8=14분)면 충분하다.
 // 최종 실패분은 DB에 적재되지 않으므로 다음날 "신규"로 재유입 — 일일 크론이 암묵적 재시도 역할을 한다.
@@ -9,14 +10,13 @@ import { syncPerformanceData } from "../../application/use-cases/orchestrator";
 const MAX_REPEAT = 3;
 
 (async () => {
-  const now = dayjs();
-  // 월간 랭킹을 위해 31일 전을 startDate로 잡는다.
-  const startDate = now.subtract(31, "days").format("YYYYMMDD");
-  const endDate = now.add(90, "days").format("YYYYMMDD");
-  const afterDate = now.subtract(32, "days").format("YYYYMMDD");
-  const updateEndDate = now.add(89, "days").format("YYYYMMDD");
-
   try {
+    // 날짜 파생 규칙은 buildSyncDateRange가 담당하며, 모든 숫자의 출처는 datePolicy.ts다.
+    // afterDate(어제) 계약은 syncDateRange.test.ts가 고정한다.
+    const { startDate, endDate, afterDate, updateEndDate } = buildSyncDateRange(
+      dayjs(),
+    );
+
     const summary = await syncPerformanceData(
       startDate,
       endDate,
