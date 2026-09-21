@@ -4,6 +4,7 @@ import {
   programExtractionSchema,
   ProgramExtractionResponse,
 } from "shared/types/gemini";
+import { ApiUsage } from "shared/types/sync";
 import {
   GenerateContentParams,
   GenerateContentResult,
@@ -60,9 +61,12 @@ const { $schema: _, ...RESPONSE_JSON_SCHEMA } = z.toJSONSchema(
 export const createGetProgramJSON = ({ generateContent, log }: GetProgramJSONDeps) => {
   return async (
     programText: string,
+    usage?: ApiUsage,
   ): Promise<ProgramExtractionResponse> => {
+    if (usage) usage.geminiRequests += 1;
+
     const response = await generateContent({
-      model: "gemini-2.5-flash",
+      model: "gemini-2.5-flash-lite",
       contents: INSTRUCTION + programText,
       config: {
         temperature: 0,
@@ -71,6 +75,14 @@ export const createGetProgramJSON = ({ generateContent, log }: GetProgramJSONDep
         responseJsonSchema: RESPONSE_JSON_SCHEMA,
       },
     });
+
+    // 토큰은 응답 내용과 무관하게 실제 소비량이므로,
+    // 빈 응답·파싱 실패 여부와 무관하게 집계한다.
+    if (usage) {
+      usage.geminiInputTokens += response.usageMetadata?.promptTokenCount ?? 0;
+      usage.geminiOutputTokens +=
+        response.usageMetadata?.candidatesTokenCount ?? 0;
+    }
 
     // RESPONSE_JSON_SCHEMA에 명시한 구조에 따라 반환해야 하므로
     // 빈 문자열을 반환할 경우 에러를 throw한다.

@@ -22,6 +22,12 @@ const makeSummary = (
   detailFetchFailures: 0,
   insertAttempted: true,
   insertSucceeded: true,
+  apiUsage: {
+    visionRequests: 0,
+    geminiRequests: 0,
+    geminiInputTokens: 0,
+    geminiOutputTokens: 0,
+  },
   ...overrides,
 });
 
@@ -76,6 +82,23 @@ describe("buildSyncSummaryMessage 테스트", () => {
     );
 
     expect(message).toContain("DB 적재: 대상 없음");
+  });
+
+  it("API 사용량을 표시한다", () => {
+    const message = buildSyncSummaryMessage(
+      makeSummary({
+        apiUsage: {
+          visionRequests: 47,
+          geminiRequests: 42,
+          geminiInputTokens: 1234567,
+          geminiOutputTokens: 890123,
+        },
+      }),
+    );
+
+    expect(message).toContain(
+      "API 사용량: Vision 47건 / Gemini 42건 (입력 1,234,567 / 출력 890,123 토큰)",
+    );
   });
 
   it("artifact 링크가 있으면 포함하고, 없으면 생략한다", () => {
