@@ -1,4 +1,4 @@
-import { ProcessResult } from "shared/types/sync";
+import { ApiUsage, ProcessResult } from "shared/types/sync";
 
 // syncPerformanceData 한 번의 실행 결과 요약.
 // Slack 요약 알림과 process.exitCode 판정이 모두 이 모양에 의존한다.
@@ -11,6 +11,8 @@ export interface SyncRunSummary {
   detailFetchFailures: number;
   insertAttempted: boolean;
   insertSucceeded: boolean;
+  // 실행 동안 소비한 Vision/Gemini API 사용량
+  apiUsage: ApiUsage;
 }
 
 // GitHub Actions 실행 환경에서만 존재하는 변수들로 artifact 페이지 URL을 만든다.
@@ -71,6 +73,10 @@ export const buildSyncSummaryMessage = (
   } else {
     lines.push("- DB 적재: ❌ 실패 (BatchInsertError artifact 확인 필요)");
   }
+
+  lines.push(
+    `- API 사용량: Vision ${summary.apiUsage.visionRequests}건 / Gemini ${summary.apiUsage.geminiRequests}건 (입력 ${summary.apiUsage.geminiInputTokens.toLocaleString("en-US")} / 출력 ${summary.apiUsage.geminiOutputTokens.toLocaleString("en-US")} 토큰)`,
+  );
 
   if (artifactUrl) {
     lines.push(`🔗 실패 데이터 artifact: ${artifactUrl}`);

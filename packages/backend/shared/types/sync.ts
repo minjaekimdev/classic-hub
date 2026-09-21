@@ -10,6 +10,15 @@ export interface ProcessResult {
   attempts?: number;
 }
 
+// 한 번의 sync 실행에서 소비한 외부 AI API 사용량 집계.
+// Vision은 요청 수만, Gemini는 요청 수와 입출력 토큰 수를 센다.
+export interface ApiUsage {
+  visionRequests: number;
+  geminiRequests: number;
+  geminiInputTokens: number;
+  geminiOutputTokens: number;
+}
+
 export type WorkflowError = "ProcessError" | "BatchInsertError" | "DetailFetchError";
 
 // extract 단계의 상세 페칭 실패 기록 — 상세 데이터 자체가 없으므로 id/사유/시각만 남긴다.

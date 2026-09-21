@@ -15,7 +15,14 @@ export interface GenerateContentParams {
 // Gemini SDK 응답 중 사용처에서 필요한 최소 필드만 노출
 export interface GenerateContentResult {
   text: string;
-  usageMetadata?: unknown;
+  usageMetadata?: GenerateContentUsageMetadata;
+}
+
+// usageMetadata 중 사용량 집계에 필요한 토큰 카운트 필드
+export interface GenerateContentUsageMetadata {
+  promptTokenCount?: number;
+  candidatesTokenCount?: number;
+  totalTokenCount?: number;
 }
 
 export interface IGeminiService {

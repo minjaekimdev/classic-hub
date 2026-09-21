@@ -1,5 +1,5 @@
 import sharp from "sharp";
-import { ProcessResult } from "shared/types/sync";
+import { ApiUsage, ProcessResult } from "shared/types/sync";
 import { PerformanceDetail } from "@/shared/types/kopis";
 import { ProgramExtractionResponse } from "shared/types/gemini";
 import { sanitizeImageBuffer } from "./program/sanitizeImageBuffer";
@@ -8,9 +8,13 @@ import { toDbPerformance } from "../3_load/mappers/toDbPerformance";
 
 export interface TransformPerformancesDeps {
   imageFetcher: (url: string, message: string) => Promise<Buffer>;
-  getProgramText: (images: Buffer[]) => Promise<string>;
+  getProgramText: (
+    images: Buffer[],
+    usage?: ApiUsage,
+  ) => Promise<string>;
   getProgramJSON: (
     programText: string,
+    usage?: ApiUsage,
   ) => Promise<ProgramExtractionResponse>;
   uploadPosterToStorage: (
     id: string,
@@ -35,6 +39,7 @@ export const createTransformPerformances = ({
 }: TransformPerformancesDeps) => {
   return async (
     performanceDetail: PerformanceDetail,
+    usage?: ApiUsage,
   ): Promise<ProcessResult> => {
     // 이미지 페칭 (포스터 + 상세이미지)
     const posterUrl = performanceDetail.poster;
@@ -113,6 +118,7 @@ export const createTransformPerformances = ({
     try {
       textFromDetailImage = await getProgramText(
         splitedDetailImageBuffers.flat(),
+        usage,
       );
     } catch (error) {
       log.error(`[OCR_FAIL] Extracting Program text failed (ID: ${id}): ${error}`, errorMeta(error));
@@ -136,7 +142,7 @@ export const createTransformPerformances = ({
     log.debug("Converting Program text to JSON...");
     let programJSON: ProgramExtractionResponse;
     try {
-      programJSON = await getProgramJSON(programText);
+      programJSON = await getProgramJSON(programText, usage);
     } catch (error) {
       log.error(
         `[GEMINI_FAIL] Converting Program text to JSON failed (ID: ${id}): ${error}`,

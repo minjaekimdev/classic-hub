@@ -1,6 +1,11 @@
 import promiseLimiter from "@/shared/utils/promiseLimiter";
 import { DBPerformanceWrite } from "@classic-hub/shared/types/database";
-import { DetailFetchFailure, ProcessResult, WorkflowError } from "shared/types/sync";
+import {
+  ApiUsage,
+  DetailFetchFailure,
+  ProcessResult,
+  WorkflowError,
+} from "shared/types/sync";
 import { PerformanceDetail } from "@/shared/types/kopis";
 import { RetryDeps, RetryFailure } from "@/application/services/retry";
 import {
@@ -26,6 +31,7 @@ export interface SyncPerformancesDeps {
   }>;
   transformPerformances: (
     performance: PerformanceDetail,
+    usage?: ApiUsage,
   ) => Promise<ProcessResult>;
   retry: <T>(
     initialFailures: RetryFailure<T>[],
@@ -78,10 +84,20 @@ export const createSyncPerformanceData = ({
     );
 
     // 2. Transform 단계 (공연 1건 = 이미지 페칭 + 가공 묶음을 동시 5건씩 병렬 처리)
+    // 실행당 API 사용량 집계기 — 1차 패스와 재시도가 같은 객체에 누적한다.
+    const apiUsage: ApiUsage = {
+      visionRequests: 0,
+      geminiRequests: 0,
+      geminiInputTokens: 0,
+      geminiOutputTokens: 0,
+    };
+    const processPerformance = (performance: PerformanceDetail) =>
+      transformPerformances(performance, apiUsage);
+
     log.info(`[PROCESS] Transform 단계 시작 (대상: ${performances.length}건)`);
     const results = await promiseLimiter(
       performances,
-      (performance) => transformPerformances(performance),
+      processPerformance,
       TRANSFORM_CONCURRENCY,
     );
 
@@ -108,7 +124,7 @@ export const createSyncPerformanceData = ({
       failedInputs,
       maxRepeat,
       {
-        processor: transformPerformances,
+        processor: processPerformance,
         sleep: (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
         log,
       },
@@ -181,6 +197,7 @@ export const createSyncPerformanceData = ({
       detailFetchFailures: detailFetchFailures.length,
       insertAttempted,
       insertSucceeded,
+      apiUsage,
     };
     await notify(buildSyncSummaryMessage(summary, getRunArtifactUrl()));
 

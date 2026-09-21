@@ -76,7 +76,7 @@ describe("syncPerformances 오케스트레이션 테스트", () => {
     expect(deps.retry).toHaveBeenCalledWith(
       [],
       3,
-      expect.objectContaining({ processor: transformPerformances }),
+      expect.objectContaining({ processor: expect.any(Function) }),
     );
     expect(deps.insertPerformancesBulk).toHaveBeenCalledTimes(1);
     expect(deps.insertPerformancesBulk).toHaveBeenCalledWith([
@@ -106,6 +106,12 @@ describe("syncPerformances 오케스트레이션 테스트", () => {
       detailFetchFailures: 0,
       insertAttempted: true,
       insertSucceeded: true,
+      apiUsage: {
+        visionRequests: 0,
+        geminiRequests: 0,
+        geminiInputTokens: 0,
+        geminiOutputTokens: 0,
+      },
     });
   });
 
@@ -142,7 +148,13 @@ describe("syncPerformances 오케스트레이션 테스트", () => {
     expect(failures).toHaveLength(1);
     expect(failures[0].input).toBe(performances[1]);
     expect(failures[0].result.error).toBe("GeminiError");
-    expect(retryDeps.processor).toBe(transformPerformances);
+    // processor는 실행 단위 usage를 주입한 래퍼이므로, 호출 시 usage 객체가 함께 전달되는지로 검증한다.
+    expect(typeof retryDeps.processor).toBe("function");
+    await retryDeps.processor(performances[1]);
+    expect(transformPerformances).toHaveBeenCalledWith(
+      performances[1],
+      expect.objectContaining({ visionRequests: 0, geminiRequests: 0 }),
+    );
     expect(typeof retryDeps.sleep).toBe("function");
 
     expect(deps.insertPerformancesBulk).toHaveBeenCalledTimes(1);
@@ -166,6 +178,12 @@ describe("syncPerformances 오케스트레이션 테스트", () => {
       detailFetchFailures: 0,
       insertAttempted: true,
       insertSucceeded: true,
+      apiUsage: {
+        visionRequests: 0,
+        geminiRequests: 0,
+        geminiInputTokens: 0,
+        geminiOutputTokens: 0,
+      },
     });
   });
 
