@@ -88,6 +88,7 @@ const DEFAULT_FIXTURE_ID = "PF286762";
     retry,
     insertPerformancesBulk: (payload) =>
       callDatabaseFunction("upsert_performances_bulk", { payload }),
+    deletePerformances: async () => {},
     notify: async () => {},
     saveFailuresToArtifact: () => {},
     failedRecordsFilename: "unused",

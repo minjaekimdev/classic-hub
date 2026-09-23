@@ -25,6 +25,8 @@ const makeSummary = (
   detailFetchFailureIds: [],
   insertAttempted: true,
   insertSucceeded: true,
+  deleteAttempted: true,
+  deleteSucceeded: true,
   apiUsage: {
     visionRequests: 0,
     geminiRequests: 0,
@@ -44,6 +46,7 @@ describe("buildSyncSummaryMessage 테스트", () => {
     expect(message).toContain("1차 성공: 42건 / 재시도 회복: 2건");
     expect(message).toContain("최종 실패: 0건");
     expect(message).toContain("DB 적재: 성공");
+    expect(message).toContain("DB 삭제: 성공");
   });
 
   it("최종 실패가 있으면 유형별 집계와 함께 ⚠️ 상태를 만든다", () => {
@@ -69,6 +72,24 @@ describe("buildSyncSummaryMessage 테스트", () => {
 
     expect(message).toContain("DB 적재: ❌ 실패");
     expect(message).toContain("⚠️ 공연 동기화 완료");
+  });
+
+  it("삭제가 실패하면 ❌ DB 삭제 상태를 만든다", () => {
+    const message = buildSyncSummaryMessage(
+      makeSummary({ deleteSucceeded: false }),
+    );
+
+    expect(message).toContain("DB 삭제: ❌ 실패");
+    expect(message).toContain("⚠️ 공연 동기화 완료");
+  });
+
+  it("삭제 대상이 없으면 문제 없이 대상 없음을 표시한다", () => {
+    const message = buildSyncSummaryMessage(
+      makeSummary({ deleteAttempted: false, deleteSucceeded: false }),
+    );
+
+    expect(message).toContain("DB 삭제: 대상 없음");
+    expect(message).toContain("✅ 공연 동기화 완료");
   });
 
   it("상세 페칭 실패가 있으면 ⚠️ 상태와 함께 건수·id를 표시한다", () => {

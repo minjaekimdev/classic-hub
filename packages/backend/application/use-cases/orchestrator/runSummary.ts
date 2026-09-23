@@ -16,6 +16,9 @@ export interface SyncRunSummary {
   detailFetchFailureIds: string[];
   insertAttempted: boolean;
   insertSucceeded: boolean;
+  // 마지막 단계의 DB 삭제 실행 결과 — idsToDelete가 있어야 시도된다 (대상 없음은 문제가 아니다).
+  deleteAttempted: boolean;
+  deleteSucceeded: boolean;
   // 실행 동안 소비한 Vision/Gemini API 사용량
   apiUsage: ApiUsage;
 }
@@ -51,7 +54,8 @@ export const buildSyncSummaryMessage = (
   const hasProblem =
     summary.finalFailures.length > 0 ||
     summary.detailFetchFailureIds.length > 0 ||
-    !summary.insertSucceeded;
+    !summary.insertSucceeded ||
+    (summary.deleteAttempted && !summary.deleteSucceeded);
 
   const lines: string[] = [];
   lines.push(`${hasProblem ? "⚠️" : "✅"} 공연 동기화 완료`);
@@ -91,6 +95,14 @@ export const buildSyncSummaryMessage = (
     lines.push("- DB 적재: 성공");
   } else {
     lines.push("- DB 적재: ❌ 실패 (BatchInsertError artifact 확인 필요)");
+  }
+
+  if (!summary.deleteAttempted) {
+    lines.push("- DB 삭제: 대상 없음");
+  } else if (summary.deleteSucceeded) {
+    lines.push("- DB 삭제: 성공");
+  } else {
+    lines.push("- DB 삭제: ❌ 실패 (DeleteError artifact 확인 필요)");
   }
 
   lines.push(

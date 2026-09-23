@@ -42,6 +42,7 @@ const makeDeps = (
   transformPerformances: vi.fn(),
   retry: vi.fn().mockResolvedValue({ retrySuccesses: [], retryFailures: [] }),
   insertPerformancesBulk: vi.fn().mockResolvedValue(undefined),
+  deletePerformances: vi.fn().mockResolvedValue(undefined),
   notify: vi.fn().mockResolvedValue(undefined),
   saveFailuresToArtifact: vi.fn(),
   failedRecordsFilename: "failed_records.json",
@@ -94,6 +95,8 @@ describe("syncPerformances 오케스트레이션 테스트", () => {
       { performance_id: "PF2" },
       { performance_id: "PF3" },
     ]);
+    // 삭제 대상이 없으면 deletePerformances를 호출하지 않는다.
+    expect(deps.deletePerformances).not.toHaveBeenCalled();
     expect(deps.saveFailuresToArtifact).not.toHaveBeenCalled();
     expect(deps.log.error).not.toHaveBeenCalled();
 
@@ -106,6 +109,9 @@ describe("syncPerformances 오케스트레이션 테스트", () => {
     );
     expect(deps.notify).toHaveBeenCalledWith(
       expect.stringContaining("신규: 3건 / 수정: 0건 / 삭제: 0건"),
+    );
+    expect(deps.notify).toHaveBeenCalledWith(
+      expect.stringContaining("DB 삭제: 대상 없음"),
     );
     expect(deps.notify).toHaveBeenCalledWith(
       expect.stringContaining("DB 적재: 성공"),
@@ -122,6 +128,8 @@ describe("syncPerformances 오케스트레이션 테스트", () => {
       detailFetchFailureIds: [],
       insertAttempted: true,
       insertSucceeded: true,
+      deleteAttempted: false,
+      deleteSucceeded: false,
       apiUsage: {
         visionRequests: 0,
         geminiRequests: 0,
@@ -204,6 +212,8 @@ describe("syncPerformances 오케스트레이션 테스트", () => {
       detailFetchFailureIds: [],
       insertAttempted: true,
       insertSucceeded: true,
+      deleteAttempted: false,
+      deleteSucceeded: false,
       apiUsage: {
         visionRequests: 0,
         geminiRequests: 0,
@@ -409,5 +419,95 @@ describe("syncPerformances 오케스트레이션 테스트", () => {
     expect(summary.detailFetchFailureIds).toEqual(["PF_MISSING"]);
     // 대상 공연은 transform에 투입된 performances와 유실분을 모두 포함한다.
     expect(summary.totalTargets).toBe(2);
+  });
+
+  it("idsToDelete가 있으면 insert 후 삭제를 수행하고 요약에 성공을 표시한다", async () => {
+    const performances = [makeDetail("PF1")];
+    const insertPerformancesBulk = vi.fn().mockResolvedValue(undefined);
+    const deletePerformances = vi.fn().mockResolvedValue(undefined);
+    const deps = makeDeps({
+      extractPerformances: vi.fn().mockResolvedValue({
+        performances,
+        idsToDelete: ["PF_OLD"],
+        idsToInsert: ["PF1"],
+        idsToUpdate: [],
+        detailFetchFailures: [],
+      }),
+      transformPerformances: vi
+        .fn()
+        .mockImplementation((p: PerformanceDetail) =>
+          Promise.resolve(successResult(p.mt20id)),
+        ),
+      insertPerformancesBulk,
+      deletePerformances,
+    });
+    const summary = await run(deps);
+
+    expect(deletePerformances).toHaveBeenCalledTimes(1);
+    expect(deletePerformances).toHaveBeenCalledWith(["PF_OLD"]);
+
+    // 삭제는 insert보다 뒤에 실행된다 (파괴적 연산은 마지막에).
+    const insertOrder = insertPerformancesBulk.mock.invocationCallOrder[0];
+    const deleteOrder = deletePerformances.mock.invocationCallOrder[0];
+    expect(deleteOrder).toBeGreaterThan(insertOrder);
+
+    expect(deps.notify).toHaveBeenCalledWith(
+      expect.stringContaining("DB 삭제: 성공"),
+    );
+    expect(summary.deleteAttempted).toBe(true);
+    expect(summary.deleteSucceeded).toBe(true);
+  });
+
+  it("삭제가 실패하면 artifact(DeleteError)에 기록하고 요약에 실패를 표시하며 알림은 계속 보낸다", async () => {
+    const performances = [makeDetail("PF1")];
+    const notify = vi.fn().mockResolvedValue(undefined);
+    const saveFailuresToArtifact = vi.fn();
+    const deletePerformances = vi.fn().mockRejectedValue(new Error("FK violation"));
+    const deps = makeDeps({
+      extractPerformances: vi.fn().mockResolvedValue({
+        performances,
+        idsToDelete: ["PF_OLD"],
+        idsToInsert: ["PF1"],
+        idsToUpdate: [],
+        detailFetchFailures: [],
+      }),
+      transformPerformances: vi
+        .fn()
+        .mockImplementation((p: PerformanceDetail) =>
+          Promise.resolve(successResult(p.mt20id)),
+        ),
+      deletePerformances,
+      saveFailuresToArtifact,
+      notify,
+    });
+    const summary = await run(deps);
+
+    expect(saveFailuresToArtifact).toHaveBeenCalledWith(
+      "failed_records.json",
+      [
+        expect.objectContaining({
+          id: "PF_OLD",
+          error: "DeleteError",
+          failedAt: expect.any(String),
+        }),
+      ],
+      "DeleteError",
+    );
+
+    // 삭제 실패가 알림 자체를 막지 않는다 (조용한 실패 방지).
+    expect(notify).toHaveBeenCalledTimes(1);
+    expect(notify).toHaveBeenCalledWith(
+      expect.stringContaining("DB 삭제: ❌ 실패"),
+    );
+
+    // Slack 알림보다 artifact 저장이 먼저다 (insert 실패 케이스와 동일한 원칙).
+    const artifactOrder = saveFailuresToArtifact.mock.invocationCallOrder[0];
+    const notifyOrder = notify.mock.invocationCallOrder[0];
+    expect(artifactOrder).toBeLessThan(notifyOrder);
+
+    expect(summary.deleteAttempted).toBe(true);
+    expect(summary.deleteSucceeded).toBe(false);
+    // 삭제 실패와 무관하게 insert는 정상 완료된다.
+    expect(summary.insertSucceeded).toBe(true);
   });
 });

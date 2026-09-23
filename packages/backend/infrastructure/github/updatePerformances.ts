@@ -26,11 +26,12 @@ const MAX_REPEAT = 3;
     );
 
     // 조용한 실패 방지: 끝까지 실패한 데이터(재시도 소진, 상세 페칭 유실)가 있거나
-    // DB 적재가 실패한 날은 Actions 히스토리에 실패로 기록되게 한다.
+    // DB 적재·삭제가 실패한 날은 Actions 히스토리에 실패로 기록되게 한다.
     if (
       summary.finalFailures.length > 0 ||
       summary.detailFetchFailureIds.length > 0 ||
-      !summary.insertSucceeded
+      !summary.insertSucceeded ||
+      (summary.deleteAttempted && !summary.deleteSucceeded)
     ) {
       process.exitCode = 1;
     }

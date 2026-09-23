@@ -9,6 +9,7 @@ import {
 } from "@/infrastructure/github/saveFailuresToArtifact";
 import { retry } from "@/application/services/retry";
 import { extractPerformances } from "../1_extract";
+import { deletePerformances } from "../1_extract/infra/deleteDbPerformances";
 import { transformPerformances } from "../2_transform";
 import { createSyncPerformanceData } from "./syncPerformances";
 
@@ -19,6 +20,7 @@ export const syncPerformanceData = createSyncPerformanceData({
   retry,
   insertPerformancesBulk: (payload) =>
     callDatabaseFunction("upsert_performances_bulk", { payload }),
+  deletePerformances,
   notify: sendSlackNotification,
   saveFailuresToArtifact,
   failedRecordsFilename: FAILED_RECORDS_FILENAME,
