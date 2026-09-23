@@ -190,7 +190,10 @@ export const createSyncPerformanceData = ({
 
     // 6. 실행 단위 요약 알림 — 성공 시에도 조용히 1건 (크론 스킵 감지)
     const summary: SyncRunSummary = {
-      totalTargets: performances.length,
+      // "대상 공연"은 extract에서 가공 대상이었던 전체(idsToTransform)를 뜻한다.
+      // idsToTransform = 상세 페칭에 성공해 transform에 투입된 performances
+      //                + 페칭에 실패한 detailFetchFailures.
+      totalTargets: performances.length + detailFetchFailures.length,
       firstPassSuccesses,
       retryRecovered: retrySuccesses.length,
       finalFailures: retryFailures,

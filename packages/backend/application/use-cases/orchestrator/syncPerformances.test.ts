@@ -366,5 +366,7 @@ describe("syncPerformances 오케스트레이션 테스트", () => {
       expect.stringContaining("상세 페칭 실패: 1건"),
     );
     expect(summary.detailFetchFailures).toBe(1);
+    // 대상 공연은 transform에 투입된 performances와 유실분을 모두 포함한다.
+    expect(summary.totalTargets).toBe(2);
   });
 });
