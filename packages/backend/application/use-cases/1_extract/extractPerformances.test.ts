@@ -81,6 +81,8 @@ describe("extractPerformances 오케스트레이션 테스트", () => {
     const result = await extractPerformances("2026-01-01", "2026-06-30", "2026-07-01", "2026-07-31");
 
     expect(result.idsToDelete).toEqual(["ID_3"]);
+    expect(result.idsToInsert).toEqual(["ID_1", "ID_2"]);
+    expect(result.idsToUpdate).toEqual([]);
     expect(result.detailFetchFailures).toEqual([]);
     expect(result.performances).toHaveLength(2);
     expect(result.performances[0]!.mt20id).toBe("ID_1");
@@ -131,10 +133,13 @@ describe("extractPerformances 오케스트레이션 테스트", () => {
       makeDeps({ compareNewOld, getAllPerformanceIdList, getPerformanceDetailList }),
     );
 
-    await extractPerformances("2026-01-01", "2026-06-30", "2026-07-01", "2026-07-31");
+    const result = await extractPerformances("2026-01-01", "2026-06-30", "2026-07-01", "2026-07-31");
 
     // ID_2가 양쪽에 있지만 중복 제거되어 [ID_1, ID_2, ID_3]만 전달
     expect(getPerformanceDetailList).toHaveBeenCalledWith(["ID_1", "ID_2", "ID_3"]);
+    // 원본 분류(idsToInsert/idsToUpdate)는 중복 제거 없이 그대로 반환된다
+    expect(result.idsToInsert).toEqual(["ID_1", "ID_2"]);
+    expect(result.idsToUpdate).toEqual(["ID_2", "ID_3"]);
   });
 
   // 시나리오 4: 상세 데이터는 변환 없이 원본 그대로 반환된다 (이미지 페칭은 transform 담당)

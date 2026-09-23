@@ -27,6 +27,9 @@ export interface SyncPerformancesDeps {
   ) => Promise<{
     performances: PerformanceDetail[];
     idsToDelete: string[];
+    // 중복 제거 전의 원본 분류 (Slack 요약의 신규/수정 건수 집계용)
+    idsToInsert: string[];
+    idsToUpdate: string[];
     detailFetchFailures: DetailFetchFailure[];
   }>;
   transformPerformances: (
@@ -76,7 +79,13 @@ export const createSyncPerformanceData = ({
     maxRepeat: number,
   ) => {
     // 1. Extract 단계 (공연 원본 데이터 페칭 — 이미지 버퍼는 transform에서 1건씩 페칭)
-    const { performances, detailFetchFailures } = await extractPerformances(
+    const {
+      performances,
+      idsToDelete,
+      idsToInsert,
+      idsToUpdate,
+      detailFetchFailures,
+    } = await extractPerformances(
       startDate,
       endDate,
       afterDate,
@@ -194,10 +203,13 @@ export const createSyncPerformanceData = ({
       // idsToTransform = 상세 페칭에 성공해 transform에 투입된 performances
       //                + 페칭에 실패한 detailFetchFailures.
       totalTargets: performances.length + detailFetchFailures.length,
+      newCount: idsToInsert.length,
+      updateCount: idsToUpdate.length,
+      deleteCount: idsToDelete.length,
       firstPassSuccesses,
       retryRecovered: retrySuccesses.length,
       finalFailures: retryFailures,
-      detailFetchFailures: detailFetchFailures.length,
+      detailFetchFailureIds: detailFetchFailures.map((f) => f.id),
       insertAttempted,
       insertSucceeded,
       apiUsage,

@@ -29,7 +29,7 @@ const MAX_REPEAT = 3;
     // DB 적재가 실패한 날은 Actions 히스토리에 실패로 기록되게 한다.
     if (
       summary.finalFailures.length > 0 ||
-      summary.detailFetchFailures > 0 ||
+      summary.detailFetchFailureIds.length > 0 ||
       !summary.insertSucceeded
     ) {
       process.exitCode = 1;
