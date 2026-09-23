@@ -197,6 +197,7 @@ describe("syncPerformances 통합 테스트 (KOPIS/Gemini = msw, Supabase = 로�
       detectText: async () => "교향곡 제5번 루트비히 판 베토벤",
     });
     const getProgramJSON = createGetProgramJSON({
+      model: "gemini-2.5-flash-lite",
       generateContent: (params) => geminiService.generateContent(params),
       log: logger,
     });

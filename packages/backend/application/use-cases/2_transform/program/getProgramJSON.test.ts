@@ -9,6 +9,7 @@ import {
 const makeDeps = (
   overrides: Partial<GetProgramJSONDeps> = {},
 ): GetProgramJSONDeps => ({
+  model: "gemini-2.5-flash-lite",
   generateContent: vi.fn(),
   log: { debug: vi.fn(), info: vi.fn() },
   ...overrides,

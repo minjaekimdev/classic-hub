@@ -23,6 +23,7 @@ const getProgramText = createGetProgramText({
 
 // Gemini로 프로그램 텍스트를 구조화된 JSON으로 변환
 const getProgramJSON = createGetProgramJSON({
+  model: "gemini-2.5-flash-lite",
   generateContent: (params) => geminiService.generateContent(params),
   log: logger,
 });
