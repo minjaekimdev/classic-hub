@@ -27,6 +27,9 @@ export interface SyncPerformancesDeps {
   ) => Promise<{
     performances: PerformanceDetail[];
     idsToDelete: string[];
+    // 중복 제거 전의 원본 분류 (Slack 요약의 신규/수정 건수 집계용)
+    idsToInsert: string[];
+    idsToUpdate: string[];
     detailFetchFailures: DetailFetchFailure[];
   }>;
   transformPerformances: (
@@ -42,6 +45,8 @@ export interface SyncPerformancesDeps {
     retryFailures: ProcessResult[];
   }>;
   insertPerformancesBulk: (payload: DBPerformanceWrite[]) => Promise<void>;
+  // 윈도에서 사라진(오래된) 공연을 DB에서 제거한다. 실패 시 에러를 던진다.
+  deletePerformances: (ids: string[]) => Promise<void>;
   notify: (message: string) => Promise<unknown>;
   saveFailuresToArtifact: (
     failFilePath: string,
@@ -63,6 +68,7 @@ export const createSyncPerformanceData = ({
   transformPerformances,
   retry: runRetry,
   insertPerformancesBulk,
+  deletePerformances,
   notify,
   saveFailuresToArtifact,
   failedRecordsFilename,
@@ -76,7 +82,13 @@ export const createSyncPerformanceData = ({
     maxRepeat: number,
   ) => {
     // 1. Extract 단계 (공연 원본 데이터 페칭 — 이미지 버퍼는 transform에서 1건씩 페칭)
-    const { performances, detailFetchFailures } = await extractPerformances(
+    const {
+      performances,
+      idsToDelete,
+      idsToInsert,
+      idsToUpdate,
+      detailFetchFailures,
+    } = await extractPerformances(
       startDate,
       endDate,
       afterDate,
@@ -188,15 +200,50 @@ export const createSyncPerformanceData = ({
       }
     }
 
+    // 5.5 삭제 단계 — 윈도에서 사라진(오래된) 공연을 DB에서 제거한다.
+    // 파괴적 연산이므로 마지막에 실행하고, 실패해도 알림 자체는 막지 않는다 (insert 실패 처리와 동일한 원칙).
+    let deleteAttempted = false;
+    let deleteSucceeded = false;
+    if (idsToDelete.length > 0) {
+      deleteAttempted = true;
+      try {
+        await deletePerformances(idsToDelete);
+        deleteSucceeded = true;
+        log.info(`[DB_SUCCESS] DB 삭제 성공 (${idsToDelete.length}건)`);
+      } catch (error) {
+        log.error("[DELETE_FAIL] DB 삭제 failed", error);
+        saveFailuresToArtifact(
+          failedRecordsFilename,
+          idsToDelete.map((id) => ({
+            id,
+            error: "DeleteError",
+            failedAt: new Date().toISOString(),
+          })),
+          "DeleteError",
+        );
+        log.error(
+          `[DELETE_FAIL] 삭제 실패 공연 ${idsToDelete.length}건 → artifact 저장 완료`,
+        );
+      }
+    }
+
     // 6. 실행 단위 요약 알림 — 성공 시에도 조용히 1건 (크론 스킵 감지)
     const summary: SyncRunSummary = {
-      totalTargets: performances.length,
+      // "대상 공연"은 extract에서 가공 대상이었던 전체(idsToTransform)를 뜻한다.
+      // idsToTransform = 상세 페칭에 성공해 transform에 투입된 performances
+      //                + 페칭에 실패한 detailFetchFailures.
+      totalTargets: performances.length + detailFetchFailures.length,
+      newCount: idsToInsert.length,
+      updateCount: idsToUpdate.length,
+      deleteCount: idsToDelete.length,
       firstPassSuccesses,
       retryRecovered: retrySuccesses.length,
       finalFailures: retryFailures,
-      detailFetchFailures: detailFetchFailures.length,
+      detailFetchFailureIds: detailFetchFailures.map((f) => f.id),
       insertAttempted,
       insertSucceeded,
+      deleteAttempted,
+      deleteSucceeded,
       apiUsage,
     };
     await notify(buildSyncSummaryMessage(summary, getRunArtifactUrl()));

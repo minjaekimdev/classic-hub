@@ -90,9 +90,12 @@ export const createExtractPerformances = ({
 
     // 이미지 버퍼는 transform 단계에서 공연 1건 단위로 페칭한다. (중복 페칭 제거)
     // 삭제해야할 공연 id만 전달하고, 실제 삭제는 뒤로 미룬다.
+    // idsToInsert/idsToUpdate는 중복 제거 전의 원본 분류다 (Slack 요약의 신규/수정 건수 집계용).
     return {
       performances,
       idsToDelete,
+      idsToInsert,
+      idsToUpdate,
       detailFetchFailures,
     };
   };

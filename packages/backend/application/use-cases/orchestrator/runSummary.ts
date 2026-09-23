@@ -4,16 +4,34 @@ import { ApiUsage, ProcessResult } from "shared/types/sync";
 // Slack 요약 알림과 process.exitCode 판정이 모두 이 모양에 의존한다.
 export interface SyncRunSummary {
   totalTargets: number;
+  // extract 단계의 분류 결과 — 신규(idsToInsert)·수정(idsToUpdate)·삭제 대상(idsToDelete) 건수.
+  // 신규+수정은 중복 제거 전의 raw 개수라 totalTargets(중복 제거 후)과 합이 다를 수 있다.
+  newCount: number;
+  updateCount: number;
+  deleteCount: number;
   firstPassSuccesses: number;
   retryRecovered: number;
   finalFailures: ProcessResult[];
-  // extract 단계의 상세 페칭 최종 실패 건수 (인라인 재시도·2차 패스로도 회복되지 않은 유실분)
-  detailFetchFailures: number;
+  // extract 단계의 상세 페칭 최종 실패 id 목록 (인라인 재시도·2차 패스로도 회복되지 않은 유실분)
+  detailFetchFailureIds: string[];
   insertAttempted: boolean;
   insertSucceeded: boolean;
+  // 마지막 단계의 DB 삭제 실행 결과 — idsToDelete가 있어야 시도된다 (대상 없음은 문제가 아니다).
+  deleteAttempted: boolean;
+  deleteSucceeded: boolean;
   // 실행 동안 소비한 Vision/Gemini API 사용량
   apiUsage: ApiUsage;
 }
+
+// Slack 메시지 폭주 방지 — 실패 id는 최대 10개까지만 표시하고 나머지는 "외 N건"으로 요약한다.
+// 전체 내역은 artifact가 담당한다 (요약 알림 철학과 일치).
+const MAX_IDS_SHOWN = 10;
+
+const formatIds = (ids: string[]): string => {
+  const shown = ids.slice(0, MAX_IDS_SHOWN).join(", ");
+  const overflow = ids.length - MAX_IDS_SHOWN;
+  return overflow > 0 ? `${shown} 외 ${overflow}건` : shown;
+};
 
 // GitHub Actions 실행 환경에서만 존재하는 변수들로 artifact 페이지 URL을 만든다.
 // 로컬 등 Actions 밖에서는 null (요약 메시지에서 링크 줄이 생략된다).
@@ -35,12 +53,16 @@ export const buildSyncSummaryMessage = (
 ): string => {
   const hasProblem =
     summary.finalFailures.length > 0 ||
-    summary.detailFetchFailures > 0 ||
-    !summary.insertSucceeded;
+    summary.detailFetchFailureIds.length > 0 ||
+    !summary.insertSucceeded ||
+    (summary.deleteAttempted && !summary.deleteSucceeded);
 
   const lines: string[] = [];
   lines.push(`${hasProblem ? "⚠️" : "✅"} 공연 동기화 완료`);
   lines.push(`- 대상 공연: ${summary.totalTargets}건`);
+  lines.push(
+    `- 신규: ${summary.newCount}건 / 수정: ${summary.updateCount}건 / 삭제: ${summary.deleteCount}건`,
+  );
   lines.push(
     `- 1차 성공: ${summary.firstPassSuccesses}건 / 재시도 회복: ${summary.retryRecovered}건`,
   );
@@ -56,13 +78,14 @@ export const buildSyncSummaryMessage = (
   const aggregation = Object.entries(byError)
     .map(([type, count]) => `${type} ${count}건`)
     .join(", ");
+  const failedIds = formatIds(summary.finalFailures.map((f) => f.id));
   lines.push(
-    `- 최종 실패: ${summary.finalFailures.length}건${aggregation ? ` (${aggregation})` : ""}`,
+    `- 최종 실패: ${summary.finalFailures.length}건${aggregation ? ` (${aggregation})` : ""}${failedIds ? ` — ID: ${failedIds}` : ""}`,
   );
 
-  if (summary.detailFetchFailures > 0) {
+  if (summary.detailFetchFailureIds.length > 0) {
     lines.push(
-      `- 상세 페칭 실패: ${summary.detailFetchFailures}건 (DetailFetchError artifact 확인 필요)`,
+      `- 상세 페칭 실패: ${summary.detailFetchFailureIds.length}건 — ID: ${formatIds(summary.detailFetchFailureIds)} (DetailFetchError artifact 확인 필요)`,
     );
   }
 
@@ -72,6 +95,14 @@ export const buildSyncSummaryMessage = (
     lines.push("- DB 적재: 성공");
   } else {
     lines.push("- DB 적재: ❌ 실패 (BatchInsertError artifact 확인 필요)");
+  }
+
+  if (!summary.deleteAttempted) {
+    lines.push("- DB 삭제: 대상 없음");
+  } else if (summary.deleteSucceeded) {
+    lines.push("- DB 삭제: 성공");
+  } else {
+    lines.push("- DB 삭제: ❌ 실패 (DeleteError artifact 확인 필요)");
   }
 
   lines.push(

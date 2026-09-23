@@ -18,6 +18,7 @@ import { createGetAllPerformanceIdList } from "../1_extract/flows/getAllPerforma
 import { createGetPerformanceDetailList } from "../1_extract/flows/getPerformanceDetailList";
 import { compareNewOld } from "../1_extract/flows/compareNewOld";
 import { createExtractPerformances } from "../1_extract/extractPerformances";
+import { deletePerformances } from "../1_extract/infra/deleteDbPerformances";
 import { createGetProgramText } from "../2_transform/program/getProgramText";
 import { createGetProgramJSON } from "../2_transform/program/getProgramJSON";
 import { createTransformPerformances } from "../2_transform/transformPerformances";
@@ -215,6 +216,7 @@ describe("syncPerformances 통합 테스트 (KOPIS/Gemini = msw, Supabase = 로�
       retry,
       insertPerformancesBulk: (payload) =>
         callDatabaseFunction("upsert_performances_bulk", { payload }),
+      deletePerformances,
       notify: async () => {},
       saveFailuresToArtifact: () => {},
       failedRecordsFilename: "failed_records.json",

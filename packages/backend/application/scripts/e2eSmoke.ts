@@ -81,12 +81,15 @@ const DEFAULT_FIXTURE_ID = "PF286762";
     extractPerformances: async () => ({
       performances: [fixture],
       idsToDelete: [],
+      idsToInsert: [fixture.mt20id],
+      idsToUpdate: [],
       detailFetchFailures: [],
     }),
     transformPerformances,
     retry,
     insertPerformancesBulk: (payload) =>
       callDatabaseFunction("upsert_performances_bulk", { payload }),
+    deletePerformances: async () => {},
     notify: async () => {},
     saveFailuresToArtifact: () => {},
     failedRecordsFilename: "unused",

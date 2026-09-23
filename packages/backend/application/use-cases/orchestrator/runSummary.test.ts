@@ -16,12 +16,17 @@ const makeSummary = (
   overrides: Partial<SyncRunSummary> = {},
 ): SyncRunSummary => ({
   totalTargets: 45,
+  newCount: 30,
+  updateCount: 12,
+  deleteCount: 3,
   firstPassSuccesses: 42,
   retryRecovered: 2,
   finalFailures: [],
-  detailFetchFailures: 0,
+  detailFetchFailureIds: [],
   insertAttempted: true,
   insertSucceeded: true,
+  deleteAttempted: true,
+  deleteSucceeded: true,
   apiUsage: {
     visionRequests: 0,
     geminiRequests: 0,
@@ -37,9 +42,11 @@ describe("buildSyncSummaryMessage 테스트", () => {
 
     expect(message).toContain("✅ 공연 동기화 완료");
     expect(message).toContain("대상 공연: 45건");
+    expect(message).toContain("신규: 30건 / 수정: 12건 / 삭제: 3건");
     expect(message).toContain("1차 성공: 42건 / 재시도 회복: 2건");
     expect(message).toContain("최종 실패: 0건");
     expect(message).toContain("DB 적재: 성공");
+    expect(message).toContain("DB 삭제: 성공");
   });
 
   it("최종 실패가 있으면 유형별 집계와 함께 ⚠️ 상태를 만든다", () => {
@@ -55,7 +62,9 @@ describe("buildSyncSummaryMessage 테스트", () => {
     );
 
     expect(message).toContain("⚠️ 공연 동기화 완료");
-    expect(message).toContain("최종 실패: 3건 (GeminiError 2건, OCRError 1건)");
+    expect(message).toContain(
+      "최종 실패: 3건 (GeminiError 2건, OCRError 1건) — ID: PF1, PF2, PF3",
+    );
   });
 
   it("insert가 실패하면 ❌ DB 적재 상태를 만든다", () => {
@@ -65,14 +74,46 @@ describe("buildSyncSummaryMessage 테스트", () => {
     expect(message).toContain("⚠️ 공연 동기화 완료");
   });
 
-  it("상세 페칭 실패가 있으면 ⚠️ 상태와 함께 건수를 표시한다", () => {
+  it("삭제가 실패하면 ❌ DB 삭제 상태를 만든다", () => {
     const message = buildSyncSummaryMessage(
-      makeSummary({ detailFetchFailures: 5 }),
+      makeSummary({ deleteSucceeded: false }),
+    );
+
+    expect(message).toContain("DB 삭제: ❌ 실패");
+    expect(message).toContain("⚠️ 공연 동기화 완료");
+  });
+
+  it("삭제 대상이 없으면 문제 없이 대상 없음을 표시한다", () => {
+    const message = buildSyncSummaryMessage(
+      makeSummary({ deleteAttempted: false, deleteSucceeded: false }),
+    );
+
+    expect(message).toContain("DB 삭제: 대상 없음");
+    expect(message).toContain("✅ 공연 동기화 완료");
+  });
+
+  it("상세 페칭 실패가 있으면 ⚠️ 상태와 함께 건수·id를 표시한다", () => {
+    const message = buildSyncSummaryMessage(
+      makeSummary({ detailFetchFailureIds: ["PF_MISSING"] }),
     );
 
     expect(message).toContain("⚠️ 공연 동기화 완료");
     expect(message).toContain(
-      "상세 페칭 실패: 5건 (DetailFetchError artifact 확인 필요)",
+      "상세 페칭 실패: 1건 — ID: PF_MISSING (DetailFetchError artifact 확인 필요)",
+    );
+  });
+
+  it("실패 id가 10개를 넘으면 10개만 표시하고 나머지는 '외 N건'으로 요약한다", () => {
+    const ids = Array.from({ length: 12 }, (_, i) => `PF${i + 1}`);
+    const message = buildSyncSummaryMessage(
+      makeSummary({
+        finalFailures: ids.map((id) => failResult(id, "GeminiError")),
+      }),
+    );
+
+    expect(message).toContain("최종 실패: 12건 (GeminiError 12건)");
+    expect(message).toContain(
+      "— ID: PF1, PF2, PF3, PF4, PF5, PF6, PF7, PF8, PF9, PF10 외 2건",
     );
   });
 

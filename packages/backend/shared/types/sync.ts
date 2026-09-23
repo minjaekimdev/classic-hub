@@ -19,7 +19,11 @@ export interface ApiUsage {
   geminiOutputTokens: number;
 }
 
-export type WorkflowError = "ProcessError" | "BatchInsertError" | "DetailFetchError";
+export type WorkflowError =
+  | "ProcessError"
+  | "BatchInsertError"
+  | "DetailFetchError"
+  | "DeleteError";
 
 // extract 단계의 상세 페칭 실패 기록 — 상세 데이터 자체가 없으므로 id/사유/시각만 남긴다.
 export interface DetailFetchFailure {
@@ -28,9 +32,17 @@ export interface DetailFetchFailure {
   failedAt: string;
 }
 
-// processFailures, batchInsertFailures, detailFetchFailures는 배타적이지 않을 수 있으므로 옵셔널 프로퍼티 사용
+// DB 삭제 실패 기록 — DetailFetchFailure와 동일한 형태(id/사유/시각)를 갖는다.
+export interface DeleteFailure {
+  id: string;
+  error: string;
+  failedAt: string;
+}
+
+// processFailures, batchInsertFailures, detailFetchFailures, deleteFailures는 배타적이지 않을 수 있으므로 옵셔널 프로퍼티 사용
 export interface Artifact {
   processFailures?: ProcessResult[];
   batchInsertFailures?: DBPerformanceWrite[];
   detailFetchFailures?: DetailFetchFailure[];
+  deleteFailures?: DeleteFailure[];
 }

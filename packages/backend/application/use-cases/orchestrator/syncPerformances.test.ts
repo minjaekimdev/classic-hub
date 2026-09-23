@@ -32,10 +32,17 @@ const makeDeps = (
 ): SyncPerformancesDeps => ({
   extractPerformances: vi
     .fn()
-    .mockResolvedValue({ performances: [], idsToDelete: [], detailFetchFailures: [] }),
+    .mockResolvedValue({
+      performances: [],
+      idsToDelete: [],
+      idsToInsert: [],
+      idsToUpdate: [],
+      detailFetchFailures: [],
+    }),
   transformPerformances: vi.fn(),
   retry: vi.fn().mockResolvedValue({ retrySuccesses: [], retryFailures: [] }),
   insertPerformancesBulk: vi.fn().mockResolvedValue(undefined),
+  deletePerformances: vi.fn().mockResolvedValue(undefined),
   notify: vi.fn().mockResolvedValue(undefined),
   saveFailuresToArtifact: vi.fn(),
   failedRecordsFilename: "failed_records.json",
@@ -66,9 +73,13 @@ describe("syncPerformances 오케스트레이션 테스트", () => {
       );
 
     const deps = makeDeps({
-      extractPerformances: vi
-        .fn()
-        .mockResolvedValue({ performances, idsToDelete: [], detailFetchFailures: [] }),
+      extractPerformances: vi.fn().mockResolvedValue({
+        performances,
+        idsToDelete: [],
+        idsToInsert: ["PF1", "PF2", "PF3"],
+        idsToUpdate: [],
+        detailFetchFailures: [],
+      }),
       transformPerformances,
     });
     const summary = await run(deps);
@@ -84,6 +95,8 @@ describe("syncPerformances 오케스트레이션 테스트", () => {
       { performance_id: "PF2" },
       { performance_id: "PF3" },
     ]);
+    // 삭제 대상이 없으면 deletePerformances를 호출하지 않는다.
+    expect(deps.deletePerformances).not.toHaveBeenCalled();
     expect(deps.saveFailuresToArtifact).not.toHaveBeenCalled();
     expect(deps.log.error).not.toHaveBeenCalled();
 
@@ -95,17 +108,28 @@ describe("syncPerformances 오케스트레이션 테스트", () => {
       expect.stringContaining("대상 공연: 3건"),
     );
     expect(deps.notify).toHaveBeenCalledWith(
+      expect.stringContaining("신규: 3건 / 수정: 0건 / 삭제: 0건"),
+    );
+    expect(deps.notify).toHaveBeenCalledWith(
+      expect.stringContaining("DB 삭제: 대상 없음"),
+    );
+    expect(deps.notify).toHaveBeenCalledWith(
       expect.stringContaining("DB 적재: 성공"),
     );
 
     expect(summary).toEqual({
       totalTargets: 3,
+      newCount: 3,
+      updateCount: 0,
+      deleteCount: 0,
       firstPassSuccesses: 3,
       retryRecovered: 0,
       finalFailures: [],
-      detailFetchFailures: 0,
+      detailFetchFailureIds: [],
       insertAttempted: true,
       insertSucceeded: true,
+      deleteAttempted: false,
+      deleteSucceeded: false,
       apiUsage: {
         visionRequests: 0,
         geminiRequests: 0,
@@ -134,9 +158,13 @@ describe("syncPerformances 오케스트레이션 테스트", () => {
     });
 
     const deps = makeDeps({
-      extractPerformances: vi
-        .fn()
-        .mockResolvedValue({ performances, idsToDelete: [], detailFetchFailures: [] }),
+      extractPerformances: vi.fn().mockResolvedValue({
+        performances,
+        idsToDelete: [],
+        idsToInsert: ["PF1", "PF3"],
+        idsToUpdate: ["PF2"],
+        detailFetchFailures: [],
+      }),
       transformPerformances,
       retry,
     });
@@ -169,15 +197,23 @@ describe("syncPerformances 오케스트레이션 테스트", () => {
     expect(deps.notify).toHaveBeenCalledWith(
       expect.stringContaining("재시도 회복: 1건"),
     );
+    expect(deps.notify).toHaveBeenCalledWith(
+      expect.stringContaining("신규: 2건 / 수정: 1건 / 삭제: 0건"),
+    );
 
     expect(summary).toEqual({
       totalTargets: 3,
+      newCount: 2,
+      updateCount: 1,
+      deleteCount: 0,
       firstPassSuccesses: 2,
       retryRecovered: 1,
       finalFailures: [],
-      detailFetchFailures: 0,
+      detailFetchFailureIds: [],
       insertAttempted: true,
       insertSucceeded: true,
+      deleteAttempted: false,
+      deleteSucceeded: false,
       apiUsage: {
         visionRequests: 0,
         geminiRequests: 0,
@@ -206,9 +242,13 @@ describe("syncPerformances 오케스트레이션 테스트", () => {
     const notify = vi.fn().mockResolvedValue(undefined);
 
     const deps = makeDeps({
-      extractPerformances: vi
-        .fn()
-        .mockResolvedValue({ performances, idsToDelete: [], detailFetchFailures: [] }),
+      extractPerformances: vi.fn().mockResolvedValue({
+        performances,
+        idsToDelete: [],
+        idsToInsert: ["PF1", "PF2"],
+        idsToUpdate: [],
+        detailFetchFailures: [],
+      }),
       transformPerformances,
       retry,
       saveFailuresToArtifact,
@@ -246,9 +286,13 @@ describe("syncPerformances 오케스트레이션 테스트", () => {
       );
 
     const deps = makeDeps({
-      extractPerformances: vi
-        .fn()
-        .mockResolvedValue({ performances, idsToDelete: [], detailFetchFailures: [] }),
+      extractPerformances: vi.fn().mockResolvedValue({
+        performances,
+        idsToDelete: [],
+        idsToInsert: ["PF1", "PF2"],
+        idsToUpdate: [],
+        detailFetchFailures: [],
+      }),
       transformPerformances,
       insertPerformancesBulk: vi
         .fn()
@@ -301,9 +345,13 @@ describe("syncPerformances 오케스트레이션 테스트", () => {
     const artifactPath = path.join(dir, "failed_records.json");
 
     const deps = makeDeps({
-      extractPerformances: vi
-        .fn()
-        .mockResolvedValue({ performances, idsToDelete: [], detailFetchFailures: [] }),
+      extractPerformances: vi.fn().mockResolvedValue({
+        performances,
+        idsToDelete: [],
+        idsToInsert: ["PF2"],
+        idsToUpdate: [],
+        detailFetchFailures: [],
+      }),
       transformPerformances,
       retry,
       saveFailuresToArtifact,
@@ -343,13 +391,13 @@ describe("syncPerformances 오케스트레이션 테스트", () => {
       );
 
     const deps = makeDeps({
-      extractPerformances: vi
-        .fn()
-        .mockResolvedValue({
-          performances,
-          idsToDelete: [],
-          detailFetchFailures,
-        }),
+      extractPerformances: vi.fn().mockResolvedValue({
+        performances,
+        idsToDelete: [],
+        idsToInsert: ["PF1"],
+        idsToUpdate: [],
+        detailFetchFailures,
+      }),
       transformPerformances,
     });
     const summary = await run(deps);
@@ -365,6 +413,101 @@ describe("syncPerformances 오케스트레이션 테스트", () => {
     expect(deps.notify).toHaveBeenCalledWith(
       expect.stringContaining("상세 페칭 실패: 1건"),
     );
-    expect(summary.detailFetchFailures).toBe(1);
+    expect(deps.notify).toHaveBeenCalledWith(
+      expect.stringContaining("상세 페칭 실패: 1건 — ID: PF_MISSING"),
+    );
+    expect(summary.detailFetchFailureIds).toEqual(["PF_MISSING"]);
+    // 대상 공연은 transform에 투입된 performances와 유실분을 모두 포함한다.
+    expect(summary.totalTargets).toBe(2);
+  });
+
+  it("idsToDelete가 있으면 insert 후 삭제를 수행하고 요약에 성공을 표시한다", async () => {
+    const performances = [makeDetail("PF1")];
+    const insertPerformancesBulk = vi.fn().mockResolvedValue(undefined);
+    const deletePerformances = vi.fn().mockResolvedValue(undefined);
+    const deps = makeDeps({
+      extractPerformances: vi.fn().mockResolvedValue({
+        performances,
+        idsToDelete: ["PF_OLD"],
+        idsToInsert: ["PF1"],
+        idsToUpdate: [],
+        detailFetchFailures: [],
+      }),
+      transformPerformances: vi
+        .fn()
+        .mockImplementation((p: PerformanceDetail) =>
+          Promise.resolve(successResult(p.mt20id)),
+        ),
+      insertPerformancesBulk,
+      deletePerformances,
+    });
+    const summary = await run(deps);
+
+    expect(deletePerformances).toHaveBeenCalledTimes(1);
+    expect(deletePerformances).toHaveBeenCalledWith(["PF_OLD"]);
+
+    // 삭제는 insert보다 뒤에 실행된다 (파괴적 연산은 마지막에).
+    const insertOrder = insertPerformancesBulk.mock.invocationCallOrder[0];
+    const deleteOrder = deletePerformances.mock.invocationCallOrder[0];
+    expect(deleteOrder).toBeGreaterThan(insertOrder);
+
+    expect(deps.notify).toHaveBeenCalledWith(
+      expect.stringContaining("DB 삭제: 성공"),
+    );
+    expect(summary.deleteAttempted).toBe(true);
+    expect(summary.deleteSucceeded).toBe(true);
+  });
+
+  it("삭제가 실패하면 artifact(DeleteError)에 기록하고 요약에 실패를 표시하며 알림은 계속 보낸다", async () => {
+    const performances = [makeDetail("PF1")];
+    const notify = vi.fn().mockResolvedValue(undefined);
+    const saveFailuresToArtifact = vi.fn();
+    const deletePerformances = vi.fn().mockRejectedValue(new Error("FK violation"));
+    const deps = makeDeps({
+      extractPerformances: vi.fn().mockResolvedValue({
+        performances,
+        idsToDelete: ["PF_OLD"],
+        idsToInsert: ["PF1"],
+        idsToUpdate: [],
+        detailFetchFailures: [],
+      }),
+      transformPerformances: vi
+        .fn()
+        .mockImplementation((p: PerformanceDetail) =>
+          Promise.resolve(successResult(p.mt20id)),
+        ),
+      deletePerformances,
+      saveFailuresToArtifact,
+      notify,
+    });
+    const summary = await run(deps);
+
+    expect(saveFailuresToArtifact).toHaveBeenCalledWith(
+      "failed_records.json",
+      [
+        expect.objectContaining({
+          id: "PF_OLD",
+          error: "DeleteError",
+          failedAt: expect.any(String),
+        }),
+      ],
+      "DeleteError",
+    );
+
+    // 삭제 실패가 알림 자체를 막지 않는다 (조용한 실패 방지).
+    expect(notify).toHaveBeenCalledTimes(1);
+    expect(notify).toHaveBeenCalledWith(
+      expect.stringContaining("DB 삭제: ❌ 실패"),
+    );
+
+    // Slack 알림보다 artifact 저장이 먼저다 (insert 실패 케이스와 동일한 원칙).
+    const artifactOrder = saveFailuresToArtifact.mock.invocationCallOrder[0];
+    const notifyOrder = notify.mock.invocationCallOrder[0];
+    expect(artifactOrder).toBeLessThan(notifyOrder);
+
+    expect(summary.deleteAttempted).toBe(true);
+    expect(summary.deleteSucceeded).toBe(false);
+    // 삭제 실패와 무관하게 insert는 정상 완료된다.
+    expect(summary.insertSucceeded).toBe(true);
   });
 });

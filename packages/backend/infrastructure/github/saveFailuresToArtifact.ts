@@ -13,6 +13,7 @@ const keyMapper: Record<WorkflowError, keyof Artifact> = {
   ProcessError: "processFailures",
   BatchInsertError: "batchInsertFailures",
   DetailFetchError: "detailFetchFailures",
+  DeleteError: "deleteFailures",
 };
 
 export const saveFailuresToArtifact = (
