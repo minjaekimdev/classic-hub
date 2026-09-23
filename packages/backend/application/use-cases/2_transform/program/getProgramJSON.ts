@@ -11,6 +11,8 @@ import {
 } from "@/infrastructure/gemini/service";
 
 export interface GetProgramJSONDeps {
+  // 변환에 사용할 Gemini 모델명. 프로덕션과 디버깅 스크립트가 다른 모델을 쓸 수 있도록 외부에서 주입한다.
+  model: string;
   generateContent: (
     params: GenerateContentParams,
   ) => Promise<GenerateContentResult>;
@@ -58,7 +60,7 @@ const { $schema: _, ...RESPONSE_JSON_SCHEMA } = z.toJSONSchema(
 
 // KOPIS 응답의 프로그램 텍스트를 분석하여 구조화된 JSON으로 변환하는 함수
 // 실패 시 에러를 그대로 던지며, null fallback 정책은 상위 오케스트레이터가 담당한다.
-export const createGetProgramJSON = ({ generateContent, log }: GetProgramJSONDeps) => {
+export const createGetProgramJSON = ({ model, generateContent, log }: GetProgramJSONDeps) => {
   return async (
     programText: string,
     usage?: ApiUsage,
@@ -66,7 +68,7 @@ export const createGetProgramJSON = ({ generateContent, log }: GetProgramJSONDep
     if (usage) usage.geminiRequests += 1;
 
     const response = await generateContent({
-      model: "gemini-2.5-flash-lite",
+      model,
       contents: INSTRUCTION + programText,
       config: {
         temperature: 0,

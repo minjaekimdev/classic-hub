@@ -66,6 +66,7 @@ const DEFAULT_FIXTURE_ID = "PF286762";
       detectText: (buffer) => visionService.detectText(buffer),
     }),
     getProgramJSON: createGetProgramJSON({
+      model: "gemini-2.5-flash-lite",
       generateContent: (params) => geminiService.generateContent(params),
       log: logger,
     }),

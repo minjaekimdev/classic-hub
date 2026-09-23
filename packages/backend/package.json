@@ -33,6 +33,7 @@
     "build": "tsc --noEmit",
     "test": "NODE_ENV=test vitest",
     "test-smoke": "NODE_ENV=test tsx application/scripts/e2eSmoke.ts",
-    "reprocess-failures": "tsx application/scripts/reprocessFailures.ts"
+    "reprocess-failures": "tsx application/scripts/reprocessFailures.ts",
+    "debug-performance": "tsx application/scripts/debugPerformance.ts"
   }
 }
