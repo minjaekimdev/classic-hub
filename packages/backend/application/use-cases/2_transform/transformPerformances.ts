@@ -148,6 +148,15 @@ export const createTransformPerformances = ({
         `[GEMINI_FAIL] Converting Program text to JSON failed (ID: ${id}): ${error}`,
         errorMeta(error),
       );
+      // 실패한 공연에 한해 Gemini 입력 텍스트(sty + OCR)를 출력한다.
+      // GitHub Actions 콘솔 확인 용도이며, slack 알림(summery notify)과는 무관하다.
+      // LOG_LEVEL 기본값(info)에서는 debug가 노출되지 않으므로 error 레벨로 출력한다.
+      log.error(
+        `[GEMINI_FAIL] Dumping program text for failed data (ID: ${id})
+========== PROGRAM TEXT START ==========
+${programText}
+========== PROGRAM TEXT END ==========`,
+      );
       return failure("GeminiError");
     }
 

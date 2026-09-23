@@ -191,8 +191,10 @@ describe("transformPerformances 에러 분류 테스트", () => {
   });
 
   it("Gemini 변환이 실패하면 GeminiError를 반환한다", async () => {
+    const logError = vi.fn();
     const deps = makeDeps({
       getProgramJSON: vi.fn().mockRejectedValue(new Error("gemini fail")),
+      log: { debug: vi.fn(), info: vi.fn(), error: logError },
     });
 
     const result = await run(deps, makeDetail("PF1"));
@@ -200,6 +202,14 @@ describe("transformPerformances 에러 분류 테스트", () => {
     expect(result.id).toBe("PF1");
     expect(result.error).toBe("GeminiError");
     expect(result.data).toBeNull();
+
+    // 원인 파악용 진단 로그: 실패한 공연에 한해 Gemini 입력 텍스트를 덤프한다
+    const dumpLog = logError.mock.calls
+      .map(([msg]) => msg)
+      .find((msg) => String(msg).includes("Dumping program text"));
+    expect(dumpLog).toBeDefined();
+    expect(String(dumpLog)).toContain("(ID: PF1)");
+    expect(String(dumpLog)).toContain("추출된 프로그램 텍스트");
   });
 
   it("포스터 압축이 실패하면 SharpError를 반환한다", async () => {
