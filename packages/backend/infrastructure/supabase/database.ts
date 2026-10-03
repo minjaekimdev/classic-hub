@@ -103,7 +103,11 @@ export const insertData = async <T>(
   data: T,
   onConflict: string,
 ) => {
-  const { error } = await supabase.from(table).upsert(data, { onConflict });
+  const { error } = await supabase
+    .from(table)
+    .upsert(data as Record<string, any> | Record<string, any>[], {
+      onConflict,
+    });
 
   if (error) {
     throw new APIError(`DB insert failed: ${error.message}`);
