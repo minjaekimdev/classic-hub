@@ -41,8 +41,10 @@ export const createExtractPerformances = ({
     updateEndDate: string,
   ) => {
     // 로그를 현재 단계, KOPIS페칭, DB관련 로직 등등에 따라 각각 PROCESS, KOPIS, DB로 분류
+    // afterDate/startDate/updateEndDate는 실행일에 따라 바뀌므로(어제 고정 계약 등)
+    // 재현·디버깅 시 정확한 조회 조건을 알 수 있게 4개 값을 모두 기록한다.
     log.info(
-      `[PROCESS] 새로운 공연 데이터 동기화 시작 (대상 기간: ${startDate} ~ ${endDate})`,
+      `[PROCESS] 새로운 공연 데이터 동기화 시작 (startDate: ${startDate}, endDate: ${endDate}, afterDate: ${afterDate}, updateEndDate: ${updateEndDate})`,
     );
 
     // 1) 새로운 데이터를 페칭
@@ -60,12 +62,23 @@ export const createExtractPerformances = ({
     log.info("[PROCESS] DB에 존재하는 공연 ID와 새로운 공연 ID 비교");
     const { idsToDelete, idsToInsert } = compareNewOld(newIds, dbIds);
 
+    // 신규/삭제 대상 id 전체를 기록해 분류 결과를 추적 가능하게 한다.
+    log.info(
+      `[PROCESS] 신규 공연 id ${idsToInsert.length}건: ${idsToInsert.join(",")}`,
+    );
+    log.info(
+      `[PROCESS] 삭제 대상 공연 id ${idsToDelete.length}건: ${idsToDelete.join(",")}`,
+    );
+
     // 4) 기존에 저장된 공연둘 중 수정된 공연의 id 가져오기
     log.info("[PROCESS] DB에 있는 기존 공연들 중 수정된 공연 id 가져오기");
     const idsToUpdate = await getAllPerformanceIdList(
       startDate,
       updateEndDate,
       afterDate,
+    );
+    log.info(
+      `[PROCESS] 수정 대상 공연 id ${idsToUpdate.length}건: ${idsToUpdate.join(",")}`,
     );
 
     // 5) 변환(Transform) 단계에 투입할 데이터를 골라낸다.
