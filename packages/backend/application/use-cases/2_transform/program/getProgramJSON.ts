@@ -22,7 +22,8 @@ export interface GetProgramJSONDeps {
   };
 }
 
-const INSTRUCTION = `
+// 프로덕션과 동일한 프롬프트를 벤치마크·디버깅 스크립트에서 재사용할 수 있도록 노출한다.
+export const INSTRUCTION = `
 너는 클래식 음악 프로그램 데이터 추출 전문가야. 제공된 텍스트에서 오로지 '작곡가'와 '연주 곡목'만 추출해서 JSON 배열 형태로 응답해.
 
 ### 반드시 지켜야 할 추출 규칙:
