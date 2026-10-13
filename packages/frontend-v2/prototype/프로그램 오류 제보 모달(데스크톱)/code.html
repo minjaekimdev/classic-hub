@@ -1,0 +1,321 @@
+<!DOCTYPE html><html class="light" lang="ko" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>OPUS INDEX — 프로그램 정보 오류 제보</title>
+<!-- Google Fonts: Playfair Display & Hanken Grotesk -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,300..700;1,300..700&amp;family=Playfair+Display:ital,wght@0,400..900;1,400..900&amp;display=swap" rel="stylesheet">
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS CDN with Plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Theme Configuration -->
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "background": "#f9f9fd",
+            "on-surface": "#1a1c1f",
+            "on-secondary-fixed": "#281800",
+            "error-container": "#ffdad6",
+            "surface-container": "#ededf2",
+            "tertiary-container": "#480d16",
+            "surface-container-high": "#e8e8ec",
+            "on-tertiary-container": "#c87277",
+            "secondary-fixed": "#ffddaf",
+            "inverse-surface": "#2f3034",
+            "error": "#ba1a1a",
+            "secondary-container": "#fecc82",
+            "tertiary-fixed": "#ffdada",
+            "on-primary-container": "#828b9a",
+            "primary": "#050e1a",
+            "on-surface-variant": "#44474c",
+            "on-secondary-container": "#795516",
+            "primary-container": "#1b2430",
+            "surface": "#f9f9fd",
+            "secondary-fixed-dim": "#efbe76",
+            "on-background": "#1a1c1f",
+            "inverse-primary": "#bec7d7",
+            "surface-container-lowest": "#ffffff",
+            "on-secondary-fixed-variant": "#614000",
+            "surface-container-highest": "#e2e2e6",
+            "surface-container-low": "#f3f3f7",
+            "on-tertiary": "#ffffff",
+            "surface-dim": "#d9dade",
+            "primary-fixed": "#dae3f4",
+            "on-primary-fixed": "#131c28",
+            "secondary": "#7c5818",
+            "on-error": "#ffffff",
+            "surface-variant": "#e2e2e6",
+            "outline": "#75777c",
+            "tertiary": "#270005",
+            "surface-bright": "#f9f9fd",
+            "on-primary-fixed-variant": "#3e4755",
+            "tertiary-fixed-dim": "#ffb3b6",
+            "on-error-container": "#93000a",
+            "inverse-on-surface": "#f0f0f4",
+            "on-tertiary-fixed": "#3d050e",
+            "outline-variant": "#c5c6cc",
+            "primary-fixed-dim": "#bec7d7",
+            "on-tertiary-fixed-variant": "#753137",
+            "on-primary": "#ffffff",
+            "on-secondary": "#ffffff",
+            "surface-tint": "#565f6d"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "margin": "2rem",
+            "gutter": "1.5rem",
+            "space-xs": "0.25rem",
+            "space-md": "1rem",
+            "space-sm": "0.5rem",
+            "space-lg": "1.5rem",
+            "space-xl": "2.5rem"
+          },
+          "fontFamily": {
+            "label-caps": ["Hanken Grotesk"],
+            "headline-sm": ["Playfair Display"],
+            "body-sm": ["Hanken Grotesk"],
+            "display-hero-mobile": ["Playfair Display"],
+            "body-md": ["Hanken Grotesk"],
+            "program-title": ["Playfair Display"],
+            "label-md": ["Hanken Grotesk"],
+            "headline-lg-mobile": ["Playfair Display"],
+            "body-lg": ["Hanken Grotesk"],
+            "display-hero": ["Playfair Display"],
+            "headline-lg": ["Playfair Display"],
+            "headline-md": ["Playfair Display"]
+          },
+          "fontSize": {
+            "label-caps": ["11px", { "lineHeight": "16px", "letterSpacing": "0.1em", "fontWeight": "600" }],
+            "headline-sm": ["18px", { "lineHeight": "26px", "letterSpacing": "0em", "fontWeight": "600" }],
+            "body-sm": ["12px", { "lineHeight": "18px", "letterSpacing": "0.01em", "fontWeight": "400" }],
+            "display-hero-mobile": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "body-md": ["14px", { "lineHeight": "22px", "letterSpacing": "0em", "fontWeight": "400" }],
+            "program-title": ["17px", { "lineHeight": "24px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+            "label-md": ["13px", { "lineHeight": "18px", "letterSpacing": "0.04em", "fontWeight": "600" }],
+            "headline-lg-mobile": ["24px", { "lineHeight": "32px", "letterSpacing": "0em", "fontWeight": "600" }],
+            "body-lg": ["16px", { "lineHeight": "26px", "letterSpacing": "-0.005em", "fontWeight": "400" }],
+            "display-hero": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+            "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "headline-md": ["22px", { "lineHeight": "30px", "letterSpacing": "0em", "fontWeight": "500" }]
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-background text-on-surface antialiased relative min-h-screen overflow-hidden select-none">
+<!-- BACKGROUND: Dimmed Desktop Search Results Page of OPUS -->
+<div class="pointer-events-none filter blur-[2px] opacity-40 select-none">
+<!-- TopNavBar (Shared Component Anchor) -->
+<header class="w-full bg-surface dark:bg-surface-container-lowest border-b border-outline-variant dark:border-outline">
+<div class="w-full border-b border-outline-variant dark:border-outline px-6 md:px-8 max-w-7xl mx-auto flex items-center justify-between h-16">
+<div class="flex items-center gap-10">
+<a class="font-headline-md text-headline-md tracking-wider text-primary dark:text-inverse-primary font-semibold" href="#">
+            OPUS INDEX
+          </a>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-on-surface dark:hover:text-inverse-on-surface font-label-caps text-label-caps tracking-wider transition-colors" href="#">Repertoire</a>
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-on-surface dark:hover:text-inverse-on-surface font-label-caps text-label-caps tracking-wider transition-colors" href="#">Composers</a>
+<a class="text-secondary dark:text-secondary-fixed border-b-2 border-secondary dark:border-secondary-fixed pb-1 font-label-caps text-label-caps tracking-wider" href="#">Concerts</a>
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-on-surface dark:hover:text-inverse-on-surface font-label-caps text-label-caps tracking-wider transition-colors" href="#">Venues</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden sm:flex items-center bg-surface-container-lowest border border-outline-variant rounded px-3 py-1.5 w-64">
+<span class="material-symbols-outlined text-outline text-lg mr-2" data-icon="search">search</span>
+<span class="text-body-sm font-body-sm text-outline">Search composers or works...</span>
+</div>
+<button class="flex items-center gap-1 px-3 py-1.5 border border-outline-variant rounded font-label-caps text-label-caps text-on-surface-variant">
+<span class="material-symbols-outlined text-sm" data-icon="tune">tune</span>
+<span class="">Filter</span>
+</button>
+<button class="p-1.5 text-on-surface-variant">
+<span class="material-symbols-outlined text-lg" data-icon="bookmark_border">bookmark_border</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Search Results Page Content (Underlay) -->
+<main class="max-w-7xl mx-auto px-6 md:px-8 py-8">
+<!-- Search Command Row -->
+<div class="max-w-[840px] mx-auto mb-8">
+<div class="h-14 bg-surface-container-lowest border border-outline-variant rounded flex items-center px-4 shadow-sm">
+<span class="material-symbols-outlined text-secondary text-xl mr-3" data-icon="search">search</span>
+<span class="font-body-lg text-body-lg text-on-surface">라흐마니노프 (Sergei Rachmaninoff)</span>
+</div>
+<div class="flex gap-2 mt-3">
+<span class="px-3 py-1 bg-surface-container-lowest border border-secondary text-secondary font-label-caps text-label-caps rounded">All</span>
+<span class="px-3 py-1 bg-surface-container-lowest border border-outline-variant text-on-surface-variant font-label-caps text-label-caps rounded">Piano</span>
+<span class="px-3 py-1 bg-surface-container-lowest border border-outline-variant text-on-surface-variant font-label-caps text-label-caps rounded">Symphony</span>
+<span class="px-3 py-1 bg-surface-container-lowest border border-outline-variant text-on-surface-variant font-label-caps text-label-caps rounded">Chamber</span>
+</div>
+</div>
+<!-- Results Grid (Editorial Concert Cards) -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Card 1 (Target Concert) -->
+<div class="bg-surface-container-lowest border border-outline-variant p-6 rounded flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-3">
+<span class="font-label-caps text-label-caps tracking-wider text-secondary px-2 py-0.5 rounded border border-secondary/30 bg-secondary/10">예매중</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">2025.04.18 ~ 04.19</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary mb-1">서울시향의 라흐마니노프 피아노 협주곡 2번</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4">예술의전당 콘서트홀</p>
+<div class="bg-surface-container-low p-4 rounded border border-outline-variant/60 mb-4">
+<span class="font-label-caps text-label-caps text-secondary block mb-1">PROGRAM</span>
+<p class="font-program-title text-program-title text-primary">피아노 협주곡 2번 다단조, 작품번호 18 (외 2곡)</p>
+</div>
+</div>
+<div class="border-t border-outline-variant pt-3 flex items-center justify-between text-body-sm font-body-sm text-on-surface-variant">
+<span class="">R석 120,000원 | S석 90,000원</span>
+<span class="text-secondary font-label-caps text-label-caps underline">오류 제보</span>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-lowest border border-outline-variant p-6 rounded flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-3">
+<span class="font-label-caps text-label-caps tracking-wider text-primary px-2 py-0.5 rounded border border-outline-variant bg-surface-container">공연예정</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">2025.05.02</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary mb-1">KBS교향악단 제805회 정기연주회</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4">롯데콘서트홀</p>
+<div class="bg-surface-container-low p-4 rounded border border-outline-variant/60 mb-4">
+<span class="font-label-caps text-label-caps text-secondary block mb-1">PROGRAM</span>
+<p class="font-program-title text-program-title text-primary">브람스: 교향곡 제4번 마단조, Op. 98</p>
+</div>
+</div>
+<div class="border-t border-outline-variant pt-3 flex items-center justify-between text-body-sm font-body-sm text-on-surface-variant">
+<span class="">R석 100,000원 | S석 80,000원</span>
+<span class="text-secondary font-label-caps text-label-caps underline">오류 제보</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer Underlay -->
+<footer class="w-full border-t border-outline-variant mt-16 py-12 px-6 md:px-8 max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+<span class="font-headline-sm text-headline-sm text-primary font-medium">OPUS INDEX</span>
+<p class="text-body-sm font-body-sm text-on-surface-variant">© 2025 OPUS INDEX. Dedicated to classical musical repertoire &amp; program curations.</p>
+</footer>
+</div>
+<!-- MODAL DIALOG OVERLAY (Level 3 Elevation) -->
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto bg-primary/45 backdrop-blur-[4px]">
+<!-- Modal Window Canvas (Refined Archival Paper Aesthetic) -->
+<div class="relative w-full max-w-[620px] bg-surface-container-lowest border border-outline-variant rounded shadow-[0_12px_40px_-8px_rgba(5,14,26,0.18)] my-8 overflow-hidden transform transition-all animate-in fade-in zoom-in-95 duration-200">
+<!-- Top Decorative Brass Hairline -->
+<div class="h-0.5 w-full bg-secondary"></div>
+<!-- Modal Header -->
+<div class="px-6 sm:px-8 pt-6 pb-4 border-b border-outline-variant/60 flex items-start justify-between gap-4">
+<div>
+<div class="flex items-center gap-2 mb-1.5">
+<span class="material-symbols-outlined text-secondary text-lg" data-icon="report">report</span>
+<h2 class="font-headline-md text-headline-md text-primary tracking-tight">프로그램 정보 오류 제보</h2>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+            잘못 기재된 작곡가, 곡목, 악장 또는 연주 편성 정보를 제보해 주시면 검토 후 즉시 반영됩니다.
+          </p>
+</div>
+<!-- Close Button (X) -->
+<button aria-label="닫기" class="text-on-surface-variant hover:text-primary transition-colors p-1.5 rounded-full hover:bg-surface-container-low shrink-0 mt-0.5" type="button">
+<span class="material-symbols-outlined text-xl block" data-icon="close">close</span>
+</button>
+</div>
+<!-- Modal Scrollable Content Area -->
+<div class="px-6 sm:px-8 py-6 space-y-6 max-h-[calc(85vh-160px)] overflow-y-auto">
+<!-- 1. Target Concert Info Summary (Read-only summary card) -->
+<section aria-labelledby="target-concert-title">
+<div class="bg-surface-container-low border border-outline-variant/80 rounded p-4 relative">
+<div class="flex items-center justify-between mb-2">
+<span class="font-label-caps text-label-caps text-secondary tracking-widest" id="target-concert-title">대상 공연 정보</span>
+<span class="inline-flex items-center gap-1 text-[11px] font-label-caps text-outline">
+<span class="material-symbols-outlined text-xs" data-icon="lock">lock</span>
+                수정 대상
+              </span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary font-medium leading-snug mb-1">
+              서울시향의 라흐마니노프 피아노 협주곡 2번
+            </h3>
+<div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-body-sm font-body-sm text-on-surface-variant">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-xs text-outline" data-icon="calendar_today">calendar_today</span>
+                2025.04.18 ~ 04.19
+              </span>
+<span class="text-outline-variant">•</span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-xs text-outline" data-icon="location_on">location_on</span>
+                예술의전당 콘서트홀
+              </span>
+</div>
+
+</div>
+</section>
+<!-- 2. Error Category Selection (오류 유형 선택) -->
+
+<!-- 3. Correction Input Fields -->
+<div class="space-y-4">
+<!-- Textarea: Correct program info -->
+<div>
+<label class="block font-label-caps text-label-caps text-primary tracking-wider mb-1.5" for="correction_details">
+              올바른 프로그램 정보 / 수정 요청 내용 <span class="text-secondary">*</span>
+</label>
+<textarea class="w-full text-body-md font-body-md text-on-surface placeholder:text-outline bg-surface-container-lowest border border-outline-variant rounded p-3 focus:border-secondary focus:ring-1 focus:ring-secondary transition-colors outline-none resize-none leading-relaxed" id="correction_details" placeholder="예: 등록된 작곡가가 브람스가 아닌 말러로 잘못 기재되어 있습니다. 또는 라흐마니노프 작품번호 18번 -&gt; 43번 오기 수정 요청." rows="4"></textarea>
+<p class="mt-1 text-[11px] font-body-sm text-outline flex items-center justify-between">
+<span class="">상세한 악장 번호나 작곡가 공식 표기를 적어주시면 빠른 처리에 도움이 됩니다.</span>
+<span class="">0 / 500자</span>
+</p>
+</div>
+<!-- Reference URL input -->
+<div>
+<label class="block font-label-caps text-label-caps text-primary tracking-wider mb-1.5" for="reference_url">
+              참고 링크 / 근거 <span class="text-outline font-normal">(선택사항)</span>
+</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-outline">
+<span class="material-symbols-outlined text-base" data-icon="link">link</span>
+</div>
+<input class="w-full pl-9 pr-3 py-2.5 text-body-md font-body-md text-on-surface placeholder:text-outline bg-surface-container-lowest border border-outline-variant rounded focus:border-secondary focus:ring-1 focus:ring-secondary transition-colors outline-none" id="reference_url" placeholder="공식 기획사 공지 링크 또는 예매처 상세 페이지 URL" type="url">
+</div>
+</div>
+</div>
+<!-- 4. Contact / Notification (선택사항) -->
+<div class="pt-2 border-t border-outline-variant/60">
+<label class="block font-label-caps text-label-caps text-primary tracking-wider mb-1.5" for="notifier_email">
+            처리 결과 알림 이메일 <span class="text-outline font-normal">(선택사항)</span>
+</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-outline">
+<span class="material-symbols-outlined text-base" data-icon="mail">mail</span>
+</div>
+<input class="w-full pl-9 pr-3 py-2 text-body-md font-body-md text-on-surface placeholder:text-outline bg-surface-container-lowest border border-outline-variant rounded focus:border-secondary focus:ring-1 focus:ring-secondary transition-colors outline-none" id="notifier_email" placeholder="name@example.com" type="email">
+</div>
+<p class="mt-1 text-[11px] font-body-sm text-outline">
+            검토 완료 및 아카이브 수정 반영 시 1회성 알림 메일이 발송됩니다.
+          </p>
+</div>
+</div>
+<!-- 5. Modal Footer Action Buttons -->
+<div class="px-6 sm:px-8 py-4 bg-surface-container-low border-t border-outline-variant/70 flex items-center justify-end gap-3">
+<button class="px-5 py-2.5 border border-primary text-primary hover:bg-primary/5 active:opacity-80 rounded text-label-md font-label-md transition-colors duration-150" type="button">
+          취소
+        </button>
+<button class="px-6 py-2.5 bg-primary text-on-primary hover:bg-primary-container active:opacity-80 rounded text-label-md font-label-md tracking-wide transition-colors duration-150 flex items-center gap-1.5 shadow-sm" type="button">
+<span class="material-symbols-outlined text-base" data-icon="send">send</span>
+<span class="">제보 접수하기</span>
+</button>
+</div>
+</div>
+</div>
+
+
+</body></html>
