@@ -95,6 +95,25 @@ export const createSyncPerformanceData = ({
       updateEndDate,
     );
 
+    // 1.5 분류 결과 로그 — 신규/수정/삭제 공연의 id를 실행 로그에 남겨 추적한다.
+    // idsToInsert·idsToUpdate는 중복 제거 전의 원본 분류로, Slack 요약의 건수와 동일한 기준이다.
+    // 삭제는 5.5 단계에서 실행되며, 실패 시 [DELETE_FAIL] + artifact로 확인할 수 있다.
+    if (idsToInsert.length > 0) {
+      log.info(
+        `[SYNC_IDS] 신규 공연 ${idsToInsert.length}건 — ids: ${idsToInsert.join(", ")}`,
+      );
+    }
+    if (idsToUpdate.length > 0) {
+      log.info(
+        `[SYNC_IDS] 수정 공연 ${idsToUpdate.length}건 — ids: ${idsToUpdate.join(", ")}`,
+      );
+    }
+    if (idsToDelete.length > 0) {
+      log.info(
+        `[SYNC_IDS] 삭제 공연 ${idsToDelete.length}건 — ids: ${idsToDelete.join(", ")}`,
+      );
+    }
+
     // 2. Transform 단계 (공연 1건 = 이미지 페칭 + 가공 묶음을 동시 5건씩 병렬 처리)
     // 실행당 API 사용량 집계기 — 1차 패스와 재시도가 같은 객체에 누적한다.
     const apiUsage: ApiUsage = {

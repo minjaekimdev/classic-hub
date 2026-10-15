@@ -510,4 +510,42 @@ describe("syncPerformances 오케스트레이션 테스트", () => {
     // 삭제 실패와 무관하게 insert는 정상 완료된다.
     expect(summary.insertSucceeded).toBe(true);
   });
+
+  it("extract 분류 결과로 신규/수정/삭제 공연의 id를 로그에 출력한다", async () => {
+    const deps = makeDeps({
+      extractPerformances: vi.fn().mockResolvedValue({
+        performances: [makeDetail("PF1")],
+        idsToDelete: ["PF_OLD1", "PF_OLD2"],
+        idsToInsert: ["PF1", "PF2"],
+        idsToUpdate: ["PF2"],
+        detailFetchFailures: [],
+      }),
+      transformPerformances: vi
+        .fn()
+        .mockImplementation((p: PerformanceDetail) =>
+          Promise.resolve(successResult(p.mt20id)),
+        ),
+    });
+    await run(deps);
+
+    expect(deps.log.info).toHaveBeenCalledWith(
+      "[SYNC_IDS] 신규 공연 2건 — ids: PF1, PF2",
+    );
+    expect(deps.log.info).toHaveBeenCalledWith(
+      "[SYNC_IDS] 수정 공연 1건 — ids: PF2",
+    );
+    expect(deps.log.info).toHaveBeenCalledWith(
+      "[SYNC_IDS] 삭제 공연 2건 — ids: PF_OLD1, PF_OLD2",
+    );
+  });
+
+  it("분류 대상이 없는 카테고리는 SYNC_IDS 로그를 출력하지 않는다", async () => {
+    const deps = makeDeps();
+    await run(deps);
+
+    const syncIdsLogs = vi
+      .mocked(deps.log.info)
+      .mock.calls.filter(([msg]) => String(msg).includes("[SYNC_IDS]"));
+    expect(syncIdsLogs).toHaveLength(0);
+  });
 });
