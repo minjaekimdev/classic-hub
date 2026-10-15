@@ -103,7 +103,10 @@ export const insertData = async <T>(
   data: T,
   onConflict: string,
 ) => {
-  const { error } = await supabase.from(table).upsert(data, { onConflict });
+  // 제네릭 T를 supabase의 조건부 타입(RejectExcessProperties)이 받아들이지 못하므로 캐스팅으로 회피한다.
+  const { error } = await supabase
+    .from(table)
+    .upsert(data as never, { onConflict });
 
   if (error) {
     throw new APIError(`DB insert failed: ${error.message}`);
