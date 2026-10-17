@@ -8,6 +8,11 @@ pre-commit:
       glob: "{packages/backend/**/*,packages/shared/**/*}"
       run: npm test --prefix packages/backend -- run --exclude '**/*.integration.test.ts'
 
+    spec-annotations:
+      # frontend-v2 specs 정책 추적 주석 검증 (경고 전용 — 커밋은 허용)
+      glob: "packages/frontend-v2/src/**/*.{ts,tsx}"
+      run: node scripts/check-spec-annotations.mjs
+
 pre-push:
   parallel: true
   commands:
@@ -18,8 +23,8 @@ pre-push:
 
     frontend-check:
       # 프론트엔드 코드나 shared가 바뀌었을 때 실행
-      glob: "{packages/frontend/**/*,packages/shared/**/*}"
-      run: npx turbo run build --filter=frontend
+      glob: "{packages/frontend-v2/**/*,packages/shared/**/*}"
+      run: npx turbo run build --filter=frontend-v2
 
     syncpack:
       # 의존성 버전 불일치 검사 (package.json이 바뀐 push에서만)

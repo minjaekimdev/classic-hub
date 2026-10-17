@@ -43,6 +43,7 @@ export const programExtractionSchema = z
     (items) =>
       items.every(
         (item) =>
+          // 다음 정보 중 최소 한 가지라도 갖고 있으면 통과이다. (모두 만족하지 않는 경우를 프롬프트에서 제한하므로)
           item.composerKo !== null ||
           item.composerEn !== null ||
           item.workTitleKr.length > 0 ||

@@ -1,0 +1,81 @@
+<!DOCTYPE html><html lang="ko" class="h-full" style=""><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OPUS - 전체 연주 프로그램 호버 팝오버 UI</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&amp;family=Noto+Serif+KR:wght@300;400;500;600;700&amp;family=Noto+Sans+KR:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            surface: '#f9f9fd',
+            'surface-dim': '#d9dade',
+            'surface-bright': '#f9f9fd',
+            'surface-container-lowest': '#ffffff',
+            'surface-container-low': '#f3f3f7',
+            'surface-container': '#eeeff3',
+            'surface-container-high': '#e8e8ed',
+            'surface-container-highest': '#e2e2e7',
+            'on-surface': '#191c20',
+            'on-surface-variant': '#44474e',
+            outline: '#74777f',
+            'outline-variant': '#c4c6d0',
+            primary: '#1b2430',
+            'on-primary': '#ffffff',
+            'primary-container': '#313a48',
+            secondary: '#8a6d3b',
+            'secondary-container': '#f5ede0',
+            'on-secondary-container': '#4a3718',
+          },
+          fontFamily: {
+            serif: ['"Playfair Display"', '"Noto Serif KR"', 'serif'],
+            sans: ['"Noto Sans KR"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+    }
+  </style>
+</head>
+<body class="bg-slate-100 min-h-screen flex items-center justify-center p-6 md:p-12 font-sans antialiased text-on-surface">
+
+  <!-- 메인 단독 팝오버 컨테이너 -->
+  <div class="w-full max-w-lg bg-surface-container-lowest border border-outline/30 rounded-lg shadow-2xl overflow-hidden">
+    
+    <!-- 팝오버 헤더 -->
+    <div class="px-5 py-3.5 bg-surface-container-low border-b border-outline-variant/50 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-secondary text-lg">queue_music</span>
+        <span class="text-xs font-semibold tracking-wider text-primary uppercase">전체 연주 프로그램 (작곡가별 프로그램)</span>
+      </div>
+      <span class="text-[11px] text-on-surface-variant bg-surface-container-high/80 px-2 py-0.5 rounded font-medium">상세 곡목</span>
+    </div>
+
+    <!-- 프로그램 곡 목록 (선택된 요소의 원본 구조 및 텍스트 완벽 반영) -->
+    <div class="p-5 space-y-3.5 text-xs"><div class="pb-4 border-b border-outline-variant/30 space-y-2"><div class="flex items-baseline justify-between"><h4 class="font-serif font-semibold text-sm text-primary tracking-wide">리하르트 바그너</h4><span class="text-[11px] font-serif italic text-on-surface-variant/80">Richard Wagner</span></div><div class="pl-3 border-l-2 border-outline-variant/30 space-y-2"><div class="space-y-0.5"><p class="font-serif font-medium text-xs text-primary">뉘른베르크의 마이스터징거 전주곡</p><p class="text-[11px] text-on-surface-variant/80 italic font-serif">Die Meistersinger von Nürnberg: Prelude to Act I, WWV 96</p></div></div></div><div class="pb-4 border-b border-outline-variant/30 space-y-2"><div class="flex items-baseline justify-between"><h4 class="font-serif font-semibold text-sm text-primary tracking-wide">세르게이 라흐마니노프</h4><span class="text-[11px] font-serif italic text-on-surface-variant/80">Sergei Rachmaninoff</span></div><div class="pl-3 border-l-2 border-outline-variant/30 space-y-3"><div class="space-y-0.5"><p class="font-serif font-medium text-xs text-primary">피아노 협주곡 2번 다단조, 작품번호 18</p><p class="text-[11px] text-on-surface-variant/80 italic font-serif">Piano Concerto No. 2 in C minor, Op. 18</p></div><div class="space-y-0.5"><p class="font-serif font-medium text-xs text-primary">회화적 연습곡, 작품번호 39 중 제5곡 내림마단조 '아파쇼나토'</p><p class="text-[11px] text-on-surface-variant/80 italic font-serif">Études-Tableaux, Op. 39: No. 5 in E-flat minor 'Appassionato'</p></div></div></div><div class="space-y-2"><div class="flex items-baseline justify-between"><h4 class="font-serif font-semibold text-sm text-primary tracking-wide">요하네스 브람스</h4><span class="text-[11px] font-serif italic text-on-surface-variant/80">Johannes Brahms</span></div><div class="pl-3 border-l-2 border-outline-variant/30 space-y-2"><div class="space-y-0.5"><p class="font-serif font-medium text-xs text-primary">비극적 서곡, 작품번호 81</p><p class="text-[11px] text-on-surface-variant/80 italic font-serif">Tragic Overture in D minor, Op. 81</p></div></div></div></div>
+
+    <!-- 팝오버 푸터 -->
+    <div class="px-5 py-2.5 bg-surface-container-low border-t border-outline-variant/50 flex items-center justify-between text-[11px] text-on-surface-variant">
+      <div class="flex items-center gap-1.5">
+        <span class="material-symbols-outlined text-sm">schedule</span>
+        <span class="">공연 러닝타임: 약 110분</span>
+      </div>
+      
+    </div>
+
+  </div>
+
+
+
+
+
+
+</body></html>

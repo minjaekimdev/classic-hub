@@ -1,0 +1,590 @@
+<!DOCTYPE html><html class="light" lang="ko" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+<title>OPUS INDEX — 클래식 프로그램 검색 &amp; 공연 정보</title>
+<!-- Google Fonts: Playfair Display & Hanken Grotesk -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&amp;family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&amp;display=swap" rel="stylesheet">
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "tertiary": "#270005",
+            "primary": "#050e1a",
+            "primary-fixed": "#dae3f4",
+            "secondary-container": "#fecc82",
+            "on-error": "#ffffff",
+            "surface-container-lowest": "#ffffff",
+            "on-tertiary-container": "#c87277",
+            "secondary-fixed": "#ffddaf",
+            "surface-container-low": "#f3f3f7",
+            "background": "#f9f8f5",
+            "on-background": "#1a1c1f",
+            "on-primary-container": "#828b9a",
+            "surface": "#f9f8f5",
+            "surface-variant": "#e2e2e6",
+            "secondary": "#7c5818",
+            "on-tertiary-fixed-variant": "#753137",
+            "inverse-primary": "#bec7d7",
+            "surface-container": "#ededf2",
+            "on-tertiary": "#ffffff",
+            "outline": "#75777c",
+            "on-surface": "#1a1c1f",
+            "tertiary-fixed": "#ffdada",
+            "on-secondary-container": "#795516",
+            "tertiary-container": "#480d16",
+            "on-error-container": "#93000a",
+            "inverse-on-surface": "#f0f0f4",
+            "on-primary-fixed": "#131c28",
+            "on-primary-fixed-variant": "#3e4755",
+            "on-secondary": "#ffffff",
+            "surface-bright": "#f9f8f5",
+            "surface-container-highest": "#e2e2e6",
+            "on-tertiary-fixed": "#3d050e",
+            "error": "#ba1a1a",
+            "surface-container-high": "#e8e8ec",
+            "primary-container": "#1b2430",
+            "on-secondary-fixed-variant": "#614000",
+            "outline-variant": "#e7e4dc",
+            "primary-fixed-dim": "#bec7d7",
+            "tertiary-fixed-dim": "#ffb3b6",
+            "surface-dim": "#d9dade",
+            "on-surface-variant": "#44474c",
+            "error-container": "#ffdad6",
+            "secondary-fixed-dim": "#efbe76",
+            "inverse-surface": "#2f3034",
+            "on-primary": "#ffffff",
+            "on-secondary-fixed": "#281800",
+            "surface-tint": "#565f6d"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "fontFamily": {
+            "label-caps": ["Hanken Grotesk"],
+            "program-title": ["Playfair Display"],
+            "display-hero": ["Playfair Display"],
+            "headline-md": ["Playfair Display"],
+            "headline-sm": ["Playfair Display"],
+            "headline-lg-mobile": ["Playfair Display"],
+            "display-hero-mobile": ["Playfair Display"],
+            "label-md": ["Hanken Grotesk"],
+            "body-lg": ["Hanken Grotesk"],
+            "body-md": ["Hanken Grotesk"],
+            "headline-lg": ["Playfair Display"],
+            "body-sm": ["Hanken Grotesk"]
+          },
+          "fontSize": {
+            "label-caps": [
+              "11px",
+              {
+                "lineHeight": "16px",
+                "letterSpacing": "0.1em",
+                "fontWeight": "600"
+              }
+            ],
+            "program-title": [
+              "17px",
+              {
+                "lineHeight": "24px",
+                "letterSpacing": "0.01em",
+                "fontWeight": "500"
+              }
+            ],
+            "display-hero": [
+              "48px",
+              {
+                "lineHeight": "56px",
+                "letterSpacing": "-0.02em",
+                "fontWeight": "600"
+              }
+            ],
+            "headline-md": [
+              "22px",
+              {
+                "lineHeight": "30px",
+                "letterSpacing": "0em",
+                "fontWeight": "500"
+              }
+            ],
+            "headline-sm": [
+              "18px",
+              {
+                "lineHeight": "26px",
+                "letterSpacing": "0em",
+                "fontWeight": "600"
+              }
+            ],
+            "headline-lg-mobile": [
+              "24px",
+              {
+                "lineHeight": "32px",
+                "letterSpacing": "0em",
+                "fontWeight": "600"
+              }
+            ],
+            "display-hero-mobile": [
+              "32px",
+              {
+                "lineHeight": "40px",
+                "letterSpacing": "-0.01em",
+                "fontWeight": "600"
+              }
+            ],
+            "label-md": [
+              "13px",
+              {
+                "lineHeight": "18px",
+                "letterSpacing": "0.04em",
+                "fontWeight": "600"
+              }
+            ],
+            "body-lg": [
+              "16px",
+              {
+                "lineHeight": "26px",
+                "letterSpacing": "-0.005em",
+                "fontWeight": "400"
+              }
+            ],
+            "body-md": [
+              "14px",
+              {
+                "lineHeight": "22px",
+                "letterSpacing": "0em",
+                "fontWeight": "400"
+              }
+            ],
+            "headline-lg": [
+              "32px",
+              {
+                "lineHeight": "40px",
+                "letterSpacing": "-0.01em",
+                "fontWeight": "600"
+              }
+            ],
+            "body-sm": [
+              "12px",
+              {
+                "lineHeight": "18px",
+                "letterSpacing": "0.01em",
+                "fontWeight": "400"
+              }
+            ]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+      font-size: 18px;
+      line-height: 1;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    body {
+      background-color: #f9f8f5;
+      color: #1a1c1f;
+      -webkit-font-smoothing: antialiased;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface min-h-screen flex flex-col selection:bg-secondary-fixed selection:text-on-secondary-fixed">
+<!-- 1. Header / Top Bar -->
+<header class="w-full bg-surface border-b border-outline-variant sticky top-0 z-30">
+<div class="px-4 py-3.5 flex items-center justify-between gap-2">
+<!-- Brand Wordmark -->
+<a class="font-program-title text-headline-sm tracking-widest text-primary font-semibold" href="#">
+        OPUS
+      </a>
+<!-- Compact Meta Badge -->
+<div class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-surface-container-low border border-outline-variant rounded-lg">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+<span class="font-label-caps text-[10px] tracking-tight text-on-surface-variant leading-none">
+          향후 3개월간 공연 편성 데이터 탐색 가능
+        </span>
+</div><button type="button" aria-label="서비스 피드백 보내기" class="inline-flex items-center gap-1 px-2.5 py-1 bg-surface-container-lowest border border-outline-variant rounded-lg font-label-md text-[11px] text-primary hover:border-secondary hover:text-secondary transition-colors cursor-pointer"><span class="material-symbols-outlined text-[14px] text-secondary">rate_review</span><span class="font-medium">피드백</span></button>
+</div>
+</header>
+<!-- Main Content Canvas (Mobile Optimized) -->
+<main class="flex-1 w-full max-w-lg mx-auto px-4 pt-6 pb-12 flex flex-col gap-6">
+<!-- 2. Search & Editorial Hero Area -->
+<section class="flex flex-col gap-3">
+<div class="flex flex-col gap-1.5">
+<span class="font-label-caps text-label-caps tracking-widest text-secondary uppercase">
+          CLASSICAL MUSIC REPERTOIRE INDEX
+        </span>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary font-semibold leading-tight">
+          프로그램과 연주곡으로 찾는<br>클래식 콘서트
+        </h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+          작곡가, 작품명, 연주자 등으로 엄선된 실황 공연을 탐색하세요.
+        </p>
+</div>
+<!-- Search Box with Query '라흐' -->
+<div class="mt-2 w-full">
+<div class="relative flex items-center bg-surface-container-lowest border border-outline-variant rounded-lg shadow-sm focus-within:border-secondary transition-all">
+<div class="pl-3.5 pr-1 text-on-surface-variant flex items-center">
+<span class="material-symbols-outlined text-outline">search</span>
+</div>
+<input class="w-full py-3.5 pl-2 pr-20 bg-transparent font-body-md text-body-md text-primary focus:outline-none placeholder:text-outline" placeholder="예: 라흐마니노프 / 조성진 / 베토벤" type="text" value="라흐">
+<div class="absolute right-1.5 flex items-center gap-1">
+<!-- Clear Button -->
+<button aria-label="입력 초기화" class="p-1.5 text-outline hover:text-primary transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]">close</span>
+</button>
+<!-- Submit Button -->
+<button class="px-3 py-1.5 bg-primary-container text-surface-container-lowest font-label-md text-label-md rounded hover:bg-primary transition-colors" type="button">
+              검색
+            </button>
+</div>
+</div>
+</div>
+</section>
+<!-- 3. Filter & Results Status Bar -->
+<section class="flex flex-col gap-3 pt-2 border-t border-outline-variant/60">
+<!-- Status Tabs & Date Filter Bar -->
+<div class="flex items-center justify-between gap-2 flex-wrap">
+<!-- Status Tabs: '공연중 (2)', '공연예정 (1)' -->
+<div class="flex items-center gap-1.5">
+<button class="px-3 py-1.5 bg-primary-container text-surface-container-lowest font-label-md text-label-md rounded transition-colors">
+            공연중 (2)
+          </button>
+<button class="px-3 py-1.5 bg-surface-container-lowest border border-outline-variant text-on-surface-variant font-label-md text-label-md rounded hover:border-outline transition-colors">
+            공연예정 (1)
+          </button>
+</div>
+<!-- Date Range Filter Picker Button -->
+<div class="flex items-center gap-1">
+<button class="inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-surface-container-lowest border border-outline-variant rounded font-body-sm text-[12px] text-on-surface hover:border-outline transition-colors">
+<span class="material-symbols-outlined text-[15px] text-secondary">calendar_today</span>
+<span class="">2025. 04. 01 ~ 2025. 06. 30</span>
+</button>
+<button class="p-1.5 bg-surface-container-lowest border border-outline-variant rounded text-outline hover:text-primary transition-colors" title="기간 초기화">
+<span class="material-symbols-outlined text-[15px]">refresh</span>
+</button>
+</div>
+</div>
+<!-- Result Count & Sort Info -->
+<div class="flex items-center justify-between text-body-sm text-on-surface-variant pt-1">
+<div>
+<span class="">검색 결과: </span>
+<strong class="font-medium text-primary">'라흐'</strong>
+<span class=""> (총 3건)</span>
+</div>
+<div class="relative inline-flex items-center"><label for="sort-order-select" class="sr-only">정렬 기준</label><select id="sort-order-select" class="appearance-none bg-surface-container-lowest border border-outline-variant rounded pl-2.5 pr-6 py-1 text-[12px] font-body-sm text-on-surface focus:outline-none focus-within:border-secondary transition-colors cursor-pointer"><option value="imminent" selected="">정렬: 공연임박순</option><option value="price_asc">정렬: 낮은 가격순</option><option value="price_desc">정렬: 높은 가격순</option></select><span class="pointer-events-none absolute right-1.5 text-outline material-symbols-outlined text-[15px]">expand_more</span></div>
+</div>
+</section>
+<!-- 4. Concert Card List (3 Cards) -->
+<section class="flex flex-col gap-6">
+<!-- CARD 1: 서울시향의 라흐마니노프 피아노 협주곡 2번 -->
+<article class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm flex flex-col">
+<!-- Poster & Venue Container -->
+<div class="relative bg-surface-container-low border-b border-outline-variant">
+<!-- Status Badge -->
+<div class="absolute top-3 left-3 z-10">
+<span class="inline-block px-2 py-0.5 bg-[#9b733215] text-[#9b7332] border border-[#9b733240] rounded font-label-caps text-label-caps">
+              공연중
+            </span>
+</div>
+<!-- Poster Image (Vertical Paper Ratio 1:1.414 Mobile Framing) -->
+<div class="w-full h-80 overflow-hidden flex items-center justify-center bg-[#131c28] p-2"><img class="w-full h-full object-contain" data-alt="An authentic high-culture classical concert poster for Sergei Rachmaninoff Piano Concerto No. 2, featuring refined typography on aged cotton paper background with deep charcoal shadows, archival warm brass accents, and subtle symphony hall architectural silhouettes. The mood is timeless, restrained, and contemplative." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB6huPfXlASiiABEryWyqu5n57Xp8ZgPF6p3na_DU3BQbN9wrsv34myYBG5YetneHe-DHP6JEk-4lmQOxIHjVx3F2Ms7-Fy-U9PHCkQPW2JH3JGOHvH_NcxuJA9m9M8_2hk_fO1FwBMK4B4glaYwpTHXVOs44kzoIRCFZgCNbndlJSSAuhMNvTiCQvU-2Z5BCCf8nB9dXfBFZCdbxHXJbwPTpMx25hUA22E6plsfsUR1aC0SJKVHuM"></div>
+<!-- Venue & Address Bar below Poster -->
+<div class="p-3 bg-surface-container-low/60 border-t border-outline-variant/60 flex items-start gap-1.5">
+<span class="material-symbols-outlined text-outline text-[16px] mt-0.5">location_on</span>
+<div class="font-body-sm text-[12px] leading-snug text-on-surface-variant">
+<span class="font-medium text-primary">예술의전당 콘서트홀</span>
+<span class="text-outline"> / 서울특별시 서초구 남부순환로 2406</span>
+</div>
+</div>
+</div>
+<!-- Content Area -->
+<div class="p-4 flex flex-col gap-4">
+<!-- Header & Date -->
+<div class="flex flex-col gap-1.5">
+<h2 class="font-headline-sm text-headline-sm text-primary font-semibold leading-snug">
+              서울시향의 라흐마니노프 피아노 협주곡 2번
+            </h2>
+<div class="flex flex-col gap-0.5 font-body-sm text-[13px] text-on-surface-variant">
+<div class="flex items-center gap-1.5 text-primary font-medium">
+<span class="material-symbols-outlined text-[15px] text-secondary">schedule</span>
+<span class="">2025.04.18 (금) ~ 04.19 (토)</span>
+</div>
+<p class="pl-5 text-outline">금 20:00, 토 17:00 (총 2회 공연)</p>
+</div>
+</div>
+<!-- Artists -->
+<div class="font-body-sm text-body-sm text-on-surface border-t border-b border-outline-variant/40 py-2.5">
+<span class="font-label-caps text-label-caps text-secondary uppercase block mb-1">아티스트 (ARTISTS)</span>
+<p class="font-medium text-primary">얍 판 츠베덴 · 임윤찬 · 서울시립교향악단</p>
+</div>
+<!-- Program Specification Box -->
+<div class="bg-surface p-3.5 rounded-lg border border-outline-variant/70 flex flex-col gap-2.5">
+<div class="flex items-center justify-between pb-2 border-b border-outline-variant/50"><span class="font-label-caps text-[10px] tracking-wider text-secondary uppercase font-semibold">PROGRAM</span><div class="flex items-center gap-1.5"><button type="button" class="inline-flex items-center gap-1 px-2 py-1 bg-surface-container-lowest border border-outline-variant rounded font-label-md text-[11px] text-primary hover:border-secondary hover:text-secondary transition-colors"><span class="material-symbols-outlined text-[13px] text-secondary">queue_music</span><span class="">전체 프로그램 보기</span></button><button type="button" class="inline-flex items-center gap-1 px-2 py-1 bg-surface-container-high border border-outline-variant rounded font-label-md text-[11px] text-on-surface hover:bg-primary hover:text-surface-container-lowest transition-colors"><span class="material-symbols-outlined text-[13px]">flag</span><span class="">오류 제보</span></button></div></div>
+<!-- Single Featured Work -->
+<div class="flex flex-col gap-0.5"><div class="flex flex-wrap items-center gap-1.5"><p class="font-program-title text-[15px] text-primary font-medium leading-snug">피아노 협주곡 2번 다단조, 작품번호 18</p><span class="font-body-sm text-[12px] text-on-surface-variant font-normal tracking-normal">(외 2곡)</span></div><p class="font-body-sm text-[12px] text-outline italic">Piano Concerto No. 2 in C minor, Op. 18</p></div>
+<!-- Summary Line -->
+
+<!-- Program Composers List -->
+<div class="text-[12px] text-on-surface-variant pt-1">
+<span class="text-outline">프로그램 작곡가:</span>
+<span class="font-medium text-primary"> 세르게이 라흐마니노프 · 요하네스 브람스 · 리하르트 바그너</span>
+</div>
+</div>
+<!-- Concert Detailed Specs -->
+<div class="bg-surface-container-low/40 p-3 rounded text-[12px] font-body-sm flex flex-col gap-1 text-on-surface-variant">
+<div class="flex items-center justify-between">
+<span class="text-outline">러닝타임</span>
+<span class="text-primary font-medium">110분 (인터미션 20분 포함)</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-outline">관람연령</span>
+<span class="text-primary">초등학생 이상 관람가 (만 7세 이상)</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-outline">공연 장소</span>
+<span class="text-primary">예술의전당 콘서트홀</span>
+</div>
+<div class="pt-1.5 mt-1 border-t border-outline-variant/40 text-[11px] text-outline">
+              R석 150,000원 | S석 110,000원 | A석 80,000원 | B석 50,000원 | C석 30,000원
+            </div>
+</div>
+<!-- Booking Actions -->
+<div class="pt-1 flex flex-col gap-2">
+<div class="flex items-center justify-between text-[11px] text-outline">
+
+
+</div>
+<a class="w-full py-3 bg-primary-container text-surface-container-lowest font-label-md text-label-md rounded flex items-center justify-center gap-2 hover:bg-primary transition-colors" href="#">
+<span class="">예매처 바로가기</span>
+<span class="material-symbols-outlined text-[16px]">open_in_new</span>
+</a>
+</div>
+</div>
+</article>
+<!-- CARD 2: KBS교향악단 제802회 정기연주회 -->
+<article class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm flex flex-col">
+<!-- Poster & Venue Container -->
+<div class="relative bg-surface-container-low border-b border-outline-variant">
+<!-- Status Badge -->
+<div class="absolute top-3 left-3 z-10">
+<span class="inline-block px-2 py-0.5 bg-[#9b733215] text-[#9b7332] border border-[#9b733240] rounded font-label-caps text-label-caps">
+              공연중
+            </span>
+</div>
+<!-- Poster Image -->
+<div class="w-full h-80 overflow-hidden flex items-center justify-center bg-[#131c28] p-2"><img class="w-full h-full object-contain" data-alt="A striking minimalist physical playbill aesthetic poster for KBS Symphony Orchestra Masterworks concert, incorporating vintage classical typography, subtle concert hall acoustic wood motifs, and charcoal ink on textured ivory cotton stock." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDsy5INk3MVNsfG5yCYtkrJwvNjhO6kIBNZvr3-mt0go8l6GpUMH7szB3PXSl_UF8DRA2_Uyfxv4G8fjEFLb5XwEU1B9-se5pe9ojvGRyusv43tVleIxoX6niy6e3UKExvgyEyUsBdwTFdD0G01enhmF3s-bIPOn0d9VCtnF0cruV-khTPOB5S3X2d356Mk3CYC0nk7m7kE7YaYOUxEn3kz-YkfRd-rm112JHL_JzVjyuUPNqFFLM8"></div>
+<!-- Venue & Address Bar below Poster -->
+<div class="p-3 bg-surface-container-low/60 border-t border-outline-variant/60 flex items-start gap-1.5">
+<span class="material-symbols-outlined text-outline text-[16px] mt-0.5">location_on</span>
+<div class="font-body-sm text-[12px] leading-snug text-on-surface-variant">
+<span class="font-medium text-primary">롯데콘서트홀</span>
+<span class="text-outline"> / 서울특별시 송파구 올림픽로 300 롯데월드몰 8층</span>
+</div>
+</div>
+</div>
+<!-- Content Area -->
+<div class="p-4 flex flex-col gap-4">
+<!-- Header & Date -->
+<div class="flex flex-col gap-1.5">
+<h2 class="font-headline-sm text-headline-sm text-primary font-semibold leading-snug">
+              KBS교향악단 제802회 정기연주회
+            </h2>
+<div class="flex flex-col gap-0.5 font-body-sm text-[13px] text-on-surface-variant">
+<div class="flex items-center gap-1.5 text-primary font-medium">
+<span class="material-symbols-outlined text-[15px] text-secondary">schedule</span>
+<span class="">2025.05.23 (금)</span>
+</div>
+<p class="pl-5 text-outline">금 20:00 (총 1회 공연)</p>
+</div>
+</div>
+<!-- Artists -->
+<div class="font-body-sm text-body-sm text-on-surface border-t border-b border-outline-variant/40 py-2.5">
+<span class="font-label-caps text-label-caps text-secondary uppercase block mb-1">아티스트 (ARTISTS)</span>
+<p class="font-medium text-primary">피에타리 잉키넨 · 선우예권 · KBS교향악단</p>
+</div>
+<!-- Program Specification Box -->
+<div class="bg-surface p-3.5 rounded-lg border border-outline-variant/70 flex flex-col gap-2.5">
+<div class="flex items-center justify-between pb-2 border-b border-outline-variant/50"><span class="font-label-caps text-[10px] tracking-wider text-secondary uppercase font-semibold">PROGRAM</span><div class="flex items-center gap-1.5"><button type="button" class="inline-flex items-center gap-1 px-2 py-1 bg-surface-container-lowest border border-outline-variant rounded font-label-md text-[11px] text-primary hover:border-secondary hover:text-secondary transition-colors"><span class="material-symbols-outlined text-[13px] text-secondary">queue_music</span><span class="">전체 프로그램 보기</span></button><button type="button" class="inline-flex items-center gap-1 px-2 py-1 bg-surface-container-high border border-outline-variant rounded font-label-md text-[11px] text-on-surface hover:bg-primary hover:text-surface-container-lowest transition-colors"><span class="material-symbols-outlined text-[13px]">flag</span><span class="">오류 제보</span></button></div></div>
+<!-- Single Featured Work -->
+<div class="flex flex-col gap-0.5"><div class="flex flex-wrap items-center gap-1.5"><p class="font-program-title text-[15px] text-primary font-medium leading-snug">피아노 협주곡 3번 라단조, 작품번호 30</p><span class="font-body-sm text-[12px] text-on-surface-variant font-normal tracking-normal">(외 2곡)</span></div><p class="font-body-sm text-[12px] text-outline italic">Piano Concerto No. 3 in D minor, Op. 30</p></div>
+<!-- Summary Line -->
+
+<!-- Program Composers List -->
+<div class="text-[12px] text-on-surface-variant pt-1">
+<span class="text-outline">프로그램 작곡가:</span>
+<span class="font-medium text-primary"> 세르게이 라흐마니노프 · 표트르 차이콥스키 · 장 시벨리우스</span>
+</div>
+</div>
+<!-- Concert Detailed Specs -->
+<div class="bg-surface-container-low/40 p-3 rounded text-[12px] font-body-sm flex flex-col gap-1 text-on-surface-variant">
+<div class="flex items-center justify-between">
+<span class="text-outline">러닝타임</span>
+<span class="text-primary font-medium">105분</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-outline">관람연령</span>
+<span class="text-primary">초등학생 이상</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-outline">공연 장소</span>
+<span class="text-primary">롯데콘서트홀</span>
+</div>
+<div class="pt-1.5 mt-1 border-t border-outline-variant/40 text-[11px] text-outline">
+              R석 120,000원 | S석 90,000원 | A석 60,000원 | B석 30,000원 | C석 10,000원
+            </div>
+</div>
+<!-- Booking Actions -->
+<div class="pt-1 flex flex-col gap-2">
+<div class="flex items-center justify-between text-[11px] text-outline">
+
+
+</div>
+<a class="w-full py-3 bg-primary-container text-surface-container-lowest font-label-md text-label-md rounded flex items-center justify-center gap-2 hover:bg-primary transition-colors" href="#">
+<span class="">예매처 바로가기</span>
+<span class="material-symbols-outlined text-[16px]">open_in_new</span>
+</a>
+</div>
+</div>
+</article>
+<!-- CARD 3: 조성진 & 사이먼 래틀 런던 심포니 오케스트라 -->
+<article class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm flex flex-col">
+<!-- Poster & Venue Container -->
+<div class="relative bg-surface-container-low border-b border-outline-variant">
+<!-- Status Badge (Upcoming) -->
+<div class="absolute top-3 left-3 z-10">
+<span class="inline-block px-2 py-0.5 bg-[#1b24300d] text-[#1b2430] border border-[#1b243020] rounded font-label-caps text-label-caps">
+              공연예정
+            </span>
+</div>
+<!-- Poster Image -->
+<div class="w-full h-80 overflow-hidden flex items-center justify-center bg-[#131c28] p-2"><img class="w-full h-full object-contain" data-alt="An elegant archival concert poster for Seong-Jin Cho and Sir Simon Rattle with the London Symphony Orchestra. Crisp serif typography in gold and warm off-white tones against deep midnight charcoal canvas, reflecting solemn and prestigious orchestral grandeur." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZy0XEEq0GzBaJRdtQYe5fCBWvV3Wk2B8XmgP2B44MMKMIzMdqJroFbt4iyxoLawVUoOcxx8CuKTDG5wQGKBcjuUePmxhB6blGtJC8FpIIdpHzZMfMoxdX96RjFP6A2uwQRXObYM3T4AWw5aIsBOfbcp1tOENpeNR2ZsHR33h4IpgFpfdReNo_NrIfeUS_jx-XGkcRIOu-6e0dMWxyopj-1nJ3AEnSY7c_CVHZs9w0jFMsnQgjl0k"></div>
+<!-- Venue & Address Bar below Poster -->
+<div class="p-3 bg-surface-container-low/60 border-t border-outline-variant/60 flex items-start gap-1.5">
+<span class="material-symbols-outlined text-outline text-[16px] mt-0.5">location_on</span>
+<div class="font-body-sm text-[12px] leading-snug text-on-surface-variant">
+<span class="font-medium text-primary">세종문화회관 대극장</span>
+<span class="text-outline"> / 서울특별시 종로구 세종대로 175</span>
+</div>
+</div>
+</div>
+<!-- Content Area -->
+<div class="p-4 flex flex-col gap-4">
+<!-- Header & Date -->
+<div class="flex flex-col gap-1.5">
+<h2 class="font-headline-sm text-headline-sm text-primary font-semibold leading-snug">
+              조성진 &amp; 사이먼 래틀 런던 심포니 오케스트라
+            </h2>
+<div class="flex flex-col gap-0.5 font-body-sm text-[13px] text-on-surface-variant">
+<div class="flex items-center gap-1.5 text-primary font-medium">
+<span class="material-symbols-outlined text-[15px] text-secondary">schedule</span>
+<span class="">2025.06.14 (토) ~ 06.15 (일)</span>
+</div>
+<p class="pl-5 text-outline">토 17:00, 일 15:00 (총 2회 공연)</p>
+</div>
+</div>
+<!-- Artists -->
+<div class="font-body-sm text-body-sm text-on-surface border-t border-b border-outline-variant/40 py-2.5">
+<span class="font-label-caps text-label-caps text-secondary uppercase block mb-1">아티스트 (ARTISTS)</span>
+<p class="font-medium text-primary">사이먼 래틀 · 조성진 · 런던 심포니 오케스트라</p>
+</div>
+<!-- Program Specification Box -->
+<div class="bg-surface p-3.5 rounded-lg border border-outline-variant/70 flex flex-col gap-2.5">
+<div class="flex items-center justify-between pb-2 border-b border-outline-variant/50"><span class="font-label-caps text-[10px] tracking-wider text-secondary uppercase font-semibold">PROGRAM</span><div class="flex items-center gap-1.5"><button type="button" class="inline-flex items-center gap-1 px-2 py-1 bg-surface-container-lowest border border-outline-variant rounded font-label-md text-[11px] text-primary hover:border-secondary hover:text-secondary transition-colors"><span class="material-symbols-outlined text-[13px] text-secondary">queue_music</span><span class="">전체 프로그램 보기</span></button><button type="button" class="inline-flex items-center gap-1 px-2 py-1 bg-surface-container-high border border-outline-variant rounded font-label-md text-[11px] text-on-surface hover:bg-primary hover:text-surface-container-lowest transition-colors"><span class="material-symbols-outlined text-[13px]">flag</span><span class="">오류 제보</span></button></div></div>
+<!-- Single Featured Work -->
+<div class="flex flex-col gap-0.5"><div class="flex flex-wrap items-center gap-1.5"><p class="font-program-title text-[15px] text-primary font-medium leading-snug">피아노 협주곡 3번 라단조, 작품번호 30</p><span class="font-body-sm text-[12px] text-on-surface-variant font-normal tracking-normal">(외 1곡)</span></div><p class="font-body-sm text-[12px] text-outline italic">Piano Concerto No. 3 in D minor, Op. 30</p></div>
+<!-- Summary Line -->
+
+<!-- Program Composers List -->
+<div class="text-[12px] text-on-surface-variant pt-1">
+<span class="text-outline">프로그램 작곡가:</span>
+<span class="font-medium text-primary"> 세르게이 라흐마니노프 · 구스타프 말러</span>
+</div>
+</div>
+<!-- Concert Detailed Specs -->
+<div class="bg-surface-container-low/40 p-3 rounded text-[12px] font-body-sm flex flex-col gap-1 text-on-surface-variant">
+<div class="flex items-center justify-between">
+<span class="text-outline">러닝타임</span>
+<span class="text-primary font-medium">120분</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-outline">관람연령</span>
+<span class="text-primary">초등학생 이상</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-outline">공연 장소</span>
+<span class="text-primary">세종문화회관 대극장</span>
+</div>
+<div class="pt-1.5 mt-1 border-t border-outline-variant/40 text-[11px] text-outline">
+              VIP석 380,000원 | R석 300,000원 | S석 220,000원 | A석 140,000원 | B석 80,000원
+            </div>
+</div>
+<!-- Booking Actions -->
+<div class="pt-1 flex flex-col gap-2">
+
+<a class="w-full py-3 bg-primary-container text-surface-container-lowest font-label-md text-label-md rounded flex items-center justify-center gap-2 hover:bg-primary transition-colors" href="#">
+<span class="">예매처 바로가기</span>
+<span class="material-symbols-outlined text-[16px]">open_in_new</span>
+</a>
+</div>
+</div>
+</article>
+</section>
+<!-- 5. Pagination Bar -->
+<nav aria-label="Pagination" class="w-full py-4 flex items-center justify-center gap-2">
+<button class="px-3 py-2 text-outline font-label-md text-label-md rounded border border-outline-variant/60 bg-surface-container-lowest opacity-50 cursor-not-allowed" disabled="">
+        이전 페이지
+      </button>
+<span class="w-9 h-9 flex items-center justify-center bg-primary-container text-surface-container-lowest font-label-md text-label-md rounded">
+        1
+      </span>
+<button class="px-3 py-2 text-outline font-label-md text-label-md rounded border border-outline-variant/60 bg-surface-container-lowest opacity-50 cursor-not-allowed" disabled="">
+        다음 페이지
+      </button>
+</nav>
+<!-- 5-1. Pagination Design Spec: 다중 페이지 상태 (디자인 참고용) -->
+<div class="w-full pt-4 pb-3 flex flex-col items-center gap-2.5">
+<span class="inline-flex items-center font-label-caps text-label-caps text-outline uppercase tracking-wider border border-outline-variant/60 bg-surface-container-low px-2.5 py-1 rounded">Design Spec · 다중 페이지</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant text-center leading-relaxed">검색 결과가 여러 페이지일 때의 페이지네이션<br>(예시: 총 42건, 12페이지 중 4페이지)</p>
+</div>
+<nav aria-label="Pagination (다중 페이지)" class="w-full pb-6 flex items-center justify-center gap-1.5">
+<button class="px-3 py-2 text-on-surface-variant font-label-md text-label-md rounded border border-outline-variant/60 bg-surface-container-lowest hover:border-outline hover:text-primary transition-colors" type="button">이전</button>
+<button class="w-9 h-9 flex items-center justify-center font-label-md text-label-md rounded text-on-surface-variant hover:bg-surface-container transition-colors" type="button">3</button>
+<span class="w-9 h-9 flex items-center justify-center bg-primary-container text-surface-container-lowest font-label-md text-label-md rounded" aria-current="page">4</span>
+<button class="w-9 h-9 flex items-center justify-center font-label-md text-label-md rounded text-on-surface-variant hover:bg-surface-container transition-colors" type="button">5</button>
+<span class="px-0.5 font-label-md text-label-md text-outline-variant select-none">…</span>
+<button class="w-9 h-9 flex items-center justify-center font-label-md text-label-md rounded text-on-surface-variant hover:bg-surface-container transition-colors" type="button">12</button>
+<button class="px-3 py-2 text-on-surface-variant font-label-md text-label-md rounded border border-outline-variant/60 bg-surface-container-lowest hover:border-outline hover:text-primary transition-colors" type="button">다음</button>
+</nav>
+</main>
+<!-- Footer -->
+
+
+
+
+
+
+
+
+
+<footer class="w-full border-t border-outline-variant py-6 px-4 bg-surface text-center"><p class="font-body-sm text-[12px] text-outline leading-relaxed">이 서비스의 데이터 출처는 (주)공연예술통합전산망 입니다.</p></footer>
+
+</body></html>

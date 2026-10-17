@@ -9,7 +9,8 @@
   "scripts": {
     "prepare": "lefthook install",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "db:gen:remote": "supabase gen types typescript --project-id razltwjkvwqiyksaydcw > packages/shared/types/supabase.ts"
+    "db:gen:remote": "supabase gen types typescript --project-id razltwjkvwqiyksaydcw > packages/shared/types/supabase.ts",
+    "check:specs": "node scripts/check-spec-annotations.mjs --all"
   },
   "repository": {
     "type": "git",

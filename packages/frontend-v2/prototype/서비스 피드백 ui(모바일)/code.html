@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+
+<html class="light" lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>OPUS INDEX - 서비스 피드백 보내기</title>
+<!-- Google Fonts: Playfair Display & Hanken Grotesk -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,300..900;1,300..900&amp;family=Playfair+Display:ital,wght@0,400..900;1,400..900&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "secondary-container": "#fecc82",
+            "surface-variant": "#e2e2e6",
+            "primary-fixed-dim": "#bec7d7",
+            "primary-container": "#1b2430",
+            "error-container": "#ffdad6",
+            "surface-container-lowest": "#ffffff",
+            "on-secondary-fixed-variant": "#614000",
+            "on-secondary-container": "#795516",
+            "tertiary-fixed": "#ffdada",
+            "on-tertiary-fixed-variant": "#753137",
+            "inverse-surface": "#2f3034",
+            "tertiary": "#270005",
+            "on-primary-fixed": "#131c28",
+            "on-surface": "#1a1c1f",
+            "on-secondary-fixed": "#281800",
+            "surface-container-low": "#f3f3f7",
+            "tertiary-container": "#480d16",
+            "secondary": "#7c5818",
+            "secondary-fixed-dim": "#efbe76",
+            "tertiary-fixed-dim": "#ffb3b6",
+            "primary": "#050e1a",
+            "surface-bright": "#f9f9fd",
+            "surface-container-highest": "#e2e2e6",
+            "background": "#f9f9fd",
+            "on-secondary": "#ffffff",
+            "outline-variant": "#c5c6cc",
+            "on-surface-variant": "#44474c",
+            "surface-dim": "#d9dade",
+            "on-primary": "#ffffff",
+            "surface-container-high": "#e8e8ec",
+            "secondary-fixed": "#ffddaf",
+            "on-tertiary-fixed": "#3d050e",
+            "surface-container": "#ededf2",
+            "on-error": "#ffffff",
+            "inverse-primary": "#bec7d7",
+            "on-primary-container": "#828b9a",
+            "primary-fixed": "#dae3f4",
+            "on-tertiary": "#ffffff",
+            "on-tertiary-container": "#c87277",
+            "on-error-container": "#93000a",
+            "error": "#ba1a1a",
+            "inverse-on-surface": "#f0f0f4",
+            "surface": "#f9f9fd",
+            "on-primary-fixed-variant": "#3e4755",
+            "on-background": "#1a1c1f",
+            "outline": "#75777c",
+            "surface-tint": "#565f6d"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "gutter": "1.5rem",
+            "space-lg": "1.5rem",
+            "space-xl": "2.5rem",
+            "space-xs": "0.25rem",
+            "space-md": "1rem",
+            "space-sm": "0.5rem",
+            "margin": "2rem"
+          },
+          "fontFamily": {
+            "body-md": ["Hanken Grotesk"],
+            "label-caps": ["Hanken Grotesk"],
+            "headline-lg-mobile": ["Playfair Display"],
+            "display-hero-mobile": ["Playfair Display"],
+            "body-lg": ["Hanken Grotesk"],
+            "program-title": ["Playfair Display"],
+            "body-sm": ["Hanken Grotesk"],
+            "headline-md": ["Playfair Display"],
+            "display-hero": ["Playfair Display"],
+            "headline-lg": ["Playfair Display"],
+            "headline-sm": ["Playfair Display"],
+            "label-md": ["Hanken Grotesk"]
+          },
+          "fontSize": {
+            "body-md": ["14px", { "lineHeight": "22px", "letterSpacing": "0em", "fontWeight": "400" }],
+            "label-caps": ["11px", { "lineHeight": "16px", "letterSpacing": "0.1em", "fontWeight": "600" }],
+            "headline-lg-mobile": ["24px", { "lineHeight": "32px", "letterSpacing": "0em", "fontWeight": "600" }],
+            "display-hero-mobile": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "body-lg": ["16px", { "lineHeight": "26px", "letterSpacing": "-0.005em", "fontWeight": "400" }],
+            "program-title": ["17px", { "lineHeight": "24px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+            "body-sm": ["12px", { "lineHeight": "18px", "letterSpacing": "0.01em", "fontWeight": "400" }],
+            "headline-md": ["22px", { "lineHeight": "30px", "letterSpacing": "0em", "fontWeight": "500" }],
+            "display-hero": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+            "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "headline-sm": ["18px", { "lineHeight": "26px", "letterSpacing": "0em", "fontWeight": "600" }],
+            "label-md": ["13px", { "lineHeight": "18px", "letterSpacing": "0.04em", "fontWeight": "600" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-primary/40 font-body-md text-on-surface antialiased min-h-screen flex items-end justify-center backdrop-blur-sm p-0 sm:p-4">
+<!-- Mobile Screen Shell Container (Standard 390px mobile target) -->
+<div class="relative w-full max-w-[390px] h-[813px] max-h-[820px] bg-surface-container-lowest rounded-t-xl sm:rounded-xl shadow-2xl flex flex-col overflow-hidden border border-outline-variant/30">
+<!-- Drag Handle & Modal Header -->
+<header class="pt-3 pb-4 px-5 shrink-0 bg-surface-container-lowest border-b border-outline-variant/20 relative">
+<!-- Drag Handle Bar -->
+<div class="flex justify-center mb-3">
+<span class="w-10 h-1 bg-outline-variant/60 rounded-full inline-block cursor-grab active:cursor-grabbing"></span>
+</div>
+<div class="flex items-start justify-between gap-3">
+<div>
+<div class="flex items-center gap-1.5 mb-1">
+<span class="font-label-caps text-label-caps text-secondary tracking-widest uppercase">Curator's Note</span>
+</div>
+<h1 class="font-headline-sm text-headline-sm text-primary tracking-tight">서비스 피드백 보내기</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1 leading-relaxed">
+            OPUS를 더 나은 서비스로 만들기 위한 여러분의 소중한 의견을 들려주세요.
+          </p>
+</div>
+<!-- Close Button (Touch target 44px) -->
+<button aria-label="닫기" class="w-10 h-10 -mr-2 -mt-1 flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors rounded-full hover:bg-surface-container-low active:opacity-70" type="button">
+<span class="material-symbols-outlined text-[20px]" data-icon="close">close</span>
+</button>
+</div>
+</header>
+<!-- Scrollable Content Area -->
+<div class="flex-1 overflow-y-auto px-5 py-4 space-y-6 overscroll-contain">
+<!-- 1. 피드백 유형 선택 (Feedback Type Filter Chips) -->
+<section>
+<div class="flex items-center justify-between mb-2.5">
+<label class="font-label-md text-label-md text-primary flex items-center gap-1">
+            피드백 유형
+            <span class="text-secondary text-xs">*</span>
+</label>
+<span class="font-body-sm text-body-sm text-outline">단일 선택</span>
+</div>
+<!-- Interactive Category Chips -->
+<div aria-label="피드백 유형 선택" class="flex flex-wrap gap-2" role="radiogroup">
+<!-- Selected Chip: 기능 제안 -->
+<button aria-checked="true" class="h-9 px-3.5 rounded-lg border border-secondary bg-secondary/10 text-secondary font-label-md text-label-md flex items-center gap-1.5 transition-all" role="radio" type="button">
+<span class="material-symbols-outlined text-[16px]" data-icon="check_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+            기능 제안
+          </button>
+<button aria-checked="false" class="h-9 px-3.5 rounded-lg border border-outline-variant bg-surface text-on-surface hover:border-outline font-label-md text-label-md flex items-center gap-1.5 transition-all active:bg-surface-container" role="radio" type="button">
+            검색 편의성
+          </button>
+<button aria-checked="false" class="h-9 px-3.5 rounded-lg border border-outline-variant bg-surface text-on-surface hover:border-outline font-label-md text-label-md flex items-center gap-1.5 transition-all active:bg-surface-container" role="radio" type="button">
+            디자인/UI
+          </button>
+<button aria-checked="false" class="h-9 px-3.5 rounded-lg border border-outline-variant bg-surface text-on-surface hover:border-outline font-label-md text-label-md flex items-center gap-1.5 transition-all active:bg-surface-container" role="radio" type="button">
+            칭찬/응원
+          </button>
+<button aria-checked="false" class="h-9 px-3.5 rounded-lg border border-outline-variant bg-surface text-on-surface hover:border-outline font-label-md text-label-md flex items-center gap-1.5 transition-all active:bg-surface-container" role="radio" type="button">
+            기타
+          </button>
+</div>
+</section>
+<!-- 2. 서비스 만족도 (5점 척도 터치 타깃) -->
+<section class="bg-surface-container-low p-3.5 rounded-xl border border-outline-variant/30">
+<div class="flex items-center justify-between mb-2">
+<label class="font-label-md text-label-md text-primary">
+            서비스 전반적 만족도
+          </label>
+<span class="font-label-caps text-label-caps text-secondary font-semibold" id="score-text">5.0 / 최고예요</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-3">
+          클래식 프로그램 아카이브 탐색 경험은 어떠셨나요?
+        </p>
+<!-- 5-Point Rating Button Row (Min 44px touch targets) -->
+<div aria-label="만족도 5점 척도" class="grid grid-cols-5 gap-1.5" role="group">
+<button class="h-11 rounded-lg border border-outline-variant/40 bg-surface-container-lowest flex flex-col items-center justify-center hover:border-secondary transition-all active:scale-95 group" type="button">
+<span class="material-symbols-outlined text-outline group-hover:text-secondary text-[20px]" data-icon="sentiment_very_dissatisfied">sentiment_very_dissatisfied</span>
+<span class="font-label-caps text-[10px] text-outline mt-0.5">1점</span>
+</button>
+<button class="h-11 rounded-lg border border-outline-variant/40 bg-surface-container-lowest flex flex-col items-center justify-center hover:border-secondary transition-all active:scale-95 group" type="button">
+<span class="material-symbols-outlined text-outline group-hover:text-secondary text-[20px]" data-icon="sentiment_dissatisfied">sentiment_dissatisfied</span>
+<span class="font-label-caps text-[10px] text-outline mt-0.5">2점</span>
+</button>
+<button class="h-11 rounded-lg border border-outline-variant/40 bg-surface-container-lowest flex flex-col items-center justify-center hover:border-secondary transition-all active:scale-95 group" type="button">
+<span class="material-symbols-outlined text-outline group-hover:text-secondary text-[20px]" data-icon="sentiment_neutral">sentiment_neutral</span>
+<span class="font-label-caps text-[10px] text-outline mt-0.5">3점</span>
+</button>
+<button class="h-11 rounded-lg border border-outline-variant/40 bg-surface-container-lowest flex flex-col items-center justify-center hover:border-secondary transition-all active:scale-95 group" type="button">
+<span class="material-symbols-outlined text-outline group-hover:text-secondary text-[20px]" data-icon="sentiment_satisfied">sentiment_satisfied</span>
+<span class="font-label-caps text-[10px] text-outline mt-0.5">4점</span>
+</button>
+<!-- Active Rating State -->
+<button class="h-11 rounded-lg border-1.5 border-secondary bg-surface-container-lowest shadow-sm flex flex-col items-center justify-center ring-1 ring-secondary/30 transition-all active:scale-95" type="button">
+<span class="material-symbols-outlined text-secondary text-[20px]" data-icon="sentiment_very_satisfied" data-weight="fill" style="font-variation-settings: 'FILL' 1;">sentiment_very_satisfied</span>
+<span class="font-label-caps text-[10px] text-secondary font-semibold mt-0.5">5점</span>
+</button>
+</div>
+</section>
+<!-- 3. 피드백 상세 내용 (Textarea + Character Count) -->
+<section class="space-y-1.5">
+<div class="flex items-center justify-between">
+<label class="font-label-md text-label-md text-primary flex items-center gap-1" for="feedback-content">
+            의견 내용
+            <span class="text-secondary text-xs">*</span>
+</label>
+<span class="font-body-sm text-body-sm text-outline" id="char-counter">0 / 500</span>
+</div>
+<div class="relative">
+<textarea class="w-full bg-surface border border-outline-variant rounded-lg p-3.5 font-body-md text-body-md text-on-surface placeholder:text-outline focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary/20 resize-none transition-colors" id="feedback-content" maxlength="500" placeholder="개선되었으면 하는 점이나 필요한 기능, 응원의 메시지를 자유롭게 작성해주세요." rows="4"></textarea>
+</div>
+</section>
+<!-- 4. 이메일 주소 (선택 입력) -->
+<section class="space-y-1.5">
+<label class="font-label-md text-label-md text-primary flex items-center justify-between" for="feedback-email">
+<span>답변받을 이메일 <span class="font-normal text-on-surface-variant font-body-sm text-body-sm">(선택)</span></span>
+<span class="material-symbols-outlined text-outline text-[16px]" data-icon="mail">mail</span>
+</label>
+<input class="w-full h-11 bg-surface border border-outline-variant rounded-lg px-3.5 font-body-md text-body-md text-on-surface placeholder:text-outline focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary/20 transition-colors" id="feedback-email" placeholder="name@example.com" type="email"/>
+<p class="font-body-sm text-body-sm text-outline-variant mt-1">
+          작성해주신 제안에 대한 진행 상황 및 안내가 필요한 경우 회신드립니다.
+        </p>
+</section>
+</div>
+<!-- 5. 하단 고정 액션 (Fixed Bottom Action Row with safe touch areas) -->
+<footer class="p-4 bg-surface-container-lowest border-t border-outline-variant/20 shrink-0 grid grid-cols-3 gap-2.5">
+<!-- 취소 버튼 -->
+<button class="col-span-1 h-12 rounded-lg border border-outline-variant bg-transparent font-label-md text-label-md text-on-surface-variant hover:text-primary hover:bg-surface-container-low transition-colors flex items-center justify-center active:opacity-70" type="button">
+        취소
+      </button>
+<!-- 피드백 접수하기 버튼 (Primary solid deep charcoal) -->
+<button class="col-span-2 h-12 rounded-lg bg-primary-container text-on-primary font-label-md text-label-md hover:bg-primary transition-colors flex items-center justify-center gap-1.5 shadow-sm active:opacity-85" type="button">
+<span>피드백 접수하기</span>
+<span class="material-symbols-outlined text-[18px]" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</footer>
+</div>
+<!-- Inline Micro-interaction JS for live character counting -->
+<script>
+    const textarea = document.getElementById('feedback-content');
+    const counter = document.getElementById('char-counter');
+    if (textarea && counter) {
+      textarea.addEventListener('input', (e) => {
+        const length = e.target.value.length;
+        counter.textContent = `${length} / 500`;
+      });
+    }
+  </script>
+</body></html>

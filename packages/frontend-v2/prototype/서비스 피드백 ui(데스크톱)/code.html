@@ -1,0 +1,482 @@
+<!DOCTYPE html><html class="light" lang="ko"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>서비스 피드백 보내기 | OPUS INDEX</title>
+<!-- Google Fonts: Playfair Display & Hanken Grotesk -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&amp;family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;display=swap" rel="stylesheet">
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Theme Configuration verbatim -->
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "secondary-container": "#fecc82",
+            "surface-variant": "#e2e2e6",
+            "primary-fixed-dim": "#bec7d7",
+            "primary-container": "#1b2430",
+            "error-container": "#ffdad6",
+            "surface-container-lowest": "#ffffff",
+            "on-secondary-fixed-variant": "#614000",
+            "on-secondary-container": "#795516",
+            "tertiary-fixed": "#ffdada",
+            "on-tertiary-fixed-variant": "#753137",
+            "inverse-surface": "#2f3034",
+            "tertiary": "#270005",
+            "on-primary-fixed": "#131c28",
+            "on-surface": "#1a1c1f",
+            "on-secondary-fixed": "#281800",
+            "surface-container-low": "#f3f3f7",
+            "tertiary-container": "#480d16",
+            "secondary": "#7c5818",
+            "secondary-fixed-dim": "#efbe76",
+            "tertiary-fixed-dim": "#ffb3b6",
+            "primary": "#050e1a",
+            "surface-bright": "#f9f9fd",
+            "surface-container-highest": "#e2e2e6",
+            "background": "#f9f9fd",
+            "on-secondary": "#ffffff",
+            "outline-variant": "#c5c6cc",
+            "on-surface-variant": "#44474c",
+            "surface-dim": "#d9dade",
+            "on-primary": "#ffffff",
+            "surface-container-high": "#e8e8ec",
+            "secondary-fixed": "#ffddaf",
+            "on-tertiary-fixed": "#3d050e",
+            "surface-container": "#ededf2",
+            "on-error": "#ffffff",
+            "inverse-primary": "#bec7d7",
+            "on-primary-container": "#828b9a",
+            "primary-fixed": "#dae3f4",
+            "on-tertiary": "#ffffff",
+            "on-tertiary-container": "#c87277",
+            "on-error-container": "#93000a",
+            "error": "#ba1a1a",
+            "inverse-on-surface": "#f0f0f4",
+            "surface": "#f9f9fd",
+            "on-primary-fixed-variant": "#3e4755",
+            "on-background": "#1a1c1f",
+            "outline": "#75777c",
+            "surface-tint": "#565f6d"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "gutter": "1.5rem",
+            "space-lg": "1.5rem",
+            "space-xl": "2.5rem",
+            "space-xs": "0.25rem",
+            "space-md": "1rem",
+            "space-sm": "0.5rem",
+            "margin": "2rem"
+          },
+          "fontFamily": {
+            "body-md": [
+              "Hanken Grotesk"
+            ],
+            "label-caps": [
+              "Hanken Grotesk"
+            ],
+            "headline-lg-mobile": [
+              "Playfair Display"
+            ],
+            "display-hero-mobile": [
+              "Playfair Display"
+            ],
+            "body-lg": [
+              "Hanken Grotesk"
+            ],
+            "program-title": [
+              "Playfair Display"
+            ],
+            "body-sm": [
+              "Hanken Grotesk"
+            ],
+            "headline-md": [
+              "Playfair Display"
+            ],
+            "display-hero": [
+              "Playfair Display"
+            ],
+            "headline-lg": [
+              "Playfair Display"
+            ],
+            "headline-sm": [
+              "Playfair Display"
+            ],
+            "label-md": [
+              "Hanken Grotesk"
+            ]
+          },
+          "fontSize": {
+            "body-md": [
+              "14px",
+              {
+                "lineHeight": "22px",
+                "letterSpacing": "0em",
+                "fontWeight": "400"
+              }
+            ],
+            "label-caps": [
+              "11px",
+              {
+                "lineHeight": "16px",
+                "letterSpacing": "0.1em",
+                "fontWeight": "600"
+              }
+            ],
+            "headline-lg-mobile": [
+              "24px",
+              {
+                "lineHeight": "32px",
+                "letterSpacing": "0em",
+                "fontWeight": "600"
+              }
+            ],
+            "display-hero-mobile": [
+              "32px",
+              {
+                "lineHeight": "40px",
+                "letterSpacing": "-0.01em",
+                "fontWeight": "600"
+              }
+            ],
+            "body-lg": [
+              "16px",
+              {
+                "lineHeight": "26px",
+                "letterSpacing": "-0.005em",
+                "fontWeight": "400"
+              }
+            ],
+            "program-title": [
+              "17px",
+              {
+                "lineHeight": "24px",
+                "letterSpacing": "0.01em",
+                "fontWeight": "500"
+              }
+            ],
+            "body-sm": [
+              "12px",
+              {
+                "lineHeight": "18px",
+                "letterSpacing": "0.01em",
+                "fontWeight": "400"
+              }
+            ],
+            "headline-md": [
+              "22px",
+              {
+                "lineHeight": "30px",
+                "letterSpacing": "0em",
+                "fontWeight": "500"
+              }
+            ],
+            "display-hero": [
+              "48px",
+              {
+                "lineHeight": "56px",
+                "letterSpacing": "-0.02em",
+                "fontWeight": "600"
+              }
+            ],
+            "headline-lg": [
+              "32px",
+              {
+                "lineHeight": "40px",
+                "letterSpacing": "-0.01em",
+                "fontWeight": "600"
+              }
+            ],
+            "headline-sm": [
+              "18px",
+              {
+                "lineHeight": "26px",
+                "letterSpacing": "0em",
+                "fontWeight": "600"
+              }
+            ],
+            "label-md": [
+              "13px",
+              {
+                "lineHeight": "18px",
+                "letterSpacing": "0.04em",
+                "fontWeight": "600"
+              }
+            ]
+          }
+        },
+      },
+    }
+  </script>
+</head>
+<body class="bg-background text-on-surface min-h-screen relative font-body-md text-body-md antialiased overflow-hidden selection:bg-secondary-container selection:text-on-secondary-container">
+<!-- Background App Mockup (Editorial Classical Repertoire Screen under Modal Backdrop) -->
+<div aria-hidden="true" class="filter blur-sm select-none pointer-events-none opacity-40 h-screen w-screen overflow-hidden flex flex-col justify-between">
+<!-- Atmospheric Top Bar Mock -->
+<header class="w-full border-b border-outline-variant px-8 max-w-7xl mx-auto flex items-center justify-between h-16">
+<div class="font-headline-md text-headline-md tracking-wider text-primary font-semibold">OPUS INDEX</div>
+<div class="flex gap-8">
+<span class="font-label-caps text-label-caps text-secondary border-b-2 border-secondary pb-1 tracking-wider">Concerts</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant tracking-wider">Repertoire</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant tracking-wider">Composers</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant tracking-wider">Venues</span>
+</div>
+</header>
+<!-- Content Silhouette -->
+<main class="max-w-5xl mx-auto w-full px-8 py-12 flex-1">
+<div class="h-8 w-64 bg-surface-variant rounded-lg mb-6"></div>
+<div class="h-4 w-96 bg-surface-container mb-12"></div>
+<div class="grid grid-cols-2 gap-8">
+<div class="h-64 border border-outline-variant bg-surface-container-lowest rounded-lg p-6 flex flex-col justify-between">
+<div class="space-y-3">
+<div class="h-4 w-24 bg-surface-variant"></div>
+<div class="h-6 w-3/4 bg-surface-container-high"></div>
+</div>
+<div class="h-16 bg-surface-container-low rounded"></div>
+</div>
+<div class="h-64 border border-outline-variant bg-surface-container-lowest rounded-lg p-6 flex flex-col justify-between">
+<div class="space-y-3">
+<div class="h-4 w-24 bg-surface-variant"></div>
+<div class="h-6 w-3/4 bg-surface-container-high"></div>
+</div>
+<div class="h-16 bg-surface-container-low rounded"></div>
+</div>
+</div>
+</main>
+</div>
+<!-- Level 3 Elevation Backdrop: Refined Classical Dim & Blur (40% deep charcoal overlay) -->
+<div class="fixed inset-0 z-50 bg-primary/40 backdrop-blur-[4px] flex items-center justify-center p-4 md:p-6 transition-all duration-300">
+<!-- Modal Container: Level 2 Elevation Dialog Card -->
+<div aria-describedby="modal-subtitle" aria-labelledby="modal-title" aria-modal="true" class="w-full max-w-[700px] bg-surface-container-lowest rounded-xl border border-outline-variant shadow-[0_12px_40px_-8px_rgba(5,14,26,0.18)] overflow-hidden flex flex-col relative transition-all duration-200" role="dialog">
+<!-- Modal Header Strip with Archival Brass Subtle Accent Accentuation -->
+<div class="px-8 pt-7 pb-5 border-b border-outline-variant relative bg-surface-bright flex items-start justify-between">
+<div class="space-y-1.5 pr-6">
+<div class="flex items-center gap-2 mb-1">
+<span class="inline-block w-1.5 h-1.5 rounded-full bg-secondary"></span>
+<span class="font-label-caps text-label-caps tracking-widest text-secondary uppercase">Listener &amp; Patron Voice</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-primary tracking-normal" id="modal-title">
+            서비스 피드백 보내기
+          </h2>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed" id="modal-subtitle">
+            OPUS 서비스 이용 경험이나 개선되었으면 하는 점, 바라는 기능을 자유롭게 들려주세요.
+          </p>
+</div>
+<!-- Close Button (Material Symbols Outlined) -->
+<button aria-label="닫기" class="shrink-0 p-1.5 text-on-surface-variant hover:text-primary hover:bg-surface-container transition-colors rounded-lg active:opacity-80" onclick="window.history.length &gt; 1 ? window.history.back() : null" type="button">
+<span class="material-symbols-outlined text-[22px] leading-none" data-icon="close">close</span>
+</button>
+</div>
+<!-- Scrollable Form Body -->
+<form class="px-8 py-6 space-y-7 max-h-[798px] overflow-y-auto" id="feedbackForm" onsubmit="event.preventDefault(); submitFeedback();">
+<!-- 1. 피드백 주제 / 성격 선택 -->
+<div class="space-y-2.5">
+<label class="block font-label-md text-label-md text-primary font-semibold">
+            피드백 주제
+          </label>
+<div aria-label="피드백 주제 선택" class="flex flex-wrap gap-2" role="radiogroup">
+<!-- Option 1: Default Active -->
+<button aria-checked="true" class="topic-chip px-3.5 py-2 rounded-lg border text-label-md font-label-md transition-all duration-150 border-secondary bg-secondary/5 text-secondary font-semibold" onclick="selectTopic(this)" role="radio" type="button">
+              기능 제안 / 개선 요청
+            </button>
+<!-- Option 2 -->
+<button aria-checked="false" class="topic-chip px-3.5 py-2 rounded-lg border text-label-md font-label-md transition-all duration-150 border-outline-variant bg-surface-container-lowest text-on-surface hover:border-secondary hover:text-secondary" onclick="selectTopic(this)" role="radio" type="button">
+              검색 정확도 / 편의성
+            </button>
+<!-- Option 3 -->
+<button aria-checked="false" class="topic-chip px-3.5 py-2 rounded-lg border text-label-md font-label-md transition-all duration-150 border-outline-variant bg-surface-container-lowest text-on-surface hover:border-secondary hover:text-secondary" onclick="selectTopic(this)" role="radio" type="button">
+              디자인 / 사용성
+            </button>
+<!-- Option 4 -->
+<button aria-checked="false" class="topic-chip px-3.5 py-2 rounded-lg border text-label-md font-label-md transition-all duration-150 border-outline-variant bg-surface-container-lowest text-on-surface hover:border-secondary hover:text-secondary" onclick="selectTopic(this)" role="radio" type="button">
+              칭찬 및 격려
+            </button>
+<!-- Option 5 -->
+<button aria-checked="false" class="topic-chip px-3.5 py-2 rounded-lg border text-label-md font-label-md transition-all duration-150 border-outline-variant bg-surface-container-lowest text-on-surface hover:border-secondary hover:text-secondary" onclick="selectTopic(this)" role="radio" type="button">
+              기타 의견
+            </button>
+</div>
+</div>
+<!-- 2. 만족도 평가 (5단계 클래식 리터러리/아이콘 감성) -->
+<div class="space-y-2.5">
+<div class="flex items-center justify-between">
+<label class="font-label-md text-label-md text-primary font-semibold">
+              전반적인 만족도
+            </label>
+<span class="font-label-caps text-label-caps text-secondary font-medium" id="ratingDescriptor">매우 만족</span>
+</div>
+<div aria-label="만족도 5단계" class="grid grid-cols-5 gap-2.5" role="radiogroup">
+<!-- Level 5: 매우 만족 (Default Active) -->
+<button aria-checked="true" class="rating-btn group flex flex-col items-center justify-center py-3 px-2 rounded-lg border border-secondary bg-secondary/5 text-secondary transition-all" onclick="selectRating(this, '매우 만족')" role="radio" type="button">
+<span class="material-symbols-outlined text-[26px] mb-1 text-secondary transition-transform group-hover:scale-110" data-icon="sentiment_very_satisfied" data-weight="fill" style="font-variation-settings: 'FILL' 1;">sentiment_very_satisfied</span>
+<span class="font-label-caps text-label-caps">매우 만족</span>
+</button>
+<!-- Level 4: 만족 -->
+<button aria-checked="false" class="rating-btn group flex flex-col items-center justify-center py-3 px-2 rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface-variant hover:border-secondary hover:text-secondary transition-all" onclick="selectRating(this, '만족')" role="radio" type="button">
+<span class="material-symbols-outlined text-[26px] mb-1 text-on-surface-variant group-hover:text-secondary transition-transform group-hover:scale-110" data-icon="sentiment_satisfied">sentiment_satisfied</span>
+<span class="font-label-caps text-label-caps">만족</span>
+</button>
+<!-- Level 3: 보통 -->
+<button aria-checked="false" class="rating-btn group flex flex-col items-center justify-center py-3 px-2 rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface-variant hover:border-secondary hover:text-secondary transition-all" onclick="selectRating(this, '보통')" role="radio" type="button">
+<span class="material-symbols-outlined text-[26px] mb-1 text-on-surface-variant group-hover:text-secondary transition-transform group-hover:scale-110" data-icon="sentiment_neutral">sentiment_neutral</span>
+<span class="font-label-caps text-label-caps">보통</span>
+</button>
+<!-- Level 2: 아쉬움 -->
+<button aria-checked="false" class="rating-btn group flex flex-col items-center justify-center py-3 px-2 rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface-variant hover:border-secondary hover:text-secondary transition-all" onclick="selectRating(this, '아쉬움')" role="radio" type="button">
+<span class="material-symbols-outlined text-[26px] mb-1 text-on-surface-variant group-hover:text-secondary transition-transform group-hover:scale-110" data-icon="sentiment_dissatisfied">sentiment_dissatisfied</span>
+<span class="font-label-caps text-label-caps">아쉬움</span>
+</button>
+<!-- Level 1: 매우 아쉬움 -->
+<button aria-checked="false" class="rating-btn group flex flex-col items-center justify-center py-3 px-2 rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface-variant hover:border-secondary hover:text-secondary transition-all" onclick="selectRating(this, '매우 아쉬움')" role="radio" type="button">
+<span class="material-symbols-outlined text-[26px] mb-1 text-on-surface-variant group-hover:text-secondary transition-transform group-hover:scale-110" data-icon="sentiment_very_dissatisfied">sentiment_very_dissatisfied</span>
+<span class="font-label-caps text-label-caps">매우 아쉬움</span>
+</button>
+</div>
+</div>
+<!-- 3. 상세 피드백 입력 영역 (Textarea) -->
+<div class="space-y-2">
+<div class="flex items-center justify-between">
+<label class="font-label-md text-label-md text-primary font-semibold flex items-center gap-1" for="feedbackTextarea">
+              의견 및 제안 내용
+              <span class="text-tertiary-container text-body-sm font-medium" title="필수 입력 항목">*</span>
+</label>
+<span class="font-label-caps text-label-caps text-on-surface-variant tracking-wider">
+<span class="text-primary font-semibold" id="charCount">0</span> / 1000자
+            </span>
+</div>
+<div class="relative">
+<textarea class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg p-3.5 font-body-md text-body-md text-primary placeholder:text-outline focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary transition-colors resize-none leading-relaxed" id="feedbackTextarea" maxlength="1000" oninput="handleTextareaCount(this)" placeholder="어떤 점이 좋았거나 개선되면 좋을까요? 구체적인 의견을 남겨주시면 서비스 발전에 큰 도움이 됩니다. (예: 아티스트별 모아보기 기능도 있으면 좋겠어요, 검색 필터 관련 의견 등)" required="" rows="5"></textarea>
+</div>
+</div>
+<!-- 4. 답변 및 업데이트 수신용 이메일 입력 (선택) -->
+<div class="space-y-2">
+<label class="block font-label-md text-label-md text-primary font-semibold" for="contactEmail">
+            답변 수신용 이메일 <span class="text-on-surface-variant font-normal text-body-sm">(선택)</span>
+</label>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3.5 text-[20px] text-outline pointer-events-none" data-icon="mail">mail</span>
+<input class="w-full pl-11 pr-4 py-2.5 bg-surface-container-lowest border border-outline-variant rounded-lg font-body-md text-body-md text-primary placeholder:text-outline focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary transition-colors" id="contactEmail" placeholder="답변이 필요하시거나 개선 소식을 받고 싶으신 경우 입력해주세요" type="email">
+</div>
+</div>
+<!-- 안내 메모 (Repertoire Archive Tone) -->
+<div class="p-3.5 bg-surface-container-low border border-outline-variant rounded-lg flex items-start gap-3">
+<span class="material-symbols-outlined text-[18px] text-secondary shrink-0 mt-0.5" data-icon="info">info</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+            보내주신 프로그램 및 검색 개선 제안은 OPUS 개발팀에 직접 공유되며, 검토 후 서비스 반영 여부를 결정합니다.
+          </p>
+</div>
+</form>
+<!-- 5. 하단 액션 버튼 Strip -->
+<div class="px-8 py-5 border-t border-outline-variant bg-surface-bright flex flex-col sm:flex-row items-center justify-between gap-4">
+<!-- 좌측: 신뢰 안내 문구 -->
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px] text-secondary" data-icon="mark_chat_read">mark_chat_read</span>
+<span class="font-body-sm text-body-sm">
+            소중한 의견은 서비스 운영팀에 직접 전달됩니다.
+          </span>
+</div>
+<!-- 우측 액션 버튼 군 -->
+<div class="flex items-center gap-3 w-full sm:w-auto justify-end">
+<!-- 취소 버튼 (아웃라인 버튼) -->
+<button class="px-5 py-2.5 rounded-lg border border-primary text-primary hover:bg-primary/5 font-label-md text-label-md transition-colors active:opacity-80" onclick="resetOrClose()" type="button">
+            취소
+          </button>
+<!-- 피드백 보내기 (Primary Solid 버튼) -->
+<button class="px-6 py-2.5 rounded-lg bg-primary hover:bg-[#2C3847] text-on-primary font-label-md text-label-md transition-colors shadow-sm active:opacity-80 flex items-center gap-2" form="feedbackForm" type="submit">
+<span class="">피드백 보내기</span>
+<span class="material-symbols-outlined text-[16px]" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Interactive Logic for State Management -->
+<script>
+    // Character counter logic
+    function handleTextareaCount(textarea) {
+      const length = textarea.value.length;
+      document.getElementById('charCount').textContent = length;
+    }
+
+    // Topic Chip selection logic
+    function selectTopic(clickedBtn) {
+      const chips = document.querySelectorAll('.topic-chip');
+      chips.forEach(chip => {
+        chip.setAttribute('aria-checked', 'false');
+        chip.className = 'topic-chip px-3.5 py-2 rounded-lg border text-label-md font-label-md transition-all duration-150 border-outline-variant bg-surface-container-lowest text-on-surface hover:border-secondary hover:text-secondary';
+      });
+
+      clickedBtn.setAttribute('aria-checked', 'true');
+      clickedBtn.className = 'topic-chip px-3.5 py-2 rounded-lg border text-label-md font-label-md transition-all duration-150 border-secondary bg-secondary/5 text-secondary font-semibold';
+    }
+
+    // Rating selection logic
+    function selectRating(clickedBtn, label) {
+      const buttons = document.querySelectorAll('.rating-btn');
+      document.getElementById('ratingDescriptor').textContent = label;
+
+      buttons.forEach(btn => {
+        btn.setAttribute('aria-checked', 'false');
+        btn.className = 'rating-btn group flex flex-col items-center justify-center py-3 px-2 rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface-variant hover:border-secondary hover:text-secondary transition-all';
+        const icon = btn.querySelector('.material-symbols-outlined');
+        if (icon) {
+          icon.className = 'material-symbols-outlined text-[26px] mb-1 text-on-surface-variant group-hover:text-secondary transition-transform group-hover:scale-110';
+          icon.style.fontVariationSettings = "'FILL' 0";
+        }
+      });
+
+      clickedBtn.setAttribute('aria-checked', 'true');
+      clickedBtn.className = 'rating-btn group flex flex-col items-center justify-center py-3 px-2 rounded-lg border border-secondary bg-secondary/5 text-secondary transition-all';
+      const activeIcon = clickedBtn.querySelector('.material-symbols-outlined');
+      if (activeIcon) {
+        activeIcon.className = 'material-symbols-outlined text-[26px] mb-1 text-secondary transition-transform group-hover:scale-110';
+        activeIcon.style.fontVariationSettings = "'FILL' 1";
+      }
+    }
+
+    // Form submission feedback
+    function submitFeedback() {
+      const textarea = document.getElementById('feedbackTextarea');
+      if (!textarea.value.trim()) {
+        textarea.focus();
+        return;
+      }
+      
+      const submitBtn = document.querySelector('button[type="submit"]');
+      const originalHTML = submitBtn.innerHTML;
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = `<span class="material-symbols-outlined text-[18px] animate-spin" data-icon="sync">sync</span> <span>전송 중...</span>`;
+
+      setTimeout(() => {
+        alert('소중한 의견이 등록되었습니다. OPUS 서비스 발전에 큰 힘이 됩니다.');
+        textarea.value = '';
+        document.getElementById('charCount').textContent = '0';
+        document.getElementById('contactEmail').value = '';
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalHTML;
+      }, 700);
+    }
+
+    function resetOrClose() {
+      if (confirm('작성 중인 피드백 내용을 취소하시겠습니까?')) {
+        document.getElementById('feedbackForm').reset();
+        document.getElementById('charCount').textContent = '0';
+      }
+    }
+  </script>
+
+
+</body></html>
