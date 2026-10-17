@@ -225,7 +225,7 @@
 <body class="bg-background text-on-surface antialiased min-h-screen flex flex-col selection:bg-secondary-fixed selection:text-on-secondary-fixed">
 <!-- ================= TOP NAVIGATION BAR (Shared Component Anchor) ================= -->
 <header class="w-full bg-surface dark:bg-surface-container-lowest border-b border-outline-variant dark:border-outline sticky top-0 z-40">
-<div class="w-full px-6 md:px-8 max-w-7xl mx-auto flex items-center justify-between h-16"><div class="flex items-center"><a class="font-headline-md text-headline-md tracking-wider text-primary dark:text-inverse-primary font-semibold flex items-center gap-2" href="#"><span class="">OPUS</span></a></div><div class="flex items-center gap-4 text-on-surface-variant font-label-caps text-label-caps"><div class="flex items-center gap-2 border border-outline-variant/60 bg-surface-container-low px-3 py-1 text-on-surface-variant"><span class="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span><span class="font-label-caps tracking-wider">향후 3개월간 공연 편성 데이터 탐색 가능</span></div><button type="button" class="inline-flex items-center gap-1.5 font-label-caps text-label-caps px-3 py-1 bg-surface-bright hover:bg-surface-container border border-outline-variant hover:border-secondary text-primary transition-colors cursor-pointer"><span class="material-symbols-outlined text-[16px] text-secondary">rate_review</span><span class="">서비스 피드백</span></button></div></div>
+<div class="w-full px-6 md:px-8 max-w-7xl mx-auto flex items-center justify-between h-16"><div class="flex items-center"><a class="font-headline-md text-headline-md tracking-wider text-primary dark:text-inverse-primary font-semibold flex items-center gap-2" href="#"><span class="">OPUS</span></a></div><div class="flex items-center gap-4 text-on-surface-variant font-label-caps text-label-caps"><div class="flex items-center gap-2 border border-outline-variant/60 bg-surface-container-low px-3 py-1 text-on-surface-variant"><span class="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span><span class="font-label-caps tracking-wider">향후 3개월간 공연 편성 데이터 탐색 가능</span></div></div></div>
 </header>
 <!-- ================= HERO & REPERTOIRE SEARCH ARCHITECTURE ================= -->
 <main class="flex-grow">
@@ -268,7 +268,8 @@
 <!-- Status Filters (Strictly: 공연 상태) -->
 <div class="flex items-center gap-1 overflow-x-auto pb-1 md:pb-0">
 <span class="font-label-caps text-label-caps text-on-surface-variant mr-3 whitespace-nowrap">공연 상태:</span>
-<button class="font-label-caps text-label-caps px-3 py-1.5 bg-primary-container text-on-primary" type="button">공연중 (2)</button>
+<button class="font-label-caps text-label-caps px-3 py-1.5 bg-primary-container text-on-primary" type="button">전체 (3)</button>
+<button class="font-label-caps text-label-caps px-3 py-1.5 bg-surface-bright text-on-surface hover:bg-surface-container border border-outline-variant" type="button">공연중 (2)</button>
 <button class="font-label-caps text-label-caps px-3 py-1.5 bg-surface-bright text-on-surface hover:bg-surface-container border border-outline-variant" type="button">공연예정 (1)</button>
 
 
@@ -551,8 +552,35 @@
           </button>
 <span class="px-3.5 py-1.5 bg-primary-container text-on-primary font-label-caps text-label-caps">1</span>
 <button class="px-3 py-1.5 border border-outline-variant font-label-caps text-label-caps text-on-surface-variant hover:text-primary disabled:opacity-40" disabled="">
+          다음 페이지
+        </button>
+</div>
+</div>
+<!-- ================= Pagination Design Spec: 다중 페이지 상태 (디자인 참고용) ================= -->
+<div class="mt-16 pt-8 border-t border-outline-variant/60">
+<div class="flex flex-col gap-1.5 mb-6">
+<span class="inline-flex w-fit items-center font-label-caps text-label-caps text-outline uppercase tracking-wider border border-outline-variant/60 bg-surface-container-low px-2.5 py-1">Design Spec · 다중 페이지</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">검색 결과가 여러 페이지일 때의 페이지네이션 (예시: 총 42건, 12페이지 중 4페이지)</p>
+</div>
+<div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+<span class="font-body-sm text-body-sm text-on-surface-variant">
+          총 42개의 프로그램 검색 결과 표시 중 (12페이지 중 4)
+        </span>
+<div class="flex items-center gap-1">
+<button class="px-3 py-1.5 border border-outline-variant font-label-caps text-label-caps text-on-surface-variant hover:text-primary hover:border-outline transition-colors" type="button">
+            이전 페이지
+          </button>
+<button class="w-8 h-8 flex items-center justify-center font-label-caps text-label-caps text-on-surface-variant hover:text-primary hover:bg-surface-container transition-colors" type="button">1</button>
+<button class="w-8 h-8 flex items-center justify-center font-label-caps text-label-caps text-on-surface-variant hover:text-primary hover:bg-surface-container transition-colors" type="button">2</button>
+<button class="w-8 h-8 flex items-center justify-center font-label-caps text-label-caps text-on-surface-variant hover:text-primary hover:bg-surface-container transition-colors" type="button">3</button>
+<span class="w-8 h-8 flex items-center justify-center bg-primary-container text-on-primary font-label-caps text-label-caps" aria-current="page">4</span>
+<button class="w-8 h-8 flex items-center justify-center font-label-caps text-label-caps text-on-surface-variant hover:text-primary hover:bg-surface-container transition-colors" type="button">5</button>
+<span class="px-1 font-label-caps text-label-caps text-outline-variant select-none">…</span>
+<button class="w-8 h-8 flex items-center justify-center font-label-caps text-label-caps text-on-surface-variant hover:text-primary hover:bg-surface-container transition-colors" type="button">12</button>
+<button class="px-3 py-1.5 border border-outline-variant font-label-caps text-label-caps text-on-surface-variant hover:text-primary hover:border-outline transition-colors" type="button">
             다음 페이지
           </button>
+</div>
 </div>
 </div>
 </section>

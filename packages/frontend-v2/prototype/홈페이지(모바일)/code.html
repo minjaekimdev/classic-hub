@@ -560,6 +560,20 @@
         다음 페이지
       </button>
 </nav>
+<!-- 5-1. Pagination Design Spec: 다중 페이지 상태 (디자인 참고용) -->
+<div class="w-full pt-4 pb-3 flex flex-col items-center gap-2.5">
+<span class="inline-flex items-center font-label-caps text-label-caps text-outline uppercase tracking-wider border border-outline-variant/60 bg-surface-container-low px-2.5 py-1 rounded">Design Spec · 다중 페이지</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant text-center leading-relaxed">검색 결과가 여러 페이지일 때의 페이지네이션<br>(예시: 총 42건, 12페이지 중 4페이지)</p>
+</div>
+<nav aria-label="Pagination (다중 페이지)" class="w-full pb-6 flex items-center justify-center gap-1.5">
+<button class="px-3 py-2 text-on-surface-variant font-label-md text-label-md rounded border border-outline-variant/60 bg-surface-container-lowest hover:border-outline hover:text-primary transition-colors" type="button">이전</button>
+<button class="w-9 h-9 flex items-center justify-center font-label-md text-label-md rounded text-on-surface-variant hover:bg-surface-container transition-colors" type="button">3</button>
+<span class="w-9 h-9 flex items-center justify-center bg-primary-container text-surface-container-lowest font-label-md text-label-md rounded" aria-current="page">4</span>
+<button class="w-9 h-9 flex items-center justify-center font-label-md text-label-md rounded text-on-surface-variant hover:bg-surface-container transition-colors" type="button">5</button>
+<span class="px-0.5 font-label-md text-label-md text-outline-variant select-none">…</span>
+<button class="w-9 h-9 flex items-center justify-center font-label-md text-label-md rounded text-on-surface-variant hover:bg-surface-container transition-colors" type="button">12</button>
+<button class="px-3 py-2 text-on-surface-variant font-label-md text-label-md rounded border border-outline-variant/60 bg-surface-container-lowest hover:border-outline hover:text-primary transition-colors" type="button">다음</button>
+</nav>
 </main>
 <!-- Footer -->
 
@@ -571,6 +585,6 @@
 
 
 
-<footer class="w-full border-t border-outline-variant py-6 px-4 bg-surface text-center"><div class="flex justify-center items-center pb-3"><button type="button" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-surface-container-low border border-outline-variant rounded font-label-md text-[12px] text-on-surface-variant hover:border-secondary hover:text-primary transition-colors cursor-pointer"><span class="material-symbols-outlined text-[15px] text-secondary">forum</span><span class="">서비스 피드백 보내기</span></button></div><p class="font-body-sm text-[12px] text-outline leading-relaxed">이 서비스의 데이터 출처는 (주)공연예술통합전산망 입니다.</p></footer>
+<footer class="w-full border-t border-outline-variant py-6 px-4 bg-surface text-center"><p class="font-body-sm text-[12px] text-outline leading-relaxed">이 서비스의 데이터 출처는 (주)공연예술통합전산망 입니다.</p></footer>
 
-<aside class="fixed right-4 bottom-6 z-30 pointer-events-auto"><button type="button" aria-label="서비스 피드백 바텀시트 열기" class="flex items-center gap-1.5 px-3.5 py-2.5 bg-primary-container text-surface-container-lowest rounded-full shadow-sm hover:bg-primary border border-outline-variant/50 transition-all cursor-pointer"><span class="material-symbols-outlined text-[18px] text-secondary-container">chat_bubble</span><span class="font-label-md text-[12px] font-medium tracking-normal">피드백</span></button></aside></body></html>
+</body></html>

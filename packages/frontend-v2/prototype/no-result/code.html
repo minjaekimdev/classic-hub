@@ -1,0 +1,304 @@
+<!doctype html>
+<html class="light" lang="ko" style="">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>OPUS - 클래식 프로그램 검색 &amp; 공연 정보 (검색 결과 없음)</title>
+    <!-- Google Fonts: Playfair Display & Hanken Grotesk -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,300..800;1,300..800&amp;family=Playfair+Display:ital,wght@0,400..900;1,400..900&amp;display=swap"
+      rel="stylesheet"
+    />
+    <!-- Material Symbols Outlined -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <!-- Tailwind CSS v3 -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-bright": "#f9f9fd",
+              "on-secondary-fixed-variant": "#614000",
+              "surface-variant": "#e2e2e6",
+              "on-surface": "#1a1c1f",
+              "on-primary": "#ffffff",
+              "on-secondary-fixed": "#281800",
+              "error-container": "#ffdad6",
+              "inverse-surface": "#2f3034",
+              "on-error": "#ffffff",
+              "secondary-fixed": "#ffddaf",
+              background: "#f9f9fd",
+              "tertiary-container": "#480d16",
+              "surface-container-high": "#e8e8ec",
+              "on-primary-container": "#828b9a",
+              "primary-fixed": "#dae3f4",
+              "surface-tint": "#565f6d",
+              "inverse-primary": "#bec7d7",
+              "surface-container-low": "#f3f3f7",
+              "on-surface-variant": "#44474c",
+              "on-primary-fixed": "#131c28",
+              "surface-dim": "#d9dade",
+              outline: "#75777c",
+              "secondary-fixed-dim": "#efbe76",
+              "on-primary-fixed-variant": "#3e4755",
+              "on-error-container": "#93000a",
+              tertiary: "#270005",
+              "outline-variant": "#c5c6cc",
+              "secondary-container": "#fecc82",
+              "surface-container-lowest": "#ffffff",
+              secondary: "#7c5818",
+              "inverse-on-surface": "#f0f0f4",
+              "on-secondary": "#ffffff",
+              "tertiary-fixed": "#ffdada",
+              "tertiary-fixed-dim": "#ffb3b6",
+              primary: "#050e1a",
+              "primary-container": "#1b2430",
+              "on-tertiary-fixed": "#3d050e",
+              "on-tertiary": "#ffffff",
+              "on-tertiary-container": "#c87277",
+              "primary-fixed-dim": "#bec7d7",
+              error: "#ba1a1a",
+              surface: "#f9f9fd",
+              "surface-container": "#ededf2",
+              "on-background": "#1a1c1f",
+              "on-tertiary-fixed-variant": "#753137",
+              "surface-container-highest": "#e2e2e6",
+              "on-secondary-container": "#795516",
+            },
+            borderRadius: {
+              DEFAULT: "0.125rem",
+              lg: "0.25rem",
+              xl: "0.5rem",
+              full: "0.75rem",
+            },
+            spacing: {
+              "space-md": "1rem",
+              "space-sm": "0.5rem",
+              "space-lg": "1.5rem",
+              margin: "2rem",
+              "space-xl": "2.5rem",
+              gutter: "1.5rem",
+              "space-xs": "0.25rem",
+            },
+            fontFamily: {
+              "headline-lg-mobile": ["Playfair Display"],
+              "headline-md": ["Playfair Display"],
+              "body-md": ["Hanken Grotesk"],
+              "body-lg": ["Hanken Grotesk"],
+              "body-sm": ["Hanken Grotesk"],
+              "display-hero": ["Playfair Display"],
+              "display-hero-mobile": ["Playfair Display"],
+              "headline-sm": ["Playfair Display"],
+              "program-title": ["Playfair Display"],
+              "label-md": ["Hanken Grotesk"],
+              "label-caps": ["Hanken Grotesk"],
+              "headline-lg": ["Playfair Display"],
+            },
+            fontSize: {
+              "headline-lg-mobile": [
+                "24px",
+                { lineHeight: "32px", letterSpacing: "0em", fontWeight: "600" },
+              ],
+              "headline-md": [
+                "22px",
+                { lineHeight: "30px", letterSpacing: "0em", fontWeight: "500" },
+              ],
+              "body-md": [
+                "14px",
+                { lineHeight: "22px", letterSpacing: "0em", fontWeight: "400" },
+              ],
+              "body-lg": [
+                "16px",
+                {
+                  lineHeight: "26px",
+                  letterSpacing: "-0.005em",
+                  fontWeight: "400",
+                },
+              ],
+              "body-sm": [
+                "12px",
+                {
+                  lineHeight: "18px",
+                  letterSpacing: "0.01em",
+                  fontWeight: "400",
+                },
+              ],
+              "display-hero": [
+                "48px",
+                {
+                  lineHeight: "56px",
+                  letterSpacing: "-0.02em",
+                  fontWeight: "600",
+                },
+              ],
+              "display-hero-mobile": [
+                "32px",
+                {
+                  lineHeight: "40px",
+                  letterSpacing: "-0.01em",
+                  fontWeight: "600",
+                },
+              ],
+              "headline-sm": [
+                "18px",
+                { lineHeight: "26px", letterSpacing: "0em", fontWeight: "600" },
+              ],
+              "program-title": [
+                "17px",
+                {
+                  lineHeight: "24px",
+                  letterSpacing: "0.01em",
+                  fontWeight: "500",
+                },
+              ],
+              "label-md": [
+                "13px",
+                {
+                  lineHeight: "18px",
+                  letterSpacing: "0.04em",
+                  fontWeight: "600",
+                },
+              ],
+              "label-caps": [
+                "11px",
+                {
+                  lineHeight: "16px",
+                  letterSpacing: "0.1em",
+                  fontWeight: "600",
+                },
+              ],
+              "headline-lg": [
+                "32px",
+                {
+                  lineHeight: "40px",
+                  letterSpacing: "-0.01em",
+                  fontWeight: "600",
+                },
+              ],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 300,
+          "GRAD" 0,
+          "opsz" 20;
+        display: inline-block;
+        vertical-align: middle;
+        line-height: 1;
+      }
+      .material-symbols-outlined[data-weight="fill"] {
+        font-variation-settings:
+          "FILL" 1,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 20;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-background text-on-surface antialiased selection:bg-secondary-fixed selection:text-on-secondary-fixed min-h-screen font-body-md text-body-md"
+  >
+    <!-- EMPTY STATE (검색 결과 0건) -->
+    <section
+      class="w-full bg-surface-container-lowest border border-outline-variant rounded-xl p-8 md:p-14 mb-16 text-center max-w-4xl mx-auto shadow-xs"
+    >
+      <!-- Classical Music Motif Icon Badge -->
+      <div
+        class="mx-auto w-16 h-16 rounded-full bg-secondary-fixed/40 border border-secondary/30 flex items-center justify-center mb-5 text-secondary shadow-xs"
+      >
+        <span
+          class="material-symbols-outlined text-[32px]"
+          data-icon="music_note"
+          data-weight="fill"
+          >music_note</span
+        >
+      </div>
+      <!-- Status Tag -->
+      <div
+        class="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-secondary-fixed/30 border border-secondary/40 text-secondary font-label-caps text-label-caps mb-4"
+      >
+        <span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+        ARCHIVE QUERY · 0 RESULTS
+      </div>
+      <!-- Headline -->
+      <h2 class="font-headline-lg text-headline-lg text-primary mb-3">
+        일치하는 연주 프로그램을 찾을 수 없습니다
+      </h2>
+      <!-- Description -->
+      <p
+        class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto mb-8 leading-relaxed"
+      >
+        입력하신 검색어
+        <strong class="text-primary font-medium"
+          >‘스트라빈스키 봄의 제전’</strong
+        >
+        및 지정된 기간 내에 등록된 정기 연주회 또는 기획 공연 편성 내역이
+        데이터베이스에 존재하지 않습니다.
+      </p>
+      <!-- Search Tips Box (권장 검색 방식 & 제안) -->
+      <div
+        class="max-w-2xl mx-auto bg-surface-container-low border border-outline-variant/70 rounded-lg p-5 text-left mb-8"
+      >
+        <div
+          class="flex items-center gap-2 mb-3 text-secondary font-label-caps text-label-caps"
+        >
+          <span
+            class="material-symbols-outlined text-[16px]"
+            data-icon="tips_and_updates"
+            >tips_and_updates</span
+          >
+          <span class="">권장 검색 방식 및 제안</span>
+        </div>
+        <ul
+          class="space-y-2.5 font-body-sm text-body-sm text-on-surface-variant"
+        >
+          <li class="flex items-start gap-2">
+            <span class="text-secondary font-bold text-xs mt-0.5">•</span>
+            <span class=""
+              >작곡가의 성(Last Name)으로 넓게 검색해 보세요 (예:
+              <span
+                class="text-primary underline underline-offset-2 cursor-pointer hover:text-secondary"
+                >스트라빈스키</span
+              >,
+              <span
+                class="text-primary underline underline-offset-2 cursor-pointer hover:text-secondary"
+                >라흐마니노프</span
+              >,
+              <span
+                class="text-primary underline underline-offset-2 cursor-pointer hover:text-secondary"
+                >베토벤</span
+              >).</span
+            >
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-secondary font-bold text-xs mt-0.5">•</span>
+            <span class=""
+              >현재 설정된 공연 기간(<strong class="text-primary font-medium"
+                >2025.04.01 ~ 2025.06.30</strong
+              >)을 하반기 또는 연간 전체 일정으로 확장해 보세요.</span
+            >
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-secondary font-bold text-xs mt-0.5">•</span>
+            <span class=""
+              >악장 번호나 카탈로그 번호(Opus / BWV / K.)를 제외하고 단어 단위를
+              간소화하여 재입력해 보세요.</span
+            >
+          </li>
+        </ul>
+      </div>
+    </section>
+  </body>
+</html>
