@@ -2,8 +2,8 @@
  * specs/home.md 구현 정책
  * - search-005: 새로고침으로 탐색 가능한 최대 기간 적용(DateRangePicker에서 위임)
  * - search-007: '검색 필터 초기화' 시 검색어/공연상태/공연기간/정렬기준 전체 초기화
+ * - search-009: 검색어 입력 후 '검색' 제출 시에만 URL에 검색어 커밋
  * - exception-02: URL 기간 파라미터가 유효 범위를 벗어나도 유효 범위로 정규화
- * - exception-04: 검색 요청 500ms 디바운싱
  */
 "use client";
 
@@ -14,7 +14,7 @@ import { getBrowsablePeriod } from "@/lib/period";
 import { homePageUrlParsers } from "@/lib/urlState";
 import type { DateRange, SortBy, StatusFilter } from "@/types/concert";
 
-/** 검색 요청 디바운스 (exception-04: 429 예방) */
+/** 검색 제출 디바운스 (search-009: 연타로 인한 중복 요청 예방) */
 const SEARCH_DEBOUNCE_MS = 500;
 
 export default function useHomePageState() {
@@ -39,31 +39,22 @@ export default function useHomePageState() {
   };
   useEffect(() => clearDebounce, []);
 
-  /** 검색어 즉시 커밋 (Enter / 검색 버튼 / 초기화 / 예시 검색어) */
-  const commitQuery = useCallback(
-    (value: string) => {
-      clearDebounce();
-      setQueryInput(value);
-      setParams({ q: value, page: 1 });
-    },
-    [setParams],
-  );
-
-  /** 입력 중에는 버퍼만 갱신하고, 500ms 후 URL에 커밋한다 */
-  const handleQueryInput = useCallback(
+  /** 검색 제출 커밋 (검색 버튼 / Enter / 입력 초기화 / 예시 검색어) — 500ms 디바운스 후 URL에 반영한다 */
+  const submitQuery = useCallback(
     (value: string) => {
       setQueryInput(value);
       clearDebounce();
-      if (!value.trim()) {
-        setParams({ q: "", page: 1 });
-        return;
-      }
       debounceRef.current = setTimeout(() => {
         setParams({ q: value, page: 1 });
       }, SEARCH_DEBOUNCE_MS);
     },
     [setParams],
   );
+
+  /** 입력 중에는 버퍼만 갱신하고, '검색' 제출 전에는 URL에 반영하지 않는다 (search-009) */
+  const handleQueryInput = useCallback((value: string) => {
+    setQueryInput(value);
+  }, []);
 
   const handleStatusFilter = useCallback(
     (value: StatusFilter) => {
@@ -121,7 +112,7 @@ export default function useHomePageState() {
     },
     actions: {
       onQueryInputChange: handleQueryInput,
-      onQuerySubmit: commitQuery,
+      onQuerySubmit: submitQuery,
       onStatusFilterChange: handleStatusFilter,
       onDateRangeChange: handleDateRange,
       onSortByChange: handleSortBy,

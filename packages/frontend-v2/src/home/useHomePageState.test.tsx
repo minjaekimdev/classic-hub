@@ -15,7 +15,7 @@ const createWrapper =
   };
 
 describe("useHomePageState", () => {
-  it("검색어 입력은 즉시 커밋하지 않고 500ms 디바운스 후 URL에 반영한다 (specs exception-04)", async () => {
+  it("검색어 입력만으로는 URL에 반영되지 않는다 (specs search-009)", async () => {
     const { result } = renderHook(() => useHomePageState(), {
       wrapper: createWrapper(),
     });
@@ -25,17 +25,32 @@ describe("useHomePageState", () => {
     expect(result.current.state.queryInput).toBe("라흐");
     expect(result.current.state.query).toBe("");
 
-    await waitFor(
-      () => expect(result.current.state.query).toBe("라흐"),
-      { timeout: 2000 },
-    );
+    // 검색 제출 디바운스(500ms)가 지나도 입력만으로는 커밋되지 않는다
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 700));
+    });
+
+    expect(result.current.state.query).toBe("");
   });
 
-  it("검색어 제출은 즉시 커밋한다", async () => {
+  it("검색 제출은 500ms 디바운스 후 URL에 커밋한다 (specs search-009)", async () => {
     const { result } = renderHook(() => useHomePageState(), {
       wrapper: createWrapper(),
     });
 
+    act(() => result.current.actions.onQuerySubmit("베토벤"));
+
+    expect(result.current.state.query).toBe("");
+
+    await waitFor(() => expect(result.current.state.query).toBe("베토벤"));
+  });
+
+  it("연속 검색 제출 시 마지막 제출값만 커밋한다 (specs search-009)", async () => {
+    const { result } = renderHook(() => useHomePageState(), {
+      wrapper: createWrapper(),
+    });
+
+    act(() => result.current.actions.onQuerySubmit("라흐"));
     act(() => result.current.actions.onQuerySubmit("베토벤"));
 
     await waitFor(() => expect(result.current.state.query).toBe("베토벤"));
