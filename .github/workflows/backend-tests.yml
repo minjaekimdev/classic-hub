@@ -3,6 +3,13 @@ name: Backend Tests
 on:
   pull_request:
 
+  # PR 없이 main에 직접 push/머지되는 변경도 반드시 검증한다.
+  # 계기(2026-10): lockfile 재작성을 동반한 머지가 PR 우회로 반입되어
+  # supabase-js가 2.95.3→2.109.0으로 갱신됐고, 이 조합을 최초로 실행한
+  # 야간 크론잡이 Node 런타임 검사에서 크래시했다. (단위/통합 테스트는 커버 못 함)
+  push:
+    branches: [main]
+
   workflow_dispatch:
 
 # 같은 브랜치에 새 커밋이 push되면 진행 중인 실행을 취소 (낭비 제거)
