@@ -1,15 +1,16 @@
 /**
  * specs/home.md 구현 정책
  * - search-001: placeholder에 실제 검색 가능한 검색어 예시 표시
+ * - search-009: 검색어 입력 후 '검색' 버튼(또는 Enter) 제출 시에만 검색 수행
  */
 import { useRef, type FormEvent } from "react";
 import Icon from "@/components/Icon";
 
 interface SearchBarProps {
   value: string;
-  /** 매 입력마다 호출 (디바운스는 상태 소유자가 처리) */
+  /** 매 입력마다 호출 — 입력 버퍼만 갱신하며 URL 커밋은 하지 않는다 */
   onChange: (value: string) => void;
-  /** Enter / 검색 버튼 / 초기화 시 즉시 커밋 */
+  /** 검색 버튼 / Enter / 입력 초기화 제출 시 호출 (디바운스는 상태 소유자가 처리) */
   onSubmit: (value: string) => void;
 }
 
