@@ -6,6 +6,9 @@ export type StatusFilter = "all" | "ongoing" | "upcoming";
 /** 정렬 기준 (공연임박순 | 낮은가격순 | 높은가격순) */
 export type SortBy = "imminent" | "price_asc" | "price_desc";
 
+/** 검색 결과 보기 모드 (앨범형 | 리스트형) */
+export type ViewMode = "album" | "list";
+
 /** YYYY-MM-DD 형식의 날짜 */
 export type IsoDate = string;
 

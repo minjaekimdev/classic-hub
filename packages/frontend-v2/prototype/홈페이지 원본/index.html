@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>OPUS 오퍼스 | 클래식 공연 검색</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700&family=Playfair+Display:ital,wght@0,500;0,700;1,500&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --navy:#16233a;
+    --navy-2:#22314e;
+    --gold:#c8a24a;
+    --gold-soft:#f3e8cf;
+    --ivory:#faf8f3;
+    --ink:#22242a;
+    --gray:#6b7080;
+    --line:#e8e4da;
+    --card-r:16px;
+    --shadow:0 6px 20px rgba(22,35,58,.08);
+    --serif-display:"Noto Serif KR","Playfair Display",serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+    color:var(--ink);
+    background:var(--ivory);
+    line-height:1.55;
+    letter-spacing:-.01em;
+  }
+  a{color:inherit;text-decoration:none}
+  ul{list-style:none}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+  .wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+
+  /* ── 라인 아이콘 공통 ───────────────────── */
+  .ic{display:inline-block;vertical-align:middle;flex:0 0 auto}
+  .ic use, svg.ic{stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+
+  /* ===== Header ===== */
+  .topbar{background:#0d1728;color:#9aa4b8;font-size:12px}
+  .topbar .wrap{display:flex;justify-content:flex-end;gap:18px;height:34px;align-items:center}
+  .topbar a:hover{color:#fff}
+
+  .gnb{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .gnb .wrap{display:flex;align-items:center;gap:32px;height:72px}
+  .logo{display:flex;align-items:baseline;gap:8px}
+  .logo .mark{font-family:"Playfair Display",serif;font-size:30px;font-weight:700;color:var(--navy);letter-spacing:1px}
+  .logo .mark em{font-style:normal;color:var(--gold)}
+  .logo .sub{font-size:11px;color:var(--gray);letter-spacing:3px;font-weight:500}
+  .gnb nav{display:flex;gap:26px;font-size:15px;font-weight:600;color:#4a5060}
+  .gnb nav a{display:inline-flex;align-items:center;height:69px;border-bottom:3px solid transparent;transition:.15s}
+  .gnb nav a:hover,.gnb nav a.active{color:var(--navy);border-color:var(--gold)}
+  .gnb .right{margin-left:auto;display:flex;align-items:center;gap:14px}
+  .btn-search-mini{
+    display:flex;align-items:center;justify-content:center;gap:7px;
+    border:1px solid var(--line);border-radius:999px;
+    padding:9px 18px;font-size:13px;font-weight:600;color:#4a5060;background:#fff;
+    transition:.15s;
+  }
+  .btn-search-mini:hover{border-color:var(--navy);color:var(--navy)}
+  .btn-login{background:var(--navy);color:#fff;border-radius:999px;padding:10px 20px;font-size:13px;font-weight:700;transition:.15s}
+  .btn-login:hover{background:var(--gold)}
+
+  /* ===== Hero ===== */
+  .hero{
+    background:
+      radial-gradient(1100px 460px at 18% -20%, rgba(200,162,74,.20), transparent 62%),
+      radial-gradient(900px 420px at 90% -10%, rgba(90,120,180,.22), transparent 58%),
+      linear-gradient(165deg,#141f36 0%,#16233a 48%,#0c1424 100%);
+    color:#fff;
+    padding:60px 0 0;
+    position:relative;
+  }
+  .hero h1{
+    font-family:var(--serif-display);
+    font-size:38px;font-weight:700;letter-spacing:-.02em;line-height:1.3;
+  }
+  .hero h1 .accent{color:var(--gold)}
+  .hero .lead{margin-top:12px;color:#aab3c6;font-size:15px;font-weight:400}
+
+  .tabs{display:flex;gap:10px;margin:32px 0 18px}
+  .tab{
+    padding:11px 24px;border-radius:999px;
+    border:1px solid rgba(255,255,255,.25);
+    color:#c6cddd;font-size:15px;font-weight:600;transition:.15s;
+    display:flex;align-items:center;
+  }
+  .tab:hover{background:rgba(255,255,255,.1);color:#fff}
+  .tab.active{background:#fff;color:var(--navy);border-color:#fff}
+
+  /* ===== Search Panel (카드형) ===== */
+  .search-panel{
+    position:relative;z-index:2;
+    background:#fff;border-radius:22px 22px 0 0;
+    box-shadow:0 -18px 60px -12px rgba(6,12,26,.35);
+    padding:28px 30px 24px;
+  }
+  .search-row{display:flex;gap:12px;align-items:stretch}
+  .field{
+    flex:1;border:1.5px solid var(--line);border-radius:14px;
+    padding:13px 18px 12px;min-width:0;background:#fff;
+    transition:.15s;display:flex;flex-direction:column;justify-content:center;
+  }
+  .field:hover{border-color:#c9cfdd}
+  .field:focus-within{border-color:var(--navy);box-shadow:0 0 0 3px rgba(22,35,58,.06)}
+  .field .lbl{display:flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:#8a8f9c;margin-bottom:4px;line-height:1}
+  .field .lbl .ic{width:12px;height:12px}
+  .field input,.field select{
+    width:100%;border:none;outline:none;font:inherit;font-size:15px;font-weight:500;
+    color:var(--ink);background:transparent;line-height:1.4;padding:0;
+  }
+  .field input::placeholder{color:#b3b7c2}
+  .field .val{font-size:15px;font-weight:500;color:var(--ink);display:flex;align-items:center;gap:8px;line-height:1.4}
+  .field .val .ic{width:15px;height:15px;color:#8a8f9c}
+  .btn-main{
+    flex:0 0 132px;border-radius:14px;
+    background:var(--navy);color:#fff;font-size:16px;font-weight:700;
+    display:flex;align-items:center;justify-content:center;gap:9px;
+    transition:.15s;letter-spacing:.02em;
+  }
+  .btn-main:hover{background:var(--gold);color:#0d1728}
+  .btn-main .ic{width:17px;height:17px}
+  .quick-tags{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;align-items:center}
+  .quick-tags .t-lbl{font-size:13px;color:var(--gray);font-weight:600;margin-right:4px}
+  .chip{
+    font-size:13px;color:#4a5060;background:#f4f2ec;
+    border-radius:999px;padding:8px 15px;font-weight:500;transition:.15s;
+    display:inline-flex;align-items:center;
+  }
+  .chip:hover{background:var(--gold-soft);color:var(--navy)}
+  .chip b{color:var(--gold);font-weight:700;margin-right:5px}
+
+  /* ===== Section ===== */
+  section{padding:60px 0}
+  .sec-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:28px}
+  .sec-head h2{font-size:25px;font-weight:800;letter-spacing:-.02em;color:var(--navy);line-height:1.3}
+  .sec-head h2 small{
+    font-family:"Playfair Display",serif;display:block;
+    font-size:12px;color:var(--gold);letter-spacing:.32em;font-weight:500;
+    margin-bottom:8px;text-transform:uppercase;
+  }
+  .more{font-size:14px;color:var(--gray);font-weight:600;display:inline-flex;align-items:center;gap:2px}
+  .more:hover{color:var(--navy)}
+  .more .ic{width:13px;height:13px}
+
+  /* ===== Categories (라인 아이콘 + 뮤트 톤) ===== */
+  .cat-row{display:flex;gap:30px;overflow-x:auto;padding-bottom:8px}
+  .cat{flex:0 0 auto;text-align:center;width:106px}
+  .cat .thumb{
+    width:104px;height:104px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    color:#fdfcf9;
+    box-shadow:0 8px 22px rgba(40,44,60,.12);
+    transition:.18s;
+    margin:0 auto 12px;
+  }
+  .cat:hover .thumb{transform:translateY(-5px)}
+  .cat .thumb .ic{width:38px;height:38px;stroke-width:1.4}
+  .cat .name{font-size:15px;font-weight:700;color:#333a49;white-space:nowrap;letter-spacing:-.01em}
+  .cat .cnt{font-size:12px;color:var(--gray);font-weight:400;margin-top:2px}
+  /* 뮤트 톤 그라데이션 */
+  .m1{background:linear-gradient(145deg,#55617c,#6e7a94)}
+  .m2{background:linear-gradient(145deg,#7c7264,#998e7d)}
+  .m3{background:linear-gradient(145deg,#6e7278,#8b8f96)}
+  .m4{background:linear-gradient(145deg,#7d6165,#a08488)}
+  .m5{background:linear-gradient(145deg,#5f7062,#7c8d7f)}
+  .m6{background:linear-gradient(145deg,#6c6480,#8a82a0)}
+  .m7{background:linear-gradient(145deg,#877856,#a5977a)}
+
+  /* ===== Cards ===== */
+  .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
+  .card{background:#fff;border-radius:var(--card-r);overflow:hidden;box-shadow:var(--shadow);transition:.18s}
+  .card:hover{transform:translateY(-6px);box-shadow:0 14px 30px rgba(22,35,58,.14)}
+  .poster{
+    position:relative;aspect-ratio:3/4;
+    display:flex;align-items:center;justify-content:center;
+    color:rgba(255,255,255,.85);
+  }
+  .poster .ic{width:56px;height:56px;stroke-width:1.2}
+  .badge{
+    position:absolute;top:12px;left:12px;
+    background:var(--gold);color:#fff;
+    font-size:12px;font-weight:700;padding:5px 10px;border-radius:8px;letter-spacing:-.01em;
+  }
+  .badge.dark{background:var(--navy)}
+  .badge.red{background:#b05555}
+  .like{
+    position:absolute;top:10px;right:10px;
+    width:34px;height:34px;border-radius:50%;
+    background:rgba(255,255,255,.94);color:#5a6070;
+    display:flex;align-items:center;justify-content:center;transition:.15s;
+  }
+  .like .ic{width:16px;height:16px}
+  .like:hover,.like.on{color:#b05555}
+  .card .info{padding:15px 17px 17px}
+  .card .hall{font-size:12px;color:var(--gray);margin-bottom:4px}
+  .card h3{font-size:16px;font-weight:700;color:#242938;line-height:1.4;min-height:45px;letter-spacing:-.01em}
+  .card .date{font-size:13px;color:#5a6070;margin-top:6px}
+  .price{display:flex;align-items:baseline;gap:6px;margin-top:10px}
+  .price .now{font-size:17px;font-weight:800;color:var(--navy)}
+  .price .now em{font-style:normal;color:var(--gold);margin-right:3px}
+  .price .was{font-size:13px;color:#b3b7c2;text-decoration:line-through}
+  .pill{
+    display:inline-flex;align-items:center;margin-top:9px;font-size:11px;font-weight:700;
+    padding:3px 9px;border-radius:6px;letter-spacing:-.01em;
+  }
+  .pill.almost{color:#a06a1a;background:var(--gold-soft)}
+  .pill.new{color:#3f5f8f;background:#eaf1fb}
+
+  /* ===== Banner ===== */
+  .banner{
+    border-radius:22px;overflow:hidden;position:relative;
+    background:
+      radial-gradient(600px 260px at 85% 20%, rgba(200,162,74,.22), transparent 60%),
+      linear-gradient(120deg,#141f36 0%,#22314e 60%,#33436a 100%);
+    color:#fff;padding:46px 50px;
+    display:flex;align-items:center;justify-content:space-between;gap:24px;
+  }
+  .banner h3{font-size:26px;font-weight:800;letter-spacing:-.02em}
+  .banner h3 .accent{color:var(--gold)}
+  .banner p{margin-top:8px;color:#b6bfd2;font-size:14px;font-weight:400}
+  .btn-gold{
+    background:var(--gold);color:#fff;font-weight:700;font-size:15px;
+    padding:14px 28px;border-radius:999px;transition:.15s;white-space:nowrap;
+  }
+  .btn-gold:hover{background:#b8913c}
+
+  /* ===== Regions ===== */
+  .regions{display:grid;grid-template-columns:repeat(6,1fr);gap:14px}
+  .region{
+    position:relative;border-radius:16px;overflow:hidden;
+    aspect-ratio:1/1;display:flex;align-items:flex-end;
+    color:#fff;box-shadow:var(--shadow);transition:.18s;
+  }
+  .region:hover{transform:translateY(-4px)}
+  .region .bg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+  .region .bg .ic{width:44px;height:44px;color:rgba(255,255,255,.75);stroke-width:1.2}
+  .region .grad{position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,22,38,.06) 42%,rgba(13,20,36,.82))}
+  .region span{position:relative;z-index:1;padding:13px 15px;font-size:16px;font-weight:700;letter-spacing:-.01em}
+  .region small{display:block;font-size:11px;font-weight:400;color:#cfd5e0;margin-top:1px}
+
+  /* ===== Ranking / Coming ===== */
+  .rank-list{display:flex;flex-direction:column;gap:10px}
+  .rank-item{display:flex;align-items:center;gap:16px;background:#fff;border-radius:14px;padding:12px 18px;box-shadow:var(--shadow);transition:.15s}
+  .rank-item:hover{box-shadow:0 8px 22px rgba(22,35,58,.12)}
+  .rank-item .no{font-family:"Playfair Display",serif;font-size:22px;font-weight:700;color:var(--gold);width:30px;text-align:center;flex:0 0 auto}
+  .poster-s{
+    width:52px;height:64px;border-radius:10px;flex:0 0 auto;
+    display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.85);
+  }
+  .poster-s .ic{width:22px;height:22px;stroke-width:1.4}
+  .rank-item .meta{flex:1;min-width:0}
+  .rank-item .meta h4{font-size:15px;font-weight:700;color:#242938;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .rank-item .meta p{font-size:12px;color:var(--gray)}
+  .rank-item .arrow{width:34px;text-align:center;font-size:13px;font-weight:700;flex:0 0 auto}
+  .up{color:#b05555}.down{color:#3f5f8f}.same{color:#b3b7c2}
+  .openc{font-family:"Playfair Display",serif;font-size:24px;font-weight:700;color:var(--navy);line-height:1.1;width:64px;text-align:center;flex:0 0 auto}
+  .openc small{display:block;font-family:inherit;font-size:11px;color:var(--gray);font-weight:500;margin-top:2px}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+
+  /* ===== Footer ===== */
+  footer{background:#0d1728;color:#9aa4b8;margin-top:20px}
+  .foot-top{display:flex;gap:40px;align-items:center;padding:36px 0;border-bottom:1px solid rgba(255,255,255,.08)}
+  .foot-links{display:flex;gap:22px;font-size:13px;flex-wrap:wrap;align-items:center}
+  .foot-links b{color:#e6eaf2;font-weight:600}
+  .foot-sns{margin-left:auto;display:flex;gap:12px}
+  .foot-sns a{
+    width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.22);
+    display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#cfd6e4;
+    transition:.15s;
+  }
+  .foot-sns a:hover{border-color:var(--gold);color:var(--gold)}
+  .foot-bottom{padding:26px 0 44px;font-size:12px;line-height:1.9;font-weight:400}
+  .foot-bottom .copy{margin-top:8px;color:#6d7789}
+
+  /* ===== Responsive ===== */
+  @media (max-width:1024px){
+    .cards{grid-template-columns:repeat(3,1fr)}
+    .regions{grid-template-columns:repeat(4,1fr)}
+    .two-col{grid-template-columns:1fr}
+  }
+  @media (max-width:760px){
+    .gnb nav{display:none}
+    .search-row{flex-direction:column}
+    .btn-main{padding:15px}
+    .cards{grid-template-columns:repeat(2,1fr)}
+    .regions{grid-template-columns:repeat(3,1fr)}
+    .hero h1{font-size:28px}
+    .banner{flex-direction:column;text-align:center;padding:36px 26px}
+    .sec-head h2{font-size:21px}
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ 라인 아이콘 스프라이트 (통일: stroke 1.5 / round / 24 grid) ═══ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m15.9 15.9 4.1 4.1"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="4" y="6" width="16" height="14" rx="2"/><path d="M8 4v4M16 4v4M4 10.5h16"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="3.5"/><path d="M5.5 19.5c1.2-3 3.7-4.5 6.5-4.5s5.3 1.5 6.5 4.5"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20.2S5.2 16 3.3 11.4C2.1 8.6 4 5.5 7.1 5.5c2 0 3.4 1.1 4.9 3.2 1.5-2.1 2.9-3.2 4.9-3.2 3.1 0 5 3.1 3.8 5.9C18.8 16 12 20.2 12 20.2z"/></symbol>
+    <symbol id="i-chev" viewBox="0 0 24 24"><path d="m9.5 5.5 6 6.5-6 6.5"/></symbol>
+    <symbol id="i-violin" viewBox="0 0 24 24"><circle cx="12" cy="3.4" r="1.1"/><path d="M12 4.5v4"/><path d="M12 8.5c-2.6 0-4.3 1.6-4.3 3.6 0 1.2.6 2.1 1.2 2.9-.5.6-.8 1.3-.8 2 0 2.2 1.7 4 3.9 4s3.9-1.8 3.9-4c0-.7-.3-1.4-.8-2 .6-.8 1.2-1.7 1.2-2.9 0-2-1.7-3.6-4.3-3.6z"/><path d="M10.6 14.6h2.8"/></symbol>
+    <symbol id="i-piano" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="10.5" rx="1.5"/><path d="M8.2 7v5.6M12 7v5.6M15.8 7v5.6"/></symbol>
+    <symbol id="i-opera" viewBox="0 0 24 24"><path d="M5 5.5h10.5V12c0 3.6-2.35 6.5-5.25 6.5S5 15.6 5 12V5.5z"/><path d="M7.9 10h.01M12.6 10h.01"/><path d="M7.9 13.2c1.3 1.1 2.9 1.1 4.2 0"/></symbol>
+    <symbol id="i-ballet" viewBox="0 0 24 24"><circle cx="12" cy="4" r="1.7"/><path d="M12 6.3v6.2"/><path d="M12 7.4 7.4 5.7M12 7.4l4.6-1.7"/><path d="M8 12.7c2.6 1.5 5.4 1.5 8 0"/><path d="M10.9 13.4 9.4 19.6M13.1 13.4l1.5 6.2"/></symbol>
+    <symbol id="i-notes" viewBox="0 0 24 24"><path d="M9.5 17.5V6.2l8.5-1.9v10.9"/><circle cx="7.5" cy="17.8" r="2"/><circle cx="16" cy="15.5" r="2"/></symbol>
+    <symbol id="i-guitar" viewBox="0 0 24 24"><circle cx="12" cy="15.8" r="4.3"/><circle cx="12" cy="15.8" r="1.4"/><path d="M12 11.5V5.2M9.7 5.2h4.6M10.6 9.7h2.8"/><path d="M10.8 6.8h.01M13.2 6.8h.01"/></symbol>
+    <symbol id="i-crown" viewBox="0 0 24 24"><path d="M4.5 16.5l1.2-7.6 4 2.9L12 5.8l2.3 6 4-2.9 1.2 7.6H4.5z"/><path d="M4.5 19.5h15"/></symbol>
+    <symbol id="i-building" viewBox="0 0 24 24"><path d="M4.5 9.5h15M5.5 9.5 12 4.5l6.5 5M7 9.5V18M10.3 9.5V18M13.7 9.5V18M17 9.5V18M4.5 18h15"/><path d="M10.6 18v-3a1.4 1.4 0 0 1 2.8 0v3"/></symbol>
+    <symbol id="i-bridge" viewBox="0 0 24 24"><path d="M3 15.5h18"/><path d="M5.5 15.5c1.5-5 11.5-5 13 0"/><path d="M9 15.5V9M15 15.5V9M9 9h6"/></symbol>
+    <symbol id="i-tree" viewBox="0 0 24 24"><path d="M12 3.5l4.5 6.5h-2.8l3.3 5.5H7l3.3-5.5H7.5L12 3.5z"/><path d="M12 15.5v5"/></symbol>
+    <symbol id="i-castle" viewBox="0 0 24 24"><path d="M5.5 20v-7.5L8 10V7h2.2v2h3.6V7H16v3l2.5 2.5V20"/><path d="M10 20v-3.5h4V20M4.5 20h15"/></symbol>
+    <symbol id="i-city" viewBox="0 0 24 24"><path d="M5 20v-9h5.5v9M12.5 20V6.5H19V20M4 20h16"/><path d="M7.2 13.5h1.1M7.2 16h1.1M14.8 9.5h1.6M14.8 12h1.6M14.8 14.5h1.6"/></symbol>
+    <symbol id="i-mountain" viewBox="0 0 24 24"><path d="M3.5 19.5 9 9l4 7.2 2.2-3.7 5.3 7H3.5z"/><circle cx="18" cy="6" r="1.8"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6.5 15.5v-5a5.5 5.5 0 0 1 11 0v5l1.8 2.7H4.7l1.8-2.7z"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/></symbol>
+  </defs>
+</svg>
+
+<!-- 최상단 유틸바 -->
+<div class="topbar">
+  <div class="wrap">
+    <a href="#">고객센터</a><a href="#">공연 등록 문의</a><a href="#">마이페이지</a>
+  </div>
+</div>
+
+<!-- GNB -->
+<header class="gnb">
+  <div class="wrap">
+    <a class="logo" href="index.html">
+      <span class="mark">OP<em>U</em>S</span>
+      <span class="sub">클래식 공연 검색</span>
+    </a>
+    <nav>
+      <a href="index.html" class="active">홈</a>
+      <a href="search.html">공연</a>
+      <a href="#">아티스트</a>
+      <a href="#">공연장</a>
+      <a href="#">특가/할인</a>
+      <a href="#">매거진</a>
+    </nav>
+    <div class="right">
+      <button class="btn-search-mini">
+        <svg class="ic" width="14" height="14"><use href="#i-search"/></svg>상세검색
+      </button>
+      <button class="btn-login">로그인</button>
+    </div>
+  </div>
+</header>
+
+<!-- 히어로 + 검색 -->
+<div class="hero">
+  <div class="wrap">
+    <h1>어디서 볼까, <span class="accent">클래식</span>을</h1>
+    <p class="lead">전국 4,200여 개 클래식·오페라·발레 공연을 한 곳에서 비교하고 예매하세요</p>
+
+    <div class="tabs">
+      <button class="tab active">공연 검색</button>
+      <button class="tab">아티스트</button>
+      <button class="tab">공연장</button>
+      <button class="tab">앙코르 상영</button>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="search-panel">
+      <div class="search-row">
+        <div class="field" style="flex:1.4">
+          <label class="lbl">공연명 · 연주자</label>
+          <input type="text" placeholder="예) 말러 교향곡 5번, 조성진, 라 보엠" />
+        </div>
+        <div class="field" style="flex:.9">
+          <label class="lbl">지역</label>
+          <select>
+            <option>전체 지역</option><option>서울</option><option>경기</option>
+            <option>부산</option><option>대전</option><option>대구</option>
+          </select>
+        </div>
+        <div class="field" style="flex:1.1">
+          <label class="lbl">관람일</label>
+          <div class="val"><svg class="ic"><use href="#i-calendar"/></svg>11. 1 (일) ~ 11. 30 (월)</div>
+        </div>
+        <div class="field" style="flex:.9">
+          <label class="lbl">인원 · 좌석</label>
+          <div class="val"><svg class="ic"><use href="#i-user"/></svg>2명 · 전체</div>
+        </div>
+        <button class="btn-main">
+          <svg class="ic"><use href="#i-search"/></svg>검색
+        </button>
+      </div>
+      <div class="quick-tags">
+        <span class="t-lbl">인기 검색어</span>
+        <button class="chip"><b>1</b>조성진 피아노 리사이틀</button>
+        <button class="chip"><b>2</b>KBS 심포니 오케스트라</button>
+        <button class="chip"><b>3</b>잠실 롯데콘서트홀</button>
+        <button class="chip">누벨르 발레단</button>
+        <button class="chip">세바스티앙 큐리에</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 카테고리 -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <h2><small>Categories</small>어떤 공연을 찾으세요?</h2>
+    </div>
+    <div class="cat-row">
+      <a class="cat" href="#"><div class="thumb m1"><svg class="ic"><use href="#i-violin"/></svg></div><div class="name">교향곡</div><div class="cnt">1,240편</div></a>
+      <a class="cat" href="#"><div class="thumb m2"><svg class="ic"><use href="#i-piano"/></svg></div><div class="name">독주회</div><div class="cnt">860편</div></a>
+      <a class="cat" href="#"><div class="thumb m4"><svg class="ic"><use href="#i-opera"/></svg></div><div class="name">오페라</div><div class="cnt">312편</div></a>
+      <a class="cat" href="#"><div class="thumb m6"><svg class="ic"><use href="#i-ballet"/></svg></div><div class="name">발레</div><div class="cnt">274편</div></a>
+      <a class="cat" href="#"><div class="thumb m5"><svg class="ic"><use href="#i-notes"/></svg></div><div class="name">실내악</div><div class="cnt">498편</div></a>
+      <a class="cat" href="#"><div class="thumb m3"><svg class="ic"><use href="#i-guitar"/></svg></div><div class="name">기타 · 민속</div><div class="cnt">152편</div></a>
+      <a class="cat" href="#"><div class="thumb m7"><svg class="ic"><use href="#i-crown"/></svg></div><div class="name">갈라 콘서트</div><div class="cnt">96편</div></a>
+    </div>
+  </div>
+</section>
+
+<!-- 인기 공연 -->
+<section style="padding-top:8px">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2><small>Trending</small>지금 인기 있는 공연</h2>
+      <a class="more" href="#">전체보기<svg class="ic"><use href="#i-chev"/></svg></a>
+    </div>
+    <div class="cards">
+      <a class="card" href="#">
+        <div class="poster m1"><svg class="ic"><use href="#i-violin"/></svg><span class="badge">예매 TOP</span><span class="like"><svg class="ic"><use href="#i-heart"/></svg></span></div>
+        <div class="info">
+          <div class="hall">롯데콘서트홀 · 서울</div>
+          <h3>조성진 피아노 리사이틀 — 라흐마니노프 전곡</h3>
+          <div class="date">2026.11.14 (토) ~ 11.15 (일)</div>
+          <div class="price"><span class="now"><em>15%</em>110,000원</span><span class="was">130,000원</span></div>
+          <span class="pill almost">매진 임박</span>
+        </div>
+      </a>
+      <a class="card" href="#">
+        <div class="poster m4"><svg class="ic"><use href="#i-opera"/></svg><span class="badge dark">신규 오픈</span><span class="like"><svg class="ic"><use href="#i-heart"/></svg></span></div>
+        <div class="info">
+          <div class="hall">예술의전당 오페라극장</div>
+          <h3>베르디 오페라 「라 트라비아타」 — 서울시오페라</h3>
+          <div class="date">2026.11.28 (토) ~ 12.6 (일)</div>
+          <div class="price"><span class="now">132,000원</span></div>
+          <span class="pill new">단독 판매</span>
+        </div>
+      </a>
+      <a class="card" href="#">
+        <div class="poster m6"><svg class="ic"><use href="#i-ballet"/></svg><span class="like"><svg class="ic"><use href="#i-heart"/></svg></span></div>
+        <div class="info">
+          <div class="hall">블루스퀘어 신한카드홀</div>
+          <h3>누벨르 발레단 「백조의 호수」 20주년 시즌</h3>
+          <div class="date">2026.12.10 (목) ~ 12.20 (일)</div>
+          <div class="price"><span class="now"><em>20%</em>64,000원</span><span class="was">80,000원</span></div>
+          <span class="pill almost">매진 임박</span>
+        </div>
+      </a>
+      <a class="card" href="#">
+        <div class="poster m6" style="background:linear-gradient(145deg,#6a5a86,#8a7aa8)"><svg class="ic"><use href="#i-piano"/></svg><span class="badge red">단 3회</span><span class="like"><svg class="ic"><use href="#i-heart"/></svg></span></div>
+        <div class="info">
+          <div class="hall">세종문화회관 M씨어터</div>
+          <h3>세바스티앙 큐리에 한국 데뷔 리사이틀</h3>
+          <div class="date">2026.11.7 (금) ~ 11.9 (일)</div>
+          <div class="price"><span class="now">99,000원</span></div>
+          <span class="pill new">프리토크</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- 프로모션 배너 -->
+<section style="padding-top:10px">
+  <div class="wrap">
+    <div class="banner">
+      <div>
+        <h3>11월 <span class="accent">클래식의 달</span> 특별 할인</h3>
+        <p>전국 협회·오케스트라 공연 최대 40% · R석 조조 할인 · 2인 1매 프로모션</p>
+      </div>
+      <button class="btn-gold">할인 공연 보러가기</button>
+    </div>
+  </div>
+</section>
+
+<!-- 지역별 공연 -->
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2><small>By Region</small>지역별 클래식 공연</h2>
+      <a class="more" href="#">전체 지역<svg class="ic"><use href="#i-chev"/></svg></a>
+    </div>
+    <div class="regions">
+      <a class="region" href="#"><div class="bg m1"><svg class="ic"><use href="#i-building"/></svg></div><div class="grad"></div><span>서울<small>1,842편</small></span></a>
+      <a class="region" href="#"><div class="bg m2"><svg class="ic"><use href="#i-bridge"/></svg></div><div class="grad"></div><span>부산<small>412편</small></span></a>
+      <a class="region" href="#"><div class="bg m5"><svg class="ic"><use href="#i-tree"/></svg></div><div class="grad"></div><span>경기<small>536편</small></span></a>
+      <a class="region" href="#"><div class="bg m4"><svg class="ic"><use href="#i-castle"/></svg></div><div class="grad"></div><span>대구<small>268편</small></span></a>
+      <a class="region" href="#"><div class="bg m3"><svg class="ic"><use href="#i-city"/></svg></div><div class="grad"></div><span>대전<small>204편</small></span></a>
+      <a class="region" href="#"><div class="bg m7"><svg class="ic"><use href="#i-mountain"/></svg></div><div class="grad"></div><span>광주<small>186편</small></span></a>
+    </div>
+  </div>
+</section>
+
+<!-- 랭킹 + 오픈예정 -->
+<section style="padding-top:0">
+  <div class="wrap two-col">
+    <div>
+      <div class="sec-head">
+        <h2><small>Weekly TOP 5</small>이번 주 예매 랭킹</h2>
+      </div>
+      <div class="rank-list">
+        <a class="rank-item" href="#">
+          <span class="no">1</span>
+          <div class="poster-s m1"><svg class="ic"><use href="#i-violin"/></svg></div>
+          <div class="meta"><h4>조성진 피아노 리사이틀</h4><p>롯데콘서트홀 · 11.14 (토)</p></div>
+          <span class="arrow up">▲</span>
+        </a>
+        <a class="rank-item" href="#">
+          <span class="no">2</span>
+          <div class="poster-s m6"><svg class="ic"><use href="#i-ballet"/></svg></div>
+          <div class="meta"><h4>누벨르 발레단 「백조의 호수」</h4><p>블루스퀘어 · 12.10 (목)</p></div>
+          <span class="arrow up">▲2</span>
+        </a>
+        <a class="rank-item" href="#">
+          <span class="no">3</span>
+          <div class="poster-s m2"><svg class="ic"><use href="#i-piano"/></svg></div>
+          <div class="meta"><h4>세바스티앙 큐리에 리사이틀</h4><p>세종M씨어터 · 11.7 (금)</p></div>
+          <span class="arrow down">▼1</span>
+        </a>
+        <a class="rank-item" href="#">
+          <span class="no">4</span>
+          <div class="poster-s m4"><svg class="ic"><use href="#i-opera"/></svg></div>
+          <div class="meta"><h4>「라 트라비아타」 서울시오페라</h4><p>예술의전당 · 11.28 (토)</p></div>
+          <span class="arrow same">-</span>
+        </a>
+        <a class="rank-item" href="#">
+          <span class="no">5</span>
+          <div class="poster-s m5"><svg class="ic"><use href="#i-notes"/></svg></div>
+          <div class="meta"><h4>아르테미스 콰르텟 내한 공연</h4><p>이화여대 삼성홀 · 11.21 (토)</p></div>
+          <span class="arrow up">NEW</span>
+        </a>
+      </div>
+    </div>
+    <div>
+      <div class="sec-head">
+        <h2><small>Coming Soon</small>티켓 오픈 예정</h2>
+        <a class="more" href="#">전체 일정<svg class="ic"><use href="#i-chev"/></svg></a>
+      </div>
+      <div class="rank-list">
+        <a class="rank-item" href="#">
+          <div class="openc">11.03<small>목 14:00</small></div>
+          <div class="poster-s m3"><svg class="ic"><use href="#i-violin"/></svg></div>
+          <div class="meta"><h4>빈 필하모닉 내한 갈라 콘서트</h4><p>예술의전당 콘서트홀 · 2027.1.8~10</p></div>
+          <button class="chip" style="flex:0 0 auto"><svg class="ic" style="width:13px;height:13px;margin-right:5px"><use href="#i-bell"/></svg>알림신청</button>
+        </a>
+        <a class="rank-item" href="#">
+          <div class="openc">11.05<small>토 10:00</small></div>
+          <div class="poster-s m7"><svg class="ic"><use href="#i-crown"/></svg></div>
+          <div class="meta"><h4>설년 음악회 「니벨룽의 반지」 발췌</h4><p>롯데콘서트홀 · 2027.1.30~31</p></div>
+          <button class="chip" style="flex:0 0 auto"><svg class="ic" style="width:13px;height:13px;margin-right:5px"><use href="#i-bell"/></svg>알림신청</button>
+        </a>
+        <a class="rank-item" href="#">
+          <div class="openc">11.07<small>월 11:00</small></div>
+          <div class="poster-s m4"><svg class="ic"><use href="#i-opera"/></svg></div>
+          <div class="meta"><h4>부산국제오페라축제 「카르멘」</h4><p>부산시립오페라하우스 · 2027.2.5~8</p></div>
+          <button class="chip" style="flex:0 0 auto"><svg class="ic" style="width:13px;height:13px;margin-right:5px"><use href="#i-bell"/></svg>알림신청</button>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 푸터 -->
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <a class="logo" href="index.html">
+        <span class="mark" style="color:#e6eaf2">OP<em>U</em>S</span>
+      </a>
+      <div class="foot-links">
+        <b>회사소개</b><b>이용약관</b><b>개인정보처리방침</b><span>공연 등록 신청</span><span>제휴 문의</span><span>고객센터 1544-0000</span>
+      </div>
+      <div class="foot-sns">
+        <a href="#">X</a><a href="#">IG</a><a href="#">YT</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      (주)오퍼스컴퍼니 · 대표 김오퍼스 · 서울특별시 중구 세종대로 110
+      <br>사업자등록번호 000-00-00000 · 통신판매업신고 중구-0000호
+      <div class="copy">© 2026 OPUS Inc. All rights reserved. 본 페이지는 디자인 시안입니다.</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.querySelectorAll('.tab').forEach(t=>{
+    t.addEventListener('click',()=>{
+      document.querySelector('.tab.active')?.classList.remove('active');
+      t.classList.add('active');
+    });
+  });
+  document.querySelectorAll('.like').forEach(l=>{
+    l.addEventListener('click',e=>{e.preventDefault();l.classList.toggle('on');});
+  });
+</script>
+</body>
+</html>

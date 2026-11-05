@@ -1,349 +1,229 @@
-<!DOCTYPE html><html lang="ko"><head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OPUS - 공연 기간 선택 (모바일)</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&amp;family=Pretendard:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            serif: ['"Playfair Display"', 'serif'],
-            sans: ['Pretendard', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'Roboto', 'sans-serif'],
-          },
-          colors: {
-            primary: '#1b2430',
-            secondary: '#a37e42',
-            surface: '#f9f9fd',
-            'surface-dim': '#e8e8ed',
-            'surface-container-lowest': '#ffffff',
-            'surface-container-low': '#f3f3f7',
-            'outline-variant': '#e2e2e7',
-          }
-        }
-      }
-    }
-  </script>
-  <style>
-    body {
-      font-family: 'Pretendard', sans-serif;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .font-serif-title {
-      font-family: '"Playfair Display"', serif;
-    }
-    .no-scrollbar::-webkit-scrollbar {
-      display: none;
-    }
-    .no-scrollbar {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-    }
-  </style>
+<!DOCTYPE html>
+<!--
+  OPUS | 관람 기간 선택 ui 시안 (모바일)
+  specs/home.md: search-005 (새로고침 → 최대 기간 초기화), exception-02 (범위 밖 clamp)
+  데스크톱 popover(홈페이지 수정안)와 동일 구성: 기간 프리셋 + 달력 + 초기화/적용.
+-->
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>OPUS | 관람 기간 선택 ui 시안 (모바일)</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --navy:#16233a;
+    --gold:#c8a24a;
+    --gold-deep:#a8843a;
+    --gold-tint:#fbf8f1;
+    --ink:#22242a;
+    --gray:#6b7080;
+    --muted:#a3a093;
+    --line:#e8e4da;
+    --line-soft:#efece3;
+    --display:"Josefin Sans","Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    font-family:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+    color:var(--ink);background:#e9e7e0;
+    line-height:1.55;letter-spacing:-.01em;
+  }
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+  .ic{display:inline-block;vertical-align:middle;flex:0 0 auto}
+  .ic use,svg.ic{stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+  .stage{max-width:430px;margin:0 auto;min-height:100vh;background:var(--gold-tint);position:relative;overflow:hidden}
+
+  /* ── 배경: 시트를 연 모바일 검색 패널 상태 (흐리게) ── */
+  .ctx{padding:14px 16px 0;filter:brightness(.92);user-select:none}
+  .ctx .field{
+    border:1.5px solid var(--navy);border-radius:12px;background:#fff;
+    padding:11px 16px 10px;box-shadow:0 0 0 3px rgba(22,35,58,.06);
+  }
+  .ctx .lbl{display:flex;align-items:center;gap:5px;font-size:11.5px;font-weight:700;color:#8a8f9c;margin-bottom:3px}
+  .ctx .lbl .ic{width:12px;height:12px}
+  .ctx .val{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:500;color:var(--ink)}
+  .ctx .val .ic{width:15px;height:15px;color:#8a8f9c}
+
+  /* ── 바텀시트 ── */
+  .scrim{position:absolute;inset:0;background:rgba(13,23,40,.5)}
+  .sheet{
+    position:absolute;left:0;right:0;bottom:0;z-index:10;
+    background:#fff;border-radius:16px 16px 0 0;
+    box-shadow:0 -10px 40px rgba(13,23,40,.3);
+    display:flex;flex-direction:column;max-height:92vh;
+  }
+  .grabber{width:40px;height:4px;border-radius:2px;background:#d8d2c0;margin:10px auto 2px;flex:0 0 auto}
+  .sheet-head{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    padding:6px 18px 12px;border-bottom:1px solid var(--line-soft);flex:0 0 auto;
+  }
+  .sheet-head b{font-size:15px;font-weight:700;color:var(--navy)}
+  .btn-close{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:30px;height:30px;border-radius:50%;background:var(--gold-tint);color:var(--gray);transition:.15s;
+  }
+  .btn-close:hover{color:var(--navy)}
+  .btn-close .ic{width:14px;height:14px}
+  .sheet-scroll{overflow-y:auto;padding:14px 18px 18px;overscroll-behavior:contain}
+  .pp-top{display:flex;align-items:center;gap:8px}
+  .pp-chip{font-size:10px;font-weight:700;letter-spacing:.04em;background:var(--navy);color:#fff;border-radius:3px;padding:3px 7px;flex:0 0 auto}
+  .pp-desc{font-size:11.5px;color:var(--gray);line-height:1.5}
+  .pp-lbl{font-size:11px;font-weight:600;color:var(--gray);margin:14px 0 8px}
+  /* 프리셋: 모바일에서는 세로 라디오 리스트 */
+  .pp-preset-list{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+  .pp-preset{
+    display:flex;align-items:center;justify-content:space-between;gap:8px;
+    width:100%;text-align:left;padding:12px 14px;
+    font-size:13.5px;font-weight:600;color:#4a5060;background:#fff;transition:.12s;
+  }
+  .pp-preset + .pp-preset{border-top:1px solid var(--line-soft)}
+  .pp-preset .range{display:block;font-size:11px;font-weight:500;color:var(--muted);margin-top:1px}
+  .pp-preset.active{background:var(--gold-tint);color:var(--navy)}
+  .pp-preset .check{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--line);flex:0 0 auto;position:relative}
+  .pp-preset.active .check{background:var(--navy);border-color:var(--navy)}
+  .pp-preset.active .check::after{
+    content:"";position:absolute;left:5px;top:2px;width:5px;height:9px;
+    border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg);
+  }
+  /* 달력: 1개월 + 이동 버튼 */
+  .cal-head{display:flex;align-items:center;justify-content:space-between;margin:16px 0 6px}
+  .cal-title{font-family:var(--display);font-size:14px;font-weight:700;color:var(--navy)}
+  .cal-title em{font-style:normal;font-family:"Josefin Sans",sans-serif;font-size:10px;font-weight:600;letter-spacing:.18em;color:var(--gold-deep);margin-left:6px}
+  .cal-nav{display:flex;gap:6px}
+  .pp-nav{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:26px;height:26px;border:1px solid var(--line);border-radius:4px;color:var(--gray);transition:.12s;
+  }
+  .pp-nav:hover:not(:disabled){border-color:var(--navy);color:var(--navy)}
+  .pp-nav:disabled{opacity:.35;cursor:default}
+  .pp-nav .ic{width:12px;height:12px}
+  .pp-dow,.pp-days{display:grid;grid-template-columns:repeat(7,1fr)}
+  .pp-dow{margin-bottom:2px}
+  .pp-dow span{font-size:10.5px;font-weight:600;color:var(--muted);text-align:center;padding:3px 0}
+  .pp-day{
+    position:relative;height:36px;display:flex;align-items:center;justify-content:center;
+    font-size:12.5px;color:var(--ink);transition:background .1s;
+  }
+  .pp-day:disabled{color:#c9c5b8;cursor:default}
+  .pp-day.in-range{background:var(--gold-tint)}
+  .pp-day.in-range:first-child,.pp-day.in-range:last-of-type{border-radius:0}
+  .pp-day.edge{background:var(--navy);color:#fff;font-weight:700;border-radius:6px}
+  .pp-day .dot{position:absolute;bottom:3px;left:50%;transform:translateX(-50%);width:3px;height:3px;border-radius:50%;background:var(--gold-deep)}
+  .pp-day.edge .dot{background:var(--gold)}
+  .pp-foot{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    margin-top:14px;padding-top:12px;border-top:1px solid var(--line-soft);flex:0 0 auto;
+  }
+  .pp-reset{font-size:12.5px;font-weight:600;color:var(--gray);padding:9px 12px;border-radius:6px;transition:.12s}
+  .pp-reset:hover{color:var(--navy);background:var(--gold-tint)}
+  .pp-apply{font-size:13.5px;font-weight:700;color:#fff;background:var(--navy);border-radius:8px;padding:11px 22px;transition:.15s}
+  .pp-apply:hover{background:var(--gold);color:#0d1728}
+</style>
 </head>
-<body class="bg-[#f2f3f7] text-[#1b2430] min-h-screen flex flex-col justify-end sm:justify-center items-center p-0 sm:p-4">
+<body>
+<div class="stage">
 
-  <!-- Mobile Bottom Sheet / Modal Card -->
-  <div class="w-full max-w-[420px] bg-white rounded-t-3xl sm:rounded-2xl shadow-2xl flex flex-col max-h-[92vh] overflow-hidden border border-[#e2e2e7]/80">
-    
-    <!-- Sheet Drag Handle (Mobile cue) -->
-    <div class="w-full flex justify-center pt-3 pb-1 sm:hidden">
-      <div class="w-10 h-1 bg-[#d1d2d8] rounded-full"></div>
+  <!-- 배경: 기간 필드를 누른 모바일 검색 패널 상태 (흐리게) -->
+  <div class="ctx" aria-hidden="true">
+    <div class="field">
+      <span class="lbl"><svg class="ic"><use href="#i-calendar"/></svg>관람 기간</span>
+      <span class="val"><svg class="ic"><use href="#i-calendar"/></svg>10. 23 (금) ~ 1. 23 (토)</span>
     </div>
-
-    <!-- Header -->
-    <header class="px-5 pt-3 pb-4 border-b border-[#f0f0f4]">
-      <div class="flex items-center justify-between mb-1.5">
-        <div class="flex items-center gap-2">
-          <span class="material-symbols-outlined text-[20px] text-[#1b2430]">calendar_month</span>
-          <h1 class="text-base font-bold text-[#1b2430] tracking-tight">공연 기간 선택</h1>
-          <span class="bg-[#1b2430] text-white text-[10px] font-medium px-2 py-0.5 rounded">최대 3개월 탐색</span>
-        </div>
-        <button type="button" class="w-8 h-8 flex items-center justify-center rounded-full text-stone-400 hover:text-stone-700 hover:bg-stone-100 transition-colors">
-          <span class="material-symbols-outlined text-[20px]">close</span>
-        </button>
-      </div>
-      <p class="text-[12px] text-stone-500 leading-relaxed font-normal">
-        공연 기획사 및 예술의전당·롯데콘서트홀 등록 기준 향후 6개월간의 공식 프로그램을 조회합니다.
-      </p>
-    </header>
-
-    <!-- Quick Presets Horizontal Scroll -->
-    <div class="px-5 py-3 border-b border-[#f0f0f4] bg-[#fafafc]">
-      <div class="flex items-center justify-between mb-2">
-        <span class="text-[11px] font-semibold text-stone-500 tracking-wider">기간 프리셋</span>
-        <span class="text-[11px] text-[#a37e42] font-medium">향후 3개월 선택됨</span>
-      </div>
-      <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-0.5">
-        <button type="button" class="whitespace-nowrap px-3 py-1.5 rounded-lg text-[12px] font-medium border border-[#e5e6eb] bg-white text-stone-600 hover:border-stone-400 transition-colors">
-          오늘
-        </button>
-        <button type="button" class="whitespace-nowrap px-3 py-1.5 rounded-lg text-[12px] font-medium border border-[#e5e6eb] bg-white text-stone-600 hover:border-stone-400 transition-colors">
-          이번 주말
-        </button>
-        <button type="button" class="whitespace-nowrap px-3 py-1.5 rounded-lg text-[12px] font-medium border border-[#e5e6eb] bg-white text-stone-600 hover:border-stone-400 transition-colors">
-          이번 달 (4월)
-        </button>
-        <button type="button" class="whitespace-nowrap px-3 py-1.5 rounded-lg text-[12px] font-medium border border-[#e5e6eb] bg-white text-stone-600 hover:border-stone-400 transition-colors">
-          향후 1개월
-        </button>
-        <button type="button" class="whitespace-nowrap px-3 py-1.5 rounded-lg text-[12px] font-semibold border-2 border-[#a37e42] bg-[#a37e42]/10 text-[#a37e42] flex items-center gap-1">
-          <span class="material-symbols-outlined text-[14px]">check</span>
-          향후 3개월
-        </button>
-        <button type="button" class="whitespace-nowrap px-3 py-1.5 rounded-lg text-[12px] font-medium border border-[#e5e6eb] bg-white text-stone-600 hover:border-stone-400 transition-colors">
-          향후 6개월 전체
-        </button>
-      </div>
-    </div>
-
-    <!-- Scrollable Calendar Area -->
-    <div class="flex-1 overflow-y-auto px-5 py-4 space-y-6 no-scrollbar">
-      
-      <!-- Month Navigation Sub-bar -->
-      <div class="flex items-center justify-between px-1">
-        <div class="text-[11px] font-medium tracking-widest text-stone-400 uppercase font-serif-title">
-          Opus Repertoire Calendar 2025
-        </div>
-        <div class="flex items-center gap-1">
-          <button type="button" class="w-7 h-7 flex items-center justify-center rounded-md border border-[#e2e2e7] bg-white text-stone-600 hover:bg-stone-50">
-            <span class="material-symbols-outlined text-[16px]">chevron_left</span>
-          </button>
-          <button type="button" class="w-7 h-7 flex items-center justify-center rounded-md border border-[#e2e2e7] bg-white text-stone-600 hover:bg-stone-50">
-            <span class="material-symbols-outlined text-[16px]">chevron_right</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- Month 1: 2025년 4월 -->
-      <div class="bg-white rounded-xl border border-[#ececf0] p-3.5 shadow-sm">
-        <div class="flex items-baseline justify-between mb-3 px-1">
-          <div class="text-base font-bold text-[#1b2430] font-serif-title tracking-tight">
-            2025년 4월
-          </div>
-          <span class="text-[11px] font-serif-title tracking-widest text-[#a37e42] font-semibold">APRIL</span>
-        </div>
-
-        <!-- Weekday Header -->
-        <div class="grid grid-cols-7 gap-1 text-center mb-1 text-[11px] font-medium text-stone-400">
-          <span class="text-red-500">일</span>
-          <span class="">월</span>
-          <span class="">화</span>
-          <span class="">수</span>
-          <span class="">목</span>
-          <span class="">금</span>
-          <span class="text-blue-600">토</span>
-        </div>
-
-        <!-- 4월 Dates Grid -->
-        <div class="grid grid-cols-7 gap-y-1 text-center text-[13px]">
-          <!-- Empty Slots (Sun, Mon) -->
-          <div></div>
-          <div></div>
-
-          <!-- 1일: 선택 시작일 -->
-          <div class="relative py-1 bg-[#ede8dc] rounded-l-full">
-            <div class="w-7 h-7 mx-auto bg-[#1b2430] text-white font-bold rounded-full flex flex-col items-center justify-center text-[11px] leading-none shadow">
-              <span class="">1</span>
-              <span class="text-[7px] text-[#e0cfb4] -mt-0.5">시작</span>
-            </div>
-          </div>
-
-          <!-- 2 ~ 5일: 범위 내 -->
-          <div class="py-1 bg-[#ede8dc] flex items-center justify-center">
-            <span class="text-stone-800 font-medium">2</span>
-          </div>
-          <div class="py-1 bg-[#ede8dc] flex items-center justify-center">
-            <span class="text-stone-800 font-medium">3</span>
-          </div>
-          <div class="py-1 bg-[#ede8dc] flex flex-col items-center justify-center relative">
-            <span class="text-stone-800 font-medium">4</span>
-            <span class="w-1 h-1 bg-[#a37e42] rounded-full absolute bottom-0.5"></span>
-          </div>
-          <div class="py-1 bg-[#ede8dc] rounded-r-none flex items-center justify-center">
-            <span class="text-blue-700 font-medium">5</span>
-          </div>
-
-          <!-- 6 ~ 12일: 전체 범위 내 음영 -->
-          <div class="py-1 bg-[#ede8dc] flex items-center justify-center"><span class="text-red-600 font-medium">6</span></div>
-          <div class="py-1 bg-[#ede8dc] flex items-center justify-center"><span class="text-stone-800 font-medium">7</span></div>
-          <div class="py-1 bg-[#ede8dc] flex items-center justify-center"><span class="text-stone-800 font-medium">8</span></div>
-          <div class="py-1 bg-[#ede8dc] flex items-center justify-center"><span class="text-stone-800 font-medium">9</span></div>
-          <div class="py-1 bg-[#ede8dc] flex items-center justify-center"><span class="text-stone-800 font-medium">10</span></div>
-          <div class="py-1 bg-[#ede8dc] flex flex-col items-center justify-center relative">
-            <span class="text-stone-800 font-medium">11</span>
-            <span class="w-1 h-1 bg-[#a37e42] rounded-full absolute bottom-0.5"></span>
-          </div>
-          <div class="py-1 bg-[#ede8dc] flex items-center justify-center"><span class="text-blue-700 font-medium">12</span></div>
-
-          <!-- 13 ~ 19일: 전체 범위 내 음영 -->
-          <div class="py-1 bg-[#ede8dc] flex items-center justify-center"><span class="text-red-600 font-medium">13</span></div>
-          <div class="py-1 bg-[#ede8dc] flex items-center justify-center"><span class="text-stone-800 font-medium">14</span></div>
-          <div class="py-1 bg-[#ede8dc] flex items-center justify-center"><span class="text-stone-800 font-medium">15</span></div>
-          <div class="py-1 bg-[#ede8dc] flex items-center justify-center"><span class="text-stone-800 font-medium">16</span></div>
-          <div class="py-1 bg-[#ede8dc] flex items-center justify-center"><span class="text-stone-800 font-medium">17</span></div>
-          <div class="py-1 bg-[#ede8dc] flex items-center justify-center"><span class="text-stone-800 font-medium">18</span></div>
-          <div class="py-1 bg-[#ede8dc] flex flex-col items-center justify-center relative">
-            <span class="text-blue-700 font-medium">19</span>
-            <span class="w-1 h-1 bg-[#a37e42] rounded-full absolute bottom-0.5"></span>
-          </div>
-
-          <!-- 20 ~ 26일: 전체 범위 내 음영 -->
-          <div class="py-1 bg-[#ede8dc] flex items-center justify-center"><span class="text-red-600 font-medium">20</span></div>
-          <div class="py-1 bg-[#ede8dc] flex items-center justify-center"><span class="text-stone-800 font-medium">21</span></div>
-          <div class="py-1 bg-[#ede8dc] flex items-center justify-center"><span class="text-stone-800 font-medium">22</span></div>
-          <div class="py-1 bg-[#ede8dc] flex items-center justify-center"><span class="text-stone-800 font-medium">23</span></div>
-          <div class="py-1 bg-[#ede8dc] flex items-center justify-center"><span class="text-stone-800 font-medium">24</span></div>
-          <div class="py-1 bg-[#ede8dc] flex flex-col items-center justify-center relative">
-            <span class="text-stone-800 font-medium">25</span>
-            <span class="w-1 h-1 bg-[#a37e42] rounded-full absolute bottom-0.5"></span>
-          </div>
-          <div class="py-1 bg-[#ede8dc] flex items-center justify-center"><span class="text-blue-700 font-medium">26</span></div>
-
-          <!-- 27 ~ 30일: 범위 지속 -->
-          <div class="py-1 bg-[#ede8dc] flex items-center justify-center"><span class="text-red-600 font-medium">27</span></div>
-          <div class="py-1 bg-[#ede8dc] flex items-center justify-center"><span class="text-stone-800 font-medium">28</span></div>
-          <div class="py-1 bg-[#ede8dc] flex items-center justify-center"><span class="text-stone-800 font-medium">29</span></div>
-          <div class="py-1 bg-[#ede8dc] flex items-center justify-center"><span class="text-stone-800 font-medium">30</span></div>
-          <div></div>
-          <div></div>
-          <div></div>
-        </div>
-      </div>
-
-      <!-- Month 2: 2025년 5월 -->
-      <div class="bg-white rounded-xl border border-[#ececf0] p-3.5 shadow-sm">
-        <div class="flex items-baseline justify-between mb-3 px-1">
-          <div class="text-base font-bold text-[#1b2430] font-serif-title tracking-tight">
-            2025년 5월
-          </div>
-          <span class="text-[11px] font-serif-title tracking-widest text-[#a37e42] font-semibold">MAY</span>
-        </div>
-
-        <!-- Weekday Header -->
-        <div class="grid grid-cols-7 gap-1 text-center mb-1 text-[11px] font-medium text-stone-400">
-          <span class="text-red-500">일</span>
-          <span class="">월</span>
-          <span class="">화</span>
-          <span class="">수</span>
-          <span class="">목</span>
-          <span class="">금</span>
-          <span class="text-blue-600">토</span>
-        </div>
-
-        <!-- 5월 Dates Grid -->
-        <div class="grid grid-cols-7 gap-y-1 text-center text-[13px]">
-          <!-- Empty Slots (Sun, Mon, Tue, Wed) -->
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-
-          <div class="py-1 bg-[#ede8dc] flex items-center justify-center"><span class="text-stone-800 font-medium">1</span></div>
-          <div class="py-1 bg-[#ede8dc] flex flex-col items-center justify-center relative">
-            <span class="text-stone-800 font-medium">2</span>
-            <span class="w-1 h-1 bg-[#a37e42] rounded-full absolute bottom-0.5"></span>
-          </div>
-          <div class="py-1 bg-[#ede8dc] flex items-center justify-center"><span class="text-blue-700 font-medium">3</span></div>
-
-          <div class="py-1 bg-[#ede8dc] flex items-center justify-center"><span class="text-red-600 font-medium">4</span></div>
-          <div class="py-1 bg-[#ede8dc] flex items-center justify-center"><span class="text-stone-800 font-medium">5</span></div>
-          <div class="py-1 bg-[#ede8dc] flex items-center justify-center"><span class="text-stone-800 font-medium">6</span></div>
-          <div class="py-1 bg-[#ede8dc] flex items-center justify-center"><span class="text-stone-800 font-medium">7</span></div>
-          <div class="py-1 bg-[#ede8dc] flex items-center justify-center"><span class="text-stone-800 font-medium">8</span></div>
-          <div class="py-1 bg-[#ede8dc] flex flex-col items-center justify-center relative">
-            <span class="text-stone-800 font-medium">9</span>
-            <span class="w-1 h-1 bg-[#a37e42] rounded-full absolute bottom-0.5"></span>
-          </div>
-          <div class="py-1 bg-[#ede8dc] flex items-center justify-center"><span class="text-blue-700 font-medium">10</span></div>
-
-          <div class="py-1 bg-[#ede8dc] flex items-center justify-center"><span class="text-red-600 font-medium">11</span></div>
-          <div class="py-1 bg-[#ede8dc] flex items-center justify-center"><span class="text-stone-800 font-medium">12</span></div>
-          <div class="py-1 bg-[#ede8dc] flex items-center justify-center"><span class="text-stone-800 font-medium">13</span></div>
-          <div class="py-1 bg-[#ede8dc] flex items-center justify-center"><span class="text-stone-800 font-medium">14</span></div>
-          <div class="py-1 bg-[#ede8dc] flex items-center justify-center"><span class="text-stone-800 font-medium">15</span></div>
-          <div class="py-1 bg-[#ede8dc] flex flex-col items-center justify-center relative">
-            <span class="text-stone-800 font-medium">16</span>
-            <span class="w-1 h-1 bg-[#a37e42] rounded-full absolute bottom-0.5"></span>
-          </div>
-          <div class="py-1 bg-[#ede8dc] flex items-center justify-center"><span class="text-blue-700 font-medium">17</span></div>
-
-          <div class="py-1 bg-[#ede8dc] flex items-center justify-center"><span class="text-red-600 font-medium">18</span></div>
-          <div class="py-1 bg-[#ede8dc] flex items-center justify-center"><span class="text-stone-800 font-medium">19</span></div>
-          <div class="py-1 bg-[#ede8dc] flex items-center justify-center"><span class="text-stone-800 font-medium">20</span></div>
-          <div class="py-1 bg-[#ede8dc] flex items-center justify-center"><span class="text-stone-800 font-medium">21</span></div>
-          <div class="py-1 bg-[#ede8dc] flex items-center justify-center"><span class="text-stone-800 font-medium">22</span></div>
-          <div class="py-1 bg-[#ede8dc] flex flex-col items-center justify-center relative">
-            <span class="text-stone-800 font-medium">23</span>
-            <span class="w-1 h-1 bg-[#a37e42] rounded-full absolute bottom-0.5"></span>
-          </div>
-          <div class="py-1 bg-[#ede8dc] flex items-center justify-center"><span class="text-blue-700 font-medium">24</span></div>
-
-          <div class="py-1 bg-[#ede8dc] flex items-center justify-center"><span class="text-red-600 font-medium">25</span></div>
-          <div class="py-1 bg-[#ede8dc] flex items-center justify-center"><span class="text-stone-800 font-medium">26</span></div>
-          <div class="py-1 bg-[#ede8dc] flex items-center justify-center"><span class="text-stone-800 font-medium">27</span></div>
-          <div class="py-1 bg-[#ede8dc] flex items-center justify-center"><span class="text-stone-800 font-medium">28</span></div>
-          <div class="py-1 bg-[#ede8dc] flex items-center justify-center"><span class="text-stone-800 font-medium">29</span></div>
-          <div class="py-1 bg-[#ede8dc] flex items-center justify-center"><span class="text-stone-800 font-medium">30</span></div>
-          <div class="py-1 bg-[#ede8dc] flex items-center justify-center"><span class="text-blue-700 font-medium">31</span></div>
-        </div>
-
-        <!-- Range Continuation Notice -->
-        <div class="mt-3 pt-2.5 border-t border-[#f0f0f4] flex items-center justify-between text-[11px] text-stone-500">
-          <div class="flex items-center gap-1.5">
-            <span class="w-1.5 h-1.5 bg-[#a37e42] rounded-full"></span>
-            <span class="">연주회 등록일</span>
-          </div>
-          <div class="text-[#a37e42] font-semibold flex items-center gap-1">
-            <span class="">연결 범위: 2025. 06. 30(월)까지 포함</span>
-            <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Bottom Summary & Action Controls -->
-    <footer class="px-5 py-4 border-t border-[#e2e2e7] bg-[#fafafc] flex flex-col gap-3">
-      
-      <!-- Date Range Summary Pills -->
-      <div class="flex items-center gap-2 text-[12px]">
-        <div class="flex-1 bg-white border border-[#d8d9de] rounded-lg px-2.5 py-1.5 flex flex-col">
-          <span class="text-[10px] text-stone-400 font-medium">시작일</span>
-          <span class="font-bold text-[#1b2430]">2025. 04. 01 (화)</span>
-        </div>
-        <span class="text-stone-400 font-bold">~</span>
-        <div class="flex-1 bg-white border border-[#d8d9de] rounded-lg px-2.5 py-1.5 flex flex-col">
-          <span class="text-[10px] text-stone-400 font-medium">종료일</span>
-          <span class="font-bold text-[#1b2430]">2025. 06. 30 (월)</span>
-        </div>
-      </div>
-
-      <!-- Action Buttons -->
-      <div class="flex items-center gap-2">
-        <button type="button" class="px-3.5 py-3 rounded-xl border border-[#d1d2d8] bg-white text-stone-700 text-xs font-semibold flex items-center gap-1.5 active:bg-stone-100 transition-colors">
-          <span class="material-symbols-outlined text-[16px] text-stone-500">refresh</span>
-          초기화
-        </button>
-        <button type="button" class="px-4 py-3 rounded-xl border border-[#d1d2d8] bg-white text-stone-700 text-xs font-semibold active:bg-stone-100 transition-colors">
-          닫기
-        </button>
-        <button type="button" class="flex-1 py-3 rounded-xl bg-[#1b2430] text-white text-xs font-bold flex items-center justify-center gap-1.5 active:opacity-90 shadow transition-colors">
-          적용하기
-          <span class="material-symbols-outlined text-[16px]">check</span>
-        </button>
-      </div>
-
-    </footer>
-
   </div>
 
+  <div class="scrim" aria-hidden="true"></div>
 
+  <!-- search-005: 관람 기간 선택 바텀시트 -->
+  <section class="sheet" role="dialog" aria-label="관람 기간 선택">
+    <div class="grabber" aria-hidden="true"></div>
+    <div class="sheet-head">
+      <b>관람 기간</b>
+      <button type="button" class="btn-close" aria-label="닫기"><svg class="ic"><use href="#i-close"/></svg></button>
+    </div>
+    <div class="sheet-scroll">
+      <div class="pp-top">
+        <span class="pp-chip">최대 3개월 탐색</span>
+        <p class="pp-desc">공연 기획사 및 공연장 등록 기준 향후 3개월간의 공식 프로그램을 조회합니다.</p>
+      </div>
 
+      <p class="pp-lbl">기간 프리셋</p>
+      <div class="pp-preset-list">
+        <button type="button" class="pp-preset">
+          <span>이번 달 (10월)<span class="range">10. 23 ~ 10. 31</span></span>
+          <span class="check" aria-hidden="true"></span>
+        </button>
+        <button type="button" class="pp-preset">
+          <span>향후 1개월<span class="range">10. 23 ~ 11. 23</span></span>
+          <span class="check" aria-hidden="true"></span>
+        </button>
+        <button type="button" class="pp-preset active" aria-current="true">
+          <span>향후 3개월 전체<span class="range">10. 23 ~ 1. 23</span></span>
+          <span class="check" aria-hidden="true"></span>
+        </button>
+      </div>
 
+      <div class="cal-head">
+        <button type="button" class="pp-nav" disabled aria-label="이전 달"><svg class="ic"><use href="#i-chev-l"/></svg></button>
+        <span class="cal-title">2026년 10월 <em>OCT</em></span>
+        <button type="button" class="pp-nav" aria-label="다음 달"><svg class="ic"><use href="#i-chev-r"/></svg></button>
+      </div>
+      <div class="pp-dow"><span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span></div>
+      <div class="pp-days">
+        <span class="pp-day" hidden></span><span class="pp-day" hidden></span><span class="pp-day" hidden></span><span class="pp-day" hidden></span>
+        <span class="pp-day" aria-disabled="true">1</span>
+        <span class="pp-day" aria-disabled="true">2</span>
+        <span class="pp-day" aria-disabled="true">3</span>
+        <span class="pp-day" aria-disabled="true">4</span>
+        <span class="pp-day" aria-disabled="true">5</span>
+        <span class="pp-day" aria-disabled="true">6</span>
+        <span class="pp-day" aria-disabled="true">7</span>
+        <span class="pp-day" aria-disabled="true">8</span>
+        <span class="pp-day" aria-disabled="true">9</span>
+        <span class="pp-day" aria-disabled="true">10</span>
+        <span class="pp-day" aria-disabled="true">11</span>
+        <span class="pp-day" aria-disabled="true">12</span>
+        <span class="pp-day" aria-disabled="true">13</span>
+        <span class="pp-day" aria-disabled="true">14</span>
+        <span class="pp-day" aria-disabled="true">15</span>
+        <span class="pp-day" aria-disabled="true">16</span>
+        <span class="pp-day" aria-disabled="true">17</span>
+        <span class="pp-day" aria-disabled="true">18</span>
+        <span class="pp-day" aria-disabled="true">19</span>
+        <span class="pp-day" aria-disabled="true">20</span>
+        <span class="pp-day" aria-disabled="true">21</span>
+        <span class="pp-day" aria-disabled="true">22</span>
+        <span class="pp-day edge in-range">23<span class="dot"></span></span>
+        <span class="pp-day in-range">24<span class="dot"></span></span>
+        <span class="pp-day in-range">25<span class="dot"></span></span>
+        <span class="pp-day in-range">26</span>
+        <span class="pp-day in-range">27</span>
+        <span class="pp-day in-range">28</span>
+        <span class="pp-day in-range">29</span>
+        <span class="pp-day in-range">30</span>
+        <span class="pp-day in-range">31</span>
+      </div>
 
-</body></html>
+      <p class="pp-lbl" style="margin-top:16px">2026년 11월 <span style="font-family:var(--display);font-size:10px;font-weight:600;letter-spacing:.18em;color:var(--gold-deep)">NOV</span> 이후 — <b style="font-weight:700;color:var(--navy)">다음 달</b> 버튼으로 이동</p>
+
+      <div class="pp-foot">
+        <button type="button" class="pp-reset">초기화 (3개월)</button>
+        <button type="button" class="pp-apply">적용하기</button>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="4" y="6" width="16" height="14" rx="2"/><path d="M8 4v4M16 4v4M4 10.5h16"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+    <symbol id="i-chev-l" viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></symbol>
+    <symbol id="i-chev-r" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></symbol>
+  </defs>
+</svg>
+</body>
+</html>

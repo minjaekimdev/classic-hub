@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<!--
+  OPUS | 서비스 피드백 모달 시안 (데스크톱)
+  specs/home.md: feedback-001 (데스크톱 — '서비스 의견 보내기' 버튼 → 모달 창)
+-->
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>OPUS | 서비스 피드백 모달 시안 (데스크톱)</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --navy:#16233a;
+    --gold:#c8a24a;
+    --gold-deep:#a8843a;
+    --gold-tint:#fbf8f1;
+    --ivory:#faf8f3;
+    --ink:#22242a;
+    --gray:#6b7080;
+    --muted:#a3a093;
+    --line:#e8e4da;
+    --line-soft:#efece3;
+    --display:"Josefin Sans","Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    font-family:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+    color:var(--ink);background:var(--ivory);
+    line-height:1.55;letter-spacing:-.01em;
+  }
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+  .ic{display:inline-block;vertical-align:middle;flex:0 0 auto}
+  .ic use,svg.ic{stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+  .wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+
+  /* ── 배경: 홈 화면 상단 (모달 뒤, 디밤됨) ── */
+  .gnb{background:rgba(255,255,255,.94);border-bottom:1px solid var(--line)}
+  .gnb .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;height:64px}
+  .logo{display:flex;align-items:baseline;gap:9px}
+  .logo .mark{font-family:var(--display);font-size:26px;font-weight:700;color:var(--navy);letter-spacing:1px}
+  .logo .mark em{font-style:normal;color:var(--gold)}
+  .logo .sub{font-size:11px;color:var(--gray);letter-spacing:2.5px;font-weight:500}
+  .btn-feedback{
+    display:inline-flex;align-items:center;gap:6px;
+    border:1.5px solid var(--navy);color:var(--navy);border-radius:999px;
+    padding:8px 16px;font-size:13px;font-weight:600;background:#fff;
+  }
+  .btn-feedback .ic{width:13px;height:13px}
+  .hero{
+    background:
+      radial-gradient(1100px 460px at 18% -20%, rgba(200,162,74,.20), transparent 62%),
+      radial-gradient(900px 420px at 90% -10%, rgba(90,120,180,.22), transparent 58%),
+      linear-gradient(165deg,#141f36 0%,#16233a 48%,#0c1424 100%);
+    color:#fff;padding:54px 0 120px;
+  }
+  .hero h1{font-family:var(--display);font-size:36px;font-weight:700;letter-spacing:-.02em;line-height:1.32}
+  .hero h1 .accent{color:var(--gold)}
+  .hero .lead{margin-top:10px;color:#aab3c6;font-size:15px}
+
+  /* ── 디밤 레이어 ── */
+  .scrim{position:fixed;inset:0;z-index:90;background:rgba(13,23,40,.55);backdrop-filter:blur(2px)}
+
+  /* ── 피드백 모달 (feedback-001) ── */
+  .modal-wrap{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:24px}
+  .modal{
+    width:560px;max-width:100%;max-height:calc(100vh - 48px);overflow-y:auto;
+    background:#fff;border-radius:14px;box-shadow:0 24px 64px rgba(13,23,40,.35);
+    padding:24px 26px 22px;
+  }
+  .modal-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+  .modal-head h2{font-size:18px;font-weight:700;color:var(--navy)}
+  .modal-head .sub{margin-top:4px;font-size:12.5px;color:var(--gray)}
+  .btn-close{
+    display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;
+    width:30px;height:30px;border-radius:50%;background:var(--gold-tint);color:var(--gray);transition:.15s;
+  }
+  .btn-close:hover{color:var(--navy)}
+  .btn-close .ic{width:14px;height:14px}
+  .f-group{margin-top:18px}
+  .f-lbl{display:flex;align-items:baseline;gap:4px;font-size:12.5px;font-weight:700;color:var(--ink);margin-bottom:6px}
+  .f-lbl .req{color:var(--gold-deep)}
+  .f-lbl .opt{font-size:11px;font-weight:500;color:var(--muted)}
+  .f-lbl .count{margin-left:auto;font-size:11px;font-weight:500;color:var(--muted)}
+  textarea{
+    width:100%;min-height:120px;resize:vertical;
+    border:1.5px solid var(--line);border-radius:10px;padding:12px 14px;
+    font:inherit;font-size:14px;color:var(--ink);background:#fff;outline:none;transition:.15s;
+  }
+  textarea::placeholder{color:#b3b7c2}
+  textarea:focus{border-color:var(--navy);box-shadow:0 0 0 3px rgba(22,35,58,.06)}
+  input[type=email]{
+    width:100%;border:1.5px solid var(--line);border-radius:10px;padding:11px 14px;
+    font:inherit;font-size:14px;color:var(--ink);background:#fff;outline:none;transition:.15s;
+  }
+  input[type=email]::placeholder{color:#b3b7c2}
+  input[type=email]:focus{border-color:var(--navy);box-shadow:0 0 0 3px rgba(22,35,58,.06)}
+  .f-hint{margin-top:6px;font-size:11.5px;color:var(--muted)}
+  .modal-foot{display:flex;justify-content:flex-end;gap:8px;margin-top:22px;padding-top:16px;border-top:1px solid var(--line-soft)}
+  .btn-cancel{
+    display:inline-flex;align-items:center;justify-content:center;
+    border:1px solid var(--line);border-radius:8px;padding:10px 18px;
+    font-size:13.5px;font-weight:600;color:var(--gray);transition:.15s;background:#fff;
+  }
+  .btn-cancel:hover{color:var(--navy);border-color:#c9cfdd}
+  .btn-submit{
+    display:inline-flex;align-items:center;justify-content:center;gap:7px;
+    background:var(--navy);color:#fff;border-radius:8px;padding:10px 20px;
+    font-size:13.5px;font-weight:700;transition:.15s;
+  }
+  .btn-submit:hover{background:var(--gold);color:#0d1728}
+  .btn-submit .ic{width:14px;height:14px}
+</style>
+</head>
+<body>
+
+<!-- 배경: 홈 화면 상단 (피드백 버튼이 있는 GNB) -->
+<header class="gnb">
+  <div class="wrap">
+    <a class="logo" href="#">
+      <span class="mark">OP<em>U</em>S</span>
+      <span class="sub">클래식 공연 프로그램 검색</span>
+    </a>
+    <button class="btn-feedback"><svg class="ic"><use href="#i-chat"/></svg>서비스 의견 보내기</button>
+  </div>
+</header>
+<div class="hero">
+  <div class="wrap">
+    <h1>프로그램과 연주곡으로 찾는<br /><span class="accent">클래식</span> 콘서트</h1>
+    <p class="lead">작곡가, 작품명, 연주자, 공연장으로 엄선된 실황 공연을 탐색하세요.</p>
+  </div>
+</div>
+
+<div class="scrim" aria-hidden="true"></div>
+
+<!-- feedback-001: 서비스 의견 보내기 모달 -->
+<div class="modal-wrap">
+  <section class="modal" role="dialog" aria-modal="true" aria-label="서비스 의견 보내기">
+    <div class="modal-head">
+      <div>
+        <h2>서비스 의견 보내기</h2>
+        <p class="sub">OPUS를 더 좋은 서비스로 만드는 데 큰 도움이 됩니다.</p>
+      </div>
+      <button type="button" class="btn-close" aria-label="닫기"><svg class="ic"><use href="#i-close"/></svg></button>
+    </div>
+    <div class="f-group">
+      <div class="f-lbl">의견 <span class="req">*</span><span class="count">0 / 1,000</span></div>
+      <textarea placeholder="좋았던 점, 아쉬운 점, 추가했으면 하는 기능 등을 자유롭게 남겨주세요."></textarea>
+    </div>
+    <div class="f-group">
+      <div class="f-lbl">이메일 <span class="opt">(선택)</span></div>
+      <input type="email" placeholder="example@email.com" />
+      <p class="f-hint">보내주신 의견에 대한 답변이 필요한 경우에만 사용됩니다.</p>
+    </div>
+    <div class="modal-foot">
+      <button type="button" class="btn-cancel">취소</button>
+      <button type="button" class="btn-submit"><svg class="ic"><use href="#i-send"/></svg>의견 보내기</button>
+    </div>
+  </section>
+</div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-chat" viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+    <symbol id="i-send" viewBox="0 0 24 24"><path d="M21 3 10 14"/><path d="M21 3l-7 18-4-7-7-4 18-7z"/></symbol>
+  </defs>
+</svg>
+</body>
+</html>

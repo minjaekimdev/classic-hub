@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>OPUS | 홈페이지2 적용안 (도구형) — 앨범형 보기 (view=album)</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --navy:#16233a;
+    --navy-2:#22314e;
+    --navy-deep:#0d1728;
+    --gold:#c8a24a;
+    --gold-deep:#a8843a;
+    --gold-soft:#f3e8cf;
+    --gold-tint:#fbf8f1;
+    --ivory:#faf8f3;
+    --ink:#22242a;
+    --gray:#6b7080;
+    --muted:#a3a093;
+    --line:#e8e4da;
+    --line-soft:#efece3;
+    --shadow:0 6px 20px rgba(22,35,58,.08);
+    /* 영문 디스플레이는 Josefin Sans로 통일(2026.10.23), 한글은 Pretendard.
+       한글 세리프(Noto Serif KR)는 미사용 — 로드 실패 시 궁서체 계열로 폴백되는 문제 회피 */
+    --display:"Josefin Sans","Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+    color:var(--ink);background:var(--ivory);
+    line-height:1.55;letter-spacing:-.01em;
+  }
+  a{color:inherit;text-decoration:none}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+  .wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+
+  /* ── 라인 아이콘 공통 ───────────────────── */
+  .ic{display:inline-block;vertical-align:middle;flex:0 0 auto}
+  .ic use,svg.ic{stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+
+  /* ===== GNB (feedback-001) — '향후 n개월' pill은 헤더에서 제거, 기간 안내는 히어로 notes가 담당 ===== */
+  .gnb{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .gnb .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;height:64px}
+  .logo{display:flex;align-items:baseline;gap:9px}
+  .logo .mark{font-family:"Josefin Sans",sans-serif;font-size:26px;font-weight:700;color:var(--navy);letter-spacing:1px}
+  .logo .mark em{font-style:normal;color:var(--gold)}
+  .logo .sub{font-size:11px;color:var(--gray);letter-spacing:2.5px;font-weight:500}
+  .gnb .right{margin-left:auto;display:flex;align-items:center;gap:12px}
+  .btn-feedback{
+    display:inline-flex;align-items:center;gap:6px;
+    border:1.5px solid var(--navy);color:var(--navy);border-radius:999px;
+    padding:8px 16px;font-size:13px;font-weight:600;transition:.15s;background:#fff;
+  }
+  .btn-feedback .ic{width:13px;height:13px}
+  .btn-feedback:hover{background:var(--navy);color:#fff}
+
+  /* ===== Hero ===== */
+  .hero{
+    background:
+      radial-gradient(1100px 460px at 18% -20%, rgba(200,162,74,.20), transparent 62%),
+      radial-gradient(900px 420px at 90% -10%, rgba(90,120,180,.22), transparent 58%),
+      linear-gradient(165deg,#141f36 0%,#16233a 48%,#0c1424 100%);
+    color:#fff;padding:54px 0 0;
+  }
+  .hero h1{font-family:var(--display);font-size:36px;font-weight:700;letter-spacing:-.02em;line-height:1.32}
+  .hero h1 .accent{color:var(--gold)}
+  .hero .lead{margin-top:10px;color:#aab3c6;font-size:15px;font-weight:400}
+  .hero .notes{margin-top:14px;display:flex;flex-wrap:wrap;gap:6px 22px}
+  .hero .notes span{display:inline-flex;align-items:center;gap:6px;color:#8b96ad;font-size:12.5px}
+  .hero .notes .ic{width:13px;height:13px;color:var(--gold)}
+
+  /* ===== 검색 패널 (카드형) — search-001/005/009 ===== */
+  .search-panel{
+    position:relative;z-index:10;margin-top:34px;
+    background:#fff;border-radius:18px 18px 0 0;
+    box-shadow:0 -18px 60px -12px rgba(6,12,26,.35);
+    padding:24px 26px 20px;
+  }
+  .search-row{display:flex;gap:12px;align-items:stretch}
+  .field{
+    flex:1;border:1.5px solid var(--line);border-radius:12px;
+    padding:11px 16px 10px;min-width:0;background:#fff;
+    transition:.15s;display:flex;flex-direction:column;justify-content:center;
+  }
+  .field:hover{border-color:#c9cfdd}
+  .field:focus-within{border-color:var(--navy);box-shadow:0 0 0 3px rgba(22,35,58,.06)}
+  .f-query{flex:1.6}
+  .field .lbl{display:flex;align-items:center;gap:5px;font-size:11.5px;font-weight:700;color:#8a8f9c;margin-bottom:3px;line-height:1;letter-spacing:.01em}
+  .field .lbl .ic{width:12px;height:12px}
+  .f-input-row{display:flex;align-items:center;gap:6px;min-width:0}
+  .field input{
+    width:100%;border:none;outline:none;font:inherit;font-size:15px;font-weight:500;
+    color:var(--ink);background:transparent;line-height:1.4;padding:0;
+  }
+  .field input::placeholder{color:#b3b7c2}
+  /* search-001: 롤링 placeholder — 예시 3개가 세로로 순환. 트랙 마지막에 1번 예시를 복제해 100%에서 0%로 이어 붙임(끊김 없는 루프) */
+  .f-query .f-input-row{position:relative}
+  .ph-roll{
+    position:absolute;left:0;top:50%;transform:translateY(-50%);
+    display:inline-flex;align-items:center;gap:6px;
+    font-size:15px;font-weight:500;line-height:22px;color:#b3b7c2;
+    white-space:nowrap;pointer-events:none;transition:opacity .15s;
+  }
+  .ph-win{display:inline-block;height:22px;overflow:hidden}
+  .ph-track{display:flex;flex-direction:column;animation:ph-roll 9s cubic-bezier(.45,0,.25,1) infinite}
+  .ph-item{height:22px;line-height:22px}
+  @keyframes ph-roll{
+    0%,27%{transform:translateY(0)}
+    33%,60%{transform:translateY(-22px)}
+    66%,93%{transform:translateY(-44px)}
+    100%{transform:translateY(-66px)}
+  }
+  /* 입력값이 있거나 포커스 중이면 롤링 placeholder를 숨긴다 — 캐럿과 예시 텍스트가 겹치지 않게
+     (input의 실제 placeholder는 폭 0 공간 문자 유지용) */
+  #q:not(:placeholder-shown) ~ .ph-roll,
+  .f-query:focus-within .ph-roll{opacity:0}
+  .field .val{font-size:15px;font-weight:500;color:var(--ink);display:flex;align-items:center;gap:8px;line-height:1.4;white-space:nowrap}
+  .field .val .ic{width:15px;height:15px;color:#8a8f9c}
+  .btn-clear,.btn-refresh{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:24px;height:24px;border-radius:6px;color:#b3b7c2;flex:0 0 auto;transition:.15s;
+  }
+  .btn-clear .ic,.btn-refresh .ic{width:14px;height:14px}
+  .btn-clear:hover,.btn-refresh:hover{color:var(--navy);background:#f1f0ea}
+  .btn-refresh{margin-left:auto;color:#8a8f9c}
+  .btn-main{
+    flex:0 0 128px;border-radius:12px;
+    background:var(--navy);color:#fff;font-size:16px;font-weight:700;
+    display:flex;align-items:center;justify-content:center;gap:9px;
+    transition:.15s;letter-spacing:.02em;
+  }
+  .btn-main:hover{background:var(--gold);color:#0d1728}
+  .btn-main .ic{width:17px;height:17px}
+
+  /* ===== 관람 기간 선택 popover — search-005 · 기간 선택 ui(데스크톱) 시안을 적용안 톤으로 이식 ===== */
+  .period-field{cursor:pointer;position:relative}
+  .period-field.open{border-color:var(--navy);box-shadow:0 0 0 3px rgba(22,35,58,.06)}
+  .period-pop{
+    display:none;position:absolute;top:calc(100% + 10px);right:0;z-index:80;
+    width:560px;background:#fff;border:1px solid var(--line);border-radius:10px;
+    box-shadow:0 18px 44px rgba(22,35,58,.18);padding:16px 18px 14px;text-align:left;
+  }
+  .period-field.open .period-pop{display:block}
+  .pp-top{display:flex;align-items:center;gap:8px}
+  .pp-chip{font-size:10px;font-weight:700;letter-spacing:.04em;background:var(--navy);color:#fff;border-radius:3px;padding:3px 7px;flex:0 0 auto}
+  .pp-desc{font-size:11.5px;color:var(--gray);line-height:1.5}
+  .pp-presets{display:flex;align-items:center;gap:6px;margin-top:12px}
+  .pp-lbl{font-size:11px;font-weight:600;color:var(--gray)}
+  .pp-preset{
+    font-size:12px;font-weight:600;color:#4a5060;
+    border:1px solid var(--line);border-radius:999px;padding:5px 12px;background:#fff;transition:.12s;
+  }
+  .pp-preset:hover{border-color:#c9cfdd;color:var(--navy)}
+  .pp-preset.active{background:var(--navy);border-color:var(--navy);color:#fff}
+  .pp-calendars{display:grid;grid-template-columns:1fr 1fr;gap:0 26px;margin-top:14px}
+  .pp-cal{min-width:0}
+  .pp-cal-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}
+  .pp-month{font-family:var(--display);font-size:14px;font-weight:700;color:var(--navy)}
+  .pp-month em,.pp-month-en{font-style:normal;font-family:"Josefin Sans",sans-serif;font-size:10px;font-weight:600;letter-spacing:.18em;color:var(--gold-deep)}
+  .pp-month-en{margin-left:6px}
+  .pp-nav{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border:1px solid var(--line);border-radius:4px;color:var(--gray);transition:.12s}
+  .pp-nav:hover:not(:disabled){border-color:var(--navy);color:var(--navy)}
+  .pp-nav:disabled{opacity:.35;cursor:default}
+  .pp-nav .ic{width:12px;height:12px}
+  .pp-nav-spacer{width:24px;flex:0 0 auto}
+  .pp-dow,.pp-days{display:grid;grid-template-columns:repeat(7,1fr)}
+  .pp-dow{margin-bottom:2px}
+  .pp-dow span{font-size:10.5px;font-weight:600;color:var(--muted);text-align:center;padding:3px 0}
+  .pp-day{
+    position:relative;height:32px;display:flex;align-items:center;justify-content:center;
+    font-size:12px;color:var(--ink);border-radius:4px;transition:background .1s;
+  }
+  .pp-day:hover:not(:disabled):not(.edge){background:var(--gold-tint)}
+  .pp-day:disabled{color:#c9c5b8;cursor:default}
+  .pp-day.in-range{background:var(--gold-tint);border-radius:0}
+  .pp-day.edge{background:var(--navy);color:#fff;font-weight:700}
+  .pp-day .dot{position:absolute;bottom:3px;left:50%;transform:translateX(-50%);width:3px;height:3px;border-radius:50%;background:var(--gold-deep)}
+  .pp-day.edge .dot{background:var(--gold)}
+  .pp-foot{display:flex;align-items:center;justify-content:space-between;margin-top:12px;padding-top:10px;border-top:1px solid var(--line-soft)}
+  .pp-reset{font-size:12px;font-weight:600;color:var(--gray);padding:7px 10px;border-radius:4px;transition:.12s}
+  .pp-reset:hover{color:var(--navy);background:#f1f0ea}
+  .pp-apply{font-size:12.5px;font-weight:700;color:#fff;background:var(--navy);border-radius:4px;padding:8px 16px;transition:.15s}
+  .pp-apply:hover{background:var(--gold);color:#0d1728}
+
+  /* ===== 결과 툴바 — search-003/004, view-001/002 (이 시안은 앨범형 활성 상태) ===== */
+  .toolbar{background:#fff;border-bottom:1px solid var(--line)}
+  .toolbar-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:13px 24px;flex-wrap:wrap}
+  .status-tabs{display:flex;align-items:center;gap:7px}
+  .status-tabs .t-lbl{font-size:11px;font-weight:600;letter-spacing:.06em;color:var(--gray);margin-right:8px}
+  .stab{
+    font-size:12.5px;font-weight:600;color:#4a5060;
+    border:1px solid var(--line);border-radius:5px;padding:7px 14px;background:#fff;transition:.15s;
+  }
+  .stab:hover{border-color:#c9cfdd;color:var(--navy)}
+  .stab.active{background:var(--navy);border-color:var(--navy);color:#fff}
+  .stab .cnt{font-weight:400;margin-left:3px;opacity:.75}
+  .toolbar-right{display:flex;align-items:center;gap:14px}
+  .seg{display:flex;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+  .seg button{
+    display:inline-flex;align-items:center;gap:6px;
+    font-size:12px;font-weight:600;color:var(--gray);padding:7px 13px;transition:.15s;background:#fff;
+  }
+  .seg button + button{border-left:1px solid var(--line)}
+  .seg button:hover{color:var(--navy)}
+  .seg button.active{background:var(--navy);color:#fff}
+  .seg .ic{width:13px;height:13px}
+  .sort-ctl{display:flex;align-items:center;gap:8px}
+  .sort-ctl .t-lbl{font-size:11px;font-weight:600;letter-spacing:.06em;color:var(--gray)}
+  .sort-trigger{
+    display:inline-flex;align-items:center;gap:8px;
+    border:1px solid var(--line);border-radius:5px;background:#fff;
+    padding:7px 11px;font-size:12.5px;font-weight:600;color:var(--ink);transition:.15s;
+  }
+  .sort-trigger:hover{border-color:var(--navy)}
+  .sort-trigger .ic{width:13px;height:13px;color:var(--gray)}
+  /* 정렬 기준 드롭다운 — 구 시안(홈페이지(데스크톱))의 listbox 패턴을 적용안 톤으로 이식 */
+  .sort-dd{position:relative}
+  .sort-dd.open .sort-trigger{border-color:var(--navy)}
+  .sort-dd.open .sort-trigger .ic{transform:rotate(180deg)}
+  .sort-menu{
+    display:none;position:absolute;right:0;top:calc(100% + 6px);z-index:60;
+    min-width:150px;background:#fff;border:1px solid var(--line);border-radius:6px;
+    box-shadow:0 10px 30px rgba(22,35,58,.14);padding:5px;
+  }
+  .sort-dd.open .sort-menu{display:block}
+  .sort-opt{
+    display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;
+    text-align:left;font-size:12.5px;font-weight:500;color:#4a5060;
+    padding:8px 10px;border-radius:4px;transition:.12s;
+  }
+  .sort-opt:hover{background:var(--gold-tint);color:var(--navy)}
+  .sort-opt.active{background:var(--gold-tint);color:var(--navy);font-weight:700}
+  .sort-opt.active::after{content:"";flex:0 0 6px;width:6px;height:6px;border-radius:50%;background:var(--gold)}
+
+  /* ===== 검색 결과 ===== */
+  .results{padding:34px 0 70px}
+  .results-head{
+    display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;
+    margin-bottom:22px;padding-bottom:14px;border-bottom:1px solid var(--line);
+  }
+  .results-head .r-lbl{font-family:var(--display);font-size:19px;font-weight:600;color:var(--navy)}
+  .results-head .r-query{font-family:var(--display);font-size:19px;font-weight:700;color:var(--navy)}
+  .results-head .r-total{font-size:13.5px;color:var(--gray)}
+  /* '한 페이지에 최대 N건' 안내(r-hint)는 앨범형 시안에서 미노출(2026.10.28) — search-006 표기 재검토 대상 */
+
+  /* ── 공연 카드 (앨범형: 포스터 상단 카드) — view-002, common-001, card-001~019 ──
+     view-003(모바일 앨범형 고정)과 같은 '포스터 상단' 구조를 데스크톱 3열 그리드로 재구성.
+     카드 hover 시 translateY(-6px)+그림자는 앨범형 전용 리프트 제안(적용안 DESIGN.md 미결 사항 5) 시연. */
+  .album-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;align-items:stretch}
+  .card-album{
+    display:flex;flex-direction:column;min-width:0;
+    background:#fff;border:1px solid var(--line);border-radius:6px;
+    position:relative;transition:transform .18s,box-shadow .18s,border-color .18s;
+  }
+  /* 리프트 시 flyout이 인접 카드 위에 그려져야 하므로 hover 카드만 로컬 스택 맨 위로 */
+  .card-album:hover{transform:translateY(-6px);border-color:var(--gold);box-shadow:0 14px 32px rgba(22,35,58,.14);z-index:5}
+
+  .card-album .poster{
+    border:none;border-bottom:1px solid var(--line-soft);border-radius:5px 5px 0 0;
+  }
+  .poster{
+    position:relative;aspect-ratio:3/4;width:100%;
+    border:1px solid var(--line-soft);border-radius:4px;overflow:hidden;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+  }
+  .badge{
+    position:absolute;top:10px;left:10px;z-index:3;
+    font-size:11.5px;font-weight:700;padding:4px 9px;border-radius:4px;letter-spacing:-.01em;
+  }
+  .badge.ongoing{background:var(--gold);color:#14213a}
+  .badge.upcoming{background:var(--navy);color:#fff}
+  /* 실제 포스터가 있는 경우의 예시 이미지 (시안용 더미) */
+  .poster-photo{color:#f5f1e6;padding:18px;gap:10px}
+  .poster-photo.p1{background:radial-gradient(220px 150px at 80% 8%,rgba(200,162,74,.30),transparent 60%),linear-gradient(160deg,#1d2c47,#31456e 55%,#22314e)}
+  .poster-photo.p3{background:radial-gradient(220px 150px at 20% 10%,rgba(200,162,74,.18),transparent 55%),linear-gradient(160deg,#3a3448,#5a4f66 60%,#453d55)}
+  .poster-photo.p2{background:radial-gradient(220px 150px at 30% 12%,rgba(200,162,74,.22),transparent 55%),linear-gradient(160deg,#24313f,#3c5058 60%,#2a3844)}
+  .pp-kicker{font-family:"Josefin Sans",sans-serif;font-size:9.5px;font-weight:600;letter-spacing:.3em;color:rgba(243,232,207,.85)}
+  .pp-title{font-family:var(--display);font-size:18px;font-weight:700;line-height:1.4}
+  .pp-sub{font-family:"Josefin Sans",sans-serif;font-size:10.5px;color:rgba(255,255,255,.65);letter-spacing:.08em}
+  /* 포스터가 없는 공연의 공식 fallback: 뮤트 그라데이션 + 라인 아이콘 */
+  .poster-empty{background:linear-gradient(145deg,#6e7278,#8b8f96);color:rgba(255,255,255,.85)}
+  .poster-empty .ic{width:52px;height:52px;stroke-width:1.2}
+
+  .album-body{padding:16px 18px 18px;display:flex;flex-direction:column;flex:1;min-width:0}
+  .album-body h2{
+    font-family:var(--display);font-size:17px;font-weight:700;color:var(--navy);
+    line-height:1.45;letter-spacing:-.01em;
+    /* 2줄 클램프 + 최소 높이로 그리드 행 내 제목 위치 정렬 */
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+    min-height:calc(17px * 1.45 * 2);
+  }
+  .when-a{margin-top:6px}
+  .when-a .date{display:block;font-size:13.5px;font-weight:700;color:var(--navy)}
+  .when-a .time{display:block;font-size:12px;color:var(--gray);margin-top:2px}
+
+  .venue{margin-top:12px;border-top:1px solid var(--line-soft);padding-top:10px}
+  .v-name{display:flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:var(--navy)}
+  .v-name .ic{width:13px;height:13px;color:var(--gold-deep)}
+  .v-addr{font-size:11.5px;color:var(--gray);margin-top:3px;line-height:1.5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+  .artists-a{
+    margin-top:12px;border-top:1px solid var(--line-soft);padding-top:10px;
+    display:flex;align-items:baseline;gap:6px;min-width:0;
+  }
+  .artists-a .lbl{font-family:"Josefin Sans","Pretendard Variable",Pretendard,sans-serif;font-size:10.5px;font-weight:700;letter-spacing:.1em;color:var(--gold-deep);text-transform:uppercase;flex:0 0 auto}
+  .artists-a .names{font-size:12.5px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+  .program{
+    margin:12px 0 14px;background:var(--gold-tint);border:1px solid #ece5d4;border-radius:6px;padding:12px 14px;
+    cursor:default;transition:border-color .15s,background .15s,box-shadow .15s;position:relative;
+  }
+  /* card-010/view-004: 프로그램 영역 전체가 hover 트리거 — 리스트형과 동일 인터랙션.
+     카드 폭이 좁아 flyout은 '외 N곡'이 속한 프로그램 박스 바로 하단에 카드 폭으로 펼친다(이전 앨범형 시안 선례).
+     z-40 — 카드보다 높고 헤더(z-100)보다 낮음 */
+  .program:hover{border-color:var(--gold);background:#fffdf6;box-shadow:0 3px 14px rgba(200,162,74,.16)}
+  .program:hover .flyout{display:block}
+  .p-head{display:flex;align-items:center;justify-content:space-between;gap:8px;border-bottom:1px solid #eae2cf;padding-bottom:7px;margin-bottom:9px}
+  .p-lab{display:inline-flex;align-items:center;gap:6px;font-family:"Josefin Sans",sans-serif;font-size:10.5px;font-weight:700;letter-spacing:.22em;color:var(--gold-deep)}
+  .p-lab .ic{width:13px;height:13px}
+  .p-right{display:flex;align-items:center;gap:8px}
+  .p-count{font-size:11px;font-weight:600;letter-spacing:.05em;color:var(--gray)}
+  .p-sep{color:#d8d2c0}
+  .btn-report{
+    display:inline-flex;align-items:center;gap:5px;
+    border:1px solid var(--line);border-radius:4px;background:#fff;
+    padding:4px 8px;font-size:11px;font-weight:600;color:var(--gray);transition:.15s;
+  }
+  .btn-report .ic{width:12px;height:12px}
+  .btn-report:hover{background:var(--navy);border-color:var(--navy);color:#fff}
+  /* card-009: 모바일 전용 '전체 프로그램 보기' 진입점 — 데스크톱에서는 hover flyout(view-004)이 역할을 대신한다 */
+  .btn-sheet{
+    display:none;align-items:center;gap:5px;
+    border:1px solid var(--line);border-radius:4px;background:#fff;
+    padding:4px 8px;font-size:11px;font-weight:600;color:var(--gray);transition:.15s;
+  }
+  .btn-sheet .ic{width:12px;height:12px}
+  .btn-sheet:active{background:var(--navy);border-color:var(--navy);color:#fff}
+  .p-main{display:flex;flex-wrap:wrap;align-items:baseline;gap-x:8px;gap-y:2px}
+  .p-work{font-family:var(--display);font-size:15px;font-weight:600;color:var(--navy);line-height:1.5}
+  /* search-008: 검색어와 일치하는 곡은 gold 언더라인으로 메인 표시 */
+  .p-work.matched{color:var(--gold-deep);text-decoration:underline;text-decoration-color:rgba(200,162,74,.65);text-decoration-thickness:1.5px;text-underline-offset:4px}
+  /* 앨범형에서는 트리거를 정적 흐름으로 두고 flyout의 기준점을 프로그램 박스로 잡는다(좌우 카드 폭) */
+  .card-album .flyout-trigger{position:static}
+  .flyout-trigger{
+    font-size:12.5px;font-weight:600;color:var(--gold-deep);cursor:default;
+    text-decoration:underline;text-decoration-style:dashed;text-decoration-color:rgba(200,162,74,.6);
+    text-underline-offset:3px;transition:.15s;
+  }
+  .flyout-trigger .ic{width:11px;height:11px;margin-left:2px;color:var(--gold-deep);transition:transform .15s}
+  .flyout-trigger:hover{color:var(--navy);text-decoration-color:var(--navy)}
+  .flyout-trigger:hover .ic{transform:translateY(1px)}
+  .flyout{
+    display:none;position:absolute;top:calc(100% + 8px);left:0;right:0;z-index:40;
+    background:#fff;border:1px solid var(--line);border-radius:8px;
+    box-shadow:0 10px 30px rgba(22,35,58,.14);text-align:left;
+  }
+  /* 다곡 프로그램(리사이틀 등)에서 flyout이 화면을 넘치지 않게: 헤더 고정 + 목록 영역만 스크롤 */
+  .flyout-head{display:flex;align-items:center;justify-content:space-between;gap:10px;border-bottom:1px solid var(--line-soft);padding:13px 16px 8px}
+  .flyout-scroll{
+    max-height:320px;overflow-y:auto;padding:0 16px 13px;overscroll-behavior:contain;
+    scrollbar-width:thin;scrollbar-color:#d8d2c0 transparent;
+  }
+  .flyout-scroll::-webkit-scrollbar{width:8px}
+  .flyout-scroll::-webkit-scrollbar-thumb{background:#ddd6c4;border-radius:4px;border:2px solid #fff}
+  .flyout-scroll::-webkit-scrollbar-track{background:transparent}
+  .flyout-head b{font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--gold-deep)}
+  .flyout-head span{font-size:11px;color:var(--gray)}
+  /* 곡 목록은 작곡가별 그룹(2026.10.27) — 한 작곡가가 여러 곡을 연주해도 작곡가명이 반복되지 않게 한다.
+     곡명은 '작곡가 - ' 접두 없이 표기(그룹 헤더가 맥락 제공), 번호는 그룹을 넘어 연속 부여해 실제 연주 순서를 나타낸다 */
+  .f-group + .f-group{margin-top:10px;padding-top:10px;border-top:1px solid var(--line-soft)}
+  /* 그룹 헤더는 목록 스크롤 중에도 고정 — 긴 프로그램에서 현재 작곡가를 항상 보여준다 */
+  .f-composer{display:flex;align-items:baseline;gap:6px;background:#fff;position:sticky;top:0;z-index:1;padding:2px 0 6px}
+  .f-composer .name{font-size:12px;font-weight:700;color:var(--navy)}
+  .f-composer .cnt{font-size:11px;color:var(--muted)}
+  .flyout ol{list-style:none;display:flex;flex-direction:column;gap:7px}
+  .flyout li{display:flex;gap:9px;font-size:13px;color:var(--ink);line-height:1.5}
+  .flyout li .no{font-family:"Josefin Sans",sans-serif;font-weight:700;color:var(--gold-deep);flex:0 0 16px;text-align:right}
+  .flyout li .t{display:flex;flex-direction:column;gap:1px;min-width:0}
+  /* 영어 원제 병기 — 카드 메인 표시의 p-en와 동일 톤(Josefin Sans 이탤릭, 뮤트) */
+  .flyout li .en{font-family:"Josefin Sans",sans-serif;font-size:11.5px;font-style:italic;color:var(--muted);line-height:1.4}
+  /* search-008: flyout 안에서도 검색어 일치 곡을 gold 언더라인으로 표시해 카드 메인 표시와 연결 */
+  .flyout li .matched{color:var(--gold-deep);font-weight:600;text-decoration:underline;text-decoration-color:rgba(200,162,74,.65);text-decoration-thickness:1.5px;text-underline-offset:3px}
+  .p-en{font-family:"Josefin Sans",sans-serif;font-size:11.5px;font-style:italic;color:var(--muted);margin-top:4px}
+
+  .booking-a{
+    margin-top:auto;padding-top:12px;border-top:1px solid var(--line-soft);
+    display:flex;flex-direction:column;gap:9px;
+  }
+  .b-lbl{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;letter-spacing:.05em;color:var(--gray)}
+  .b-lbl .ic{width:14px;height:14px;color:var(--gold-deep)}
+  .b-btn-a{
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    background:var(--navy);color:#fff;border-radius:4px;padding:10px 18px;
+    font-size:13px;font-weight:700;transition:.15s;
+  }
+  .b-btn-a:hover{background:var(--gold);color:#0d1728}
+  .b-btn-a .ic{width:14px;height:14px}
+
+  /* ===== 페이지네이션 — search-006, pagenation-001 ===== */
+  .pagination{display:flex;justify-content:center;align-items:center;gap:8px;margin-top:42px}
+  .page{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:38px;height:38px;border:1px solid var(--line);border-radius:4px;background:#fff;
+    font-size:14px;font-weight:600;color:var(--gray);transition:.15s;
+  }
+  .page:hover{border-color:var(--navy);color:var(--navy)}
+  .page.active{background:var(--navy);border-color:var(--navy);color:#fff}
+  .page.nav .ic{width:14px;height:14px}
+
+  /* ===== Footer ===== */
+  footer{background:var(--navy-deep);color:#9aa4b8;padding:42px 0 48px}
+  footer .logo .mark{color:#e6eaf2;font-size:22px}
+  footer .src{margin-top:14px;font-size:12.5px;line-height:1.9}
+  footer .src b{color:#cfd6e4;font-weight:600}
+  footer .copy{margin-top:10px;font-size:11.5px;color:#6d7789}
+
+  /* ===== Responsive (데스크톱 시안 — 참고용 최소 대응) ===== */
+  @media (max-width:1024px){
+    .album-grid{grid-template-columns:repeat(2,1fr)}
+  }
+  @media (max-width:760px){
+    .search-row{flex-direction:column}
+    /* 세로 배치 시 검색 버튼 높이를 필드(라벨+입력줄 2단 구조)와 일치시킨다.
+       flex-basis:128px(가로 모드용 너비 지정)는 세로에서는 높이로 작동하므로 해제 */
+    .field{min-height:63px}
+    .btn-main{flex-basis:auto;min-height:63px;padding:0}
+    /* view-003: 모바일은 1열 앨범형(포스터 상단 카드) 고정 */
+    .album-grid{grid-template-columns:1fr;gap:20px}
+    /* 기간 popover 최소 대응: 폭 제한 + 달력 1열 */
+    .period-pop{width:min(560px,calc(100vw - 48px))}
+    .pp-calendars{grid-template-columns:1fr;gap:16px 0}
+    .poster{max-width:320px;margin:0 auto;width:100%}
+    .toolbar-right .seg{display:none}
+    .hero h1{font-size:27px}
+    /* card-009: 모바일은 hover가 없으므로 '전체 프로그램 보기' 터치 진입점을 노출 */
+    .p-head{flex-wrap:wrap;row-gap:8px}
+    .p-count,.p-sep{display:none}
+    .btn-sheet{display:inline-flex}
+    /* 모바일에서 (외 N곡)은 hover 트리거가 아니라 단순 표기다 */
+    .flyout-trigger{font-weight:400;color:var(--gray);text-decoration:none}
+    .flyout-trigger .ic{display:none}
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ 라인 아이콘 스프라이트 (stroke 1.5 / round / 24 grid) ═══ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m15.9 15.9 4.1 4.1"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="4" y="6" width="16" height="14" rx="2"/><path d="M8 4v4M16 4v4M4 10.5h16"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 5v4h-4"/><path d="M4 19v-4h4"/><path d="M19.5 9a8 8 0 0 0-14-2.5M4.5 15a8 8 0 0 0 14 2.5"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+    <symbol id="i-chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+    <symbol id="i-chev-l" viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></symbol>
+    <symbol id="i-chev-r" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></symbol>
+    <symbol id="i-note" viewBox="0 0 24 24"><path d="M9.5 17.5V6.2l8.5-1.9v10.9"/><circle cx="7.5" cy="17.8" r="2"/><circle cx="16" cy="15.5" r="2"/></symbol>
+    <symbol id="i-flag" viewBox="0 0 24 24"><path d="M5 21V4"/><path d="M5 4h12l-2.5 4L17 12H5"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></symbol>
+    <symbol id="i-ticket" viewBox="0 0 24 24"><path d="M3 9V7a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v2a3 3 0 0 0 0 6v2a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-2a3 3 0 0 0 0-6z"/><path d="M14 7v10" stroke-dasharray="2.5 3.5"/></symbol>
+    <symbol id="i-open" viewBox="0 0 24 24"><path d="M14 5h5v5"/><path d="m19 5-8 8"/><path d="M19 13.5V18a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h4.5"/></symbol>
+    <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4.5 6h.01M4.5 12h.01M4.5 18h.01"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7"/><rect x="13" y="4" width="7" height="7"/><rect x="4" y="13" width="7" height="7"/><rect x="13" y="13" width="7" height="7"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5"/><path d="M12 8h.01"/></symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></symbol>
+  </defs>
+</svg>
+
+<!-- ═══ GNB (feedback-001) — '향후 n개월' 안내 pill은 헤더에서 제거, 기간 안내는 히어로 notes 담당 ═══ -->
+<header class="gnb">
+  <div class="wrap">
+    <a class="logo" href="#">
+      <span class="mark">OP<em>U</em>S</span>
+      <span class="sub">클래식 공연 프로그램 검색</span>
+    </a>
+    <div class="right">
+      <button class="btn-feedback"><svg class="ic"><use href="#i-chat"/></svg>서비스 의견 보내기</button>
+    </div>
+  </div>
+</header>
+
+<!-- ═══ 히어로 + 검색 패널 ═══ -->
+<div class="hero">
+  <div class="wrap">
+    <h1>프로그램과 연주곡으로 찾는<br /><span class="accent">클래식</span> 콘서트</h1>
+    <p class="lead">작곡가, 작품명, 연주자, 공연장으로 엄선된 실황 공연을 탐색하세요.</p>
+    <div class="notes">
+      <span><svg class="ic"><use href="#i-calendar"/></svg>현재 2026. 10. 23. ~ 2027. 1. 23. (향후 3개월) 데이터 탐색 가능</span>
+      <span><svg class="ic"><use href="#i-info"/></svg>프로그램 정보는 AI로 추출되어 실제 공연 정보와 다를 수 있습니다.</span>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="search-panel">
+      <form class="search-row" onsubmit="return false">
+        <div class="field f-query">
+          <label class="lbl" for="q"><svg class="ic"><use href="#i-search"/></svg>검색어</label>
+          <div class="f-input-row">
+            <input id="q" type="text" placeholder=" " autocomplete="off" />
+            <!-- search-001: placeholder 자리에 실제 검색 가능한 예시가 아래→위로 롤링된다 (값 입력 시 숨김) -->
+            <span class="ph-roll" aria-hidden="true">
+              <span class="ph-pre">예:</span>
+              <span class="ph-win">
+                <span class="ph-track">
+                  <span class="ph-item">라흐마니노프 피아노 협주곡 3번</span>
+                  <span class="ph-item">조성진</span>
+                  <span class="ph-item">예술의전당 콘서트홀</span>
+                  <span class="ph-item">라흐마니노프 피아노 협주곡 3번</span>
+                </span>
+              </span>
+            </span>
+            <button type="button" class="btn-clear" aria-label="입력 초기화"><svg class="ic"><use href="#i-close"/></svg></button>
+          </div>
+        </div>
+        <div class="field period-field" id="periodField">
+          <span class="lbl"><svg class="ic"><use href="#i-calendar"/></svg>관람 기간</span>
+          <div class="f-input-row">
+            <span class="val"><svg class="ic"><use href="#i-calendar"/></svg><span id="periodLabel">10. 23 (금) ~ 1. 23 (토)</span></span>
+            <button type="button" class="btn-refresh" id="periodRefresh" aria-label="탐색 가능한 최대 기간으로 초기화" title="탐색 가능한 최대 기간으로 초기화"><svg class="ic"><use href="#i-refresh"/></svg></button>
+          </div>
+          <!-- search-005 · 기간 선택 ui(데스크톱) 시안 이식: 필드 클릭 시 팝오버로 노출(적용안 DESIGN.md 미결 사항 1) -->
+          <div class="period-pop" role="dialog" aria-label="관람 기간 선택">
+            <div class="pp-top">
+              <span class="pp-chip">최대 3개월 탐색</span>
+              <p class="pp-desc">공연 기획사 및 공연장 등록 기준 향후 3개월간의 공식 프로그램을 조회합니다.</p>
+            </div>
+            <div class="pp-presets">
+              <span class="pp-lbl">기간 프리셋:</span>
+              <button type="button" class="pp-preset" data-preset="this-month">이번 달 (10월)</button>
+              <button type="button" class="pp-preset" data-preset="1m">향후 1개월</button>
+              <button type="button" class="pp-preset active" data-preset="3m">향후 3개월 전체</button>
+            </div>
+            <div class="pp-calendars">
+              <div class="pp-cal">
+                <div class="pp-cal-head">
+                  <button type="button" class="pp-nav" id="calPrev" aria-label="이전 달"><svg class="ic"><use href="#i-chev-l"/></svg></button>
+                  <span class="pp-month" id="calM0"></span>
+                  <span class="pp-nav-spacer" aria-hidden="true"></span>
+                </div>
+                <div class="pp-dow"><span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span></div>
+                <div class="pp-days" id="calGrid0"></div>
+              </div>
+              <div class="pp-cal">
+                <div class="pp-cal-head">
+                  <span class="pp-month" id="calM1"></span>
+                  <span class="pp-month-en" id="calM1en" aria-hidden="true"></span>
+                  <button type="button" class="pp-nav" id="calNext" aria-label="다음 달"><svg class="ic"><use href="#i-chev-r"/></svg></button>
+                </div>
+                <div class="pp-dow"><span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span></div>
+                <div class="pp-days" id="calGrid1"></div>
+              </div>
+            </div>
+            <div class="pp-foot">
+              <button type="button" class="pp-reset" id="ppReset">초기화 (3개월)</button>
+              <button type="button" class="pp-apply" id="ppApply">적용하기</button>
+            </div>
+          </div>
+        </div>
+        <button type="submit" class="btn-main">
+          <svg class="ic"><use href="#i-search"/></svg>검색
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 결과 툴바 : 상태 탭 + 보기 모드(앨범형 활성) + 정렬 ═══ -->
+<div class="toolbar">
+  <div class="wrap toolbar-row">
+    <div class="status-tabs" data-toggle-group>
+      <span class="t-lbl">공연 상태</span>
+      <button class="stab active">전체 <span class="cnt">(24)</span></button>
+      <button class="stab">공연중 <span class="cnt">(9)</span></button>
+      <button class="stab">공연예정 <span class="cnt">(15)</span></button>
+    </div>
+    <div class="toolbar-right">
+      <div class="seg" data-toggle-group aria-label="보기 모드 선택">
+        <button><svg class="ic"><use href="#i-list"/></svg>리스트형</button>
+        <button class="active"><svg class="ic"><use href="#i-grid"/></svg>앨범형</button>
+      </div>
+      <div class="sort-ctl">
+        <span class="t-lbl">정렬 기준</span>
+        <div class="sort-dd" id="sortDD">
+          <button type="button" class="sort-trigger" id="sortTrigger" aria-haspopup="listbox" aria-expanded="false"><span id="sortLabel">공연임박순</span><svg class="ic"><use href="#i-chev"/></svg></button>
+          <!-- 구 시안(홈페이지(데스크톱))의 정렬 3종 — 가격순은 카드 가격 표기 제외 정책과 별개로 정렬 기준은 유지 -->
+          <div class="sort-menu" role="listbox" aria-label="정렬 기준 선택">
+            <button type="button" class="sort-opt active" role="option" aria-selected="true">공연임박순</button>
+            <button type="button" class="sort-opt" role="option" aria-selected="false">낮은 가격순</button>
+            <button type="button" class="sort-opt" role="option" aria-selected="false">높은 가격순</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 검색 결과 — 앨범형 (view=album, view-002) ═══ -->
+<main class="results">
+  <div class="wrap">
+
+    <div class="results-head">
+      <span class="r-lbl">검색 결과:</span>
+      <span class="r-query">‘라흐마니노프’</span>
+      <span class="r-total">(총 24건)</span>
+    </div>
+
+    <div class="album-grid">
+
+      <!-- ── 앨범 카드 1 : 검색어 일치 곡 메인 표시(search-008) + 프로그램 영역 hover flyout(view-004/card-010) ── -->
+      <article class="card-album">
+        <div class="poster poster-photo p1">
+          <span class="badge ongoing">공연중</span>
+          <div class="pp-kicker">OPUS SEASON</div>
+          <div class="pp-title">라흐마니노프<br />피아노 협주곡<br />전곡 시리즈 III</div>
+          <div class="pp-sub">RACHMANINOFF · 2026</div>
+        </div>
+        <div class="album-body">
+          <h2>라흐마니노프 피아노 협주곡 전곡 시리즈 III</h2>
+          <div class="when-a">
+            <span class="date">2026.10.23 (금) ~ 10.25 (일)</span>
+            <span class="time">금요일(19:30), 토요일(15:00,19:30)</span>
+          </div>
+          <div class="venue">
+            <div class="v-name"><svg class="ic"><use href="#i-pin"/></svg>예술의전당 콘서트홀</div>
+            <div class="v-addr">서울특별시 서초구 남부순환로 2406</div>
+          </div>
+          <div class="artists-a">
+            <span class="lbl">Artists:</span>
+            <span class="names">박도윤(지휘) · 강연우(피아노) · 오퍼스 필하모닉 오케스트라</span>
+          </div>
+          <div class="program">
+            <div class="p-head">
+              <span class="p-lab"><svg class="ic"><use href="#i-note"/></svg>PROGRAM</span>
+              <div class="p-right">
+                <span class="p-count">총 3곡 연주</span>
+                <span class="p-sep">·</span>
+                <button class="btn-sheet"><svg class="ic"><use href="#i-note"/></svg>전체 프로그램 보기</button>
+                <button class="btn-report"><svg class="ic"><use href="#i-flag"/></svg>오류 제보</button>
+              </div>
+            </div>
+            <div class="p-main">
+              <span class="p-work matched">라흐마니노프 - 피아노 협주곡 3번 라단조 Op. 30</span>
+              <span class="flyout-trigger">(외 2곡)<svg class="ic"><use href="#i-chev"/></svg></span>
+            </div>
+            <div class="flyout">
+              <span class="flyout-head"><b>전체 연주 프로그램</b><span>러닝타임 115분</span></span>
+              <div class="flyout-scroll">
+                <div class="f-group">
+                  <div class="f-composer"><span class="name">세르게이 라흐마니노프</span><span class="cnt">3곡</span></div>
+                  <ol>
+                    <li><span class="no">1</span><span class="t"><span class="ko matched">피아노 협주곡 3번 라단조 Op. 30</span><span class="en">Piano Concerto No. 3 in D minor, Op. 30</span></span></li>
+                    <li><span class="no">2</span><span class="t"><span class="ko">파가니니 주제에 의한 광시곡 가단조 Op. 43</span><span class="en">Rhapsody on a Theme of Paganini in A minor, Op. 43</span></span></li>
+                    <li><span class="no">3</span><span class="t"><span class="ko">교향적 무곡 바단조 Op. 45</span><span class="en">Symphonic Dances in D minor, Op. 45</span></span></li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+            <p class="p-en">Piano Concerto No. 3 in D minor, Op. 30</p>
+          </div>
+          <div class="booking-a">
+            <span class="b-lbl"><svg class="ic"><use href="#i-ticket"/></svg>인터파크티켓 공식 티켓 예매</span>
+            <a class="b-btn-a" href="#">예매처 바로가기<svg class="ic"><use href="#i-open"/></svg></a>
+          </div>
+        </div>
+      </article>
+
+      <!-- ── 앨범 카드 2 : 포스터 null fallback + 하루 복수 회차(card-019) ── -->
+      <article class="card-album">
+        <div class="poster poster-empty">
+          <span class="badge upcoming">공연예정</span>
+          <svg class="ic"><use href="#i-note"/></svg>
+        </div>
+        <div class="album-body">
+          <h2>듀오 아르코 첼로·피아노 콘서트</h2>
+          <div class="when-a">
+            <span class="date">2026.11.14 (토) ~ 11.15 (일)</span>
+            <span class="time">토요일(14:30,17:00), 일요일(14:30)</span>
+          </div>
+          <div class="venue">
+            <div class="v-name"><svg class="ic"><use href="#i-pin"/></svg>부산문화회관 소극장</div>
+            <div class="v-addr">부산광역시 남구 유엔평화로 77</div>
+          </div>
+          <div class="artists-a">
+            <span class="lbl">Artists:</span>
+            <span class="names">문서진(첼로) · 오세영(피아노)</span>
+          </div>
+          <div class="program">
+            <div class="p-head">
+              <span class="p-lab"><svg class="ic"><use href="#i-note"/></svg>PROGRAM</span>
+              <div class="p-right">
+                <span class="p-count">총 3곡 연주</span>
+                <span class="p-sep">·</span>
+                <button class="btn-sheet"><svg class="ic"><use href="#i-note"/></svg>전체 프로그램 보기</button>
+                <button class="btn-report"><svg class="ic"><use href="#i-flag"/></svg>오류 제보</button>
+              </div>
+            </div>
+            <div class="p-main">
+              <span class="p-work matched">라흐마니노프 - 첼로 소나타 사단조 Op. 19</span>
+              <span class="flyout-trigger">(외 2곡)<svg class="ic"><use href="#i-chev"/></svg></span>
+            </div>
+            <div class="flyout">
+              <span class="flyout-head"><b>전체 연주 프로그램</b><span>러닝타임 90분</span></span>
+              <div class="flyout-scroll">
+                <div class="f-group">
+                  <div class="f-composer"><span class="name">세르게이 라흐마니노프</span><span class="cnt">1곡</span></div>
+                  <ol>
+                    <li><span class="no">1</span><span class="t"><span class="ko matched">첼로 소나타 사단조 Op. 19</span><span class="en">Cello Sonata in G minor, Op. 19</span></span></li>
+                  </ol>
+                </div>
+                <div class="f-group">
+                  <div class="f-composer"><span class="name">세자르 프랑크</span><span class="cnt">1곡</span></div>
+                  <ol>
+                    <li><span class="no">2</span><span class="t"><span class="ko">바이올린(첼로) 소나타 가장조</span><span class="en">Violin (Cello) Sonata in A major</span></span></li>
+                  </ol>
+                </div>
+                <div class="f-group">
+                  <div class="f-composer"><span class="name">카미유 생상스</span><span class="cnt">1곡</span></div>
+                  <ol>
+                    <li><span class="no">3</span><span class="t"><span class="ko">백조 (사육제 중)</span><span class="en">The Swan (from Carnival of the Animals)</span></span></li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+            <p class="p-en">Cello Sonata in G minor, Op. 19</p>
+          </div>
+          <div class="booking-a">
+            <span class="b-lbl"><svg class="ic"><use href="#i-ticket"/></svg>네이버 예약 공식 티켓 예매</span>
+            <a class="b-btn-a" href="#">예매처 바로가기<svg class="ic"><use href="#i-open"/></svg></a>
+          </div>
+        </div>
+      </article>
+
+      <!-- ── 앨범 카드 3 : 복수 작곡가 프로그램 표기(card-011) + 검색어 일치 곡 메인 표시(search-008) ── -->
+      <article class="card-album">
+        <div class="poster poster-photo p3">
+          <span class="badge upcoming">공연예정</span>
+          <div class="pp-kicker">REGULAR CONCERT</div>
+          <div class="pp-title">교향곡의 오늘<br />제146회<br />정기연주회</div>
+          <div class="pp-sub">OPUS SYMPHONY</div>
+        </div>
+        <div class="album-body">
+          <h2>오퍼스 심포니 제146회 정기연주회</h2>
+          <div class="when-a">
+            <span class="date">2026.12.05 (토) ~ 12.06 (일)</span>
+            <span class="time">토요일(19:30), 일요일(17:00)</span>
+          </div>
+          <div class="venue">
+            <div class="v-name"><svg class="ic"><use href="#i-pin"/></svg>세종문화회관 대극장</div>
+            <div class="v-addr">서울특별시 종로구 세종대로 175</div>
+          </div>
+          <div class="artists-a">
+            <span class="lbl">Artists:</span>
+            <span class="names">정하윤(지휘) · 오퍼스 심포니 오케스트라</span>
+          </div>
+          <div class="program">
+            <div class="p-head">
+              <span class="p-lab"><svg class="ic"><use href="#i-note"/></svg>PROGRAM</span>
+              <div class="p-right">
+                <span class="p-count">총 2곡 연주</span>
+                <span class="p-sep">·</span>
+                <button class="btn-sheet"><svg class="ic"><use href="#i-note"/></svg>전체 프로그램 보기</button>
+                <button class="btn-report"><svg class="ic"><use href="#i-flag"/></svg>오류 제보</button>
+              </div>
+            </div>
+            <div class="p-main">
+              <span class="p-work matched">라흐마니노프 - 교향곡 2번 마단조 Op. 27</span>
+              <span class="flyout-trigger">(외 1곡)<svg class="ic"><use href="#i-chev"/></svg></span>
+            </div>
+            <div class="flyout">
+              <span class="flyout-head"><b>전체 연주 프로그램</b><span>러닝타임 정보 없음</span></span>
+              <div class="flyout-scroll">
+                <div class="f-group">
+                  <div class="f-composer"><span class="name">세르게이 라흐마니노프</span><span class="cnt">1곡</span></div>
+                  <ol>
+                    <li><span class="no">1</span><span class="t"><span class="ko matched">교향곡 2번 마단조 Op. 27</span><span class="en">Symphony No. 2 in E minor, Op. 27</span></span></li>
+                  </ol>
+                </div>
+                <div class="f-group">
+                  <div class="f-composer"><span class="name">안토닌 드보르자크</span><span class="cnt">1곡</span></div>
+                  <ol>
+                    <li><span class="no">2</span><span class="t"><span class="ko">서곡 자연의 왕국 Op. 91</span><span class="en">Overture "In Nature's Realm", Op. 91</span></span></li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+            <p class="p-en">Symphony No. 2 in E minor, Op. 27</p>
+          </div>
+          <div class="booking-a">
+            <span class="b-lbl"><svg class="ic"><use href="#i-ticket"/></svg>멜론티켓 공식 티켓 예매</span>
+            <a class="b-btn-a" href="#">예매처 바로가기<svg class="ic"><use href="#i-open"/></svg></a>
+          </div>
+        </div>
+      </article>
+
+      <!-- ── 앨범 카드 4 : 다곡 프로그램(11곡) — flyout 스크롤 + 스크롤 중 작곡가 그룹 헤더 고정 시연 ── -->
+      <article class="card-album">
+        <div class="poster poster-photo p2">
+          <span class="badge upcoming">공연예정</span>
+          <div class="pp-kicker">PIANO RECITAL</div>
+          <div class="pp-title">정수연 피아노<br />리사이틀<br />라흐마니노프의 밤</div>
+          <div class="pp-sub">RACHMANINOFF · 2027</div>
+        </div>
+        <div class="album-body">
+          <h2>정수연 피아노 리사이틀 — 라흐마니노프의 밤</h2>
+          <div class="when-a">
+            <span class="date">2027.01.09 (토)</span>
+            <span class="time">토요일(19:30)</span>
+          </div>
+          <div class="venue">
+            <div class="v-name"><svg class="ic"><use href="#i-pin"/></svg>롯데콘서트홀</div>
+            <div class="v-addr">서울특별시 송파구 올림픽로 300</div>
+          </div>
+          <div class="artists-a">
+            <span class="lbl">Artists:</span>
+            <span class="names">정수연(피아노)</span>
+          </div>
+          <div class="program">
+            <div class="p-head">
+              <span class="p-lab"><svg class="ic"><use href="#i-note"/></svg>PROGRAM</span>
+              <div class="p-right">
+                <span class="p-count">총 11곡 연주</span>
+                <span class="p-sep">·</span>
+                <button class="btn-sheet"><svg class="ic"><use href="#i-note"/></svg>전체 프로그램 보기</button>
+                <button class="btn-report"><svg class="ic"><use href="#i-flag"/></svg>오류 제보</button>
+              </div>
+            </div>
+            <div class="p-main">
+              <span class="p-work matched">라흐마니노프 - 전주곡 5번 사단조 Op. 23-5</span>
+              <span class="flyout-trigger">(외 10곡)<svg class="ic"><use href="#i-chev"/></svg></span>
+            </div>
+            <div class="flyout">
+              <span class="flyout-head"><b>전체 연주 프로그램</b><span>러닝타임 95분</span></span>
+              <div class="flyout-scroll">
+                <div class="f-group">
+                  <div class="f-composer"><span class="name">세르게이 라흐마니노프</span><span class="cnt">11곡</span></div>
+                  <ol>
+                    <li><span class="no">1</span><span class="t"><span class="ko matched">전주곡 5번 사단조 Op. 23-5</span><span class="en">Prelude in G minor, Op. 23 No. 5</span></span></li>
+                    <li><span class="no">2</span><span class="t"><span class="ko">전주곡 7번 다단조 Op. 23-7</span><span class="en">Prelude in C minor, Op. 23 No. 7</span></span></li>
+                    <li><span class="no">3</span><span class="t"><span class="ko">전주곡 9번 내림마단조 Op. 23-9</span><span class="en">Prelude in E-flat minor, Op. 23 No. 9</span></span></li>
+                    <li><span class="no">4</span><span class="t"><span class="ko">전주곡 5번 사장조 Op. 32-5</span><span class="en">Prelude in G major, Op. 32 No. 5</span></span></li>
+                    <li><span class="no">5</span><span class="t"><span class="ko">전주곡 10번 나단조 Op. 32-10</span><span class="en">Prelude in B minor, Op. 32 No. 10</span></span></li>
+                    <li><span class="no">6</span><span class="t"><span class="ko">전주곡 12번 올림사단조 Op. 32-12</span><span class="en">Prelude in G-sharp minor, Op. 32 No. 12</span></span></li>
+                    <li><span class="no">7</span><span class="t"><span class="ko">에튀드 테이블로 2번 다장조 Op. 33-2</span><span class="en">Étude-Tableau in C major, Op. 33 No. 2</span></span></li>
+                    <li><span class="no">8</span><span class="t"><span class="ko">에튀드 테이블로 5번 내림마단조 Op. 39-5</span><span class="en">Étude-Tableau in E-flat minor, Op. 39 No. 5</span></span></li>
+                    <li><span class="no">9</span><span class="t"><span class="ko">에튀드 테이블로 6번 가장조 Op. 39-6</span><span class="en">Étude-Tableau in A major, Op. 39 No. 6</span></span></li>
+                    <li><span class="no">10</span><span class="t"><span class="ko">에튀드 테이블로 9번 라장조 Op. 39-9</span><span class="en">Étude-Tableau in D major, Op. 39 No. 9</span></span></li>
+                    <li><span class="no">11</span><span class="t"><span class="ko">음악의 순간 4번 마단조 Op. 16-4</span><span class="en">Moment musical in E minor, Op. 16 No. 4</span></span></li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+            <p class="p-en">Prelude in G minor, Op. 23 No. 5</p>
+          </div>
+          <div class="booking-a">
+            <span class="b-lbl"><svg class="ic"><use href="#i-ticket"/></svg>인터파크티켓 공식 티켓 예매</span>
+            <a class="b-btn-a" href="#">예매처 바로가기<svg class="ic"><use href="#i-open"/></svg></a>
+          </div>
+        </div>
+      </article>
+
+    </div>
+
+    <!-- 페이지네이션 (시안: 24건 = 3페이지) -->
+    <nav class="pagination" aria-label="페이지 이동">
+      <button class="page nav" aria-label="이전 페이지"><svg class="ic"><use href="#i-chev-l"/></svg></button>
+      <button class="page active">1</button>
+      <button class="page">2</button>
+      <button class="page">3</button>
+      <button class="page nav" aria-label="다음 페이지"><svg class="ic"><use href="#i-chev-r"/></svg></button>
+    </nav>
+
+  </div>
+</main>
+
+<!-- ═══ Footer : 실제 있는 내용만 ═══ -->
+<footer>
+  <div class="wrap">
+    <a class="logo" href="#"><span class="mark">OP<em>U</em>S</span></a>
+    <p class="src">이 서비스의 데이터 출처는 <b>(주)공연예술통합전산망 (KOPIS)</b> 입니다.<br />프로그램 정보는 AI로 추출되어 실제 공연 정보와 다를 수 있습니다.</p>
+    <p class="copy">© 2026 OPUS. 본 페이지는 디자인 시안이며 카드의 공연·인물은 표기 규칙 시연용 가상 데이터입니다.</p>
+  </div>
+</footer>
+
+<script>
+  // 상태 탭 / 보기 모드 세그먼트: 시안의 활성 상태 전환 데모용
+  document.querySelectorAll('[data-toggle-group]').forEach(group => {
+    group.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        group.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+  });
+
+  // ── 정렬 기준 드롭다운 (구 시안 정렬 3종: 공연임박순 / 낮은 가격순 / 높은 가격순) ──
+  const sortDD = document.getElementById('sortDD');
+  const sortTrigger = document.getElementById('sortTrigger');
+  const sortLabel = document.getElementById('sortLabel');
+  function closeSort(){ sortDD.classList.remove('open'); sortTrigger.setAttribute('aria-expanded', 'false'); }
+  sortTrigger.addEventListener('click', e => {
+    e.stopPropagation();
+    const open = sortDD.classList.toggle('open');
+    sortTrigger.setAttribute('aria-expanded', String(open));
+  });
+  document.querySelectorAll('.sort-opt').forEach(opt => opt.addEventListener('click', () => {
+    document.querySelectorAll('.sort-opt').forEach(o => { o.classList.remove('active'); o.setAttribute('aria-selected', 'false'); });
+    opt.classList.add('active');
+    opt.setAttribute('aria-selected', 'true');
+    sortLabel.textContent = opt.textContent.trim();
+    closeSort();
+  }));
+  document.addEventListener('click', e => { if (!sortDD.contains(e.target)) closeSort(); });
+
+  // ── 관람 기간 선택 popover (search-005 · 기간 선택 ui(데스크톱) 시안 이식) ──
+  // 탐색 가능 범위: 2026.10.23 ~ 2027.01.23 (향후 3개월). 범위 밖 날짜는 비활성(exception-02 clamp).
+  const RANGE_MIN = new Date(2026, 9, 23);
+  const RANGE_MAX = new Date(2027, 0, 23);
+  const MONTH_EN = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+  const DOW = ['일','월','화','수','목','금','토'];
+  // 공연 있는 날 표시용 데모 데이터(카드의 공연 일정 기준)
+  const CONCERT_DAYS = ['2026-10-23','2026-10-24','2026-10-25','2026-11-14','2026-11-15','2026-12-5','2026-12-6','2027-1-9'];
+  const keyOf = d => `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+  const sameDay = (a, b) => !!a && !!b && a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+  const inBrowseRange = d => d >= RANGE_MIN && d <= RANGE_MAX;
+
+  let sel = { s: new Date(2026, 9, 23), e: new Date(2027, 0, 23) };  // 초기: 향후 3개월 전체
+  let pickStart = true;
+  let leftMonth = new Date(2026, 9, 1);  // 왼쪽 달력의 기준 월
+
+  const periodField = document.getElementById('periodField');
+  const periodLabel = document.getElementById('periodLabel');
+  const fmt = d => `${d.getMonth() + 1}. ${d.getDate()} (${DOW[d.getDay()]})`;
+  const applyLabel = () => { periodLabel.textContent = `${fmt(sel.s)} ~ ${fmt(sel.e || sel.s)}`; };
+
+  function setActivePreset(t) {
+    document.querySelectorAll('.pp-preset').forEach(b => b.classList.toggle('active', b.dataset.preset === t));
+  }
+
+  function renderCalendars() {
+    const months = [leftMonth, new Date(leftMonth.getFullYear(), leftMonth.getMonth() + 1, 1)];
+    months.forEach((m, i) => {
+      document.getElementById('calM' + i).innerHTML = `${m.getFullYear()}년 ${m.getMonth() + 1}월 <em>${MONTH_EN[m.getMonth()]}</em>`;
+      const grid = document.getElementById('calGrid' + i);
+      grid.innerHTML = '';
+      const firstDow = new Date(m.getFullYear(), m.getMonth(), 1).getDay();
+      const lastDay = new Date(m.getFullYear(), m.getMonth() + 1, 0).getDate();
+      for (let k = 0; k < firstDow; k++) grid.appendChild(document.createElement('span'));
+      for (let d = 1; d <= lastDay; d++) {
+        const date = new Date(m.getFullYear(), m.getMonth(), d);
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'pp-day';
+        btn.appendChild(document.createTextNode(d));
+        if (!inBrowseRange(date)) {
+          btn.disabled = true;
+        } else {
+          if (CONCERT_DAYS.includes(keyOf(date))) {
+            const dot = document.createElement('span');
+            dot.className = 'dot';
+            btn.appendChild(dot);
+          }
+          if (sameDay(date, sel.s) || sameDay(date, sel.e)) btn.classList.add('edge');
+          else if (sel.s && sel.e && date > sel.s && date < sel.e) btn.classList.add('in-range');
+          btn.addEventListener('click', () => {
+            if (pickStart || date < sel.s) { sel = { s: date, e: null }; pickStart = false; }
+            else { sel.e = date; pickStart = true; }
+            setActivePreset(null);  // 직접 선택 시 프리셋 해제
+            renderCalendars();
+          });
+        }
+        grid.appendChild(btn);
+      }
+    });
+    document.getElementById('calPrev').disabled = leftMonth <= new Date(2026, 9, 1);
+    document.getElementById('calNext').disabled = leftMonth >= new Date(2026, 11, 1);
+  }
+
+  function setFullRange() {
+    sel = { s: new Date(2026, 9, 23), e: new Date(2027, 0, 23) };
+    pickStart = true;
+    leftMonth = new Date(2026, 9, 1);
+    setActivePreset('3m');
+    renderCalendars();
+  }
+  function closePeriod(){ periodField.classList.remove('open'); }
+
+  // 필드 클릭 → popover 토글 (초기화 버튼·popover 내부 클릭은 제외)
+  periodField.addEventListener('click', e => {
+    if (e.target.closest('.btn-refresh') || e.target.closest('.period-pop')) return;
+    periodField.classList.toggle('open');
+  });
+  document.addEventListener('click', e => { if (!periodField.contains(e.target)) closePeriod(); });
+
+  // search-005: 새로고침 버튼 → 탐색 가능한 최대 기간으로 초기화
+  document.getElementById('periodRefresh').addEventListener('click', e => {
+    e.stopPropagation();
+    setFullRange();
+    applyLabel();
+    closePeriod();
+  });
+  document.getElementById('calPrev').addEventListener('click', () => { leftMonth = new Date(leftMonth.getFullYear(), leftMonth.getMonth() - 1, 1); renderCalendars(); });
+  document.getElementById('calNext').addEventListener('click', () => { leftMonth = new Date(leftMonth.getFullYear(), leftMonth.getMonth() + 1, 1); renderCalendars(); });
+
+  document.querySelectorAll('.pp-preset').forEach(b => b.addEventListener('click', () => {
+    const s = new Date(2026, 9, 23);
+    if (b.dataset.preset === 'this-month') sel = { s, e: new Date(2026, 9, 31) };        // 이번 달: 10.23 ~ 10.31 (탐색 시작일로 clamp)
+    else if (b.dataset.preset === '1m') sel = { s, e: new Date(2026, 10, 23) };          // 향후 1개월
+    else sel = { s, e: new Date(2027, 0, 23) };                                          // 향후 3개월 전체
+    pickStart = true;
+    leftMonth = new Date(2026, 9, 1);
+    setActivePreset(b.dataset.preset);
+    renderCalendars();
+  }));
+  document.getElementById('ppReset').addEventListener('click', setFullRange);
+  document.getElementById('ppApply').addEventListener('click', () => {
+    if (!sel.e) sel.e = sel.s;
+    applyLabel();
+    closePeriod();
+  });
+
+  applyLabel();
+  renderCalendars();
+</script>
+</body>
+</html>

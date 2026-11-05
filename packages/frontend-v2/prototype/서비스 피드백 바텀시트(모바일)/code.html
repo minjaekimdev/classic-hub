@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<!--
+  OPUS | 서비스 피드백 바텀시트 시안 (모바일)
+  specs/home.md: feedback-002 (모바일 — '서비스 의견 보내기' 버튼 → 바텀시트)
+-->
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>OPUS | 서비스 피드백 바텀시트 시안 (모바일)</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --navy:#16233a;
+    --gold:#c8a24a;
+    --gold-deep:#a8843a;
+    --gold-tint:#fbf8f1;
+    --ink:#22242a;
+    --gray:#6b7080;
+    --muted:#a3a093;
+    --line:#e8e4da;
+    --line-soft:#efece3;
+    --display:"Josefin Sans","Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    font-family:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+    color:var(--ink);background:#e9e7e0;
+    line-height:1.55;letter-spacing:-.01em;
+  }
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+  .ic{display:inline-block;vertical-align:middle;flex:0 0 auto}
+  .ic use,svg.ic{stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+  .stage{max-width:430px;margin:0 auto;min-height:100vh;background:var(--gold-tint);position:relative;overflow:hidden}
+
+  /* ── 배경: 시트를 연 모바일 홈 상단 (흐리게) ── */
+  .ctx{padding:14px 16px 0;filter:brightness(.92);user-select:none}
+  .ctx .gnb-mini{display:flex;align-items:baseline;gap:8px}
+  .ctx .gnb-mini .mark{font-family:var(--display);font-size:22px;font-weight:700;color:var(--navy);letter-spacing:1px}
+  .ctx .gnb-mini .mark em{font-style:normal;color:var(--gold)}
+  .ctx .gnb-mini .sub{font-size:10px;color:var(--gray);letter-spacing:2px;font-weight:500}
+  .ctx .hero-copy{margin-top:16px;font-family:var(--display);font-size:22px;font-weight:700;line-height:1.35;color:var(--navy)}
+  .ctx .hero-copy .accent{color:var(--gold-deep)}
+
+  /* ── 바텀시트 ── */
+  .scrim{position:absolute;inset:0;background:rgba(13,23,40,.5)}
+  .sheet{
+    position:absolute;left:0;right:0;bottom:0;z-index:10;
+    background:#fff;border-radius:16px 16px 0 0;
+    box-shadow:0 -10px 40px rgba(13,23,40,.3);
+    display:flex;flex-direction:column;max-height:92vh;
+  }
+  .grabber{width:40px;height:4px;border-radius:2px;background:#d8d2c0;margin:10px auto 2px;flex:0 0 auto}
+  .sheet-head{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    padding:6px 18px 12px;border-bottom:1px solid var(--line-soft);flex:0 0 auto;
+  }
+  .sheet-head b{font-size:15px;font-weight:700;color:var(--navy)}
+  .btn-close{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:30px;height:30px;border-radius:50%;background:var(--gold-tint);color:var(--gray);transition:.15s;
+  }
+  .btn-close:hover{color:var(--navy)}
+  .btn-close .ic{width:14px;height:14px}
+  .sheet-scroll{overflow-y:auto;padding:14px 18px 18px;overscroll-behavior:contain}
+  .sheet-scroll p.sub{font-size:12.5px;color:var(--gray);margin-bottom:14px}
+  .f-lbl{display:flex;align-items:baseline;gap:4px;font-size:12.5px;font-weight:700;color:var(--ink);margin-bottom:6px}
+  .f-lbl .req{color:var(--gold-deep)}
+  .f-lbl .opt{font-size:11px;font-weight:500;color:var(--muted)}
+  .f-lbl .count{margin-left:auto;font-size:11px;font-weight:500;color:var(--muted)}
+  textarea{
+    width:100%;min-height:110px;resize:vertical;
+    border:1.5px solid var(--line);border-radius:10px;padding:12px 14px;
+    font:inherit;font-size:14px;color:var(--ink);background:#fff;outline:none;transition:.15s;
+  }
+  textarea::placeholder{color:#b3b7c2}
+  textarea:focus{border-color:var(--navy);box-shadow:0 0 0 3px rgba(22,35,58,.06)}
+  input[type=email]{
+    width:100%;border:1.5px solid var(--line);border-radius:10px;padding:11px 14px;
+    font:inherit;font-size:14px;color:var(--ink);background:#fff;outline:none;transition:.15s;
+  }
+  input[type=email]::placeholder{color:#b3b7c2}
+  input[type=email]:focus{border-color:var(--navy);box-shadow:0 0 0 3px rgba(22,35,58,.06)}
+  .f-hint{margin-top:6px;font-size:11.5px;color:var(--muted)}
+  .f-group + .f-group{margin-top:14px}
+  .btn-submit{
+    margin-top:18px;width:100%;display:inline-flex;align-items:center;justify-content:center;gap:7px;
+    background:var(--navy);color:#fff;border-radius:10px;padding:13px 20px;
+    font-size:14px;font-weight:700;transition:.15s;
+  }
+  .btn-submit:hover{background:var(--gold);color:#0d1728}
+  .btn-submit .ic{width:14px;height:14px}
+</style>
+</head>
+<body>
+<div class="stage">
+
+  <!-- 배경: 피드백 버튼을 누른 모바일 홈 상단 (흐리게) -->
+  <div class="ctx" aria-hidden="true">
+    <div class="gnb-mini">
+      <span class="mark">OP<em>U</em>S</span>
+      <span class="sub">클래식 공연 프로그램 검색</span>
+    </div>
+    <div class="hero-copy">프로그램과 연주곡으로 찾는<br /><span class="accent">클래식</span> 콘서트</div>
+  </div>
+
+  <div class="scrim" aria-hidden="true"></div>
+
+  <!-- feedback-002: 서비스 의견 보내기 바텀시트 -->
+  <section class="sheet" role="dialog" aria-modal="true" aria-label="서비스 의견 보내기">
+    <div class="grabber" aria-hidden="true"></div>
+    <div class="sheet-head">
+      <b>서비스 의견 보내기</b>
+      <button type="button" class="btn-close" aria-label="닫기"><svg class="ic"><use href="#i-close"/></svg></button>
+    </div>
+    <div class="sheet-scroll">
+      <p class="sub">OPUS를 더 좋은 서비스로 만드는 데 큰 도움이 됩니다.</p>
+      <div class="f-group">
+        <div class="f-lbl">의견 <span class="req">*</span><span class="count">0 / 1,000</span></div>
+        <textarea placeholder="좋았던 점, 아쉬운 점, 추가했으면 하는 기능 등을 자유롭게 남겨주세요."></textarea>
+      </div>
+      <div class="f-group">
+        <div class="f-lbl">이메일 <span class="opt">(선택)</span></div>
+        <input type="email" placeholder="example@email.com" />
+        <p class="f-hint">보내주신 의견에 대한 답변이 필요한 경우에만 사용됩니다.</p>
+      </div>
+      <button type="button" class="btn-submit"><svg class="ic"><use href="#i-send"/></svg>의견 보내기</button>
+    </div>
+  </section>
+
+</div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+    <symbol id="i-send" viewBox="0 0 24 24"><path d="M21 3 10 14"/><path d="M21 3l-7 18-4-7-7-4 18-7z"/></symbol>
+  </defs>
+</svg>
+</body>
+</html>

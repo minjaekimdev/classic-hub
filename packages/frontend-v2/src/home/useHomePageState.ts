@@ -3,6 +3,7 @@
  * - search-005: 새로고침으로 탐색 가능한 최대 기간 적용(DateRangePicker에서 위임)
  * - search-007: '검색 필터 초기화' 시 검색어/공연상태/공연기간/정렬기준 전체 초기화
  * - search-009: 검색어 입력 후 '검색' 제출 시에만 URL에 검색어 커밋
+ * - view-001/002: 보기 모드 상태(기본값 리스트형)를 URL로 관리하고 전환은 히스토리에 기록하지 않음
  * - exception-02: URL 기간 파라미터가 유효 범위를 벗어나도 유효 범위로 정규화
  */
 "use client";
@@ -12,13 +13,13 @@ import { useQueryStates } from "nuqs";
 import { normalizeDateRange } from "@/lib/date";
 import { getBrowsablePeriod } from "@/lib/period";
 import { homePageUrlParsers } from "@/lib/urlState";
-import type { DateRange, SortBy, StatusFilter } from "@/types/concert";
+import type { DateRange, SortBy, StatusFilter, ViewMode } from "@/types/concert";
 
 /** 검색 제출 디바운스 (search-009: 연타로 인한 중복 요청 예방) */
 const SEARCH_DEBOUNCE_MS = 500;
 
 export default function useHomePageState() {
-  const [{ q, status, from, to, sort, page }, setParams] = useQueryStates(homePageUrlParsers);
+  const [{ q, status, from, to, sort, page, view }, setParams] = useQueryStates(homePageUrlParsers);
 
   const browsablePeriod = getBrowsablePeriod();
   /** URL의 from/to가 비었거나 유효 범위를 벗어나도 유효 범위로 정규화한다 (exception-02) */
@@ -78,6 +79,14 @@ export default function useHomePageState() {
     [setParams],
   );
 
+  /** 보기 모드 변경 — 표시 방식 전환은 히스토리에 기록하지 않는다 (view-002) */
+  const handleViewMode = useCallback(
+    (value: ViewMode) => {
+      setParams({ view: value }, { history: "replace" });
+    },
+    [setParams],
+  );
+
   const handlePage = useCallback(
     (value: number) => {
       setParams({ page: value });
@@ -108,6 +117,7 @@ export default function useHomePageState() {
       dateRange,
       sortBy: sort,
       page,
+      viewMode: view,
       browsablePeriod,
     },
     actions: {
@@ -116,6 +126,7 @@ export default function useHomePageState() {
       onStatusFilterChange: handleStatusFilter,
       onDateRangeChange: handleDateRange,
       onSortByChange: handleSortBy,
+      onViewModeChange: handleViewMode,
       onPageChange: handlePage,
       onResetFilters: handleResetFilters,
     },

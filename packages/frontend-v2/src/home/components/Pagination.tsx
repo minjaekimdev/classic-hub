@@ -1,11 +1,14 @@
 /**
  * specs/home.md 구현 정책
  * - search-006: 검색 결과 페이지네이션 표시 (페이지당 개수는 api/concerts.ts PAGE_SIZE에서 결정)
+ * - pagenation-001: 페이지 이동 시 스크롤 보정은 HomePage가 담당
+ *   (디자인: prototype/홈페이지 수정안 — 번호형 중앙 정렬, 이전/다음은 아이콘 버튼)
  */
+import Icon from "@/components/Icon";
+
 interface PaginationProps {
   page: number;
   totalPages: number;
-  total: number;
   onPageChange: (page: number) => void;
 }
 
@@ -24,60 +27,57 @@ const buildPageItems = (page: number, totalPages: number): (number | "ellipsis")
   return items;
 };
 
-export default function Pagination({ page, totalPages, total, onPageChange }: PaginationProps) {
+export default function Pagination({ page, totalPages, onPageChange }: PaginationProps) {
   const handlePrevious = () => onPageChange(page - 1);
   const handleNext = () => onPageChange(page + 1);
 
   return (
-    <div className="flex flex-col items-center justify-between gap-4 border-t border-outline-variant pt-8 sm:flex-row">
-      <span className="text-body-sm text-on-surface-variant">
-        총 {total.toLocaleString()}개의 프로그램 검색 결과 표시 중 ({page}페이지 중 {totalPages})
-      </span>
-      <div className="flex items-center gap-1">
-        <button
-          type="button"
-          onClick={handlePrevious}
-          disabled={page <= 1}
-          className="border border-outline-variant px-3 py-1.5 font-label-caps text-on-surface-variant transition-colors hover:border-outline hover:text-primary disabled:pointer-events-none disabled:opacity-40"
-        >
-          이전 페이지
-        </button>
-        {buildPageItems(page, totalPages).map((item, index) =>
-          item === "ellipsis" ? (
-            <span
-              key={`ellipsis-${index}`}
-              className="select-none px-1 font-label-caps text-outline-variant"
-            >
-              …
-            </span>
-          ) : item === page ? (
-            <span
-              key={item}
-              aria-current="page"
-              className="flex h-8 w-8 items-center justify-center bg-primary-container font-label-caps text-on-primary"
-            >
-              {item}
-            </span>
-          ) : (
-            <button
-              key={item}
-              type="button"
-              onClick={() => onPageChange(item)}
-              className="flex h-8 w-8 items-center justify-center font-label-caps text-on-surface-variant transition-colors hover:bg-surface-container hover:text-primary"
-            >
-              {item}
-            </button>
-          ),
-        )}
-        <button
-          type="button"
-          onClick={handleNext}
-          disabled={page >= totalPages}
-          className="border border-outline-variant px-3 py-1.5 font-label-caps text-on-surface-variant transition-colors hover:border-outline hover:text-primary disabled:pointer-events-none disabled:opacity-40"
-        >
-          다음 페이지
-        </button>
-      </div>
-    </div>
+    <nav aria-label="페이지 이동" className="flex items-center justify-center gap-2 pt-8">
+      <button
+        type="button"
+        onClick={handlePrevious}
+        disabled={page <= 1}
+        aria-label="이전 페이지"
+        className="flex h-[38px] w-[38px] items-center justify-center rounded-md border border-outline-variant text-on-surface-variant transition-colors hover:border-primary hover:text-primary disabled:pointer-events-none disabled:opacity-40"
+      >
+        <Icon name="chevron_left" size={18} />
+      </button>
+      {buildPageItems(page, totalPages).map((item, index) =>
+        item === "ellipsis" ? (
+          <span
+            key={`ellipsis-${index}`}
+            className="select-none px-1 text-body-sm text-outline-variant"
+          >
+            …
+          </span>
+        ) : item === page ? (
+          <span
+            key={item}
+            aria-current="page"
+            className="flex h-[38px] w-[38px] items-center justify-center rounded-md bg-primary text-body-md font-bold text-on-primary"
+          >
+            {item}
+          </span>
+        ) : (
+          <button
+            key={item}
+            type="button"
+            onClick={() => onPageChange(item)}
+            className="flex h-[38px] w-[38px] items-center justify-center rounded-md border border-outline-variant text-body-md font-semibold text-on-surface-variant transition-colors hover:border-primary hover:text-primary"
+          >
+            {item}
+          </button>
+        ),
+      )}
+      <button
+        type="button"
+        onClick={handleNext}
+        disabled={page >= totalPages}
+        aria-label="다음 페이지"
+        className="flex h-[38px] w-[38px] items-center justify-center rounded-md border border-outline-variant text-on-surface-variant transition-colors hover:border-primary hover:text-primary disabled:pointer-events-none disabled:opacity-40"
+      >
+        <Icon name="chevron_right" size={18} />
+      </button>
+    </nav>
   );
 }

@@ -79,6 +79,14 @@ describe("ConcertCard", () => {
     expect(screen.queryByText(/프로그램 작곡가:/)).not.toBeInTheDocument();
   });
 
+  it("카드에 '프로그램 작곡가'·러닝타임·관람연령·좌석별 가격 블록을 표기하지 않는다 (2026.10.23 제외 확정 — 작곡가 정보는 전체 프로그램 ui 그룹 헤더로)", () => {
+    renderWithProviders(<ConcertCard concert={makeConcert()} />);
+    expect(screen.queryByText(/프로그램 작곡가:/)).not.toBeInTheDocument();
+    expect(screen.queryByText("러닝타임")).not.toBeInTheDocument();
+    expect(screen.queryByText("관람연령")).not.toBeInTheDocument();
+    expect(screen.queryByText(/좌석별 티켓 가격:/)).not.toBeInTheDocument();
+  });
+
   it("첫 곡 외 나머지 곡 수를 (외 N곡)으로 함께 표기한다 (specs card-008)", () => {
     renderWithProviders(<ConcertCard concert={makeConcert()} />);
     expect(screen.getByText("(외 2곡)")).toBeInTheDocument();
@@ -117,35 +125,6 @@ describe("ConcertCard", () => {
   it("일치하는 곡이 없으면 기본 곡(첫 프로그램 첫 곡)을 표기한다 (specs search-008)", () => {
     renderWithProviders(<ConcertCard concert={makeConcert()} searchQuery="차이콥스키" />);
     expect(screen.getByText("라흐마니노프 - 피아노 협주곡 2번")).toBeInTheDocument();
-  });
-
-  it("프로그램 작곡가 라벨과 작곡가명을 한 줄에 배치한다 (specs card-011)", () => {
-    renderWithProviders(<ConcertCard concert={makeConcert()} />);
-    const label = screen.getByText("프로그램 작곡가:");
-    expect(label.parentElement).toHaveTextContent("라흐마니노프 · 브람스");
-  });
-
-  it("러닝타임/관람연령/공연 장소가 없으면 '-'를 표기한다 (specs card-012)", () => {
-    renderWithProviders(
-      <ConcertCard
-        concert={makeConcert({ runtime: null, age: null, venueName: "" })}
-      />,
-    );
-    expect(screen.getAllByText("-").length).toBeGreaterThanOrEqual(3);
-  });
-
-  it("티켓 가격이 무료면 '전석 무료'를 표기한다 (specs card-013)", () => {
-    renderWithProviders(
-      <ConcertCard
-        concert={makeConcert({ seatPrices: [{ seatType: "전석", price: 0 }] })}
-      />,
-    );
-    expect(screen.getByText("전석 무료")).toBeInTheDocument();
-  });
-
-  it("좌석별 가격이 없으면 가격 영역을 렌더링하지 않는다 (specs card-014)", () => {
-    renderWithProviders(<ConcertCard concert={makeConcert({ seatPrices: [] })} />);
-    expect(screen.queryByText("좌석별 티켓 가격:")).not.toBeInTheDocument();
   });
 
   it("공연장 상세 주소가 없으면 주소를 표기하지 않는다 (specs card-017)", () => {

@@ -1,7 +1,11 @@
 /**
  * specs/home.md 구현 정책
- * - feedback-001: '서비스 의견 보내기' 버튼 클릭 시 피드백 모달 표시(데스크톱 플로팅 버튼)
- * - feedback-002: '피드백' 버튼 클릭 시 피드백 바텀시트 표시(모바일 헤더 버튼)
+ * - feedback-001: '서비스 의견 보내기' 버튼 클릭 시 피드백 모달 표시(데스크톱)
+ * - feedback-002: 모바일에서는 같은 버튼이 바텀시트로 표시된다(ResponsiveDialog 반응형)
+ *   (프로토타입/홈페이지 수정안: 진입점은 GNB 우측 버튼 단일 진입점)
+ * - (수정안) 모달/바텀시트에서 헤더(제목+닫기)와 푸터(취소/피드백 보내기)는 고정하고
+ *   폼 본문(주제·만족도·의견·이메일)만 스크롤한다 — 모바일·데스크톱 공통
+ *   (ResponsiveDialog fixedChrome)
  */
 "use client";
 
@@ -66,6 +70,7 @@ function FeedbackDialog({ isOpen, onClose }: FeedbackDialogProps) {
       onClose={handleClose}
       ariaLabel="서비스 피드백 보내기"
       containerClassName="md:max-w-[700px]"
+      fixedChrome
     >
       {isSubmitted ? (
         <div className="flex flex-col items-center px-6 py-14 text-center">
@@ -81,37 +86,33 @@ function FeedbackDialog({ isOpen, onClose }: FeedbackDialogProps) {
           <button
             type="button"
             onClick={handleClose}
-            className="rounded-xs bg-primary px-6 py-2.5 font-label-md text-on-primary transition-colors hover:bg-primary-container"
+            className="rounded-lg bg-primary px-6 py-2.5 font-label-md text-on-primary transition-colors hover:bg-primary-container"
           >
             닫기
           </button>
         </div>
       ) : (
-        <form onSubmit={handleSubmit}>
-          <div className="flex items-start justify-between border-b border-outline-variant bg-surface-bright px-6 pb-5 pt-6 sm:px-8">
+        /* 모바일: 시트가 flex-col이므로 form도 세로 flex — 헤더/푸터는 고정되고 본문만 스크롤된다.
+           데스크톱(md+): 시트가 block이라 flex 관련 클래스는 무시되고 기존 흐름 그대로다 */
+        <form onSubmit={handleSubmit} className="flex min-h-0 flex-col">
+          <div className="flex flex-none items-start justify-between border-b border-outline-variant px-6 pb-5 pt-6 sm:px-8">
             <div className="space-y-1.5 pr-6">
-              <div className="mb-1 flex items-center gap-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-secondary" />
-                <span className="font-label-caps uppercase tracking-widest text-secondary">
-                  Listener &amp; Patron Voice
-                </span>
-              </div>
-              <h2 className="font-serif text-headline-md text-primary">서비스 피드백 보내기</h2>
+              <h2 className="font-serif text-headline-md text-primary">서비스 의견 보내기</h2>
               <p className="leading-relaxed text-body-md text-on-surface-variant">
-                OPUS 서비스 이용 경험이나 개선되었으면 하는 점, 바라는 기능을 자유롭게 들려주세요.
+                OPUS를 더 좋은 서비스로 만드는 데 큰 도움이 됩니다.
               </p>
             </div>
             <button
               type="button"
               onClick={handleClose}
               aria-label="닫기"
-              className="shrink-0 rounded-lg p-1.5 text-on-surface-variant transition-colors hover:bg-surface-container hover:text-primary"
+              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-surface-container-low text-on-surface-variant transition-colors hover:bg-surface-container hover:text-primary"
             >
-              <Icon name="close" size={22} />
+              <Icon name="close" size={18} />
             </button>
           </div>
 
-          <div className="space-y-7 px-6 py-6 sm:px-8">
+          <div className="min-h-0 grow space-y-7 overflow-y-auto px-6 py-6 sm:px-8">
             {/* 피드백 주제 */}
             <div className="space-y-2.5">
               <span className="block font-label-md font-semibold text-primary">피드백 주제</span>
@@ -241,7 +242,7 @@ function FeedbackDialog({ isOpen, onClose }: FeedbackDialogProps) {
             )}
           </div>
 
-          <div className="flex flex-col items-center justify-between gap-4 border-t border-outline-variant bg-surface-bright px-6 py-5 sm:flex-row sm:px-8">
+          <div className="flex flex-none flex-col items-center justify-between gap-4 border-t border-outline-variant px-6 py-5 sm:flex-row sm:px-8">
             <div className="hidden items-center gap-2 text-on-surface-variant sm:flex">
               <Icon name="mark_chat_read" size={18} className="text-secondary" />
               <span className="text-body-sm">소중한 의견은 서비스 운영팀에 직접 전달됩니다.</span>
@@ -250,14 +251,14 @@ function FeedbackDialog({ isOpen, onClose }: FeedbackDialogProps) {
               <button
                 type="button"
                 onClick={handleClose}
-                className="rounded-lg border border-primary px-5 py-2.5 font-label-md text-primary transition-colors hover:bg-primary/5"
+                className="rounded-lg border border-outline-variant px-5 py-2.5 font-label-md text-on-surface-variant transition-colors hover:text-primary"
               >
                 취소
               </button>
               <button
                 type="submit"
                 disabled={isPending || content.trim().length === 0}
-                className="flex items-center gap-2 rounded-lg bg-primary px-6 py-2.5 font-label-md text-on-primary shadow-sm transition-colors hover:bg-[#2C3847] disabled:cursor-not-allowed disabled:opacity-40"
+                className="flex items-center gap-2 rounded-lg bg-primary px-6 py-2.5 font-label-md text-on-primary shadow-sm transition-colors hover:bg-primary-container disabled:cursor-not-allowed disabled:opacity-40"
               >
                 <span>{isPending ? "전송 중..." : "피드백 보내기"}</span>
                 <Icon name="arrow_forward" size={16} />
@@ -270,28 +271,10 @@ function FeedbackDialog({ isOpen, onClose }: FeedbackDialogProps) {
   );
 }
 
-/** 데스크톱: 우하단 플로팅 버튼 (feedback-001) */
-export default function ServiceFeedback() {
-  const [isOpen, setIsOpen] = useState(false);
-
-  return (
-    <>
-      <div className="pointer-events-none fixed bottom-6 right-6 z-40 hidden justify-end px-6 sm:flex">
-        <button
-          type="button"
-          onClick={() => setIsOpen(true)}
-          className="pointer-events-auto flex items-center gap-2 border border-outline-variant bg-primary-container px-4 py-2.5 font-label-md text-on-primary shadow-xl transition-colors hover:bg-on-primary-fixed-variant"
-        >
-          <Icon name="chat_bubble_outline" size={18} className="text-secondary-fixed" />
-          <span>서비스 의견 보내기</span>
-        </button>
-      </div>
-      <FeedbackDialog isOpen={isOpen} onClose={() => setIsOpen(false)} />
-    </>
-  );
-}
-
-/** 모바일: 헤더 우측 피드백 버튼 (feedback-002, prototype/홈페이지(모바일)) */
+/**
+ * GNB 우측 피드백 진입점 (feedback-001/002).
+ * 클릭 시 ResponsiveDialog가 뷰포트에 따라 모달(데스크톱)/바텀시트(모바일)로 렌더링한다.
+ */
 export function FeedbackHeaderButton() {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -300,11 +283,10 @@ export function FeedbackHeaderButton() {
       <button
         type="button"
         onClick={() => setIsOpen(true)}
-        aria-label="서비스 피드백 보내기"
-        className="inline-flex items-center gap-1 rounded-sm border border-outline-variant bg-surface-container-lowest px-2.5 py-1 text-[11px] font-medium text-primary transition-colors hover:border-secondary hover:text-secondary sm:hidden"
+        className="inline-flex items-center gap-2 rounded-full border-[1.5px] border-primary bg-surface-bright px-4 py-2 text-[13px] font-semibold text-primary transition-colors hover:bg-primary hover:text-on-primary"
       >
-        <Icon name="rate_review" size={14} className="text-secondary" />
-        <span>피드백</span>
+        <Icon name="chat_bubble_outline" size={14} />
+        <span>서비스 의견 보내기</span>
       </button>
       <FeedbackDialog isOpen={isOpen} onClose={() => setIsOpen(false)} />
     </>

@@ -1,56 +1,58 @@
 @import "tailwindcss";
 
 @theme {
-  --color-background: #f9f9fd;
-  --color-surface: #f9f9fd;
-  --color-surface-dim: #d9dade;
-  --color-surface-bright: #f9f9fd;
+  /* 홈페이지 수정안 톤 — navy+gold 팔레트 (prototype/홈페이지 수정안 참조) */
+  --color-background: #faf8f3;
+  --color-surface: #faf8f3;
+  --color-surface-dim: #efece3;
+  --color-surface-bright: #ffffff;
   --color-surface-container-lowest: #ffffff;
-  --color-surface-container-low: #f3f3f7;
-  --color-surface-container: #ededf2;
-  --color-surface-container-high: #e8e8ec;
-  --color-surface-container-highest: #e2e2e6;
-  --color-surface-variant: #e2e2e6;
-  --color-on-surface: #1a1c1f;
-  --color-on-surface-variant: #44474c;
-  --color-surface-tint: #565f6d;
-  --color-outline: #75777c;
-  --color-outline-variant: #c5c6cc;
-  --color-primary: #050e1a;
+  --color-surface-container-low: #fbf8f1;
+  --color-surface-container: #f4f1e8;
+  --color-surface-container-high: #ece9dd;
+  --color-surface-container-highest: #e4e0d2;
+  --color-surface-variant: #efece3;
+  --color-on-surface: #22242a;
+  --color-on-surface-variant: #6b7080;
+  --color-surface-tint: #16233a;
+  --color-outline: #a3a093;
+  --color-outline-variant: #e8e4da;
+  --color-primary: #16233a;
   --color-on-primary: #ffffff;
-  --color-primary-container: #1b2430;
-  --color-on-primary-container: #828b9a;
-  --color-inverse-primary: #bec7d7;
-  --color-inverse-surface: #2f3034;
-  --color-inverse-on-surface: #f0f0f4;
-  --color-primary-fixed: #dae3f4;
-  --color-primary-fixed-dim: #bec7d7;
-  --color-on-primary-fixed: #131c28;
-  --color-on-primary-fixed-variant: #3e4755;
-  --color-secondary: #7c5818;
+  --color-primary-container: #0d1728;
+  --color-on-primary-container: #ffffff;
+  --color-inverse-primary: #c8a24a;
+  --color-inverse-surface: #0d1728;
+  --color-inverse-on-surface: #e6eaf2;
+  --color-primary-fixed: #e6eaf2;
+  --color-primary-fixed-dim: #cfd6e4;
+  --color-on-primary-fixed: #16233a;
+  --color-on-primary-fixed-variant: #22314e;
+  --color-secondary: #a8843a;
   --color-on-secondary: #ffffff;
-  --color-secondary-container: #fecc82;
-  --color-on-secondary-container: #795516;
-  --color-secondary-fixed: #ffddaf;
-  --color-secondary-fixed-dim: #efbe76;
-  --color-on-secondary-fixed: #281800;
-  --color-on-secondary-fixed-variant: #614000;
-  --color-tertiary: #270005;
+  --color-secondary-container: #c8a24a;
+  --color-on-secondary-container: #16233a;
+  --color-secondary-fixed: #f3e8cf;
+  --color-secondary-fixed-dim: #e2d0a4;
+  --color-on-secondary-fixed: #14213a;
+  --color-on-secondary-fixed-variant: #3d3011;
+  --color-tertiary: #8a3b2e;
   --color-on-tertiary: #ffffff;
-  --color-tertiary-container: #480d16;
-  --color-on-tertiary-container: #c87277;
-  --color-tertiary-fixed: #ffdada;
-  --color-tertiary-fixed-dim: #ffb3b6;
-  --color-on-tertiary-fixed: #3d050e;
-  --color-on-tertiary-fixed-variant: #753137;
+  --color-tertiary-container: #f6e2dc;
+  --color-on-tertiary-container: #5c2a20;
+  --color-tertiary-fixed: #f9ece8;
+  --color-tertiary-fixed-dim: #efd2ca;
+  --color-on-tertiary-fixed: #471d14;
+  --color-on-tertiary-fixed-variant: #6b3629;
   --color-error: #ba1a1a;
   --color-on-error: #ffffff;
   --color-error-container: #ffdad6;
   --color-on-error-container: #93000a;
 
-  /* 프로토타입과 동일하게 한글 글리프는 브라우저 기본 폰트로 폴백한다 (제네릭 계열 미지정) */
-  --font-sans: var(--font-hanken), "Hanken Grotesk";
-  --font-serif: var(--font-playfair), "Playfair Display";
+  /* 한글 본문은 Pretendard(CDN), 영문 디스플레이는 Josefin Sans(next/font) — 수정안 확정 폰트 */
+  --font-sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui,
+    sans-serif;
+  --font-serif: var(--font-josefin), "Josefin Sans", sans-serif;
 
   --text-display-hero: 3rem;
   --text-display-hero--line-height: 3.5rem;
@@ -107,9 +109,71 @@
   button:not(:disabled) {
     cursor: pointer;
   }
+  /* 프로토타입 body 기본 타이포 (prototype/홈페이지 수정안) */
+  body {
+    line-height: 1.55;
+    letter-spacing: -0.01em;
+  }
 }
 
 @layer components {
+  /* 검색 예시 롤링 placeholder (search-001) — input 위를 아래→위로 순환하는 예시 트랙 */
+  .ph-roll {
+    position: absolute;
+    inset-inline-start: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    line-height: 1.4;
+    color: var(--color-outline);
+    white-space: nowrap;
+    pointer-events: none;
+    transition: opacity 0.15s;
+  }
+  .ph-win {
+    display: inline-block;
+    height: 1.4em;
+    overflow: hidden;
+  }
+  .ph-track {
+    display: flex;
+    flex-direction: column;
+    animation: ph-roll 9s cubic-bezier(0.45, 0, 0.25, 1) infinite;
+  }
+  .ph-item {
+    height: 1.4em;
+    line-height: 1.4em;
+  }
+  @keyframes ph-roll {
+    0%,
+    27% {
+      transform: translateY(0);
+    }
+    33%,
+    60% {
+      transform: translateY(-1.4em);
+    }
+    66%,
+    93% {
+      transform: translateY(-2.8em);
+    }
+    100% {
+      transform: translateY(-4.2em);
+    }
+  }
+
+  /* 홈 히어로 — navy 그라데이션 (prototype/홈페이지 수정안 hero) */
+  .hero-surface {
+    background:
+      radial-gradient(1100px 460px at 18% -20%, rgba(200, 162, 74, 0.2), transparent 62%),
+      radial-gradient(900px 420px at 90% -10%, rgba(90, 120, 180, 0.22), transparent 58%),
+      linear-gradient(165deg, #141f36 0%, #16233a 48%, #0c1424 100%);
+  }
+
   .material-symbols-outlined {
     font-family: "Material Symbols Outlined";
     font-weight: normal;
