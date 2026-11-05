@@ -7,6 +7,7 @@
 - 전체적인 아키텍처에 관해서는 design-decisions.md를 참고할 것
 - 기타 컴포넌트 설계에 관해서는 component-design.md를 참고할 것
 - 정책은 specs 폴더 내 파일들을 참고할 것
+- 디자인은 prototype 폴더 내 파일들을 참고할 것
 
 ## 개발 Workflow — 증강 코딩
 

@@ -56,6 +56,38 @@ describe("useHomePageState", () => {
     await waitFor(() => expect(result.current.state.query).toBe("베토벤"));
   });
 
+  it("보기 모드는 기본값 리스트형이며 URL 파라미터로 복원된다 (specs view-001/002)", () => {
+    const { result: defaultResult } = renderHook(() => useHomePageState(), {
+      wrapper: createWrapper(),
+    });
+    expect(defaultResult.current.state.viewMode).toBe("list");
+
+    const { result } = renderHook(() => useHomePageState(), {
+      wrapper: createWrapper("?view=album"),
+    });
+    expect(result.current.state.viewMode).toBe("album");
+  });
+
+  it("유효하지 않은 view 파라미터는 리스트형으로 정규화한다 (specs view-002)", () => {
+    const { result } = renderHook(() => useHomePageState(), {
+      wrapper: createWrapper("?view=grid"),
+    });
+    expect(result.current.state.viewMode).toBe("list");
+  });
+
+  it("보기 모드 변경은 다른 조건(페이지 등)을 건드리지 않는다 (specs view-002)", async () => {
+    const { result } = renderHook(() => useHomePageState(), {
+      wrapper: createWrapper("?page=3"),
+    });
+
+    await waitFor(() => expect(result.current.state.page).toBe(3));
+
+    act(() => result.current.actions.onViewModeChange("album"));
+
+    await waitFor(() => expect(result.current.state.viewMode).toBe("album"));
+    expect(result.current.state.page).toBe(3);
+  });
+
   it("상태 필터 변경 시 페이지를 1로 리셋한다", async () => {
     const { result } = renderHook(() => useHomePageState(), {
       wrapper: createWrapper("?page=3"),

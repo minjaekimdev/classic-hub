@@ -1,6 +1,9 @@
 /**
  * specs/home.md: 이 파일에 해당하는 명시 정책은 없음.
  * - card-009/010 연계: 프로그램 영역·바텀시트 푸터의 '오류 제보' 진입점으로 열리는 다이얼로그
+ * - (수정안) 모달/바텀시트에서 헤더(제목+닫기)와 푸터(취소/제보 접수하기)는 고정하고
+ *   폼 본문(대상 공연·수정 내용·링크·이메일)만 스크롤한다 — 모바일·데스크톱 공통
+ *   (ResponsiveDialog fixedChrome)
  */
 "use client";
 
@@ -51,8 +54,9 @@ export default function ProgramReportDialog({ isOpen, onClose, concert }: Progra
       onClose={handleClose}
       ariaLabel="프로그램 정보 오류 제보"
       containerClassName="md:max-w-[620px]"
+      fixedChrome
     >
-      <div className="h-0.5 w-full bg-secondary" />
+      <div className="h-0.5 w-full flex-none bg-secondary" />
 
       {isSubmitted ? (
         <div className="flex flex-col items-center px-6 py-14 text-center">
@@ -72,8 +76,10 @@ export default function ProgramReportDialog({ isOpen, onClose, concert }: Progra
           </button>
         </div>
       ) : (
-        <form onSubmit={handleSubmit}>
-          <div className="flex items-start justify-between gap-4 border-b border-outline-variant/60 px-6 pb-4 pt-6 sm:px-8">
+        /* 모바일: 시트가 flex-col이므로 form도 세로 flex — 헤더/푸터는 고정되고 본문만 스크롤된다.
+           데스크톱(md+): 시트가 block이라 flex 관련 클래스는 무시되고 기존 흐름 그대로다 */
+        <form onSubmit={handleSubmit} className="flex min-h-0 flex-col">
+          <div className="flex flex-none items-start justify-between gap-4 border-b border-outline-variant/60 px-6 pb-4 pt-6 sm:px-8">
             <div>
               <div className="mb-1.5 flex items-center gap-2">
                 <Icon name="report" size={18} className="text-secondary" />
@@ -95,7 +101,7 @@ export default function ProgramReportDialog({ isOpen, onClose, concert }: Progra
             </button>
           </div>
 
-          <div className="space-y-6 px-6 py-6 sm:px-8">
+          <div className="min-h-0 grow space-y-6 overflow-y-auto px-6 py-6 sm:px-8">
             {/* 대상 공연 정보 요약 */}
             <section>
               <div className="relative rounded-xs border border-outline-variant/80 bg-surface-container-low p-4">
@@ -215,7 +221,7 @@ export default function ProgramReportDialog({ isOpen, onClose, concert }: Progra
             )}
           </div>
 
-          <div className="flex items-center justify-end gap-3 border-t border-outline-variant/70 bg-surface-container-low px-6 py-4 sm:px-8">
+          <div className="flex flex-none items-center justify-end gap-3 border-t border-outline-variant/70 bg-surface-container-low px-6 py-4 sm:px-8">
             <button
               type="button"
               onClick={handleClose}

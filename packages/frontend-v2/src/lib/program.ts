@@ -1,6 +1,7 @@
 /**
  * specs/home.md 구현 정책
  * - search-008: 검색어와 일치하는 작곡가/곡명을 프로그램 순서대로 탐색(대소문자·공백 무시)
+ * - card-008/011/018: 프로그램 곡 수·작곡가·'작곡가 - 곡명' 제목 표기에 필요한 파생값 계산
  */
 import type { ConcertProgram, ConcertProgramTitle } from "@/types/concert";
 
@@ -46,4 +47,46 @@ export const findMatchedProgramWork = (
     }
   }
   return null;
+};
+
+/** 공연 카드(리스트형/앨범형) 프로그램 영역이 필요로 하는 파생값 묶음 */
+export interface ProgramSummary {
+  /** 프로그램 전체 곡 수 */
+  totalCount: number;
+  /** 메인 표기할 첫 곡 라벨 — '작곡가 - 곡명' 형식 (card-018), 프로그램이 없으면 null */
+  firstTitleLabel: string | null;
+  /** 메인 곡의 영문 제목 — 한글 제목이 있을 때만 보조 표기한다 */
+  firstTitleEn: string | null;
+  /** 메인 곡을 제외한 나머지 곡 수 — (외 N곡) 표기용 (card-008) */
+  extraCount: number;
+  /** 중복 없는 작곡가 목록 (card-011) */
+  composers: string[];
+}
+
+/**
+ * 카드 프로그램 영역에 표기할 파생값을 계산한다 (specs search-008, card-008/011/018)
+ * - 검색어와 일치하는 곡이 있으면 해당 작품을 메인으로, 없으면 첫 프로그램의 첫 곡을 메인으로 한다
+ */
+export const getProgramSummary = (
+  programs: ConcertProgram[],
+  query: string,
+): ProgramSummary => {
+  const totalCount = programs.reduce((sum, program) => sum + program.titles.length, 0);
+  const matchedWork = findMatchedProgramWork(programs, query);
+  const featuredProgram = matchedWork?.program ?? programs[0];
+  const featuredTitle = matchedWork?.title ?? featuredProgram?.titles[0];
+  const firstTitleKo = featuredTitle?.ko ?? featuredTitle?.en ?? null;
+  // '작곡가 - 곡명' 형식으로 표기 (specs card-018)
+  const firstComposer = featuredProgram?.composerKo ?? featuredProgram?.composerEn ?? null;
+  return {
+    totalCount,
+    firstTitleLabel:
+      firstComposer && firstTitleKo ? `${firstComposer} - ${firstTitleKo}` : firstTitleKo,
+    firstTitleEn: featuredTitle?.ko && featuredTitle.en ? featuredTitle.en : null,
+    extraCount: Math.max(0, totalCount - 1),
+    composers: programs
+      .map((program) => program.composerKo ?? program.composerEn)
+      .filter((composer): composer is string => composer !== null)
+      .filter((composer, index, all) => all.indexOf(composer) === index),
+  };
 };

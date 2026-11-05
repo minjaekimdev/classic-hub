@@ -2,6 +2,7 @@
  * specs/home.md 구현 정책
  * - search-003: 정렬 옵션 3가지('공연임박순', '낮은가격순', '높은가격순'),
  *   트리거 영역 클릭 시 옵션 ui가 하단에 표시되고 트리거와 우측 모서리 정렬(right-0)
+ *   (디자인: prototype/홈페이지 수정안 toolbar)
  */
 import { useRef, useState } from "react";
 import Icon from "@/components/Icon";
@@ -34,11 +35,13 @@ export default function SortSelect({ value, onChange }: SortSelectProps) {
   };
 
   return (
-    <div className="relative flex items-center gap-2 whitespace-nowrap text-body-sm text-on-surface-variant" ref={containerRef}>
-      <div className="hidden items-center gap-1 font-label-caps md:flex">
-        <Icon name="sort" size={16} className="text-secondary" />
-        <span>정렬 기준:</span>
-      </div>
+    <div
+      className="flex items-center gap-2 whitespace-nowrap text-body-sm text-on-surface-variant"
+      ref={containerRef}
+    >
+      <span className="text-[11px] font-semibold tracking-[0.06em] text-on-surface-variant">
+        정렬 기준:
+      </span>
       <div className="relative inline-block">
         <button
           type="button"
@@ -46,27 +49,21 @@ export default function SortSelect({ value, onChange }: SortSelectProps) {
           aria-expanded={isOpen}
           aria-label="정렬 기준 선택"
           onClick={() => setIsOpen((prev) => !prev)}
-          className="inline-flex cursor-pointer items-center justify-between gap-1.5 rounded-xs border border-outline-variant bg-surface-bright py-1 pl-2.5 pr-1.5 font-medium text-primary shadow-sm transition-colors hover:border-secondary md:gap-3 md:pr-2.5"
+          className="inline-flex cursor-pointer items-center gap-2 rounded-[5px] border border-outline-variant bg-white px-[11px] py-[7px] text-[12.5px] font-semibold text-on-surface transition-colors hover:border-primary"
         >
-          <span className="text-[12px] tracking-tight md:text-body-sm">
-            <span className="md:hidden">정렬: </span>
-            {labelFor(value)}
-          </span>
+          <span>{labelFor(value)}</span>
           <Icon
-            name="expand_less"
-            size={18}
-            className={`text-outline transition-transform duration-200 ${isOpen ? "" : "rotate-180"}`}
+            name="expand_more"
+            size={13}
+            className={`text-on-surface-variant transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
           />
         </button>
         {isOpen && (
           <div
             role="listbox"
             aria-label="정렬 옵션"
-            className="absolute right-0 top-full z-40 mt-1.5 w-44 border border-outline-variant bg-surface-container-lowest py-1 shadow-sm"
+            className="absolute right-0 top-full z-40 mt-1.5 min-w-[150px] rounded-md border border-outline-variant bg-white p-1 shadow-[0_10px_30px_rgba(22,35,58,0.14)]"
           >
-            <div className="mb-1 border-b border-outline-variant/40 px-3 py-1.5 font-label-caps uppercase tracking-wider text-outline">
-              옵션 선택
-            </div>
             {SORT_OPTIONS.map((option) => {
               const isSelected = option.value === value;
               return (
@@ -76,14 +73,14 @@ export default function SortSelect({ value, onChange }: SortSelectProps) {
                   role="option"
                   aria-selected={isSelected}
                   onClick={() => handleSelect(option.value)}
-                  className={`flex w-full items-center justify-between px-3 py-2 text-left text-body-sm transition-colors ${
+                  className={`flex w-full items-center justify-between gap-2 rounded-[4px] px-2.5 py-2 text-left text-body-sm transition-colors ${
                     isSelected
-                      ? "bg-surface-container-low font-medium text-primary"
+                      ? "bg-surface-container-low font-semibold text-primary"
                       : "text-on-surface hover:bg-surface-container-low"
                   }`}
                 >
                   <span>{option.label}</span>
-                  {isSelected && <Icon name="check" size={16} className="text-secondary" />}
+                  {isSelected && <Icon name="check" size={15} className="text-secondary" />}
                 </button>
               );
             })}

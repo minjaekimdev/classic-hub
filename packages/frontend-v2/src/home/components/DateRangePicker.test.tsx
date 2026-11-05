@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import DateRangePicker from "@/home/components/DateRangePicker";
 import { getBrowsablePeriod } from "@/lib/period";
 
@@ -24,5 +24,25 @@ describe("DateRangePicker", () => {
       />,
     );
     expect(screen.getByText("2026. 10. 16 ~ 2027. 01. 16")).toBeInTheDocument();
+  });
+
+  it("선택 중인 기간이 프리셋 범위와 일치하면 해당 프리셋이 선택 상태(aria-pressed)로 표시된다", () => {
+    // 프리셋은 실행 시점의 오늘 날짜 기준으로 계산되므로, 확정히 겹치지 않는 과거 기간을 value로 사용한다
+    render(
+      <DateRangePicker
+        value={{ start: "2020-01-01", end: "2020-02-01" }}
+        onChange={vi.fn()}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "2020. 01. 01 ~ 2020. 02. 01" }));
+    const dialog = screen.getByRole("dialog", { name: "공연 기간 선택" });
+
+    const todayPreset = within(dialog).getByRole("button", { name: "오늘" });
+    expect(todayPreset).toHaveAttribute("aria-pressed", "false");
+
+    // '오늘' 프리셋 선택 → draft(달력 선택 기간)가 오늘~오늘이 되어 활성 표시된다
+    fireEvent.click(todayPreset);
+    expect(todayPreset).toHaveAttribute("aria-pressed", "true");
   });
 });
