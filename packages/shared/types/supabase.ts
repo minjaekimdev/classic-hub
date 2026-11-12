@@ -14,54 +14,6 @@ export type Database = {
   }
   public: {
     Tables: {
-      daily_ranking: {
-        Row: {
-          area: string | null
-          created_at: string
-          current_rank: number | null
-          last_rank: number | null
-          performance_count: number | null
-          performance_id: string
-          performance_name: string | null
-          period_from: string | null
-          period_to: string | null
-          poster: string | null
-          seat_scale: number | null
-          updated_at: string | null
-          venue_name: string | null
-        }
-        Insert: {
-          area?: string | null
-          created_at?: string
-          current_rank?: number | null
-          last_rank?: number | null
-          performance_count?: number | null
-          performance_id: string
-          performance_name?: string | null
-          period_from?: string | null
-          period_to?: string | null
-          poster?: string | null
-          seat_scale?: number | null
-          updated_at?: string | null
-          venue_name?: string | null
-        }
-        Update: {
-          area?: string | null
-          created_at?: string
-          current_rank?: number | null
-          last_rank?: number | null
-          performance_count?: number | null
-          performance_id?: string
-          performance_name?: string | null
-          period_from?: string | null
-          period_to?: string | null
-          poster?: string | null
-          seat_scale?: number | null
-          updated_at?: string | null
-          venue_name?: string | null
-        }
-        Relationships: []
-      }
       facilities: {
         Row: {
           adress: string | null
@@ -210,54 +162,6 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
-      }
-      monthly_ranking: {
-        Row: {
-          area: string | null
-          created_at: string
-          current_rank: number | null
-          last_rank: number | null
-          performance_count: number | null
-          performance_id: string
-          performance_name: string | null
-          period_from: string | null
-          period_to: string | null
-          poster: string | null
-          seat_scale: number | null
-          updated_at: string | null
-          venue_name: string | null
-        }
-        Insert: {
-          area?: string | null
-          created_at?: string
-          current_rank?: number | null
-          last_rank?: number | null
-          performance_count?: number | null
-          performance_id: string
-          performance_name?: string | null
-          period_from?: string | null
-          period_to?: string | null
-          poster?: string | null
-          seat_scale?: number | null
-          updated_at?: string | null
-          venue_name?: string | null
-        }
-        Update: {
-          area?: string | null
-          created_at?: string
-          current_rank?: number | null
-          last_rank?: number | null
-          performance_count?: number | null
-          performance_id?: string
-          performance_name?: string | null
-          period_from?: string | null
-          period_to?: string | null
-          poster?: string | null
-          seat_scale?: number | null
-          updated_at?: string | null
-          venue_name?: string | null
-        }
-        Relationships: []
       }
       performances: {
         Row: {
@@ -416,89 +320,8 @@ export type Database = {
         }
         Relationships: []
       }
-      weekly_ranking: {
-        Row: {
-          area: string | null
-          created_at: string
-          current_rank: number | null
-          last_rank: number | null
-          performance_count: number | null
-          performance_id: string
-          performance_name: string | null
-          period_from: string | null
-          period_to: string | null
-          poster: string | null
-          seat_scale: number | null
-          updated_at: string | null
-          venue_name: string | null
-        }
-        Insert: {
-          area?: string | null
-          created_at?: string
-          current_rank?: number | null
-          last_rank?: number | null
-          performance_count?: number | null
-          performance_id: string
-          performance_name?: string | null
-          period_from?: string | null
-          period_to?: string | null
-          poster?: string | null
-          seat_scale?: number | null
-          updated_at?: string | null
-          venue_name?: string | null
-        }
-        Update: {
-          area?: string | null
-          created_at?: string
-          current_rank?: number | null
-          last_rank?: number | null
-          performance_count?: number | null
-          performance_id?: string
-          performance_name?: string | null
-          period_from?: string | null
-          period_to?: string | null
-          poster?: string | null
-          seat_scale?: number | null
-          updated_at?: string | null
-          venue_name?: string | null
-        }
-        Relationships: []
-      }
     }
     Views: {
-      daily_ranking_with_details: {
-        Row: {
-          booking_links: Json | null
-          cast: string | null
-          composers_ko: Json | null
-          current_rank: number | null
-          last_rank: number | null
-          performance_id: string | null
-          performance_name: string | null
-          period_from: string | null
-          period_to: string | null
-          poster: string | null
-          price: Json | null
-          venue_name: string | null
-        }
-        Relationships: []
-      }
-      monthly_ranking_with_details: {
-        Row: {
-          booking_links: Json | null
-          cast: string | null
-          current_rank: number | null
-          last_rank: number | null
-          performance_id: string | null
-          performance_name: string | null
-          period_from: string | null
-          period_to: string | null
-          poster: string | null
-          price: Json | null
-          venue_name: string | null
-        }
-        Relationships: []
-      }
       performances_with_program_view: {
         Row: {
           age: string | null
@@ -539,27 +362,8 @@ export type Database = {
         }
         Relationships: []
       }
-      weekly_ranking_with_details: {
-        Row: {
-          booking_links: Json | null
-          cast: string | null
-          current_rank: number | null
-          last_rank: number | null
-          performance_id: string | null
-          performance_name: string | null
-          period_from: string | null
-          period_to: string | null
-          poster: string | null
-          price: Json | null
-          venue_name: string | null
-        }
-        Relationships: []
-      }
     }
     Functions: {
-      bulk_update_concert_ranks:
-        | { Args: { payload: Json }; Returns: undefined }
-        | { Args: { payload: Json; period: string }; Returns: undefined }
       debug_check_payload: {
         Args: { payload: Json; period: string }
         Returns: {
@@ -568,6 +372,20 @@ export type Database = {
           item_type: string
           raw_item: Json
         }[]
+      }
+      search_concerts: {
+        Args: {
+          p_keyword?: string
+          p_page?: number
+          p_page_size?: number
+          p_period_from?: string
+          p_period_to?: string
+          p_sort?: string
+          p_status?: string
+          p_today?: string
+          p_with_counts?: boolean
+        }
+        Returns: Json
       }
       search_performances_with_unique_composers: {
         Args: { search_keyword: string }
