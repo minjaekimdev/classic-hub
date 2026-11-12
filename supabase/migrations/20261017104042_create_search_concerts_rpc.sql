@@ -47,7 +47,6 @@ BEGIN
         v_compact := replace(btrim(p_keyword), ' ', '');
     END IF;
 
-    -- 1계층 매칭 수 (작곡가 그룹 단위 AND)
     SELECT count(*) INTO v_exact_count
     FROM (
         SELECT v.performance_id,
@@ -57,11 +56,11 @@ BEGIN
                 CROSS JOIN LATERAL (
                     SELECT
                         lower(regexp_replace(concat_ws(' ', elem->>'composerKo',
-                            (SELECT string_agg(x->>'ko', ' ') FROM jsonb_array_elements(COALESCE(elem->'titles', '[]'::jsonb)) AS x)
-                        ), '\s', '', 'g')) AS ko_txt,
+                            (SELECT string_agg(x->>'ko', ' ') FROM jsonb_array_elements(COALESCE(elem->'titles', '[]'::jsonb)) AS x
+                        )), '\s', '', 'g')) AS ko_txt,
                         lower(regexp_replace(concat_ws(' ', elem->>'composerEn',
-                            (SELECT string_agg(x->>'en', ' ') FROM jsonb_array_elements(COALESCE(elem->'titles', '[]'::jsonb)) AS x)
-                        ), '\s', '', 'g')) AS en_txt
+                            (SELECT string_agg(x->>'en', ' ') FROM jsonb_array_elements(COALESCE(elem->'titles', '[]'::jsonb)) AS x
+                        )), '\s', '', 'g')) AS en_txt
                 ) AS g
                 WHERE COALESCE((SELECT bool_and(position(tok IN g.ko_txt) > 0) FROM unnest(v_tokens) AS tok), true)
                    OR COALESCE((SELECT bool_and(position(tok IN g.en_txt) > 0) FROM unnest(v_tokens) AS tok), true)
@@ -84,7 +83,6 @@ BEGIN
         v_total := v_exact_count;
     ELSE
         v_exact := false;
-        -- 2계층 매칭 수 (공연 단위 AND + compact)
         SELECT count(*) INTO v_total
         FROM performances_with_program_view AS v
         WHERE v.period_to >= v_from
@@ -104,7 +102,7 @@ BEGIN
 
     v_total_pages := GREATEST(ceil(v_total::numeric / v_page_size), 1);
     IF v_page > v_total_pages THEN
-        v_page := v_total_pages;  -- 존재하지 않는 페이지는 마지막 페이지로 clamp (specs exception-02)
+        v_page := v_total_pages;
     END IF;
 
     IF v_exact THEN
@@ -128,8 +126,8 @@ BEGIN
                         CROSS JOIN LATERAL (
                             SELECT
                                 lower(regexp_replace(concat_ws(' ', elem->>'composerKo',
-                                    (SELECT string_agg(x->>'ko', ' ') FROM jsonb_array_elements(COALESCE(elem->'titles', '[]'::jsonb)) AS x)
-                                ), '\s', '', 'g')) AS ko_txt,
+                                    (SELECT string_agg(x->>'ko', ' ') FROM jsonb_array_elements(COALESCE(elem->'titles', '[]'::jsonb)) AS x
+                                )), '\s', '', 'g')) AS ko_txt,
                                 lower(regexp_replace(concat_ws(' ', elem->>'composerEn',
                                     (SELECT string_agg(x->>'en', ' ') FROM jsonb_array_elements(COALESCE(elem->'titles', '[]'::jsonb)) AS x
                                 )), '\s', '', 'g')) AS en_txt
@@ -251,4 +249,4 @@ BEGIN
 END;
 $$;
 
-GRANT EXECUTE ON FUNCTION search_concerts(text, text, text, text, text, int, int, text, boolean) TO anon, authenticated;
+GRANT EXECUTE ON FUNCTION search_concerts(text, text, text, text, text, int, int, text, boolean) TO anon, authenticated;;

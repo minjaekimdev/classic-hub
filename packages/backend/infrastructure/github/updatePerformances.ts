@@ -6,7 +6,7 @@ import { buildSyncDateRange } from "./syncDateRange";
 
 // 런 내 재시도는 3라운드(백오프 2+4+8=14분)면 충분하다.
 // 최종 실패분은 DB에 적재되지 않으므로 다음날 "신규"로 재유입 — 일일 크론이 암묵적 재시도 역할을 한다.
-// 예산: 백오프 14분 + extract/transform 볼륨 시간 → workflow timeout(90분) 안에 수렴.
+// 예산: 백오프 14분 + extract/transform 볼륨 시간 → workflow timeout(120분) 안에 수렴.
 const MAX_REPEAT = 3;
 
 (async () => {

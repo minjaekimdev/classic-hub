@@ -53,14 +53,12 @@ classic-hub/
 
 ├── .github/                  
 │   └── workflows/            # GitHub Actions 워크플로우
-│       ├── performance-update.yml   # 모든 공연 정보를 DB에 업데이트 (all-performance.ts 실행)
-│       └── ranking-update.yml       # 일간/주간/월간 공연 랭킹 업데이트 (ranking-performance.ts 실행)
+│       └── performance-update.yml   # 모든 공연 정보를 DB에 업데이트 (all-performance.ts 실행)
 
 ├── backend/                  
 │   ├── database/             # DB 관련 로직
 │   │   ├── cron/             # 정기 실행 스크립트
-│   │   │   ├── all-performance.ts       # 향후 3개월 대상 공연 정보 업데이트
-│   │   │   └── ranking-performance.ts  # 공연 랭킹 업데이트
+│   │   │   └── all-performance.ts       # 향후 3개월 대상 공연 정보 업데이트
 │   │   ├── database.ts       # 상황별 DB 업데이트 함수
 │   │   ├── get-program.ts    # Gemini API를 통해 텍스트/이미지에 존재하는 프로그램 데이터를 구조화된 JSON으로 변환
 │   │   ├── insert-location-info.ts  # 공연장 정보 최초 업데이트

@@ -46,7 +46,7 @@ SELECT
     p.area,
     regexp_replace(
         regexp_replace(p."time", '(월|화|수|목|금|토|일)요일', '\1', 'g'),
-        '\(((?:\d{1,2}:\d{2})(?:,\d{1,2}:\d{2})*)\)',
+        '\((\d{1,2}:\d{2})\)',
         ' \1',
         'g'
     ) AS performance_time,
@@ -62,4 +62,4 @@ FROM performances p
 LEFT JOIN aggregated_programs ap ON p.performance_id = ap.performance_id
 LEFT JOIN facilities f ON p.venue_id = f.id;
 
-GRANT SELECT ON performances_with_program_view TO anon, authenticated;
+GRANT SELECT ON performances_with_program_view TO anon, authenticated;;

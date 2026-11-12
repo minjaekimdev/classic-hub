@@ -4,14 +4,12 @@ import { API_URL, SERVICE_KEY, CLASSIC } from "./client";
 import {
   PerformanceDetail,
   PerformanceSummary,
-  Ranking,
 } from "shared/types/kopis";
 
 // KOPIS API를 찔러서 데이터 하나를 순수하게 가져온다는 단건 조회 기능만 가지고 있으면 됨
 // getPerformanceWithBuffer, getPerformanceList 등의 함수는 비즈니스 로직이 포함되어 있으므로 X
 // 데이터 변환에 필요한 전처리까지를 이곳 인프라 코드에서 수행한다.
 export interface IKopisService {
-  getRanking(startDate: string, endDate: string): Promise<Ranking[]>;
   getPerformanceIdsInPage(
     startDate: string,
     endDate: string,
@@ -24,14 +22,6 @@ export interface IKopisService {
 
 // 실제 KOPIS API와 통신하는 구현체
 export const kopisService: IKopisService = {
-  async getRanking(startDate: string, endDate: string) {
-    const parsedData = await kopisFetcher(
-      `${API_URL}/boxoffice?service=${SERVICE_KEY}&stdate=${startDate}&eddate=${endDate}&catecode=${CLASSIC}`,
-    );
-
-    return removeTextProperty(parsedData.boxofs.boxof) as unknown as Ranking[];
-  },
-
   async getPerformanceIdsInPage(
     startDate: string,
     endDate: string,

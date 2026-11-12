@@ -19,16 +19,6 @@ export interface PerformanceSummary extends Performance {
   composers: string[];
 }
 
-// 랭킹 페이지 공연
-export type Period = "daily" | "weekly" | "monthly";
-
-export interface RankingPerformance extends Performance {
-  currentRank: number;
-  period: string | null;
-  lastRank: number | null;
-  bookingLinks: BookingLink[] | null;
-}
-
 // 결과 페이지 공연 카드
 export interface ResultPerformance {
   id: string;

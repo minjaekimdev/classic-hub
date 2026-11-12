@@ -70,4 +70,4 @@ FROM (
     LEFT JOIN facilities f ON p.venue_id = f.id
 ) t;
 
-GRANT SELECT ON performances_with_program_view TO anon, authenticated;
+GRANT SELECT ON performances_with_program_view TO anon, authenticated;;

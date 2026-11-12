@@ -6,7 +6,7 @@ import { buildSyncDateRange } from "./syncDateRange";
 // 테스트는 두 층으로 나뉜다.
 // 1) 계약 테스트: afterDate(어제)는 정책이 아니라 계약이므로 리터럴로 고정해
 //    의도하지 않은 변경 시 커밋 시점에 깨진다.
-// 2) 파생 테스트: 정책 날짜(랭킹/예매 윈도)는 DATE_POLICY를 참조해 검증하므로
+// 2) 파생 테스트: 정책 날짜(예매 윈도)는 DATE_POLICY를 참조해 검증하므로
 //    정책 변경 시 테스트 수정이 필요 없다.
 describe("afterDate 과금 방지 계약 (어제 고정)", () => {
   // 크론이 매일 도는 전제에서 수정분 조회는 반드시 어제여야 한다.
@@ -35,17 +35,16 @@ describe("afterDate 과금 방지 계약 (어제 고정)", () => {
 });
 
 describe("정책 날짜 파생 테스트 (정책 변경 시 수정 불필요)", () => {
-  it("주입한 정책 값에 따라 랭킹/예매 윈도를 파생한다", () => {
+  it("주입한 정책 값에 따라 예매 윈도를 파생한다", () => {
     const today = dayjs("2026-09-13");
     const policy: DatePolicy = {
-      rankingWindowDays: 45,
       futureWindowDays: 120,
     };
 
     const range = buildSyncDateRange(today, policy);
 
     expect(range.startDate).toBe(
-      today.subtract(45, "days").format("YYYYMMDD"),
+      today.subtract(UPDATE_LOOKBACK_DAYS, "days").format("YYYYMMDD"),
     );
     expect(range.endDate).toBe(today.add(120, "days").format("YYYYMMDD"));
     expect(range.updateEndDate).toBe(
@@ -62,9 +61,7 @@ describe("정책 날짜 파생 테스트 (정책 변경 시 수정 불필요)", 
     const range = buildSyncDateRange(today);
 
     expect(range.startDate).toBe(
-      today
-        .subtract(DATE_POLICY.rankingWindowDays, "days")
-        .format("YYYYMMDD"),
+      today.subtract(UPDATE_LOOKBACK_DAYS, "days").format("YYYYMMDD"),
     );
     expect(range.endDate).toBe(
       today.add(DATE_POLICY.futureWindowDays, "days").format("YYYYMMDD"),

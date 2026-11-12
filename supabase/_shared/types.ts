@@ -10,58 +10,10 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "12.2.3 (519615d)"
+    PostgrestVersion: "12.2.3"
   }
   public: {
     Tables: {
-      daily_ranking: {
-        Row: {
-          area: string | null
-          created_at: string
-          current_rank: number | null
-          last_rank: number | null
-          performance_count: number | null
-          performance_id: string
-          performance_name: string | null
-          period_from: string | null
-          period_to: string | null
-          poster: string | null
-          seat_scale: number | null
-          updated_at: string | null
-          venue_name: string | null
-        }
-        Insert: {
-          area?: string | null
-          created_at?: string
-          current_rank?: number | null
-          last_rank?: number | null
-          performance_count?: number | null
-          performance_id: string
-          performance_name?: string | null
-          period_from?: string | null
-          period_to?: string | null
-          poster?: string | null
-          seat_scale?: number | null
-          updated_at?: string | null
-          venue_name?: string | null
-        }
-        Update: {
-          area?: string | null
-          created_at?: string
-          current_rank?: number | null
-          last_rank?: number | null
-          performance_count?: number | null
-          performance_id?: string
-          performance_name?: string | null
-          period_from?: string | null
-          period_to?: string | null
-          poster?: string | null
-          seat_scale?: number | null
-          updated_at?: string | null
-          venue_name?: string | null
-        }
-        Relationships: []
-      }
       facilities: {
         Row: {
           adress: string | null
@@ -137,6 +89,30 @@ export type Database = {
         }
         Relationships: []
       }
+      feedbacks: {
+        Row: {
+          content: string
+          created_at: string | null
+          email: string | null
+          id: number
+          status: string
+        }
+        Insert: {
+          content: string
+          created_at?: string | null
+          email?: string | null
+          id?: number
+          status?: string
+        }
+        Update: {
+          content?: string
+          created_at?: string | null
+          email?: string | null
+          id?: number
+          status?: string
+        }
+        Relationships: []
+      }
       halls: {
         Row: {
           created_at: string
@@ -187,54 +163,6 @@ export type Database = {
           },
         ]
       }
-      monthly_ranking: {
-        Row: {
-          area: string | null
-          created_at: string
-          current_rank: number | null
-          last_rank: number | null
-          performance_count: number | null
-          performance_id: string
-          performance_name: string | null
-          period_from: string | null
-          period_to: string | null
-          poster: string | null
-          seat_scale: number | null
-          updated_at: string | null
-          venue_name: string | null
-        }
-        Insert: {
-          area?: string | null
-          created_at?: string
-          current_rank?: number | null
-          last_rank?: number | null
-          performance_count?: number | null
-          performance_id: string
-          performance_name?: string | null
-          period_from?: string | null
-          period_to?: string | null
-          poster?: string | null
-          seat_scale?: number | null
-          updated_at?: string | null
-          venue_name?: string | null
-        }
-        Update: {
-          area?: string | null
-          created_at?: string
-          current_rank?: number | null
-          last_rank?: number | null
-          performance_count?: number | null
-          performance_id?: string
-          performance_name?: string | null
-          period_from?: string | null
-          period_to?: string | null
-          poster?: string | null
-          seat_scale?: number | null
-          updated_at?: string | null
-          venue_name?: string | null
-        }
-        Relationships: []
-      }
       performances: {
         Row: {
           age: string | null
@@ -251,7 +179,6 @@ export type Database = {
           period_to: string | null
           poster: string | null
           price: Json | null
-          program: Json | null
           raw_data: Json | null
           runtime: string | null
           state: string | null
@@ -275,7 +202,6 @@ export type Database = {
           period_to?: string | null
           poster?: string | null
           price?: Json | null
-          program?: Json | null
           raw_data?: Json | null
           runtime?: string | null
           state?: string | null
@@ -299,7 +225,6 @@ export type Database = {
           period_to?: string | null
           poster?: string | null
           price?: Json | null
-          program?: Json | null
           raw_data?: Json | null
           runtime?: string | null
           state?: string | null
@@ -309,6 +234,55 @@ export type Database = {
           venue_name?: string | null
         }
         Relationships: []
+      }
+      programs: {
+        Row: {
+          composer_en: string | null
+          composer_ko: string | null
+          id: string
+          performance_id: string
+          title_en: string | null
+          title_ko: string | null
+        }
+        Insert: {
+          composer_en?: string | null
+          composer_ko?: string | null
+          id?: string
+          performance_id: string
+          title_en?: string | null
+          title_ko?: string | null
+        }
+        Update: {
+          composer_en?: string | null
+          composer_ko?: string | null
+          id?: string
+          performance_id?: string
+          title_en?: string | null
+          title_ko?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "performance_programs_performance_id_fkey"
+            columns: ["performance_id"]
+            isOneToOne: false
+            referencedRelation: "performances"
+            referencedColumns: ["performance_id"]
+          },
+          {
+            foreignKeyName: "performance_programs_performance_id_fkey"
+            columns: ["performance_id"]
+            isOneToOne: false
+            referencedRelation: "performances_with_program_view"
+            referencedColumns: ["performance_id"]
+          },
+          {
+            foreignKeyName: "performance_programs_performance_id_fkey"
+            columns: ["performance_id"]
+            isOneToOne: false
+            referencedRelation: "weekend_performances_with_program"
+            referencedColumns: ["performance_id"]
+          },
+        ]
       }
       task_queue: {
         Row: {
@@ -346,136 +320,50 @@ export type Database = {
         }
         Relationships: []
       }
-      test_table: {
-        Row: {
-          c1: string | null
-          c2: string | null
-          created_at: string
-          id: number
-          jsondata: Json | null
-          mt20id: string
-        }
-        Insert: {
-          c1?: string | null
-          c2?: string | null
-          created_at?: string
-          id?: number
-          jsondata?: Json | null
-          mt20id: string
-        }
-        Update: {
-          c1?: string | null
-          c2?: string | null
-          created_at?: string
-          id?: number
-          jsondata?: Json | null
-          mt20id?: string
-        }
-        Relationships: []
-      }
-      weekly_ranking: {
-        Row: {
-          area: string | null
-          created_at: string
-          current_rank: number | null
-          last_rank: number | null
-          performance_count: number | null
-          performance_id: string
-          performance_name: string | null
-          period_from: string | null
-          period_to: string | null
-          poster: string | null
-          seat_scale: number | null
-          updated_at: string | null
-          venue_name: string | null
-        }
-        Insert: {
-          area?: string | null
-          created_at?: string
-          current_rank?: number | null
-          last_rank?: number | null
-          performance_count?: number | null
-          performance_id: string
-          performance_name?: string | null
-          period_from?: string | null
-          period_to?: string | null
-          poster?: string | null
-          seat_scale?: number | null
-          updated_at?: string | null
-          venue_name?: string | null
-        }
-        Update: {
-          area?: string | null
-          created_at?: string
-          current_rank?: number | null
-          last_rank?: number | null
-          performance_count?: number | null
-          performance_id?: string
-          performance_name?: string | null
-          period_from?: string | null
-          period_to?: string | null
-          poster?: string | null
-          seat_scale?: number | null
-          updated_at?: string | null
-          venue_name?: string | null
-        }
-        Relationships: []
-      }
     }
     Views: {
-      daily_ranking_with_details: {
+      performances_with_program_view: {
         Row: {
+          age: string | null
+          area: string | null
           booking_links: Json | null
           cast: string | null
-          current_rank: number | null
-          last_rank: number | null
+          max_price: number | null
+          min_price: number | null
           performance_id: string | null
           performance_name: string | null
+          performance_time: string | null
           period_from: string | null
           period_to: string | null
           poster: string | null
           price: Json | null
+          programs: Json | null
+          runtime: string | null
+          search_target: string | null
+          search_target_compact: string | null
+          venue_address: string | null
+          venue_id: string | null
           venue_name: string | null
         }
         Relationships: []
       }
-      monthly_ranking_with_details: {
+      weekend_performances_with_program: {
         Row: {
-          booking_links: Json | null
           cast: string | null
-          current_rank: number | null
-          last_rank: number | null
+          composers_ko: Json | null
+          max_price: number | null
+          min_price: number | null
           performance_id: string | null
           performance_name: string | null
           period_from: string | null
           period_to: string | null
           poster: string | null
-          price: Json | null
-          venue_name: string | null
-        }
-        Relationships: []
-      }
-      weekly_ranking_with_details: {
-        Row: {
-          booking_links: Json | null
-          cast: string | null
-          current_rank: number | null
-          last_rank: number | null
-          performance_id: string | null
-          performance_name: string | null
-          period_from: string | null
-          period_to: string | null
-          poster: string | null
-          price: Json | null
           venue_name: string | null
         }
         Relationships: []
       }
     }
     Functions: {
-      bulk_update_concert_ranks:
-        | { Args: { payload: Json }; Returns: undefined }
-        | { Args: { payload: Json; period: string }; Returns: undefined }
       debug_check_payload: {
         Args: { payload: Json; period: string }
         Returns: {
@@ -485,6 +373,35 @@ export type Database = {
           raw_item: Json
         }[]
       }
+      search_concerts: {
+        Args: {
+          p_keyword?: string
+          p_page?: number
+          p_page_size?: number
+          p_period_from?: string
+          p_period_to?: string
+          p_sort?: string
+          p_status?: string
+          p_today?: string
+          p_with_counts?: boolean
+        }
+        Returns: Json
+      }
+      search_performances_with_unique_composers: {
+        Args: { search_keyword: string }
+        Returns: {
+          cast: string
+          performance_id: string
+          performance_name: string
+          period_from: string
+          period_to: string
+          poster: string
+          programs: Json
+          venue_name: string
+        }[]
+      }
+      upsert_full_performance: { Args: { payload: Json }; Returns: string }
+      upsert_performances_bulk: { Args: { payload: Json }; Returns: string }
     }
     Enums: {
       [_ in never]: never
@@ -503,12 +420,12 @@ export type Tables<
   DefaultSchemaTableNameOrOptions extends
     | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
         DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -532,11 +449,11 @@ export type TablesInsert<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -557,11 +474,11 @@ export type TablesUpdate<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -582,11 +499,11 @@ export type Enums<
   DefaultSchemaEnumNameOrOptions extends
     | keyof DefaultSchema["Enums"]
     | { schema: keyof DatabaseWithoutInternals },
-  EnumName extends DefaultSchemaEnumNameOrOptions extends {
+  EnumName extends (DefaultSchemaEnumNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaEnumNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -599,11 +516,11 @@ export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
     | keyof DefaultSchema["CompositeTypes"]
     | { schema: keyof DatabaseWithoutInternals },
-  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+  CompositeTypeName extends (PublicCompositeTypeNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
-    : never = never,
+    : never) = never,
 > = PublicCompositeTypeNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
