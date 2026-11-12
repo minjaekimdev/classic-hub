@@ -11,7 +11,7 @@ export interface SyncDateRange {
 
 // updatePerformances 크론의 조회 날짜 범위를 계산한다.
 // 모든 숫자의 출처는 datePolicy.ts이며, 파생 규칙은 다음과 같다.
-// - startDate: 오늘 - DATE_POLICY.rankingWindowDays (월간 랭킹 집계)
+// - startDate: 오늘 - UPDATE_LOOKBACK_DAYS (신규 공연 목록 시작점, 어제 고정 계약)
 // - endDate: 오늘 + DATE_POLICY.futureWindowDays (향후 예매 일정)
 // - afterDate: 오늘 - UPDATE_LOOKBACK_DAYS (KOPIS 수정분 필터, 어제로 고정된 계약값)
 // - updateEndDate: 오늘 + DATE_POLICY.futureWindowDays - 1
@@ -23,7 +23,7 @@ export const buildSyncDateRange = (
 ): SyncDateRange => {
   return {
     startDate: today
-      .subtract(policy.rankingWindowDays, "days")
+      .subtract(UPDATE_LOOKBACK_DAYS, "days")
       .format("YYYYMMDD"),
     endDate: today.add(policy.futureWindowDays, "days").format("YYYYMMDD"),
     afterDate: today
