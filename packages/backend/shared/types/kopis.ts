@@ -20,19 +20,6 @@ export interface PerformanceSummary {
   area: string; // 공연지역 (예: 경상남도)
 }
 
-// 예매상황판(랭킹) 조회 인터페이스
-export interface Ranking {
-  rnum: string; // 랭킹
-  prfnm: string; // 공연명
-  prfpd: string; // 공연기간 (예: 2026.01.13~2026.01.15)
-  prfplcnm: string; // 공연장
-  seatcnt: string; // 좌석수
-  prfdtcnt: string; // 상연횟수
-  area: string; // 지역 (예: 울산)
-  poster: string; // 포스터 URL
-  mt20id: string; // 공연 ID (예: PF178134)
-}
-
 // 상세 이미지 url 인터페이스
 export interface Styurls {
   styurl: string | string[];
